@@ -18,11 +18,17 @@ import { StatsMarquee } from "@/components/features/home/StatsMarquee";
 
 const SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
 
+const EW_TAGS       = ["NIGERIA", "AFROBEAT", "MUSIC"];
+const EW_TITLE      = "Lorem ipsum dolor sit amet consect etur neque";
+const EW_DESC       = "Lorem ipsum dolor sit amet sectetur Vivamus ner neque tempus....";
+const EW_HOVER_DESC = "Lorem ipsum dolor sit amet consectetur. Vivamus neque tempus ut ultricies porttitor pretium amet. Scelerisque ut tristique dolor elementum eque tempus.";
+const EW_BADGE      = "ALBUM REVIEW";
+
 const ESSENTIAL_WORKS = [
-  { title: "Fela: This Bitch of a Life", type: "Music", year: 1982, country: "Nigeria", rating: 4.8 },
-  { title: "Things Fall Apart", type: "Literature", year: 1958, country: "Nigeria", rating: 4.9 },
-  { title: "The Boy Who Harnessed the Wind", type: "Film", year: 2019, country: "Malawi", rating: 4.6 },
-  { title: "Tsotsi", type: "Film", year: 2005, country: "South Africa", rating: 4.5 },
+  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Music",      year: 1982, country: "Nigeria",      rating: 4.8, image: "/EW-Image-1.png" },
+  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Literature", year: 1958, country: "Nigeria",      rating: 4.9, image: "/EW-Image-2.png" },
+  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Film",       year: 2019, country: "Malawi",       rating: 4.6, image: "/EW-Image-3.png" },
+  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Film",       year: 2005, country: "South Africa", rating: 4.5, image: "/EW-Image-4.jpg" },
 ];
 
 const PILLARS = [
@@ -179,18 +185,110 @@ export default function HomePage() {
       </section>
 
       {/* ESSENTIAL WORKS */}
-      <section className="bg-bg-primary py-16">
+      <section
+        style={{
+          background:
+            "linear-gradient(180deg, #4D311D 17.79%, #794C2D 52.4%, #4D311D 95.19%)",
+        }}
+        className="relative overflow-hidden py-16"
+      >
         <div className="container">
-          <SectionHeading
-            title="Essential Works"
-            subtitle="Curated films, music, and literature that define the African cultural canon."
-            linkText="See all works →"
-            linkHref="/explore"
-          />
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {ESSENTIAL_WORKS.map((w) => (
-              <WorkCard key={w.title} {...w} essential />
-            ))}
+          <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <h2
+              style={{
+                maxWidth: "356px",
+                color: "#FFF",
+                fontFamily: "var(--font-montserrat)",
+                fontSize: "36px",
+                fontWeight: 500,
+                lineHeight: "110%",
+                textTransform: "capitalize",
+              }}
+            >
+              Essential Works
+            </h2>
+            <Link
+              href="/explore"
+              className="shrink-0"
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  padding: "8px 12px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "8px",
+                  borderRadius: "8px",
+                  color: "#EFE4D6",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                View All
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 11 11"
+                fill="none"
+                style={{ width: "9.333px", height: "9.333px", flexShrink: 0 }}
+              >
+                <path
+                  d="M0.799999 5.46665H10.1333M5.46667 10.1333L10.1333 5.46665L5.46667 0.799988"
+                  stroke="#EFE4D6"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
+          <div className="relative">
+            <div className="flex gap-5 overflow-x-auto lg:overflow-x-visible">
+              {ESSENTIAL_WORKS.map((w) => (
+                <WorkCard key={w.title} {...w} essential />
+              ))}
+            </div>
+            {/* Next button — bleeds off the right edge of the page */}
+            <button
+              aria-label="Next"
+              className="absolute hidden lg:flex items-center justify-center"
+              style={{
+                top: "50%",
+                right: "-36px",
+                transform: "translateY(-50%)",
+                width: "73px",
+                height: "197px",
+                borderRadius: "12px",
+                background: "rgba(35, 23, 6, 0.40)",
+              }}
+            >
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="28"
+                  viewBox="0 0 16 28"
+                  fill="none"
+                >
+                  <path
+                    d="M2 26L14 14L2 2"
+                    stroke="white"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </button>
           </div>
         </div>
       </section>
