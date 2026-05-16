@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Afrocritik Institute — Web
 
-## Getting Started
+The frontend for the **Afrocritik Institute**, a Pan-African cultural
+intelligence platform — a living archive and criticism platform for African
+film, music, literature, and ideas.
 
-First, run the development server:
+## Stack
+
+- **Next.js 14** (App Router)
+- **Tailwind CSS** + **shadcn/ui** primitives
+- **React Query** for data fetching
+- **Axios** API client
+- **NextAuth** for credential + OAuth sessions
+- **DM Sans** (body) / **Playfair Display** (display) typography
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app runs on `http://localhost:3000` and expects the API at
+`http://localhost:3001` (configurable via `NEXT_PUBLIC_API_URL`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local`:
 
-## Learn More
+```
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+  (main)/        Navbar + Footer pages — home, explore, detail pages
+  (auth)/        Split-layout auth pages — sign in, sign up, profile setup
+  api/auth/      NextAuth route handler
+components/
+  layout/        Navbar, Footer, Logo, AuthLayout
+  ui/            shadcn primitives
+  common/        WorkCard, PersonCard, IdeaCard, SectionHeading…
+  features/      Page-specific components
+lib/             api.ts (axios), auth.ts, utils.ts
+types/           Shared TypeScript interfaces
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command         | Description                  |
+| --------------- | ---------------------------- |
+| `npm run dev`   | Start the dev server         |
+| `npm run build` | Production build             |
+| `npm run lint`  | Lint with ESLint             |
