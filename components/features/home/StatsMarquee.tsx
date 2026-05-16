@@ -1,38 +1,69 @@
 const STATS = [
-  { value: "5,000+", label: "Works" },
-  { value: "12,000+", label: "Articles" },
-  { value: "12+", label: "Countries" },
+  { value: "1,000+", label: "Works" },
+  { value: "15,000+", label: "Articles" },
+  { value: "50+", label: "Countries" },
   { value: "120,000+", label: "Data Points" },
 ];
 
-function StatGroup() {
+function StatItem({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex shrink-0 items-center" aria-hidden>
-      {STATS.map((s) => (
-        <div key={s.label} className="flex items-center">
-          <span className="flex items-baseline gap-1.5 px-8 text-white">
-            <span className="font-display text-lg font-bold md:text-xl">
-              {s.value}
-            </span>
-            <span className="text-xs uppercase tracking-wide md:text-sm">
-              {s.label}
-            </span>
-          </span>
-          <span className="h-1.5 w-1.5 rotate-45 bg-white/50" />
-        </div>
-      ))}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "4px",
+        whiteSpace: "nowrap",
+        color: "rgba(196, 150, 60, 0.60)",
+        fontFamily: "var(--font-montserrat)",
+        fontSize: "24px",
+        fontWeight: 600,
+        lineHeight: "110%",
+        textTransform: "capitalize",
+      }}
+    >
+      <span>{value}</span>
+      <span>{label}</span>
     </div>
   );
 }
 
 export function StatsMarquee() {
+  // Duplicate stats enough times to ensure seamless scrolling
+  const repeatedStats = Array.from({ length: 10 }, () => STATS).flat();
+
   return (
-    <div className="group overflow-hidden border-y border-amber-line bg-amber py-4">
-      <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]">
-        {/* Two identical halves give a seamless -50% loop */}
-        <StatGroup />
-        <StatGroup />
+    <div
+      style={{
+        height: "80px",
+        border: "1px solid rgba(156, 92, 8, 0.30)",
+        background: "rgba(35, 23, 6, 0.60)",
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: "40px",
+          animation: "marquee 60s linear infinite",
+          paddingRight: "40px",
+        }}
+      >
+        {repeatedStats.map((stat, idx) => (
+          <StatItem key={idx} value={stat.value} label={stat.label} />
+        ))}
       </div>
+      <style>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
     </div>
   );
 }
