@@ -67,13 +67,11 @@ function EssentialCardImage({
   slug,
   title,
   image,
-  badge,
   hovered,
 }: Readonly<{
   slug: string;
   title: string;
   image?: string;
-  badge?: string;
   hovered: boolean;
 }>) {
   return (
@@ -91,30 +89,6 @@ function EssentialCardImage({
         transition: "height 0.4s ease, margin 0.4s ease",
       }}
     >
-      {badge && (
-        <span
-          style={{
-            position: "absolute",
-            top: "13.0572px",
-            left: "-4.3524px",
-            zIndex: 1,
-            display: "inline-flex",
-            padding: "2.6114px 6.0933px",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "8.7048px",
-            borderRadius: "3.4819px",
-            background: "#B50000",
-            color: "#FFF",
-            fontSize: "9px",
-            fontWeight: 400,
-            lineHeight: "140%",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {badge}
-        </span>
-      )}
       <Link href={`/works/${slug}`} className="block h-full">
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -232,12 +206,13 @@ function EssentialCard({
 
   return (
     <fieldset
-      className={cn("overflow-hidden", className)}
+      className={cn(className)}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onFocus={onEnter}
       onBlur={onLeave}
       style={{
+        position: "relative",
         padding: 0,
         margin: 0,
         flexGrow: hovered ? 0 : 1,
@@ -253,7 +228,31 @@ function EssentialCard({
       }}
     >
       <legend className="sr-only">{title}</legend>
-      <EssentialCardImage slug={slug} title={title} image={image} badge={badge} hovered={hovered} />
+      {badge && (
+        <span
+          style={{
+            position: "absolute",
+            top: "12px",
+            left: "-4.3524px",
+            zIndex: 2,
+            display: "inline-flex",
+            padding: "2.6114px 6.0933px",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "8.7048px",
+            borderRadius: "3.4819px",
+            background: "#B50000",
+            color: "#FFF",
+            fontSize: "9px",
+            fontWeight: 400,
+            lineHeight: "140%",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {badge}
+        </span>
+      )}
+      <EssentialCardImage slug={slug} title={title} image={image} hovered={hovered} />
       <EssentialCardBody
         slug={slug}
         title={title}
