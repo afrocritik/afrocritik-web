@@ -19,7 +19,7 @@ export function SectionHeading({
   theme = "dark",
   align = "left",
   className,
-}: SectionHeadingProps) {
+}: Readonly<SectionHeadingProps>) {
   const light = theme === "light";
   const centered = align === "center";
 

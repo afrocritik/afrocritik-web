@@ -254,7 +254,7 @@ export default function HomePage() {
               aria-label="Next"
               className="absolute hidden lg:flex items-center justify-center"
               style={{
-                top: "50%",
+                top: "167.5px",
                 right: "-52.5px",
                 transform: "translateY(-50%)",
                 width: "73px",
