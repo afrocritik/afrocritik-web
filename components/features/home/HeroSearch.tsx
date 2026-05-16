@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import Image from "next/image";
 
 export function HeroSearch() {
   const router = useRouter();
@@ -16,20 +16,40 @@ export function HeroSearch() {
   };
 
   return (
-    <form onSubmit={submit} className="relative w-full">
-      <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted" />
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search Works, Ideas, People, Reports..."
-        className="w-full rounded-full border border-amber-line bg-bg-card py-4 pl-12 pr-32 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber"
-      />
-      <button
-        type="submit"
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-amber px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-hover"
+    <form onSubmit={submit} className="relative mx-auto w-full max-w-[888px]">
+      <div
+        className="flex items-center gap-4 px-6"
+        style={{
+          height: "105px",
+          borderRadius: "12px",
+          border: "1px solid #6E4205",
+          background: "rgba(65, 40, 23, 0.50)",
+        }}
       >
-        Search
-      </button>
+        <button type="submit" className="shrink-0">
+          <Image
+            src="/search-icon.svg"
+            alt="Search"
+            width={70}
+            height={71}
+            priority
+          />
+        </button>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search works, ideas, people, reports..."
+          className="hero-search-input flex-1 bg-transparent text-white focus:outline-none"
+          style={{
+            height: "34.327px",
+            fontFamily: "var(--font-inter)",
+            fontSize: "24px",
+            fontWeight: 400,
+            lineHeight: "140%",
+            textTransform: "capitalize",
+          }}
+        />
+      </div>
     </form>
   );
 }

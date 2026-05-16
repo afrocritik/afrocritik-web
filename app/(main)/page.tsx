@@ -16,7 +16,7 @@ import { HorizontalScroll } from "@/components/common/HorizontalScroll";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
 import { StatsMarquee } from "@/components/features/home/StatsMarquee";
 
-const SUGGESTED = ["Afrobeat", "Nollywood", "Négritude", "Chimamanda", "Fela Kuti"];
+const SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
 
 const ESSENTIAL_WORKS = [
   { title: "Fela: This Bitch of a Life", type: "Music", year: 1982, country: "Nigeria", rating: 4.8 },
@@ -78,27 +78,96 @@ export default function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-bg-secondary to-bg-primary">
-        <div className="container flex flex-col items-center py-20 text-center md:py-28">
-          <h1 className="max-w-4xl font-display text-4xl font-bold leading-tight text-white md:text-6xl">
-            Building Africa&apos;s{" "}
-            <span className="italic text-amber">Cultural Intelligence</span>{" "}
-            Platform
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, #4D311D 17.79%, #794C2D 52.4%, #4D311D 95.19%)",
+        }}
+      >
+        <div className="container flex flex-col items-center py-12 text-center md:py-16">
+          <h1
+            style={{
+              width: "789px",
+              fontFamily: "Baskerville",
+              fontSize: "48px",
+              fontWeight: 700,
+              lineHeight: "110%",
+              textTransform: "capitalize",
+              color: "#FFF",
+              textAlign: "center",
+            }}
+          >
+            Building Africa&apos;s<br />
+            <span style={{ color: "#C4963C" }}>Cultural Intelligence</span> Platform
           </h1>
-          <p className="mt-5 max-w-2xl text-sm text-ink-secondary md:text-base">
-            The definitive archive and intelligence platform for African
-            cultural criticism — across film, music, literature, and ideas.
+          <p
+            className="mt-5 font-semibold leading-[110%]"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "14px",
+              textTransform: "capitalize",
+              color: "#F3E5D0",
+            }}
+          >
+            connecting works, ideas, and people across African culture.
           </p>
-          <div className="mt-9 w-full max-w-2xl">
+          <div className="mt-9 w-full" style={{ maxWidth: "888px" }}>
             <HeroSearch />
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               {SUGGESTED.map((s) => (
                 <Link
                   key={s}
                   href={`/explore?q=${encodeURIComponent(s)}`}
-                  className="rounded-full border border-amber-line bg-bg-card px-3.5 py-1.5 text-xs text-ink-secondary transition-colors hover:border-amber hover:text-white"
+                  className="inline-flex items-center"
+                  style={{
+                    height: "36px",
+                    padding: "8px 10px",
+                    gap: "8px",
+                    borderRadius: "10px",
+                    border: "1px solid #9C5C08",
+                    background: "rgba(65, 40, 23, 0.40)",
+                  }}
                 >
-                  {s}
+                  <span
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "15px",
+                      fontWeight: 400,
+                      lineHeight: "140%",
+                      textTransform: "capitalize",
+                      color: "#FFF",
+                      opacity: 0.2,
+                    }}
+                  >
+                    {s}
+                  </span>
+                  <div
+                    style={{
+                      width: "8.091px",
+                      height: "11px",
+                      flexShrink: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="12"
+                      viewBox="0 0 10 12"
+                      fill="none"
+                      style={{ width: "100%", height: "100%" }}
+                    >
+                      <path
+                        d="M0.500061 0.500061L8.59097 6.16673L0.500061 11.5001"
+                        stroke="#9C5C08"
+                        strokeWidth="1px"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
                 </Link>
               ))}
             </div>

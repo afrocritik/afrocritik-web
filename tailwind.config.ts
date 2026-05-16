@@ -65,6 +65,8 @@ const config = {
       fontFamily: {
         sans: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
         display: ["var(--font-playfair)", "Georgia", "serif"],
+        montserrat: ["var(--font-montserrat)", "system-ui", "sans-serif"],
+        inter: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

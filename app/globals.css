@@ -19,6 +19,13 @@
   }
 }
 
+@layer components {
+  .hero-search-input::placeholder {
+    opacity: 0.2;
+    color: #fff;
+  }
+}
+
 @layer utilities {
   .hide-scrollbar {
     -ms-overflow-style: none;
