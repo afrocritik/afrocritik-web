@@ -209,7 +209,7 @@ export default function HomePage() {
             </h2>
             <Link
               href="/explore"
-              className="shrink-0"
+              className="shrink-0 md:-mr-6"
               style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
             >
               <span
@@ -255,7 +255,7 @@ export default function HomePage() {
               className="absolute hidden lg:flex items-center justify-center"
               style={{
                 top: "50%",
-                right: "-36px",
+                right: "-52.5px",
                 transform: "translateY(-50%)",
                 width: "73px",
                 height: "197px",
