@@ -50,12 +50,39 @@ const THINKERS = [
   { name: "Kwame Nkrumah", role: "Theorist" },
 ];
 
-const MUSIC = [
-  { title: "Zombie", type: "Music", year: 1976, country: "Nigeria", rating: 4.9 },
-  { title: "Lágbájá", type: "Music", year: 1991, country: "Nigeria", rating: 4.4 },
-  { title: "Made in Lagos", type: "Music", year: 2020, country: "Nigeria", rating: 4.7 },
-  { title: "Twice as Tall", type: "Music", year: 2020, country: "Nigeria", rating: 4.6 },
-  { title: "Black Times", type: "Music", year: 2018, country: "Nigeria", rating: 4.5 },
+const EWIM_MUSIC = [
+  {
+    title: "How to stay relevant in the music industry",
+    author: "Emmanuel Ogunjobi",
+    badge: "ALBUM",
+    tags: ["NIGERIA", "AFROBEAT", "MUSIC"],
+    rating: 9.8,
+    image: "/EWIM-Image-1.png",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "ALBUM REVIEW",
+    tags: ["NIGERIA", "AFROBEAT", "MUSIC"],
+    rating: 9.8,
+    image: "/EWIM-Image-2.png",
+  },
+  {
+    title: "Hard work is not a substitute",
+    author: "Davido",
+    badge: "BIOGRAPHY",
+    tags: ["CELEBRITY", "AFROBEAT", "MUSIC"],
+    rating: 9.8,
+    image: "/EWIM-Image-3.png",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "LITERATURE",
+    tags: ["WRITER", "POLITICS", "POETRY"],
+    rating: 9.8,
+    image: "/EWIM-Image-4.png",
+  },
 ];
 
 const INTERESTS = ["Movies", "Literature", "Report", "Biography"];
@@ -415,20 +442,66 @@ export default function HomePage() {
       </section>
 
       {/* ESSENTIAL WORKS IN MUSIC */}
-      <section className="bg-bg-primary py-16">
+      <section
+        className="relative overflow-hidden py-16"
+        style={{
+          background:
+            "linear-gradient(180deg, #4D311D 17.79%, #794C2D 52.4%, #4D311D 95.19%)",
+        }}
+      >
         <div className="container">
           <SectionHeading
             title="Essential Works In Music"
-            linkText="Explore music →"
+            linkText="View All →"
             linkHref="/explore?q=music"
           />
-          <HorizontalScroll>
-            {MUSIC.map((w) => (
-              <div key={w.title} className="w-[200px] shrink-0">
-                <WorkCard {...w} essential />
+          <div className="relative">
+            <div className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible">
+              {EWIM_MUSIC.map((w) => (
+                <WorkCard key={w.title} {...w} ewim />
+              ))}
+            </div>
+            {/* Next button — bleeds off the right edge of the page */}
+            <button
+              aria-label="Next"
+              className="absolute hidden lg:flex items-center justify-center"
+              style={{
+                top: "50%",
+                right: "-52.5px",
+                transform: "translateY(-50%)",
+                width: "73px",
+                height: "197px",
+                borderRadius: "12px",
+                background: "rgba(35, 23, 6, 0.40)",
+              }}
+            >
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="28"
+                  viewBox="0 0 16 28"
+                  fill="none"
+                >
+                  <path
+                    d="M2 26L14 14L2 2"
+                    stroke="white"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
-            ))}
-          </HorizontalScroll>
+            </button>
+          </div>
         </div>
       </section>
 

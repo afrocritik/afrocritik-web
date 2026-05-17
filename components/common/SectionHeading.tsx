@@ -30,14 +30,14 @@ export function SectionHeading({
         centered
           ? "flex-col items-center text-center"
           : "flex-col md:flex-row md:items-end md:justify-between",
-        className
+        className,
       )}
     >
-      <div className={cn(centered ? "max-w-2xl" : "max-w-2xl")}>
+      <div className="max-w-2xl">
         <h2
           className={cn(
-            "font-display text-2xl font-bold md:text-[32px] md:leading-tight",
-            light ? "text-ink-dark" : "text-white"
+            "font-montserrat w-[698px] justify-center text-white text-4xl font-bold md:text-[32px] md:leading-tight capitalize leading-10",
+            light ? "text-ink-dark" : "text-white",
           )}
         >
           {title}
@@ -46,7 +46,7 @@ export function SectionHeading({
           <p
             className={cn(
               "mt-2 text-sm md:text-base",
-              light ? "text-[#6B4A2A]" : "text-ink-secondary"
+              light ? "text-[#6B4A2A]" : "text-ink-secondary",
             )}
           >
             {subtitle}
