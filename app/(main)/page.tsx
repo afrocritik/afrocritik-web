@@ -504,25 +504,46 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* EXPLORE BY POPULAR INTEREST */}
-      <section className="bg-bg-primary pb-16">
+      {/* EXPLORE BASED ON POPULAR INTEREST */}
+      <section className="bg-yellow-900 pt-32 pb-12">
         <div className="container">
-          <SectionHeading
-            title="Explore Based On Popular Interest"
-            linkText="See more →"
-            linkHref="/explore"
-          />
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {INTERESTS.map((interest) => (
+          <div className="flex justify-between items-end pb-12">
+            <h2 className="text-white text-4xl font-normal font-montserrat capitalize leading-10">
+              explore based on popular interest
+            </h2>
+            <Link
+              href="/explore"
+              className="text-center text-orange-400 text-3xl font-semibold font-inter capitalize leading-8 shrink-0 ml-8"
+            >
+              See More
+            </Link>
+          </div>
+          <div className="grid grid-cols-4 gap-5">
+            {[
+              { label: "Movies",     image: "/EBOPI-Image-1.png" },
+              { label: "Literature", image: "/EBOPI-Image-2.jpg" },
+              { label: "Report",     image: "/EBOPI-Image-3.png" },
+              { label: "Biography",  image: "/EBOPI-Image-4.jpg" },
+            ].map(({ label, image }) => (
               <Link
-                key={interest}
-                href={`/explore?q=${interest.toLowerCase()}`}
-                className="group relative flex aspect-[4/3] items-end overflow-hidden rounded-xl border border-amber-line bg-gradient-to-br from-[#3D1F00] to-[#1C0A00]"
+                key={label}
+                href={`/explore?q=${label.toLowerCase()}`}
+                className="h-80 bg-yellow-700 rounded-[20px] flex flex-col justify-start items-center"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <span className="relative z-10 p-4 font-display text-lg font-bold text-white">
-                  {interest}
-                </span>
+                <div className="self-stretch h-60 relative rounded-tl-[20px] rounded-tr-[20px]">
+                  <Image
+                    src={image}
+                    alt={label}
+                    fill
+                    className="rounded-tl-[20px] rounded-tr-[20px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-white/10 rounded-tl-[20px] rounded-tr-[20px]" />
+                </div>
+                <div className="self-stretch px-7 pt-5 pb-6 flex flex-col justify-start items-start gap-6">
+                  <div className="self-stretch text-white text-base font-semibold font-['Work_Sans'] capitalize leading-6">
+                    {label}
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
