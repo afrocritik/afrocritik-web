@@ -505,7 +505,7 @@ export default function HomePage() {
       </section>
 
       {/* EXPLORE BASED ON POPULAR INTEREST */}
-      <section className="bg-yellow-900 pt-32 pb-12">
+      <section className="bg-[#59341F] pt-32 pb-12">
         <div className="container">
           <div className="flex justify-between items-end pb-12">
             <h2 className="text-white text-4xl font-normal font-montserrat capitalize leading-10">
@@ -520,10 +520,10 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-4 gap-5">
             {[
-              { label: "Movies",     image: "/EBOPI-Image-1.png" },
+              { label: "Movies", image: "/EBOPI-Image-1.png" },
               { label: "Literature", image: "/EBOPI-Image-2.jpg" },
-              { label: "Report",     image: "/EBOPI-Image-3.png" },
-              { label: "Biography",  image: "/EBOPI-Image-4.jpg" },
+              { label: "Report", image: "/EBOPI-Image-3.png" },
+              { label: "Biography", image: "/EBOPI-Image-4.jpg" },
             ].map(({ label, image }) => (
               <Link
                 key={label}
