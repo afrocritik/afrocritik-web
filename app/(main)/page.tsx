@@ -356,45 +356,60 @@ export default function HomePage() {
       </section>
 
       {/* REPORT CTA */}
-      <section className="bg-bg-secondary py-16">
-        <div className="container">
-          <div className="flex flex-col items-center gap-8 rounded-2xl border border-amber-line bg-bg-card p-6 md:flex-row md:p-10">
-            <div className="flex aspect-[3/4] w-48 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber to-[#7A4A12] p-4 text-center font-display text-xl font-bold text-white">
+      <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 from 18% via-yellow-900 to-yellow-950">
+        <div className="container flex min-h-[692px] items-center gap-12 py-10">
+          {/* Book cover — allowed to overflow top/bottom */}
+          <div className="relative hidden shrink-0 lg:block">
+            <Image
+              src="/The-Afrocritik-Report-2.png"
+              alt="The Afrocritik Report 2025"
+              width={517}
+              height={625}
+              className="relative z-10 object-cover"
+              style={{ maxHeight: "625px" }}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col gap-6">
+            <p className="font-hedvig text-sm font-normal capitalize leading-4 text-orange-400">
               The Afrocritik Report 2025
+            </p>
+
+            <h2 className="max-w-[549px] font-baskervville text-4xl font-bold capitalize leading-10 text-orange-100">
+              What The Report Signals
+            </h2>
+
+            <p className="max-w-[564px] font-inter text-base font-normal capitalize leading-6 text-white/90">
+              Each year, the Afrocritik Report maps the cultural forces shaping
+              Africa and its diaspora — the breakthroughs, the ruptures, and the
+              tensions that define the moment. The 2025 edition reveals a
+              continent whose creative output is globally ascendant, even as the
+              infrastructure beneath it remains deeply contested.
+            </p>
+
+            {/* Stat badges */}
+            <div className="flex flex-wrap gap-3">
+              {["151 PAGES", "5 SECTIONS", "20+ CONTRIBUTORS"].map((badge) => (
+                <div
+                  key={badge}
+                  className="flex h-9 items-center rounded-lg bg-orange-100/10 px-5 text-xs font-semibold leading-3 text-stone-100 outline outline-1 outline-orange-400 font-inter"
+                >
+                  {badge}
+                </div>
+              ))}
             </div>
-            <div className="flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-amber">
-                The Afrocritik Report
-              </p>
-              <h2 className="mt-1 font-display text-2xl font-bold text-white md:text-3xl">
-                What The Report Signals
-              </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink-secondary">
-                Each year, the Afrocritik Report maps the cultural forces
-                shaping Africa and its diaspora — the breakthroughs, the
-                ruptures, and the tensions that define the moment.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {[
-                  "Digital Renaissance",
-                  "Global Crossover",
-                  "Archive Deficit",
-                ].map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-amber px-3 py-1 text-xs text-amber"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <Button
-                asChild
-                className="mt-6 rounded-md bg-amber px-7 text-white hover:bg-amber-hover"
-              >
-                <Link href="/explore?tab=reports">View Report</Link>
-              </Button>
-            </div>
+
+            {/* CTA */}
+            <Link
+              href="/explore?tab=reports"
+              className="inline-flex h-12 w-fit items-center justify-center rounded-xl px-10 font-inter text-xl font-medium capitalize leading-7 text-yellow-950"
+              style={{
+                background: "linear-gradient(42deg, #92400E 15%, #FB923C 81%)",
+              }}
+            >
+              View Report
+            </Link>
           </div>
         </div>
       </section>
