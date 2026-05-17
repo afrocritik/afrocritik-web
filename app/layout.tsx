@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { DM_Sans, Playfair_Display, Montserrat, Inter } from "next/font/google";
+import {
+  DM_Sans,
+  Playfair_Display,
+  Montserrat,
+  Inter,
+  Baskervville,
+  Hedvig_Letters_Serif,
+} from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -27,6 +34,18 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const baskervville = Baskervville({
+  subsets: ["latin"],
+  variable: "--font-baskervville",
+  weight: ["400"],
+});
+
+const hedvigLettersSerif = Hedvig_Letters_Serif({
+  subsets: ["latin"],
+  variable: "--font-hedvig",
+  weight: ["400"],
+});
+
 export const metadata: Metadata = {
   title: "Afrocritik Institute | African Cultural Intelligence Platform",
   description:
@@ -37,7 +56,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${playfair.variable} ${montserrat.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${dmSans.variable} ${playfair.variable} ${montserrat.variable} ${inter.variable} ${baskervville.variable} ${hedvigLettersSerif.variable}`}
+    >
       <body className="min-h-screen bg-base text-ink-primary antialiased">
         <Providers>{children}</Providers>
       </body>
