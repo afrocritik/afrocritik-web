@@ -9,6 +9,7 @@ import { PersonCard } from "@/components/common/PersonCard";
 import { HorizontalScroll } from "@/components/common/HorizontalScroll";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
 import { StatsMarquee } from "@/components/features/home/StatsMarquee";
+import { ThinkersSection } from "@/components/features/home/ThinkersSection";
 
 const SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
 
@@ -98,8 +99,10 @@ export default function HomePage() {
               textAlign: "center",
             }}
           >
-            Building Africa&apos;s<br />
-            <span style={{ color: "#C4963C" }}>Cultural Intelligence</span> Platform
+            Building Africa&apos;s
+            <br />
+            <span style={{ color: "#C4963C" }}>Cultural Intelligence</span>{" "}
+            Platform
           </h1>
           <p
             className="mt-5 font-semibold leading-[110%]"
@@ -204,7 +207,11 @@ export default function HomePage() {
             <Link
               href="/explore"
               className="shrink-0 md:-mr-6"
-              style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
             >
               <span
                 style={{
@@ -288,7 +295,10 @@ export default function HomePage() {
       </section>
 
       {/* FIVE PILLARS */}
-      <section id="pillars" className="bg-cream-panel pt-14 pb-20 md:pt-20 md:pb-28">
+      <section
+        id="pillars"
+        className="bg-cream-panel pt-14 pb-20 md:pt-20 md:pb-28"
+      >
         <div className="container">
           {/* Heading */}
           <div className="flex flex-col">
@@ -307,176 +317,34 @@ export default function HomePage() {
 
           {/* Cards */}
           <div className="mt-10 flex flex-wrap justify-start gap-5">
-              {PILLARS.map((p) => (
-                <div
-                  key={p.title}
-                  className="flex h-[279px] w-[218px] flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6"
-                >
-                  <Image
-                    src={p.icon}
-                    alt={p.title}
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 object-contain"
-                  />
-                  <h3 className="w-[180px] text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
-                    {p.title}
-                  </h3>
-                  <p className="w-[183px] text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
-                    {p.desc}
-                  </p>
-                </div>
-              ))}
+            {PILLARS.map((p) => (
+              <div
+                key={p.title}
+                className="flex h-[279px] w-[218px] flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6"
+              >
+                <Image
+                  src={p.icon}
+                  alt={p.title}
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 object-contain"
+                />
+                <h3 className="w-[180px] text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
+                  {p.title}
+                </h3>
+                <p className="w-[183px] text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
+                  {p.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* THINKERS WHO BUILT THE FOUNDATIONS */}
-      <section id="philosophy" className="bg-cream py-20 md:py-28">
+      <section id="philosophy" className="bg-cream py-20">
         <div className="container">
-          {/* Heading */}
-          <div className="mb-10 flex flex-col items-start text-left">
-            <span className="font-hedvig text-[14px] font-normal capitalize leading-[110%] text-[#9C5C08]">
-              Explore African Philosophy
-            </span>
-            <h2 className="mt-3 max-w-[906px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
-              The Thinkers Who Built The Foundations
-            </h2>
-            <p className="mt-3 max-w-[765px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
-              The Afrocritik Institute maps the intellectual traditions that shape how Africa understands itself. Each philosopher&apos;s ideas connect to works, movements, and living debates in the system.
-            </p>
-          </div>
-
-          {/* Thinker Card */}
-          <div className="flex overflow-hidden rounded-xl">
-            {/* Left: Image */}
-            <div
-              className="relative shrink-0"
-              style={{
-                width: '395px',
-                height: '778px',
-                background: "url('/TTWBTF-Paulin.png') lightgray 50% / cover no-repeat",
-                borderRadius: '12px 0 0 12px',
-              }}
-            >
-              {/* Dark gradient at bottom for text legibility */}
-              <div
-                className="absolute inset-x-0 bottom-0"
-                style={{
-                  height: '60%',
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.80) 0%, transparent 100%)',
-                  borderRadius: '0 0 0 12px',
-                }}
-              />
-              {/* Name + tags overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="font-inter text-[33px] font-semibold leading-[120%] tracking-[-0.66px] text-white">
-                  Paulin J. Hountondji
-                </h3>
-                <p className="mt-1 font-inter text-base font-semibold leading-[120%] tracking-[-0.32px] text-[#CCC]">
-                  Beninese Philosopher · 1942–2024
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {['BENIN', 'EPISTEMOLOGY', 'DECOLONIAL THOUGHT', 'ACTIVE: 1970 - 2024'].map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center rounded px-3 pt-[7px] pb-[2px] font-hedvig text-[11px] leading-[120%] tracking-[-0.22px] text-[#F9B65F]"
-                      style={{ background: 'rgba(124, 73, 6, 0.60)' }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Info Panel */}
-            <div
-              className="flex flex-1 flex-col justify-center px-10 py-8"
-              style={{
-                borderRadius: '0 12px 12px 0',
-                border: '1px solid rgba(156, 92, 8, 0.30)',
-                background: '#FAF7F2',
-              }}
-            >
-              {/* Body text */}
-              <div className="max-w-[649px]">
-                <p className="font-inter text-base leading-[179%] text-black">
-                  <span className="font-bold capitalize">Core Contribution</span>
-                  <br />
-                  <span className="font-normal capitalize">
-                    Hountondji challenged the idea that African philosophy was a collective, anonymous worldview recoverable through ethnography. He argued that genuine philosophy requires individual authorship, critical debate, and rigorous method — and that African thinkers must produce knowledge on their own terms, not merely be objects of Western study.
-                  </span>
-                </p>
-                <p className="mt-4 font-inter text-base leading-[179%] text-black">
-                  <span className="font-bold capitalize">Key Ideas</span>
-                  <br />
-                  <span className="font-normal capitalize">
-                    Critique of Ethnophilosophy: Rejected the practice of treating collective beliefs and oral traditions as &quot;philosophy,&quot; arguing this confused anthropology with critical thought and kept African intellectual life in a subordinate position.
-                  </span>
-                </p>
-                <p className="mt-1 font-inter text-base leading-[179%] text-black">
-                  <span className="font-bold capitalize">Knowledge Sovereignty: </span>
-                  <span className="font-normal capitalize">
-                    Advocated for Africa to control its own knowledge production — from research questions to methodologies — rather than serving as raw material for Western academic extraction.
-                  </span>
-                </p>
-              </div>
-
-              {/* Selected Works */}
-              <div className="mt-6">
-                <p className="font-inter text-base font-bold leading-[100%] text-black">
-                  Selected Works
-                </p>
-                <div className="mt-3 flex flex-wrap gap-3">
-                  {[
-                    { title: 'African Philosophy: Myth and Reality', sub: '1976 (French) · 1983 (English)', w: 'w-[216px]' },
-                    { title: 'The Struggle for Meaning', sub: '1997 · Philosophy, Culture & Democracy in Africa', w: '' },
-                    { title: 'Endogenous Knowledge', sub: '1994 · Research Trails', w: '' },
-                  ].map((work) => (
-                    <div
-                      key={work.title}
-                      className={`inline-flex items-center justify-end gap-3 rounded px-3 pt-5 pb-[18px] ${work.w}`}
-                      style={{
-                        border: '1px solid #DD962A',
-                        background: 'rgba(243, 229, 208, 0.37)',
-                      }}
-                    >
-                      <div className="flex flex-col gap-1">
-                        <p className="w-[169px] font-hedvig text-[14px] font-bold leading-[120%] tracking-[-0.28px] text-black">
-                          {work.title}
-                        </p>
-                        <p className="font-inter text-[12px] font-normal leading-[140%] text-[#666]">
-                          {work.sub}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Related Topics */}
-              <div className="mt-6">
-                <p className="font-inter text-base font-bold leading-[100%] text-black">
-                  Related Topics
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {['Kwasi Wiredu', 'Ngũgĩ wa Thiong\'o', 'Pan-Africanism', 'Négritude', 'Decoloniality'].map((topic) => (
-                    <span
-                      key={topic}
-                      className="inline-flex items-center rounded px-3 pt-[11px] pb-[8px] font-hedvig text-[11px] font-bold leading-[120%] tracking-[-0.22px] text-black"
-                      style={{
-                        border: '1px solid #DD962A',
-                        background: 'rgba(243, 229, 208, 0.37)',
-                      }}
-                    >
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <ThinkersSection />
         </div>
       </section>
 
