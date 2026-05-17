@@ -443,10 +443,9 @@ export default function HomePage() {
 
       {/* ESSENTIAL WORKS IN MUSIC */}
       <section
-        className="relative overflow-hidden py-16"
+        className="relative overflow-hidden pt-24 pb-12"
         style={{
-          background:
-            "linear-gradient(180deg, #4D311D 17.79%, #794C2D 52.4%, #4D311D 95.19%)",
+          background: "linear-gradient(180deg, #794C2D 52.4%, #4D311D 73.19%)",
         }}
       >
         <div className="container">
