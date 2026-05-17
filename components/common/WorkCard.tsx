@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 export interface WorkCardProps {
   slug?: string;
   title: string;
+  author?: string;
   description?: string;
   hoverDescription?: string;
   badge?: string;
@@ -18,6 +19,7 @@ export interface WorkCardProps {
   type?: string;
   rating?: number;
   essential?: boolean;
+  ewim?: boolean;
   className?: string;
 }
 
@@ -330,7 +332,236 @@ function StandardCard({
   );
 }
 
-export function WorkCard({ essential, ...props }: Readonly<WorkCardProps>): JSX.Element {
+function EWIMCard({
+  slug = "#",
+  title,
+  author,
+  badge,
+  tags,
+  image,
+  rating,
+  className,
+}: Readonly<Omit<WorkCardProps, "essential" | "ewim">>) {
+  const { hovered, onEnter, onLeave } = useHoverDelay();
+
+  return (
+    <fieldset
+      className={cn(className)}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+      onFocus={onEnter}
+      onBlur={onLeave}
+      style={{
+        position: "relative",
+        padding: 0,
+        margin: 0,
+        flexShrink: 0,
+        width: hovered ? "480px" : "240px",
+        height: "384px",
+        borderRadius: "8px",
+        border: "1px solid #B45309",
+        background: "rgba(255, 241, 242, 0.10)",
+        transition: "width 0.4s ease",
+      }}
+    >
+      <legend className="sr-only">{title}</legend>
+
+      {/* Badge — bleeds left of card, top aligned with image */}
+      {badge && (
+        <span
+          style={{
+            position: "absolute",
+            top: "14px",
+            left: "-4px",
+            zIndex: 2,
+            background: "#B91C1C",
+            color: "#FFF",
+            fontSize: "9px",
+            fontWeight: 400,
+            lineHeight: "12px",
+            padding: "3px 8px",
+            borderRadius: "5px",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {badge}
+        </span>
+      )}
+
+      {/* Image */}
+      <div
+        style={{
+          position: "absolute",
+          top: "16px",
+          left: "16px",
+          right: "16px",
+          height: "240px",
+          overflow: "hidden",
+          borderRadius: "4px",
+          background: "#3D1F00",
+        }}
+      >
+        <Link href={`/works/${slug}`} className="block h-full">
+          {image && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={image}
+              alt={title}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          )}
+        </Link>
+      </div>
+
+      {/* Rating */}
+      {typeof rating === "number" && (
+        <div
+          style={{
+            position: "absolute",
+            top: "268px",
+            right: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "3px",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/Star.svg"
+            alt=""
+            style={{ width: "12px", height: "10px" }}
+          />
+          <span
+            style={{
+              color: "#FFF",
+              fontFamily: "var(--font-inter)",
+              fontSize: "12px",
+              fontWeight: 600,
+              lineHeight: "140%",
+            }}
+          >
+            {rating % 1 === 0 ? rating.toFixed(1) : String(rating)}
+          </span>
+        </div>
+      )}
+
+      {/* Title */}
+      <div
+        style={{
+          position: "absolute",
+          top: "279px",
+          left: "16px",
+          right: "40px",
+        }}
+      >
+        <Link href={`/works/${slug}`}>
+          <h3
+            style={{
+              color: "#D6D3D1",
+              fontFamily: "var(--font-inter)",
+              fontSize: hovered ? "16px" : "14px",
+              fontWeight: 600,
+              lineHeight: "130%",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              transition: "font-size 0.4s ease",
+            }}
+          >
+            {title}
+          </h3>
+        </Link>
+      </div>
+
+      {/* Author */}
+      {author && (
+        <div
+          style={{
+            position: "absolute",
+            top: "315px",
+            left: "16px",
+          }}
+        >
+          <span
+            style={{
+              color: "#b45309",
+              fontFamily: "var(--font-inter)",
+              fontSize: "16px",
+              fontWeight: 600,
+              lineHeight: "150%",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {author}
+          </span>
+        </div>
+      )}
+
+      {/* Tags + Bookmark */}
+      <div
+        style={{
+          position: "absolute",
+          top: "345px",
+          left: "16px",
+          right: "16px",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+        }}
+      >
+        {tags?.map((tag) => (
+          <span
+            key={tag}
+            style={{
+              height: "24px",
+              borderRadius: "5px",
+              background: "rgba(180, 83, 9, 0.20)",
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "0 8px",
+              color: "#FFF",
+              fontSize: "9px",
+              fontWeight: 400,
+              lineHeight: "140%",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {tag}
+          </span>
+        ))}
+        {hovered && (
+          <button
+            aria-label="Share"
+            style={{
+              marginLeft: "auto",
+              width: "28px",
+              height: "24px",
+              border: "1px solid #737373",
+              borderRadius: "5px",
+              background: "transparent",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              flexShrink: 0,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/Share-Icon.png"
+              alt=""
+              style={{ width: "16px", height: "16px", objectFit: "contain" }}
+            />
+          </button>
+        )}
+      </div>
+    </fieldset>
+  );
+}
+
+export function WorkCard({ essential, ewim, ...props }: Readonly<WorkCardProps>): JSX.Element {
+  if (ewim) return <EWIMCard {...props} />;
   if (essential) return <EssentialCard {...props} />;
   return <StandardCard {...props} />;
 }
