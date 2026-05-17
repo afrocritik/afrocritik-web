@@ -29,6 +29,7 @@ const config = {
         cream: {
           DEFAULT: "#F4EAD4",
           card: "#FFFFFF",
+          panel: "#F3E5D0",
         },
         amber: {
           DEFAULT: "#C8922A",
@@ -67,6 +68,8 @@ const config = {
         display: ["var(--font-playfair)", "Georgia", "serif"],
         montserrat: ["var(--font-montserrat)", "system-ui", "sans-serif"],
         inter: ["var(--font-inter)", "system-ui", "sans-serif"],
+        baskervville: ["var(--font-baskervville)", "Georgia", "serif"],
+        hedvig: ["var(--font-hedvig)", "Georgia", "serif"],
       },
       keyframes: {
         "accordion-down": {
