@@ -21,7 +21,7 @@ export function IdeaCard({
   tags = [],
   theme = "light",
   className,
-}: IdeaCardProps) {
+}: Readonly<IdeaCardProps>) {
   const light = theme === "light";
 
   return (
@@ -32,7 +32,7 @@ export function IdeaCard({
         light
           ? "border-black/10 bg-white hover:border-amber"
           : "border-amber-line bg-bg-card hover:border-amber/50",
-        className
+        className,
       )}
     >
       {category && (
@@ -42,8 +42,8 @@ export function IdeaCard({
       )}
       <h3
         className={cn(
-          "font-display text-xl font-bold",
-          light ? "text-ink-dark" : "text-white"
+          "w-60 justify-start text-2xl font-baskervville leading-7",
+          light ? "text-orange-950 font-bold" : "text-white",
         )}
       >
         {title}
@@ -51,8 +51,8 @@ export function IdeaCard({
       {subtitle && (
         <p
           className={cn(
-            "mt-0.5 text-sm italic",
-            light ? "text-[#8B6B4A]" : "text-ink-secondary"
+            "mt-0.5 italic w-60 justify-center text-base font-normal font-inter leading-5",
+            light ? "text-yellow-700" : "text-ink-secondary",
           )}
         >
           {subtitle}
@@ -61,8 +61,8 @@ export function IdeaCard({
       {excerpt && (
         <p
           className={cn(
-            "mt-3 line-clamp-4 flex-1 text-sm leading-relaxed",
-            light ? "text-[#5B4530]" : "text-ink-secondary"
+            "mt-3 line-clamp-4 flex-1 w-60 justify-start text-base font-normal font-['Inter'] leading-5",
+            light ? "text-zinc-600" : "text-ink-secondary",
           )}
         >
           {excerpt}
@@ -71,17 +71,22 @@ export function IdeaCard({
       {tags.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-1.5">
           {tags.map((t) => (
-            <span
+            <div
               key={t}
-              className={cn(
-                "rounded-full px-2.5 py-0.5 text-[10px] font-medium",
-                light
-                  ? "bg-[#F0E6D0] text-[#6B4A2A]"
-                  : "bg-amber-soft text-amber"
-              )}
+              className="h-8 px-2.5 py-2 bg-yellow-700/20 rounded-md inline-flex justify-center items-center gap-3 overflow-hidden"
             >
-              {t}
-            </span>
+              <span
+                key={t}
+                className={cn(
+                  "justify-start text-yellow-700 text-xs font-normal font-['Inter'] leading-4",
+                  light
+                    ? "bg-[#F0E6D0] text-yellow-700"
+                    : "bg-amber-soft text-amber",
+                )}
+              >
+                {t}
+              </span>
+            </div>
           ))}
         </div>
       )}

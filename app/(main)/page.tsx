@@ -4,12 +4,12 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
-import { IdeaCard } from "@/components/common/IdeaCard";
 import { PersonCard } from "@/components/common/PersonCard";
 import { HorizontalScroll } from "@/components/common/HorizontalScroll";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
 import { StatsMarquee } from "@/components/features/home/StatsMarquee";
 import { ThinkersSection } from "@/components/features/home/ThinkersSection";
+import { IdeasSection } from "@/components/features/home/IdeasSection";
 
 const SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
 
@@ -349,20 +349,9 @@ export default function HomePage() {
       </section>
 
       {/* IDEAS THAT SHAPE THE CONTINENT */}
-      <section className="bg-cream pb-20">
+      <section className="bg-stone-100 py-20">
         <div className="container">
-          <SectionHeading
-            theme="light"
-            title="Ideas That Shape The Continent"
-            subtitle="Concepts, philosophies, and movements that continue to define African thought."
-            linkText="Explore all ideas →"
-            linkHref="/explore?tab=ideas"
-          />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {IDEAS.map((idea) => (
-              <IdeaCard key={idea.slug} {...idea} theme="light" />
-            ))}
-          </div>
+          <IdeasSection />
         </div>
       </section>
 
