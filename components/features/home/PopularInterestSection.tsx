@@ -1,0 +1,51 @@
+import Link from "next/link";
+import Image from "next/image";
+
+const INTERESTS = [
+  { label: "Movies", image: "/EBOPI-Image-1.png" },
+  { label: "Literature", image: "/EBOPI-Image-2.jpg" },
+  { label: "Report", image: "/EBOPI-Image-3.png" },
+  { label: "Biography", image: "/EBOPI-Image-4.jpg" },
+];
+
+export function PopularInterestSection() {
+  return (
+    <>
+      <div className="flex justify-between items-end pb-12">
+        <h2 className="text-white text-4xl font-bold font-baskervville capitalize leading-tight">
+          explore based on popular interest
+        </h2>
+        <Link
+          href="/explore"
+          className="text-center text-orange-400 text-3xl font-semibold font-inter capitalize leading-8 shrink-0 ml-8"
+        >
+          See More
+        </Link>
+      </div>
+      <div className="grid grid-cols-4 gap-5">
+        {INTERESTS.map(({ label, image }) => (
+          <Link
+            key={label}
+            href={`/explore?q=${label.toLowerCase()}`}
+            className="h-80 bg-yellow-700 rounded-[20px] flex flex-col justify-start items-center"
+          >
+            <div className="self-stretch h-60 relative rounded-tl-[20px] rounded-tr-[20px]">
+              <Image
+                src={image}
+                alt={label}
+                fill
+                className="rounded-tl-[20px] rounded-tr-[20px] object-cover"
+              />
+              <div className="absolute inset-0 bg-white/10 rounded-tl-[20px] rounded-tr-[20px]" />
+            </div>
+            <div className="self-stretch px-7 pt-5 pb-6 flex flex-col justify-start items-start gap-6">
+              <div className="self-stretch text-white text-base font-semibold font-['Work_Sans'] capitalize leading-6">
+                {label}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </>
+  );
+}
