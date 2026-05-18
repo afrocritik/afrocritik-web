@@ -4,8 +4,6 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
-import { PersonCard } from "@/components/common/PersonCard";
-import { HorizontalScroll } from "@/components/common/HorizontalScroll";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
 import { StatsMarquee } from "@/components/features/home/StatsMarquee";
 import { ThinkersSection } from "@/components/features/home/ThinkersSection";
@@ -32,22 +30,6 @@ const PILLARS = [
   { icon: "/TFP-Ratings.svg", title: "Ratings & Index", desc: "Structured evaluation frameworks that bring transparency and rigor to African cultural assessment." },
   { icon: "/TFP-Research.svg", title: "Research & Data", desc: "Annual reports, trend analysis, and data-driven cultural research that maps the continent's creative trajectory." },
   { icon: "/TFP-Philosophy.svg", title: "African Philosophy", desc: "Documenting and connecting the philosophical traditions — Ubuntu, Négritude, Maat, Sankofa, Omolúàbí — that undergird African cultural production." },
-];
-
-const IDEAS = [
-  { slug: "ubuntu", title: "Ubuntu", category: "Philosophy", subtitle: "I am because we are", excerpt: "A Nguni Bantu term describing the interconnectedness of humanity — a person is a person through other persons.", tags: ["Ethics", "Community"] },
-  { slug: "sankofa", title: "Sankofa", category: "Symbolism", subtitle: "Return and fetch it", excerpt: "An Akan principle teaching that there is wisdom in learning from the past to build a better future.", tags: ["Heritage", "Akan"] },
-  { slug: "maat", title: "Maat", category: "Cosmology", subtitle: "Truth, balance, order", excerpt: "The ancient Kemetic concept of cosmic harmony, justice, and the moral order of the universe.", tags: ["Justice", "Kemet"] },
-  { slug: "negritude", title: "Négritude", category: "Movement", subtitle: "Reclaiming blackness", excerpt: "A literary and ideological movement reclaiming the value of Black identity and African culture.", tags: ["Literature", "Politics"] },
-];
-
-const THINKERS = [
-  { name: "Wole Soyinka", role: "Playwright" },
-  { name: "Chinua Achebe", role: "Novelist" },
-  { name: "Ngũgĩ wa Thiong'o", role: "Author" },
-  { name: "Achille Mbembe", role: "Philosopher" },
-  { name: "Mariama Bâ", role: "Writer" },
-  { name: "Kwame Nkrumah", role: "Theorist" },
 ];
 
 const EWIM_MUSIC = [
@@ -87,12 +69,47 @@ const EWIM_MUSIC = [
 
 const INTERESTS = ["Movies", "Literature", "Report", "Biography"];
 
-const LITERATURE = [
-  { title: "Purple Hibiscus", type: "Literature", year: 2003, country: "Nigeria", rating: 4.7 },
-  { title: "So Long a Letter", type: "Literature", year: 1979, country: "Senegal", rating: 4.6 },
-  { title: "Half of a Yellow Sun", type: "Literature", year: 2006, country: "Nigeria", rating: 4.9 },
-  { title: "Weep Not, Child", type: "Literature", year: 1964, country: "Kenya", rating: 4.5 },
-  { title: "Petals of Blood", type: "Literature", year: 1977, country: "Kenya", rating: 4.4 },
+const EWIL_LITERATURE = [
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "Book Review",
+    tags: ["PROTEST", "AFROBEAT", "MUSIC"],
+    rating: 9.8,
+    image: "/EWIL-Image-1.png",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "Book Review",
+    tags: ["LITERATURE", "COLONIALISM"],
+    rating: 9.8,
+    image: "/EWIL-Image-2.png",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "Book Review",
+    tags: ["NOLLYWOOD", "SEASONS", "CAST & CREW"],
+    rating: 9.8,
+    image: "/EWIL-Image-3.png",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "Book Review",
+    tags: ["CELEBRITY", "AFROBEAT", "MUSIC"],
+    rating: 9.8,
+    image: "/EWIL-Image-4.png",
+  },
+  {
+    title: "Lorem ipsum dolor sit amet consec",
+    author: "Criticker",
+    badge: "Book Review",
+    tags: ["WRITER", "POLITICS", "POETRY"],
+    rating: 9.8,
+    image: "/EWIL-Image-5.png",
+  },
 ];
 
 const KNOWLEDGE_STEPS = [
@@ -271,53 +288,57 @@ export default function HomePage() {
               </svg>
             </Link>
           </div>
-          <div className="relative">
-            <div className="flex gap-5 overflow-x-auto lg:overflow-x-visible">
-              {ESSENTIAL_WORKS.map((w) => (
-                <WorkCard key={w.title} {...w} essential />
-              ))}
-            </div>
-            {/* Next button — bleeds off the right edge of the page */}
-            <button
-              aria-label="Next"
-              className="absolute hidden lg:flex items-center justify-center"
+        </div>
+        {/* Full-width row so the NEXT button can bleed off the viewport right edge */}
+        <div className="relative" style={{ minHeight: "395px" }}>
+          <div
+            className="flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          >
+            {ESSENTIAL_WORKS.map((w) => (
+              <WorkCard key={w.title} {...w} essential />
+            ))}
+          </div>
+          {/* NEXT button — chevron visible at viewport right edge, dark rectangle bleeds off */}
+          <button
+            aria-label="Next"
+            className="absolute hidden lg:flex items-center justify-center"
+            style={{
+              top: "30%",
+              right: "-24px",
+              transform: "translateY(-50%)",
+              width: "73px",
+              height: "197px",
+              borderRadius: "12px",
+              background: "rgba(35, 23, 6, 0.40)",
+            }}
+          >
+            <div
               style={{
-                top: "167.5px",
-                right: "-52.5px",
-                transform: "translateY(-50%)",
-                width: "73px",
-                height: "197px",
-                borderRadius: "12px",
-                background: "rgba(35, 23, 6, 0.40)",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <div
-                style={{
-                  width: "48px",
-                  height: "48px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="28"
+                viewBox="0 0 16 28"
+                fill="none"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="28"
-                  viewBox="0 0 16 28"
-                  fill="none"
-                >
-                  <path
-                    d="M2 26L14 14L2 2"
-                    stroke="white"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </button>
-          </div>
+                <path
+                  d="M2 26L14 14L2 2"
+                  stroke="white"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </section>
 
@@ -454,53 +475,57 @@ export default function HomePage() {
             linkText="View All →"
             linkHref="/explore?q=music"
           />
-          <div className="relative">
-            <div className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible">
-              {EWIM_MUSIC.map((w) => (
-                <WorkCard key={w.title} {...w} ewim />
-              ))}
-            </div>
-            {/* Next button — bleeds off the right edge of the page */}
-            <button
-              aria-label="Next"
-              className="absolute hidden lg:flex items-center justify-center"
+        </div>
+        {/* Full-width row so the NEXT button can bleed off the viewport right edge */}
+        <div className="relative">
+          <div
+            className="hide-scrollbar flex justify-end gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          >
+            {EWIM_MUSIC.map((w) => (
+              <WorkCard key={w.title} {...w} ewim />
+            ))}
+          </div>
+          {/* NEXT button — chevron visible at viewport right edge, dark rectangle bleeds off */}
+          <button
+            aria-label="Next"
+            className="absolute hidden lg:flex items-center justify-center"
+            style={{
+              top: "40%",
+              right: "-24px",
+              transform: "translateY(-50%)",
+              width: "73px",
+              height: "197px",
+              borderRadius: "12px",
+              background: "rgba(35, 23, 6, 0.40)",
+            }}
+          >
+            <div
               style={{
-                top: "50%",
-                right: "-52.5px",
-                transform: "translateY(-50%)",
-                width: "73px",
-                height: "197px",
-                borderRadius: "12px",
-                background: "rgba(35, 23, 6, 0.40)",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <div
-                style={{
-                  width: "48px",
-                  height: "48px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="28"
+                viewBox="0 0 16 28"
+                fill="none"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="28"
-                  viewBox="0 0 16 28"
-                  fill="none"
-                >
-                  <path
-                    d="M2 26L14 14L2 2"
-                    stroke="white"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </button>
-          </div>
+                <path
+                  d="M2 26L14 14L2 2"
+                  stroke="white"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </section>
 
@@ -551,25 +576,71 @@ export default function HomePage() {
       </section>
 
       {/* ESSENTIAL WORKS IN LITERATURE */}
-      <section className="bg-bg-primary pb-16">
+      <section
+        className="relative overflow-hidden bg-[#59341F] py-24"
+      >
         <div className="container">
           <SectionHeading
             title="Essential Works In Literature"
-            linkText="Explore literature →"
+            linkText="View All →"
             linkHref="/explore?q=literature"
           />
-          <HorizontalScroll>
-            {LITERATURE.map((w) => (
-              <div key={w.title} className="w-[200px] shrink-0">
-                <WorkCard {...w} essential />
-              </div>
+        </div>
+        {/* Full-width row so the NEXT button can bleed off the viewport right edge */}
+        <div className="relative">
+          <div
+            className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          >
+            {EWIL_LITERATURE.map((w) => (
+              <WorkCard key={w.image} {...w} ewil />
             ))}
-          </HorizontalScroll>
+          </div>
+          {/* NEXT button — chevron visible at viewport right edge, dark rectangle bleeds off */}
+          <button
+            aria-label="Next"
+            className="absolute hidden lg:flex items-center justify-center"
+            style={{
+              top: "40%",
+              right: "-24px",
+              transform: "translateY(-50%)",
+              width: "73px",
+              height: "197px",
+              borderRadius: "12px",
+              background: "rgba(35, 23, 6, 0.40)",
+            }}
+          >
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="28"
+                viewBox="0 0 16 28"
+                fill="none"
+              >
+                <path
+                  d="M2 26L14 14L2 2"
+                  stroke="white"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </section>
 
       {/* THINKERS CAROUSEL */}
-      <section className="bg-bg-primary pb-16">
+      {/* <section className="bg-bg-primary pb-16">
         <div className="container">
           <SectionHeading
             title="Voices of African Thought"
@@ -584,7 +655,7 @@ export default function HomePage() {
             ))}
           </HorizontalScroll>
         </div>
-      </section>
+      </section> */}
 
       {/* FROM CULTURE TO KNOWLEDGE */}
       <section className="bg-cream py-20">
