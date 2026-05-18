@@ -40,33 +40,29 @@ const INSTITUTE_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-amber-line bg-base pt-16 pb-8">
-      <div className="container grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
+    <footer className="border-t border-amber-line bg-base pt-16 pb-24">
+      <div className="container grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1fr_auto_auto_1fr]">
         {/* Brand */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-3">
           <Logo />
-          <p className="max-w-xs text-sm leading-relaxed text-ink-muted">
+          <p className="max-w-xs text-xs font-semibold capitalize leading-4 text-neutral-500">
             A Pan-African Non-Profit Cultural Institution Building The
             Infrastructure For African Cultural Criticism, With Bases In Lagos
             And Long Beach.
           </p>
-          <div>
-            <p className="mb-3 text-sm font-medium text-ink-secondary">
+          <div className="flex flex-col gap-3.5">
+            <p className="text-base font-normal leading-6 text-stone-300">
               Join our community
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2.5">
               {SOCIALS.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
-                  className="text-ink-muted transition-colors hover:text-amber"
+                  className="flex size-8 items-center justify-center text-zinc-500 transition-colors hover:text-amber"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="h-5 w-5"
-                  >
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
                     <path d={s.path} />
                   </svg>
                 </a>
@@ -76,9 +72,9 @@ export function Footer() {
         </div>
 
         {/* Explore */}
-        <div>
-          <h4 className="mb-5 font-semibold text-amber">Explore</h4>
-          <ul className="flex flex-col gap-3 text-sm text-ink-secondary">
+        <div className="w-32">
+          <h4 className="mb-6 text-xl font-bold capitalize leading-9 text-amber">Explore</h4>
+          <ul className="flex flex-col gap-2 text-base text-stone-300">
             {EXPLORE_LINKS.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className="hover:text-white">
@@ -90,9 +86,9 @@ export function Footer() {
         </div>
 
         {/* Institute */}
-        <div>
-          <h4 className="mb-5 font-semibold text-amber">Institute</h4>
-          <ul className="flex flex-col gap-3 text-sm text-ink-secondary">
+        <div className="w-40">
+          <h4 className="mb-6 text-xl font-bold capitalize leading-9 text-amber">Institute</h4>
+          <ul className="flex flex-col gap-2 text-base text-stone-300">
             {INSTITUTE_LINKS.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className="hover:text-white">
@@ -105,37 +101,27 @@ export function Footer() {
 
         {/* Newsletter */}
         <div>
-          <h4 className="mb-2 text-lg font-bold text-white">
+          <h4 className="mb-6 text-2xl font-bold capitalize leading-9 text-white font-sans">
             Join Our Weekly Digest
           </h4>
-          <p className="mb-5 text-sm text-ink-muted">
-            Get useful articles in your inbox every week.
-          </p>
-          <form className="flex items-center gap-2 rounded-full bg-white p-1.5 pl-4">
-            <input
-              type="email"
-              placeholder="Enter your email here"
-              className="min-w-0 flex-1 bg-transparent text-sm text-ink-dark placeholder:text-ink-muted focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="rounded-full bg-amber px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-hover"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <div className="container mt-14 flex flex-col items-center justify-between gap-3 border-t border-amber-line pt-6 text-xs text-ink-muted md:flex-row">
-        <p>© {new Date().getFullYear()} Afrocritik Institute. All rights reserved.</p>
-        <div className="flex items-center gap-6">
-          <Link href="#" className="hover:text-ink-secondary">
-            Privacy Policy
-          </Link>
-          <Link href="#" className="hover:text-ink-secondary">
-            Terms of Service
-          </Link>
+          <div className="flex flex-col gap-5">
+            <p className="max-w-xs text-base leading-6 text-stone-300">
+              Get useful articles in your inbox every week.
+            </p>
+            <form className="flex h-14 items-center gap-3 rounded-[20px] bg-white pl-5">
+              <input
+                type="email"
+                placeholder="Enter your email here"
+                className="min-w-0 flex-1 bg-transparent text-base text-zinc-800 placeholder:text-zinc-500 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="h-14 w-40 shrink-0 rounded-[20px] bg-gradient-to-r from-yellow-700 to-orange-400 text-base font-semibold text-white transition-opacity hover:opacity-90"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </footer>

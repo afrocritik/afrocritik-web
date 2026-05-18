@@ -10,7 +10,7 @@ export function Logo({
   href?: string;
 }>) {
   return (
-    <Link href={href} className={cn("shrink-0 relative", className)}>
+    <Link href={href} className={cn("block w-fit shrink-0 relative", className)}>
       <Image
         src="/logo.png"
         alt="Afrocritik"
