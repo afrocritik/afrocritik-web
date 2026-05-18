@@ -34,28 +34,30 @@ export function ReportCTA() {
           infrastructure beneath it remains deeply contested.
         </p>
 
-        {/* Stat badges */}
-        <div className="flex flex-wrap gap-3">
-          {["151 PAGES", "5 SECTIONS", "20+ CONTRIBUTORS"].map((badge) => (
-            <div
-              key={badge}
-              className="flex h-9 items-center rounded-lg bg-orange-100/10 px-5 text-xs font-semibold leading-3 text-stone-100 outline outline-1 outline-orange-400 font-inter"
-            >
-              {badge}
-            </div>
-          ))}
-        </div>
+        {/* Stat badges + CTA */}
+        <div className="flex w-fit flex-col gap-6">
+          <div className="flex gap-3">
+            {["151 PAGES", "5 SECTIONS", "20+ CONTRIBUTORS"].map((badge) => (
+              <div
+                key={badge}
+                className="flex h-9 items-center rounded-lg bg-orange-100/10 px-5 text-xs font-semibold leading-3 text-stone-100 outline outline-1 outline-orange-400 font-inter"
+              >
+                {badge}
+              </div>
+            ))}
+          </div>
 
-        {/* CTA */}
-        <Link
-          href="/explore?tab=reports"
-          className="inline-flex h-12 w-fit items-center justify-center rounded-xl px-10 font-inter text-xl font-medium capitalize leading-7 text-yellow-950"
-          style={{
-            background: "linear-gradient(42deg, #92400E 15%, #FB923C 81%)",
-          }}
-        >
-          View Report
-        </Link>
+          {/* CTA */}
+          <Link
+            href="/explore?tab=reports"
+            className="inline-flex h-12 w-full items-center justify-center rounded-xl px-10 font-inter text-xl font-medium capitalize leading-7 text-yellow-950"
+            style={{
+              background: "linear-gradient(42deg, #92400E 15%, #FB923C 81%)",
+            }}
+          >
+            View Report
+          </Link>
+        </div>
       </div>
     </div>
   );

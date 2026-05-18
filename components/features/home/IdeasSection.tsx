@@ -60,12 +60,10 @@ export function IdeasSection() {
       </div>
 
       {/* Idea Card */}
-      <div className="flex overflow-hidden rounded-xl">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {IDEAS.map((idea) => (
-            <IdeaCard key={idea.slug} {...idea} theme="light" />
-          ))}
-        </div>
+      <div className="mt-10 grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:pr-12">
+        {IDEAS.map((idea) => (
+          <IdeaCard key={idea.slug} {...idea} theme="light" />
+        ))}
       </div>
     </>
   );

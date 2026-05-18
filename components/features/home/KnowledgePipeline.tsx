@@ -22,14 +22,14 @@ export function KnowledgePipeline() {
           institutional knowledge.
         </p>
       </div>
-      <div className="mt-10 flex overflow-x-auto">
+      <div className="mt-10 flex overflow-x-auto lg:pr-12">
         {KNOWLEDGE_STEPS.map((s, i) => {
           const isFirst = i === 0;
           const isLast = i === KNOWLEDGE_STEPS.length - 1;
           return (
             <div
               key={s.title}
-              className={`flex shrink-0 flex-col items-center justify-center gap-3 size-56 bg-stone-100 border border-yellow-700/30 px-4${
+              className={`flex flex-1 basis-56 flex-col items-center justify-center gap-3 h-56 bg-stone-100 border border-yellow-700/30 px-4${
                 isFirst ? " rounded-tl-xl rounded-bl-xl" : " -ml-px"
               }${isLast ? " rounded-tr-xl rounded-br-xl" : ""}`}
             >

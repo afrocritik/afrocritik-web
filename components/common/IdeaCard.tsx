@@ -42,7 +42,7 @@ export function IdeaCard({
       )}
       <h3
         className={cn(
-          "w-60 justify-start text-2xl font-baskervville leading-7",
+          "w-full justify-start text-2xl font-baskervville leading-7",
           light ? "text-orange-950 font-bold" : "text-white",
         )}
       >
@@ -51,7 +51,7 @@ export function IdeaCard({
       {subtitle && (
         <p
           className={cn(
-            "mt-0.5 italic w-60 justify-center text-base font-normal font-inter leading-5",
+            "mt-0.5 italic w-full justify-center text-base font-normal font-inter leading-5",
             light ? "text-yellow-700" : "text-ink-secondary",
           )}
         >
@@ -61,7 +61,7 @@ export function IdeaCard({
       {excerpt && (
         <p
           className={cn(
-            "mt-3 line-clamp-4 flex-1 w-60 justify-start text-base font-normal font-['Inter'] leading-5",
+            "mt-3 line-clamp-4 flex-1 w-full justify-start text-base font-normal font-['Inter'] leading-5",
             light ? "text-zinc-600" : "text-ink-secondary",
           )}
         >

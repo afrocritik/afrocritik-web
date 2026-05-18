@@ -27,11 +27,11 @@ export function PillarsSection() {
       </div>
 
       {/* Cards */}
-      <div className="mt-10 flex flex-wrap justify-start gap-5">
+      <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:pr-12">
         {PILLARS.map((p) => (
           <div
             key={p.title}
-            className="flex h-[279px] w-[218px] flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6"
+            className="flex h-[279px] w-full flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6"
           >
             <Image
               src={p.icon}
@@ -40,10 +40,10 @@ export function PillarsSection() {
               height={48}
               className="h-12 w-12 object-contain"
             />
-            <h3 className="w-[180px] text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
+            <h3 className="w-full text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
               {p.title}
             </h3>
-            <p className="w-[183px] text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
+            <p className="w-full text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
               {p.desc}
             </p>
           </div>
