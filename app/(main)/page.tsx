@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
@@ -117,6 +116,7 @@ const KNOWLEDGE_STEPS = [
   { step: "02", title: "Documented", desc: "Works are archived with rich metadata into the digital record." },
   { step: "03", title: "Criticized", desc: "Critics and scholars evaluate, contextualize, and interpret each work." },
   { step: "04", title: "Imparted", desc: "Structured knowledge is shared back with the public and researchers." },
+  { step: "05", title: "Indexed", desc: "Works enter the searchable archive, permanently accessible to all." },
 ];
 
 export default function HomePage() {
@@ -576,9 +576,7 @@ export default function HomePage() {
       </section>
 
       {/* ESSENTIAL WORKS IN LITERATURE */}
-      <section
-        className="relative overflow-hidden bg-[#59341F] py-24"
-      >
+      <section className="relative overflow-hidden bg-[#59341F] py-24">
         <div className="container">
           <SectionHeading
             title="Essential Works In Literature"
@@ -639,53 +637,45 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* THINKERS CAROUSEL */}
-      {/* <section className="bg-bg-primary pb-16">
-        <div className="container">
-          <SectionHeading
-            title="Voices of African Thought"
-            linkText="Browse people →"
-            linkHref="/explore?tab=people"
-          />
-          <HorizontalScroll>
-            {THINKERS.map((p) => (
-              <div key={p.name} className="w-[150px] shrink-0">
-                <PersonCard {...p} />
-              </div>
-            ))}
-          </HorizontalScroll>
-        </div>
-      </section> */}
-
       {/* FROM CULTURE TO KNOWLEDGE */}
       <section className="bg-cream py-20">
         <div className="container">
-          <SectionHeading
-            theme="light"
-            align="center"
-            title="From Culture To Knowledge"
-            subtitle="How African creative output becomes structured, durable cultural intelligence."
-          />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {KNOWLEDGE_STEPS.map((s, i) => (
-              <div
-                key={s.title}
-                className="relative flex flex-col rounded-xl border border-black/10 bg-white p-5"
-              >
-                <span className="font-display text-3xl font-bold text-amber/40">
-                  {s.step}
-                </span>
-                <h3 className="mt-2 font-display text-lg font-bold text-ink-dark">
-                  {s.title}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-[#5B4530]">
-                  {s.desc}
-                </p>
-                {i < KNOWLEDGE_STEPS.length - 1 && (
-                  <ArrowRight className="absolute -right-3.5 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-amber lg:block" />
-                )}
-              </div>
-            ))}
+          <div className="flex flex-col">
+            <span className="font-hedvig text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
+              How the Platform operates
+            </span>
+            <h2 className="mt-3 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+              From Culture To Knowledge
+            </h2>
+            <p className="mt-3 flex h-[86px] max-w-[622px] flex-col justify-center font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
+              Culture does not organize itself. Every work, idea, and thinker
+              passes through a structured pipeline — from raw production to
+              lasting institutional knowledge.
+            </p>
+          </div>
+          <div className="mt-10 flex overflow-x-auto">
+            {KNOWLEDGE_STEPS.map((s, i) => {
+              const isFirst = i === 0;
+              const isLast = i === KNOWLEDGE_STEPS.length - 1;
+              return (
+                <div
+                  key={s.title}
+                  className={`flex shrink-0 flex-col items-center justify-center gap-3 size-56 bg-stone-100 border border-yellow-700/30 px-4${
+                    isFirst ? " rounded-tl-xl rounded-bl-xl" : " -ml-px"
+                  }${isLast ? " rounded-tr-xl rounded-br-xl" : ""}`}
+                >
+                  <span className="text-yellow-700/30 text-4xl font-normal font-hedvig capitalize leading-[56px]">
+                    {s.step}
+                  </span>
+                  <h3 className="text-center text-neutral-700 text-lg font-bold font-montserrat capitalize leading-6">
+                    {s.title}
+                  </h3>
+                  <p className="text-center text-neutral-700 text-[10px] font-normal font-inter capitalize leading-3">
+                    {s.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
