@@ -17,21 +17,23 @@ const NAV_LINKS = [
 
 function HamburgerIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="36"
-      height="24"
-      viewBox="0 0 40 28"
-      fill="none"
-    >
-      <path
-        d="M2 14H38M2 2H38M2 26H38"
-        stroke="#F3E5D0"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <div className="flex size-14 items-center justify-center overflow-hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="42"
+        height="28"
+        viewBox="0 0 40 28"
+        fill="none"
+      >
+        <path
+          d="M2 14H38M2 2H38M2 26H38"
+          stroke="#FFEDD5"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
   );
 }
 
@@ -76,7 +78,7 @@ export function Navbar() {
         )}
 
         {/* Right actions: Hamburger → Sign In */}
-        <div className="flex items-center gap-5 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Explore — interior pages only */}
           {showSearch && (
             <Link
@@ -115,21 +117,14 @@ export function Navbar() {
           ) : (
             <Link
               href="/signin"
-              className="inline-flex items-center justify-center gap-[10px] rounded-xl transition-opacity hover:opacity-90"
+              className="inline-flex h-[60px] w-[162px] items-center justify-center gap-2.5 rounded-xl transition-opacity hover:opacity-90"
               style={{
-                width: "146px",
-                height: "54px",
-                background:
-                  "linear-gradient(103deg, #9C5C08 15.53%, #ED9828 70.3%)",
-                color: "#4D311D",
-                fontFamily: "var(--font-inter)",
-                fontSize: "24px",
-                fontWeight: 500,
-                lineHeight: "140%",
-                textTransform: "capitalize",
+                background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
               }}
             >
-              Sign in
+              <span className="font-inter text-2xl font-medium capitalize leading-8 text-yellow-950">
+                Sign in
+              </span>
             </Link>
           )}
         </div>
