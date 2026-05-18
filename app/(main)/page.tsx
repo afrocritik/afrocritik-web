@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
@@ -681,37 +680,47 @@ export default function HomePage() {
       </section>
 
       {/* JOIN NETWORK CTA */}
-      <section className="bg-bg-secondary py-20">
+      <section className="bg-[#59341F] pt-32 pb-24">
         <div className="container flex flex-col items-center text-center">
-          <h2 className="max-w-2xl font-display text-3xl font-bold text-white md:text-4xl">
+          <h2 className="w-[681px] text-center justify-center text-white text-5xl font-bold font-['Baskervville'] capitalize leading-[52.80px]">
             Join The Network Building Africa&apos;s Cultural Infrastructure
           </h2>
-          <p className="mt-4 max-w-xl text-sm text-ink-secondary">
+          <p className="w-[704px] h-20 text-center justify-center text-orange-100 text-sm font-semibold font-sans capitalize leading-4 pt-4">
             Whether you&apos;re a scholar, critic, funder, or creative — the
             Afrocritik Institute is building something that must exist. The
             question is whether you&apos;ll help shape it.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button
-              asChild
-              className="rounded-md bg-amber px-7 text-white hover:bg-amber-hover"
+            {/* Subscribe */}
+            <Link
+              href="/signup"
+              className="inline-flex w-48 h-14 px-7 py-2.5 justify-center items-center gap-2.5 rounded-xl"
+              style={{ background: "linear-gradient(42deg, #92400E 15%, #FB923C 81%)" }}
             >
-              <Link href="/signup">Subscribe</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="rounded-md border-amber bg-transparent px-7 text-amber hover:bg-amber-soft"
+              <span className="text-yellow-950 text-xl font-medium font-sans capitalize leading-7">
+                SUBSCRIBE
+              </span>
+            </Link>
+
+            {/* Become a Contributor */}
+            <Link
+              href="/signup"
+              className="inline-flex w-52 h-14 justify-center items-center rounded-lg outline outline-1 outline-offset-[-1px] outline-orange-400"
             >
-              <Link href="/signup">Become a Contributor</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="rounded-md border-amber-line bg-transparent px-7 text-white hover:bg-amber-soft"
+              <span className="whitespace-nowrap text-white text-base font-semibold font-sans leading-5">
+                Become a Contributor
+              </span>
+            </Link>
+
+            {/* Partner with Us */}
+            <Link
+              href="#"
+              className="inline-flex w-48 h-14 justify-center items-center rounded-lg outline outline-1 outline-offset-[-1px] outline-orange-400"
             >
-              <Link href="#">Partner with Us</Link>
-            </Button>
+              <span className="whitespace-nowrap text-white text-base font-semibold font-sans leading-5">
+                Partner with Us
+              </span>
+            </Link>
           </div>
         </div>
       </section>
