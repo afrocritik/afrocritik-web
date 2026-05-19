@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { Logo } from "./Logo";
@@ -17,22 +18,8 @@ const NAV_LINKS = [
 
 function HamburgerIcon() {
   return (
-    <div className="flex size-14 items-center justify-center overflow-hidden">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="42"
-        height="28"
-        viewBox="0 0 40 28"
-        fill="none"
-      >
-        <path
-          d="M2 14H38M2 2H38M2 26H38"
-          stroke="#FFEDD5"
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+    <div className="flex size-16 items-center justify-center overflow-hidden">
+      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} />
     </div>
   );
 }
@@ -45,6 +32,7 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const showSearch = pathname !== "/";
+  const showAvatar = !!session || showSearch;
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,44 +44,44 @@ export function Navbar() {
       className="sticky top-0 z-50 w-full border-b border-amber-line backdrop-blur"
       style={{ background: "#3B1E08" }}
     >
-      <div className="container flex items-center gap-6 pt-8 pb-7">
+      <div className="container flex items-center gap-5 pt-6 pb-5">
         <Logo />
 
         {/* Center search — only on interior pages */}
         {showSearch ? (
           <form
             onSubmit={submitSearch}
-            className="relative hidden max-w-xl flex-1 md:block ml-2"
+            className="relative hidden h-[72px] flex-1 md:block"
           >
-            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="58"
+              height="58"
+              viewBox="0 0 70 71"
+              fill="none"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"
+            >
+              <path
+                d="M49.37 50.1779L59.5 60.0721M33.25 21.2019C39.049 21.2019 43.75 25.9481 43.75 31.8029M56.2333 33.6875C56.2333 46.4378 45.9956 56.774 33.3667 56.774C20.7378 56.774 10.5 46.4378 10.5 33.6875C10.5 20.9371 20.7378 10.601 33.3667 10.601C45.9956 10.601 56.2333 20.9371 56.2333 33.6875Z"
+                stroke="rgba(212, 212, 216, 0.30)"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search Works, Ideas, People, Reports..."
-              className="w-full rounded-full border border-amber-line bg-bg-secondary py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none focus:ring-1 focus:ring-amber"
+              className="h-[72px] w-full rounded-xl bg-zinc-300/30 pl-[76px] pr-5 font-inter text-lg text-white placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-amber"
             />
           </form>
         ) : (
           <div className="flex-1" />
         )}
 
-        {/* Right actions: Hamburger → Sign In */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Explore — interior pages only */}
-          {showSearch && (
-            <Link
-              href="/explore"
-              className="hidden md:inline-flex items-center justify-center px-[30px] py-[10px] rounded-xl text-sm font-semibold text-white"
-              style={{
-                background:
-                  "linear-gradient(103deg, #9C5C08 15.53%, #ED9828 70.3%)",
-              }}
-            >
-              Explore
-            </Link>
-          )}
-
-          {/* Hamburger — before Sign In */}
+        {/* Right actions: Hamburger → Explore → Avatar/Sign In */}
+        <div className="flex items-center gap-5 shrink-0">
+          {/* Hamburger — first on the right */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
             className="transition-opacity hover:opacity-70"
@@ -106,12 +94,29 @@ export function Navbar() {
             )}
           </button>
 
+          {/* Explore — interior pages only */}
+          {showSearch && (
+            <Link
+              href="/explore"
+              className="hidden md:inline-flex h-[60px] items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-2xl font-medium capitalize leading-8 text-yellow-950 transition-opacity hover:opacity-90"
+              style={{
+                background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
+              }}
+            >
+              Explore
+            </Link>
+          )}
+
           {/* Sign In / Avatar */}
-          {session ? (
-            <Avatar className="h-10 w-10 cursor-pointer border border-amber-line">
-              <AvatarImage src={session.user?.image || ""} alt="User" />
+          {showAvatar ? (
+            <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
+              <AvatarImage
+                src={session?.user?.image || "/Interest-Avatar.png"}
+                alt="User"
+                className="size-12 object-cover"
+              />
               <AvatarFallback className="bg-bg-secondary text-amber">
-                {session.user?.name?.[0]?.toUpperCase() || "U"}
+                {session?.user?.name?.[0]?.toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
           ) : (
