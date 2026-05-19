@@ -29,7 +29,7 @@ const FacebookIcon = () => (
 
 export function OAuthButtons() {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-8">
       <a
         href={api.auth.googleUrl}
         className="flex items-center justify-center gap-3 rounded-md border border-orange-400/40 bg-transparent py-3 text-sm font-medium font-inter text-white transition-colors hover:bg-amber-soft"
@@ -50,9 +50,11 @@ export function OAuthButtons() {
 
 export function OrDivider() {
   return (
-    <div className="flex items-center gap-4">
+    <div className="w-2/3 flex mx-auto items-center gap-6">
       <span className="flex-1 h-[1.50px] opacity-80 bg-orange-400" />
-      <span className="text-sm text-white">Or</span>
+      <span className="justify-center text-white text-lg font-normal font-inter leading-6">
+        Or
+      </span>
       <span className="flex-1 h-[1.50px] opacity-80 bg-orange-400" />
     </div>
   );
