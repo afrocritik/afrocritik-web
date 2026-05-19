@@ -32,14 +32,14 @@ export function OAuthButtons() {
     <div className="flex flex-col gap-3">
       <a
         href={api.auth.googleUrl}
-        className="flex items-center justify-center gap-3 rounded-md border border-amber-line bg-transparent py-3 text-sm font-medium text-white transition-colors hover:bg-amber-soft"
+        className="flex items-center justify-center gap-3 rounded-md border border-orange-400/40 bg-transparent py-3 text-sm font-medium font-inter text-white transition-colors hover:bg-amber-soft"
       >
         <GoogleIcon />
         Continue with Google
       </a>
       <a
         href={api.auth.facebookUrl}
-        className="flex items-center justify-center gap-3 rounded-md border border-amber-line bg-transparent py-3 text-sm font-medium text-white transition-colors hover:bg-amber-soft"
+        className="flex items-center justify-center gap-3 rounded-md border border-amber-line bg-transparent py-3 text-sm font-medium font-inter text-white transition-colors hover:bg-amber-soft"
       >
         <FacebookIcon />
         Continue with Facebook
@@ -51,9 +51,9 @@ export function OAuthButtons() {
 export function OrDivider() {
   return (
     <div className="flex items-center gap-4">
-      <span className="h-px flex-1 bg-amber-line" />
-      <span className="text-sm text-ink-muted">Or</span>
-      <span className="h-px flex-1 bg-amber-line" />
+      <span className="flex-1 h-[1.50px] opacity-80 bg-orange-400" />
+      <span className="text-sm text-white">Or</span>
+      <span className="flex-1 h-[1.50px] opacity-80 bg-orange-400" />
     </div>
   );
 }

@@ -35,46 +35,57 @@ export default function SignInPage() {
 
   return (
     <AuthLayout>
-      <div className="flex flex-col">
-        <h1 className="text-center font-display text-3xl font-bold text-white">
+      <div className="flex flex-col gap-2.5 text-center">
+        <h1 className="font-inter text-3xl font-semibold text-white leading-10">
           Sign in
         </h1>
-        <p className="mt-2 text-center text-sm text-ink-secondary">
+        <p className="self-stretch text-center justify-center text-white text-base font-normal font-poppins leading-6">
           Welcome back! Enter your details to continue
         </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-9">
+        {/* Fields */}
+        <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-ink-secondary">
+            <label
+              htmlFor="email"
+              className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6"
+            >
               Email Address
             </label>
             <input
+              id="email"
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
-              className="rounded-md border border-amber-line bg-transparent px-4 py-3 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
+              className="rounded-md border border-amber-line bg-transparent px-5 py-5 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-ink-secondary">
+            <label
+              htmlFor="password"
+              className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6"
+            >
               Password
             </label>
             <div className="relative">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full rounded-md border border-amber-line bg-transparent px-4 py-3 pr-11 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
+                className="w-full rounded-md border border-amber-line bg-transparent px-5 py-5 pr-12 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-amber"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-muted hover:text-amber"
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -85,33 +96,39 @@ export default function SignInPage() {
             </div>
             <Link
               href="#"
-              className="self-end text-sm text-amber hover:text-amber-hover"
+              className="self-stretch text-right justify-center text-yellow-700 text-base font-normal font-inter leading-6 hover:text-yellow-800"
             >
               Forgot password?
             </Link>
           </div>
+        </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
 
+        {/* CTA — button and sign-up link grouped tightly */}
+        <div className="flex flex-col gap-4">
           <button
             type="submit"
             disabled={loading}
-            className="rounded-md bg-amber py-3 text-sm font-semibold text-white transition-colors hover:bg-amber-hover disabled:opacity-60"
+            className="w-full rounded-xl bg-[#9C5C08] py-5 text-base opacity-50 font-semibold text-white transition-colors hover:bg-[#7A4706] disabled:opacity-60 font-inter"
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
 
-          <p className="text-center text-sm text-ink-secondary">
+          <p className="text-white text-base font-normal font-inter leading-6 tracking-tight text-center">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-amber hover:text-amber-hover">
+            <Link
+              href="/signup"
+              className="text-yellow-700 text-base font-normal font-inter leading-6 tracking-tight hover:text-yellow-800 underline"
+            >
               Sign up
             </Link>
           </p>
+        </div>
 
-          <OrDivider />
-          <OAuthButtons />
-        </form>
-      </div>
+        <OrDivider />
+        <OAuthButtons />
+      </form>
     </AuthLayout>
   );
 }
