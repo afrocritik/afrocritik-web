@@ -18,51 +18,47 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-function unwrap<T>(data: any): T {
-  return data as T;
-}
-
 export const api = {
   works: {
     list: (params?: Record<string, any>) =>
-      apiClient.get("/api/works", { params }).then((r) => unwrap(r.data)),
+      apiClient.get("/api/works", { params }).then((r) => r.data),
     bySlug: (slug: string) =>
       apiClient
         .get("/api/works", { params: { "where[slug][equals]": slug } })
-        .then((r) => unwrap(r.data)),
+        .then((r) => r.data),
     byId: (id: string) =>
-      apiClient.get(`/api/works/${id}`).then((r) => unwrap(r.data)),
+      apiClient.get(`/api/works/${id}`).then((r) => r.data),
   },
   people: {
     list: (params?: Record<string, any>) =>
-      apiClient.get("/api/people", { params }).then((r) => unwrap(r.data)),
+      apiClient.get("/api/people", { params }).then((r) => r.data),
     bySlug: (slug: string) =>
       apiClient
         .get("/api/people", { params: { "where[slug][equals]": slug } })
-        .then((r) => unwrap(r.data)),
+        .then((r) => r.data),
   },
   ideas: {
     list: (params?: Record<string, any>) =>
-      apiClient.get("/api/ideas", { params }).then((r) => unwrap(r.data)),
+      apiClient.get("/api/ideas", { params }).then((r) => r.data),
     bySlug: (slug: string) =>
       apiClient
         .get("/api/ideas", { params: { "where[slug][equals]": slug } })
-        .then((r) => unwrap(r.data)),
+        .then((r) => r.data),
   },
   reports: {
     list: (params?: Record<string, any>) =>
-      apiClient.get("/api/reports", { params }).then((r) => unwrap(r.data)),
+      apiClient.get("/api/reports", { params }).then((r) => r.data),
   },
   search: (q: string, filters?: Record<string, any>) =>
     apiClient
       .get("/api/search", { params: { q, ...filters } })
-      .then((r) => unwrap(r.data)),
+      .then((r) => r.data),
   archive: (filters?: Record<string, any>) =>
     apiClient
       .get("/api/search/archive", { params: filters })
-      .then((r) => unwrap(r.data)),
+      .then((r) => r.data),
   homepage: () =>
-    apiClient.get("/api/globals/homepage").then((r) => unwrap(r.data)),
+    apiClient.get("/api/globals/homepage").then((r) => r.data),
   auth: {
     login: (email: string, password: string) =>
       apiClient
