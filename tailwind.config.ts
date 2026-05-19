@@ -70,6 +70,7 @@ const config = {
         inter: ["var(--font-inter)", "system-ui", "sans-serif"],
         baskervville: ["var(--font-baskervville)", "Georgia", "serif"],
         hedvig: ["var(--font-hedvig)", "Georgia", "serif"],
+        poppins: ["var(--font-poppins)", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
