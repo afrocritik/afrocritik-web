@@ -23,7 +23,7 @@ export default function SignUpPage() {
     { label: "At least 8 characters", met: password.length >= 8 },
     { label: "Minimum 1 uppercase", met: /[A-Z]/.test(password) },
     { label: "Minimum 1 lowercase", met: /[a-z]/.test(password) },
-    { label: "Minimum 1 number", met: /[0-9]/.test(password) },
+    { label: "Minimum 1 number", met: /\d/.test(password) },
     { label: "Minimum 1 special character", met: /[^A-Za-z0-9]/.test(password) },
   ];
   const allMet = reqs.every((r) => r.met);
@@ -48,47 +48,51 @@ export default function SignUpPage() {
   return (
     <AuthLayout>
       <div className="flex flex-col">
-        <h1 className="text-center font-display text-3xl font-bold text-white">
-          Sign up
-        </h1>
-        <p className="mt-2 text-center text-sm text-ink-secondary">
-          Get started and take the first step toward your goals!
-        </p>
+        <div className="flex flex-col gap-2.5 text-center">
+          <h1 className="font-inter text-3xl font-semibold text-white leading-10">
+            Sign up
+          </h1>
+          <p className="self-stretch text-center justify-center text-white text-base font-normal font-poppins leading-6">
+            Get started and take the first step toward your goals!
+          </p>
+        </div>
 
-        <div className="mt-8">
+        <div className="mt-5">
           <OAuthButtons />
         </div>
-        <div className="my-5">
+        <div className="my-4">
           <OrDivider />
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-ink-secondary">
+            <label htmlFor="email" className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6">
               Email Address
             </label>
             <input
+              id="email"
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
-              className="rounded-md border border-amber-line bg-transparent px-4 py-3 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
+              className="rounded-md border border-amber-line bg-transparent px-5 py-3.5 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-ink-secondary">
+            <label htmlFor="password" className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6">
               Password
             </label>
             <div className="relative">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create your password"
-                className="w-full rounded-md border border-amber-line bg-transparent px-4 py-3 pr-11 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
+                className="w-full rounded-md border border-amber-line bg-transparent px-5 py-3.5 pr-12 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
               />
               <button
                 type="button"
@@ -103,14 +107,14 @@ export default function SignUpPage() {
               </button>
             </div>
             <div className="mt-1">
-              <p className="mb-1.5 text-xs font-medium text-ink-secondary">
+              <p className="mb-1.5 text-sm font-medium text-white opacity-60">
                 Please include the following in your password:
               </p>
               <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                 {reqs.map((r) => (
                   <span
                     key={r.label}
-                    className={`flex items-center gap-1 text-[11px] ${
+                    className={`flex items-center gap-1 text-xs ${
                       r.met ? "text-green-500" : "text-red-400"
                     }`}
                   >
@@ -127,17 +131,18 @@ export default function SignUpPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-ink-secondary">
+            <label htmlFor="confirm" className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6">
               Confirm password
             </label>
             <div className="relative">
               <input
+                id="confirm"
                 type={showConfirm ? "text" : "password"}
                 required
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 placeholder="Confirm your password"
-                className="w-full rounded-md border border-amber-line bg-transparent px-4 py-3 pr-11 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
+                className="w-full rounded-md border border-amber-line bg-transparent px-5 py-3.5 pr-12 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
               />
               <button
                 type="button"
@@ -158,19 +163,19 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-md bg-amber py-3 text-sm font-semibold text-white transition-colors hover:bg-amber-hover disabled:opacity-60"
+            className="w-full rounded-xl bg-[#9C5C08] py-4 text-base opacity-50 font-semibold text-white transition-colors hover:bg-[#7A4706] disabled:opacity-60 font-inter"
           >
             {loading ? "Creating account…" : "Sign up"}
           </button>
 
-          <p className="text-center text-sm text-ink-secondary">
+          <p className="text-white text-base font-normal font-inter leading-6 tracking-tight text-center">
             Already have an account?{" "}
-            <Link href="/signin" className="text-amber hover:text-amber-hover">
+            <Link href="/signin" className="text-yellow-700 text-base font-normal font-inter leading-6 tracking-tight hover:text-yellow-800 underline">
               Sign in
             </Link>
           </p>
 
-          <label className="flex items-start gap-3 text-xs text-ink-muted">
+          <label className="flex items-start gap-3 text-sm text-white">
             <input
               type="checkbox"
               checked={agreed}
@@ -179,11 +184,11 @@ export default function SignUpPage() {
             />
             <span>
               I agree to the{" "}
-              <Link href="#" className="text-amber">
+              <Link href="#" className="text-yellow-700 hover:text-yellow-800">
                 Terms of Service
               </Link>{" "}
               and acknowledge that I have read and understood the{" "}
-              <Link href="#" className="text-amber">
+              <Link href="#" className="text-yellow-700 hover:text-yellow-800">
                 Privacy Policy
               </Link>
               .
