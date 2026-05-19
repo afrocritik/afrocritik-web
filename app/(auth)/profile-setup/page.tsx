@@ -31,20 +31,17 @@ function ProfileSetupForm() {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
     try {
       await api.auth.completeProfile({ email, username, role });
-      router.push("/interests");
     } catch {
       // Proceed to interests even if the profile call is unavailable
-      router.push("/interests");
     } finally {
       setLoading(false);
+      router.push("/interests");
     }
   };
 
@@ -113,13 +110,11 @@ function ProfileSetupForm() {
           </div>
         </div>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
-
         <div className="flex flex-col items-center gap-6">
           <button
             type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-yellow-700 py-4 font-inter text-xl font-medium text-white opacity-50 transition-opacity hover:opacity-70 disabled:opacity-40"
+            disabled={loading || !username || !role}
+            className="w-full rounded-xl bg-yellow-700 py-4 font-inter text-xl font-medium text-white transition-all hover:bg-yellow-800 disabled:opacity-50 disabled:hover:bg-yellow-700 disabled:cursor-not-allowed"
           >
             {loading ? "Saving…" : "Finish"}
           </button>

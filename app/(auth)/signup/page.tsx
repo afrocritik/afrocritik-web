@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Eye, EyeOff, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { OAuthButtons, OrDivider } from "@/components/features/auth/OAuthButtons";
+import { AuthField } from "@/components/features/auth/AuthField";
+import { PasswordField } from "@/components/features/auth/PasswordField";
 import { api } from "@/lib/api";
 
 export default function SignUpPage() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -27,6 +27,7 @@ export default function SignUpPage() {
     { label: "Minimum 1 special character", met: /[^A-Za-z0-9]/.test(password) },
   ];
   const allMet = reqs.every((r) => r.met);
+  const ready = !!email && allMet && password === confirm && agreed;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,47 +66,25 @@ export default function SignUpPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
-              className="rounded-md border border-amber-line bg-transparent px-5 py-3.5 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
-            />
-          </div>
+          <AuthField
+            id="email"
+            label="Email Address"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email address"
+          />
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Create your password"
-                className="w-full rounded-md border border-amber-line bg-transparent px-5 py-3.5 pr-12 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-amber"
-              >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5" />
-                ) : (
-                  <Eye className="h-5 w-5" />
-                )}
-              </button>
-            </div>
+            <PasswordField
+              id="password"
+              label="Password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Create your password"
+            />
             <div className="mt-1">
               <p className="mb-1.5 text-sm font-medium text-white opacity-60">
                 Please include the following in your password:
@@ -130,40 +109,21 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="confirm" className="self-stretch opacity-60 justify-center text-white text-base font-medium font-inter leading-6">
-              Confirm password
-            </label>
-            <div className="relative">
-              <input
-                id="confirm"
-                type={showConfirm ? "text" : "password"}
-                required
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                placeholder="Confirm your password"
-                className="w-full rounded-md border border-amber-line bg-transparent px-5 py-3.5 pr-12 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirm((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-amber"
-              >
-                {showConfirm ? (
-                  <EyeOff className="h-5 w-5" />
-                ) : (
-                  <Eye className="h-5 w-5" />
-                )}
-              </button>
-            </div>
-          </div>
+          <PasswordField
+            id="confirm"
+            label="Confirm password"
+            required
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder="Confirm your password"
+          />
 
           {error && <p className="text-sm text-red-400">{error}</p>}
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-[#9C5C08] py-4 text-base opacity-50 font-semibold text-white transition-colors hover:bg-[#7A4706] disabled:opacity-60 font-inter"
+            disabled={loading || !ready}
+            className="w-full rounded-xl bg-[#9C5C08] py-4 text-base font-semibold text-white font-inter transition-all hover:bg-[#7A4706] disabled:opacity-50 disabled:hover:bg-[#9C5C08] disabled:cursor-not-allowed"
           >
             {loading ? "Creating account…" : "Sign up"}
           </button>
