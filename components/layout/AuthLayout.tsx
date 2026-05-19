@@ -15,7 +15,7 @@ export function AuthLayout({ children }: Readonly<AuthLayoutProps>) {
       />
 
       {/* Form panel: full-width on mobile, overlaid from the right on desktop */}
-      <div className="relative z-10 flex min-h-dvh items-center justify-center px-6 md:px-12 lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-[57%] lg:rounded-l-[40px] lg:bg-[#59341F] lg:items-start lg:pt-40">
+      <div className="relative z-10 flex min-h-dvh items-center justify-center px-6 py-16 md:px-12 lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-[57%] lg:rounded-l-[40px] lg:bg-[#59341F] lg:py-20">
         <div className="w-full max-w-[600px]">{children}</div>
       </div>
     </div>
