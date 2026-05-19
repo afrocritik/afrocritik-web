@@ -56,7 +56,7 @@ export function Navbar() {
       className="sticky top-0 z-50 w-full border-b border-amber-line backdrop-blur"
       style={{ background: "#3B1E08" }}
     >
-      <div className="container flex h-[141px] items-center gap-6">
+      <div className="container flex items-center gap-6 pt-8 pb-7">
         <Logo />
 
         {/* Center search — only on interior pages */}
