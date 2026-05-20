@@ -19,7 +19,7 @@ export function EssentialWorksSection() {
   return (
     <>
       <div className="container">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="mb-2 flex flex-col gap-2">
           <h2
             style={{
               maxWidth: "356px",
@@ -35,13 +35,18 @@ export function EssentialWorksSection() {
           </h2>
           <Link
             href="/explore"
-            className="shrink-0 md:-mr-6"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
+            className="shrink-0 self-end"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              marginRight: "calc(12px - max(24px, 50vw - 636px))",
+            }}
           >
             <span
               style={{
                 display: "flex",
-                padding: "8px 12px",
+                padding: "8px 4px",
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "8px",
@@ -74,7 +79,7 @@ export function EssentialWorksSection() {
       <div className="relative" style={{ minHeight: "395px" }}>
         <div
           className="flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
-          style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          style={{ paddingLeft: "max(24px, calc(50vw - 636px))", paddingRight: "12px" }}
         >
           {ESSENTIAL_WORKS.map((w) => (
             <WorkCard key={w.title} {...w} essential />
