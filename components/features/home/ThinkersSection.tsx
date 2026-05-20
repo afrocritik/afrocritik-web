@@ -90,9 +90,9 @@ export function ThinkersSection() {
           </button>
 
           <div className="flex items-center gap-2">
-            {THINKERS.map((_, i) => (
+            {THINKERS.map((t, i) => (
               <button
-                key={i}
+                key={t.name}
                 onClick={() => setPage(i)}
                 className={`inline-flex h-9 w-9 items-center justify-center rounded-lg font-inter text-base leading-4 ${
                   i === page ? "bg-orange-950 text-white" : "text-red-700"

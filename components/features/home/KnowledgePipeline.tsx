@@ -13,16 +13,16 @@ export function KnowledgePipeline() {
         <span className="font-hedvig text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
           How the Platform operates
         </span>
-        <h2 className="mt-3 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+        <h2 className="mt-2 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
           From Culture To Knowledge
         </h2>
-        <p className="mt-3 flex h-[86px] max-w-[622px] flex-col justify-center font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
+        <p className="mt-2 max-w-[622px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
           Culture does not organize itself. Every work, idea, and thinker passes
           through a structured pipeline — from raw production to lasting
           institutional knowledge.
         </p>
       </div>
-      <div className="mt-10 flex overflow-x-auto lg:pr-12">
+      <div className="mt-8 flex overflow-x-auto lg:pr-12">
         {KNOWLEDGE_STEPS.map((s, i) => {
           const isFirst = i === 0;
           const isLast = i === KNOWLEDGE_STEPS.length - 1;

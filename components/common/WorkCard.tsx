@@ -486,7 +486,7 @@ function EWIMCard({
         >
           <span
             style={{
-              color: "#b45309",
+              color: "#F9B65F",
               fontFamily: "var(--font-inter)",
               fontSize: "16px",
               fontWeight: 600,
