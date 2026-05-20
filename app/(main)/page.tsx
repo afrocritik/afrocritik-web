@@ -37,7 +37,7 @@ export default function HomePage() {
       </section>
 
       {/* THINKERS WHO BUILT THE FOUNDATIONS */}
-      <section id="philosophy" className="bg-cream py-20">
+      <section id="philosophy" className="bg-[#FAF3E5] py-20">
         <div className="container">
           <ThinkersSection />
         </div>
@@ -57,8 +57,7 @@ export default function HomePage() {
 
       {/* ESSENTIAL WORKS IN MUSIC */}
       <section
-        className="relative overflow-hidden pt-24 pb-12"
-        style={{ background: "linear-gradient(180deg, #794C2D 52.4%, #4D311D 73.19%)" }}
+        className="relative overflow-hidden bg-[#794C2D] pt-24 pb-12"
       >
         <EssentialMusicSection />
       </section>

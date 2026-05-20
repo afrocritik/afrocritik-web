@@ -16,10 +16,10 @@ export function PillarsSection() {
         <span className="font-hedvig text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
           Institutional Backbone
         </span>
-        <h2 className="mt-3 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+        <h2 className="mt-2 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
           The Five Pillars
         </h2>
-        <p className="mt-3 flex h-[86px] max-w-[622px] flex-col justify-center font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
+        <p className="mt-2 max-w-[622px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
           The structural foundation of the Afrocritik Institute — designed to
           sustain, develop, and systematize African cultural knowledge for
           generations.
@@ -27,7 +27,7 @@ export function PillarsSection() {
       </div>
 
       {/* Cards */}
-      <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:pr-12">
+      <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:pr-12">
         {PILLARS.map((p) => (
           <div
             key={p.title}

@@ -13,15 +13,7 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/lib/api";
 
-const ROLES = [
-  "Critic",
-  "Filmmaker",
-  "Musician",
-  "Author",
-  "Academic / Researcher",
-  "Cultural Enthusiast",
-  "Other",
-];
+const ROLES = ["User", "Critic", "Contributor"];
 
 function ProfileSetupForm() {
   const router = useRouter();

@@ -53,14 +53,14 @@ export function IdeasSection() {
         <h2 className="mt-3 w-[677px] justify-center text-orange-950 text-4xl font-bold font-baskervville capitalize leading-10">
           Ideas That Shape the Continent
         </h2>
-        <p className="mt-3 w-[670px] h-20 justify-center text-neutral-700 text-base font-normal font-inter capitalize leading-6">
+        <p className="mt-2 w-[670px] justify-center text-neutral-700 text-base font-normal font-inter capitalize leading-6">
           Each concept in the system connects to works, thinkers, and cultural
           movements — forming a living map of African intellectual life.
         </p>
       </div>
 
       {/* Idea Card */}
-      <div className="mt-10 grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:pr-12">
+      <div className="mt-6 grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:pr-12">
         {IDEAS.map((idea) => (
           <IdeaCard key={idea.slug} {...idea} theme="light" />
         ))}
