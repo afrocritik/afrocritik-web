@@ -17,11 +17,23 @@ function HeadingTitle({
   );
 }
 
-function ViewAllLink({ text, href }: Readonly<{ text: string; href: string }>) {
+function ViewAllLink({
+  text,
+  href,
+  bleedRight,
+}: Readonly<{ text: string; href: string; bleedRight?: boolean }>) {
   return (
     <Link
       href={href}
-      className="shrink-0 text-sm font-medium text-amber transition-colors hover:text-amber-hover"
+      className={cn(
+        "shrink-0 text-sm font-medium text-amber transition-colors hover:text-amber-hover",
+        bleedRight && "self-end",
+      )}
+      style={
+        bleedRight
+          ? { marginRight: "calc(24px - max(24px, 50vw - 636px))" }
+          : undefined
+      }
     >
       {text}
     </Link>
@@ -33,6 +45,7 @@ interface SectionHeadingProps {
   linkText?: string;
   linkHref?: string;
   font?: "sans" | "serif";
+  bleedRight?: boolean;
 }
 
 export function SectionHeading({
@@ -40,11 +53,21 @@ export function SectionHeading({
   linkText,
   linkHref,
   font = "sans",
+  bleedRight,
 }: Readonly<SectionHeadingProps>) {
   return (
-    <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div
+      className={cn(
+        "flex flex-col gap-2",
+        bleedRight
+          ? "mb-2"
+          : "mb-8 md:flex-row md:items-end md:justify-between md:gap-4",
+      )}
+    >
       <HeadingTitle title={title} font={font} />
-      {linkText && linkHref && <ViewAllLink text={linkText} href={linkHref} />}
+      {linkText && linkHref && (
+        <ViewAllLink text={linkText} href={linkHref} bleedRight={bleedRight} />
+      )}
     </div>
   );
 }

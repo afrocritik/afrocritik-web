@@ -357,7 +357,7 @@ function EWIMCard({
         padding: 0,
         margin: 0,
         flexShrink: 0,
-        width: hovered ? "430px" : "300px",
+        width: hovered ? "398px" : "318px",
         height: "384px",
         borderRadius: "8px",
         border: "1px solid #B45309",
