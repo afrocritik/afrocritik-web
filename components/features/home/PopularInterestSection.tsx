@@ -11,13 +11,13 @@ const INTERESTS = [
 export function PopularInterestSection() {
   return (
     <>
-      <div className="flex justify-between items-end pb-12">
+      <div className="flex flex-col gap-2 pb-4">
         <h2 className="text-white text-4xl font-bold font-baskervville capitalize leading-tight">
           explore based on popular interest
         </h2>
         <Link
           href="/explore"
-          className="text-center text-orange-400 text-3xl font-semibold font-inter capitalize leading-8 shrink-0 ml-8"
+          className="self-end text-center text-orange-400 text-3xl font-semibold font-inter capitalize leading-8 shrink-0"
         >
           See More
         </Link>
