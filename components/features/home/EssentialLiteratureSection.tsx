@@ -53,6 +53,7 @@ export function EssentialLiteratureSection() {
           title="Essential Works In Literature"
           linkText="View All →"
           linkHref="/explore?q=literature"
+          bleedRight
         />
       </div>
       {/* Full-width row so the NEXT button can bleed off the viewport right edge */}

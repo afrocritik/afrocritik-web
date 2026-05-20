@@ -46,16 +46,17 @@ export function EssentialMusicSection() {
           linkText="View All →"
           linkHref="/explore?q=music"
           font="serif"
+          bleedRight
         />
       </div>
       {/* Full-width row so the NEXT button can bleed off the viewport right edge */}
       <div className="relative">
         <div
-          className="hide-scrollbar flex justify-end gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
-          style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          className="hide-scrollbar flex justify-between gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+          style={{ paddingLeft: "max(24px, calc(50vw - 636px))", paddingRight: "24px" }}
         >
           {EWIM_MUSIC.map((w) => (
-            <WorkCard key={w.title} {...w} ewim />
+            <WorkCard key={w.image} {...w} ewim />
           ))}
         </div>
         <CarouselNextButton />
