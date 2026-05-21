@@ -1,3 +1,6 @@
+import Image from "next/image";
+import { Fragment } from "react";
+
 const STATS = [
   { value: "1,000+", label: "Works" },
   { value: "15,000+", label: "Articles" },
@@ -28,7 +31,6 @@ function StatItem({ value, label }: { value: string; label: string }) {
 }
 
 export function StatsMarquee() {
-  // Duplicate stats enough times to ensure seamless scrolling
   const repeatedStats = Array.from({ length: 10 }, () => STATS).flat();
 
   return (
@@ -45,13 +47,23 @@ export function StatsMarquee() {
       <div
         style={{
           display: "flex",
-          gap: "40px",
+          alignItems: "center",
+          gap: "24px",
           animation: "marquee 60s linear infinite",
-          paddingRight: "40px",
+          paddingRight: "24px",
         }}
       >
         {repeatedStats.map((stat, idx) => (
-          <StatItem key={idx} value={stat.value} label={stat.label} />
+          <Fragment key={idx}>
+            <StatItem value={stat.value} label={stat.label} />
+            <Image
+              src="/Ellipse 6.svg"
+              alt=""
+              width={8}
+              height={8}
+              aria-hidden
+            />
+          </Fragment>
         ))}
       </div>
       <style>{`

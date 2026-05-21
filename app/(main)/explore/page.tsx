@@ -1,30 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useMemo, useState } from "react";
+import Image from "next/image";
+import { Fragment, Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Search,
-  LayoutGrid,
-  List,
-  FileText,
-  Lightbulb,
-  Users,
-  BarChart3,
-} from "lucide-react";
+import { LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkCard } from "@/components/common/WorkCard";
 import { FilterPill } from "@/components/common/FilterPill";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PopularInterestSection } from "@/components/features/home/PopularInterestSection";
+import { ReportCTA } from "@/components/features/home/ReportCTA";
+import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
 import { api } from "@/lib/api";
 import { formatCount } from "@/lib/utils";
 
+const BROWN_GRADIENT =
+  "linear-gradient(180deg, #4D311D 17.79%, #794C2D 62.4%, #4D311D 85.19%)";
+
 const TABS = [
-  { key: "works", label: "Works", count: 12346, icon: FileText },
-  { key: "ideas", label: "Ideas", count: 1284, icon: Lightbulb },
-  { key: "people", label: "People", count: 3902, icon: Users },
-  { key: "reports", label: "Report", count: 18, icon: BarChart3 },
+  { key: "works", label: "Works", count: 12346, iconSrc: "/explore-icon_works.svg" },
+  { key: "ideas", label: "Ideas", count: 1284, iconSrc: "/explore-icon_ideas.svg" },
+  { key: "people", label: "People", count: 3902, iconSrc: "/explore-icon_people.svg" },
+  { key: "reports", label: "Report", count: 18, iconSrc: "/explore-icon_analytics.svg" },
 ];
 
 const FILTER_OPTIONS = {
@@ -66,12 +64,12 @@ const THEMES = ["Black Consciousness", "Nollywood", "Afrobeat", "Audio"];
 const POPULAR = ["Fela Kuti", "Nollywood", "Chimamanda", "Makossa", "Sankofa"];
 
 const SEARCH_TAGS = [
-  "Reference",
+  "Nollywood",
   "Afrobeat",
-  "Film",
-  "Music",
-  "Report",
-  "Literature",
+  "Fela",
+  "Wizkid",
+  "Reports",
+  "Chimamanda",
 ];
 
 const FALLBACK_WORKS = Array.from({ length: 12 }).map((_, i) => ({
@@ -135,92 +133,216 @@ function ExploreContent() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="bg-gradient-to-b from-bg-secondary to-bg-primary">
-        <div className="container flex flex-col items-center py-14 text-center">
-          <h1 className="font-display text-3xl font-bold text-white md:text-5xl">
-            Explore African Archive
-          </h1>
-          <p className="mt-3 max-w-xl text-sm text-ink-secondary">
-            Search and discover works, ideas, and people that shape our past,
-            present, and future.
-          </p>
+      {/* HERO + TABS + FILTER — single gradient flows through all three */}
+      <div style={{ background: BROWN_GRADIENT }}>
+        <section>
+          <div className="container flex flex-col items-center justify-center py-14 text-center md:py-16 h-[508px]">
+            <h1
+              style={{
+                width: "824px",
+                fontFamily: "Baskerville",
+                fontSize: "56px",
+                fontWeight: 700,
+                lineHeight: "110%",
+                textTransform: "capitalize",
+                color: "#FFF",
+                textAlign: "center",
+              }}
+            >
+              Explore African Archive
+            </h1>
+            <p
+              className="mt-5 font-semibold leading-[110%]"
+              style={{
+                fontFamily: "var(--font-inter)",
+                fontSize: "14px",
+                textTransform: "capitalize",
+                color: "#F3E5D0",
+              }}
+            >
+              Search and discover works, ideas, and people that shape our past,
+              present, and future.
+            </p>
 
-          <div className="relative mt-8 w-full max-w-2xl">
-            <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search Works, Ideas, People, Reports..."
-              className="w-full rounded-full border border-amber-line bg-bg-card py-4 pl-12 pr-4 text-sm text-white placeholder:text-ink-muted focus:border-amber focus:outline-none"
-            />
+            <div className="mt-9 w-full max-w-[888px]">
+              <div
+                className="flex items-center gap-4 px-6"
+                style={{
+                  height: "105px",
+                  borderRadius: "12px",
+                  border: "1px solid #6E4205",
+                  background: "rgba(65, 40, 23, 0.50)",
+                }}
+              >
+                <button type="button" className="shrink-0">
+                  <Image
+                    src="/search-icon.svg"
+                    alt="Search"
+                    width={70}
+                    height={71}
+                    priority
+                  />
+                </button>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search works, ideas, people, reports..."
+                  className="flex-1 bg-transparent text-white focus:outline-none"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: "24px",
+                    fontWeight: 400,
+                    lineHeight: "140%",
+                    textTransform: "capitalize",
+                  }}
+                />
+              </div>
+
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {SEARCH_TAGS.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setQuery(t)}
+                    className="inline-flex items-center"
+                    style={{
+                      height: "36px",
+                      padding: "8px 10px",
+                      gap: "8px",
+                      borderRadius: "10px",
+                      border: "1px solid #9C5C08",
+                      background: "rgba(65, 40, 23, 0.40)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "15px",
+                        fontWeight: 400,
+                        lineHeight: "140%",
+                        textTransform: "capitalize",
+                        color: "#FFF",
+                        opacity: 0.2,
+                      }}
+                    >
+                      {t}
+                    </span>
+                    <div
+                      style={{
+                        width: "8.091px",
+                        height: "11px",
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="10"
+                        height="12"
+                        viewBox="0 0 10 12"
+                        fill="none"
+                        style={{ width: "100%", height: "100%" }}
+                      >
+                        <path
+                          d="M0.500061 0.500061L8.59097 6.16673L0.500061 11.5001"
+                          stroke="#9C5C08"
+                          strokeWidth="1px"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* TABS + FILTER — 249px total, still inside gradient wrapper */}
+        {/* hover:outline hover:outline-1 hover:outline-offset-[-1.13px] */}
+        <section style={{ height: "249px" }}>
+          {/* top line */}
+          <div className="h-px bg-orange-400/15" />
+
+          {/* TAB CARDS — 145px */}
+          <div
+            className="container flex items-center"
+            style={{ height: "145px" }}
+          >
+            {TABS.map((t, i) => {
+              const active = t.key === tab;
+              return (
+                <Fragment key={t.key}>
+                  <div className="relative z-10 w-px self-stretch shrink-0 bg-orange-400/20 pointer-events-none" />
+                  <button
+                    onClick={() => setTab(t.key)}
+                    data-has-icon="true"
+                    className={`flex-1 h-36 px-4 inline-flex justify-center items-center gap-3 transition-all ${
+                      active
+                        ? "bg-[#50321C80] rounded-2xl bg-opacity-50 outline outline-1 outline-offset-[-1.13px] outline-amber-600"
+                        : "hover:bg-[#50321C80] hover:rounded-2xl hover:bg-opacity-50"
+                    }`}
+                  >
+                    <Image
+                      src={t.iconSrc}
+                      alt={t.label}
+                      width={24}
+                      height={24}
+                      className={`transition-all shrink-0 ${active ? "w-11 h-11" : "w-8 h-8 opacity-60"}`}
+                    />
+                    <div className="inline-flex flex-col justify-start items-start gap-1">
+                      <div
+                        className={`text-white font-semibold font-inter transition-all ${
+                          active ? "text-2xl leading-6" : "text-base leading-5"
+                        }`}
+                      >
+                        {t.label}
+                      </div>
+                      <div
+                        className={`text-white font-light font-inter transition-all ${
+                          active ? "text-sm leading-4" : "text-xs"
+                        }`}
+                      >
+                        {formatCount(t.count)}+
+                      </div>
+                    </div>
+                  </button>
+                  {i === TABS.length - 1 && (
+                    <div className="relative z-10 w-px self-stretch shrink-0 bg-orange-400/20 pointer-events-none" />
+                  )}
+                </Fragment>
+              );
+            })}
           </div>
 
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            {SEARCH_TAGS.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-amber-line px-3 py-1 text-xs text-ink-secondary"
-              >
-                {t}
-              </span>
+          {/* middle line */}
+          <div className="h-px bg-orange-400/15" />
+
+          {/* FILTER ROW — 104px */}
+          <div
+            className="container flex flex-wrap items-center gap-2"
+            style={{ height: "104px" }}
+          >
+            {Object.entries(FILTER_OPTIONS).map(([label, options]) => (
+              <FilterPill key={label} label={label} options={options} />
             ))}
+            <div className="ml-auto">
+              <FilterPill
+                label="Sort by: Relevance"
+                options={[
+                  { label: "Relevance", value: "relevance" },
+                  { label: "Newest", value: "newest" },
+                  { label: "Top Rated", value: "rating" },
+                ]}
+              />
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* TAB CARDS */}
-      <div className="container -mt-2">
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {TABS.map((t) => {
-            const active = t.key === tab;
-            return (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`flex items-center gap-3 rounded-xl border p-4 text-left transition-colors ${
-                  active
-                    ? "border-amber bg-amber-soft"
-                    : "border-amber-line bg-bg-card hover:border-amber/50"
-                }`}
-              >
-                <span
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                    active ? "bg-amber text-white" : "bg-amber-soft text-amber"
-                  }`}
-                >
-                  <t.icon className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block text-sm font-semibold text-white">
-                    {t.label}
-                  </span>
-                  <span className="block text-xs text-ink-muted">
-                    {formatCount(t.count)}+
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
+          {/* bottom line */}
+          <div className="h-px bg-orange-400/15" />
+        </section>
       </div>
-
-      {/* FILTER ROW */}
-      <div className="container mt-6 flex flex-wrap items-center gap-2 border-b border-amber-line pb-4">
-        {Object.entries(FILTER_OPTIONS).map(([label, options]) => (
-          <FilterPill key={label} label={label} options={options} />
-        ))}
-        <div className="ml-auto">
-          <FilterPill
-            label="Sort by: Relevance"
-            options={[
-              { label: "Relevance", value: "relevance" },
-              { label: "Newest", value: "newest" },
-              { label: "Top Rated", value: "rating" },
-            ]}
-          />
-        </div>
-      </div>
+      {/* END gradient wrapper */}
 
       {/* RESULTS */}
       <section className="container flex flex-col gap-8 py-10 lg:flex-row">
@@ -285,7 +407,9 @@ function ExploreContent() {
                     <input
                       type="checkbox"
                       checked={checkedThemes.includes(t)}
-                      onChange={() => toggle(checkedThemes, setCheckedThemes, t)}
+                      onChange={() =>
+                        toggle(checkedThemes, setCheckedThemes, t)
+                      }
                       className="h-4 w-4 accent-amber"
                     />
                     {t}
@@ -383,8 +507,8 @@ function ExploreContent() {
             </h2>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-ink-secondary">
               Navigate the interconnected web of ideas, themes, and cultural
-              movements — and see how creative output across the continent
-              stays deeply connected.
+              movements — and see how creative output across the continent stays
+              deeply connected.
             </p>
             <Button
               asChild
@@ -415,52 +539,20 @@ function ExploreContent() {
       </section>
 
       {/* POPULAR INTEREST */}
-      <section className="bg-bg-primary py-14">
+      <section className="bg-[#59341F] pt-32 pb-12">
         <div className="container">
-          <SectionHeading
-            title="Explore Based On Popular Interest"
-            linkText="See more →"
-            linkHref="/explore"
-          />
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {["Movies", "Literature", "Report", "Biography"].map((i) => (
-              <Link
-                key={i}
-                href={`/explore?q=${i.toLowerCase()}`}
-                className="group relative flex aspect-[4/3] items-end overflow-hidden rounded-xl border border-amber-line bg-gradient-to-br from-[#3D1F00] to-[#1C0A00]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <span className="relative z-10 p-4 font-display text-lg font-bold text-white">
-                  {i}
-                </span>
-              </Link>
-            ))}
-          </div>
+          <PopularInterestSection />
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-bg-secondary py-16">
-        <div className="container flex flex-col items-center text-center">
-          <h2 className="max-w-2xl font-display text-2xl font-bold text-white md:text-3xl">
-            Join The Network Building Africa&apos;s Cultural Infrastructure
-          </h2>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Button
-              asChild
-              className="rounded-md bg-amber px-7 text-white hover:bg-amber-hover"
-            >
-              <Link href="/signup">Subscribe</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="rounded-md border-amber bg-transparent px-7 text-amber hover:bg-amber-soft"
-            >
-              <Link href="/signup">Become a Contributor</Link>
-            </Button>
-          </div>
-        </div>
+      {/* REPORT CTA */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 from-[18%] via-yellow-900 to-yellow-950">
+        <ReportCTA />
+      </section>
+
+      {/* JOIN NETWORK CTA */}
+      <section className="bg-[#59341F] pt-32 pb-24">
+        <JoinNetworkCTA />
       </section>
     </>
   );

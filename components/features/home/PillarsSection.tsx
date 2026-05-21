@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 const PILLARS = [
   { icon: "/TFP-Digital-Archive.png", title: "Digital Archive", desc: "A comprehensive, searchable database of African cultural works and critical analysis — the continent's cultural memory." },
@@ -9,6 +12,8 @@ const PILLARS = [
 ];
 
 export function PillarsSection() {
+  const [selected, setSelected] = useState<string | null>(null);
+
   return (
     <>
       {/* Heading */}
@@ -28,26 +33,34 @@ export function PillarsSection() {
 
       {/* Cards */}
       <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:pr-12">
-        {PILLARS.map((p) => (
-          <div
-            key={p.title}
-            className="flex h-[279px] w-full flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6"
-          >
-            <Image
-              src={p.icon}
-              alt={p.title}
-              width={48}
-              height={48}
-              className="h-12 w-12 object-contain"
-            />
-            <h3 className="w-full text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
-              {p.title}
-            </h3>
-            <p className="w-full text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
-              {p.desc}
-            </p>
-          </div>
-        ))}
+        {PILLARS.map((p) => {
+          const isSelected = selected === p.title;
+          return (
+            <button
+              key={p.title}
+              onClick={() => setSelected(isSelected ? null : p.title)}
+              className={`flex h-[279px] w-full flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6 transition-all duration-300 ${
+                isSelected
+                  ? "shadow-[6px_6px_0px_rgba(0,0,0,0.25)] -translate-y-px"
+                  : "shadow-none hover:shadow-[3px_3px_0px_rgba(0,0,0,0.10)]"
+              }`}
+            >
+              <Image
+                src={p.icon}
+                alt={p.title}
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
+              <h3 className="w-full text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
+                {p.title}
+              </h3>
+              <p className="w-full text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
+                {p.desc}
+              </p>
+            </button>
+          );
+        })}
       </div>
     </>
   );
