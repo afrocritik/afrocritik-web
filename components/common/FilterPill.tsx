@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Check } from "lucide-react";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -61,10 +62,10 @@ export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProp
           )}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-52 rounded-xl border-amber-line bg-bg-secondary p-2 text-white shadow-xl">
-        <div className="custom-scrollbar flex max-h-60 flex-col gap-0.5 overflow-y-auto">
+      <PopoverContent className="w-60 rounded-xl border-amber-line bg-bg-secondary p-0 overflow-hidden text-white shadow-xl">
+        <div className="flex flex-col gap-[3px]">
           {options.length === 0 && (
-            <p className="px-2 py-3 text-xs text-ink-muted">No options</p>
+            <p className="px-3 py-3 text-xs text-ink-muted">No options</p>
           )}
           {options.map((opt) => {
             const isSel = selected.includes(opt.value);
@@ -72,10 +73,22 @@ export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProp
               <button
                 key={opt.value}
                 onClick={() => toggle(opt.value)}
-                className="flex items-center justify-between rounded-md px-2 py-2 text-sm transition-colors hover:bg-white/5"
+                style={{ backgroundColor: isSel ? "#DD962A" : "#A78F6F" }}
+                className="flex items-center gap-2 w-full min-h-12 px-3 py-2 text-left transition-colors"
               >
-                <span>{opt.label}</span>
-                {isSel && <Check className="h-4 w-4 text-amber" />}
+                <div className="w-5 h-5 shrink-0 flex items-center justify-center">
+                  {isSel && (
+                    <Image
+                      src="/explore-tab-check.png"
+                      alt="selected"
+                      width={20}
+                      height={20}
+                    />
+                  )}
+                </div>
+                <span className="text-base font-normal font-inter leading-tight tracking-wide text-white">
+                  {opt.label}
+                </span>
               </button>
             );
           })}
@@ -86,7 +99,7 @@ export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProp
               setSelected([]);
               onSelect?.([]);
             }}
-            className="mt-1 w-full border-t border-amber-line pt-2 text-left text-xs text-ink-muted hover:text-white"
+            className="mt-[3px] w-full bg-[#A78F6F] px-3 py-2 text-left text-xs text-white/80 hover:text-white transition-colors"
           >
             Clear
           </button>
