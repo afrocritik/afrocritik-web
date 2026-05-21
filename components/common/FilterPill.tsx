@@ -20,7 +20,7 @@ interface FilterPillProps {
   onSelect?: (values: string[]) => void;
 }
 
-export function FilterPill({ label, options, onSelect }: FilterPillProps) {
+export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProps>) {
   const [selected, setSelected] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -39,24 +39,26 @@ export function FilterPill({ label, options, onSelect }: FilterPillProps) {
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
+            "h-11 px-7 rounded-lg inline-flex justify-center items-center gap-2 transition-colors outline outline-[0.50px] outline-offset-[-0.50px]",
             active || open
-              ? "border-amber bg-amber-soft text-amber"
-              : "border-amber-line text-ink-secondary hover:border-amber/50 hover:text-white"
+              ? "bg-yellow-950/70 outline-yellow-700/70 text-white"
+              : "bg-yellow-950/40 outline-yellow-700/50 text-white hover:outline-yellow-700/70",
           )}
         >
-          {label}
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 shrink-0 transition-transform",
+              open && "rotate-180",
+            )}
+          />
+          <span className="text-sm text-white font-normal font-inter leading-4 whitespace-nowrap">
+            {label}
+          </span>
           {active && (
-            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber text-[9px] text-white">
+            <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-amber text-[9px] text-white">
               {selected.length}
             </span>
           )}
-          <ChevronDown
-            className={cn(
-              "h-3.5 w-3.5 transition-transform",
-              open && "rotate-180"
-            )}
-          />
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-52 rounded-xl border-amber-line bg-bg-secondary p-2 text-white shadow-xl">

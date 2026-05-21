@@ -21,6 +21,7 @@ export interface WorkCardProps {
   essential?: boolean;
   ewim?: boolean;
   ewil?: boolean;
+  explore?: boolean;
   className?: string;
 }
 
@@ -749,9 +750,152 @@ function EWILCard({
   );
 }
 
-export function WorkCard({ essential, ewim, ewil, ...props }: Readonly<WorkCardProps>): JSX.Element {
+function ExploreCard({
+  slug = "#",
+  title,
+  description,
+  badge,
+  tags,
+  image,
+  country,
+  type = "Film",
+  rating,
+  className,
+}: Readonly<Omit<WorkCardProps, "essential" | "ewim" | "ewil" | "explore">>) {
+  const cardTags = tags?.length
+    ? tags
+    : ([country, type].filter(Boolean) as string[]);
+
+  return (
+    <div
+      className={cn(
+        "w-full h-[298px] relative bg-rose-100/10 rounded-md outline outline-[0.77px] outline-offset-[-0.77px] outline-yellow-700",
+        className
+      )}
+    >
+      {/* Image */}
+      <Link href={`/works/${slug}`}>
+        <div className="absolute left-[10px] top-[12px] right-[10px] h-[191px] overflow-hidden rounded-sm bg-[#3D1F00]">
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={image} alt={title} className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full" />
+          )}
+        </div>
+      </Link>
+
+      {/* Badge */}
+      {badge && (
+        <span
+          className="absolute z-10"
+          style={{
+            left: "-3.86px",
+            top: "11.57px",
+            background: "#B00000",
+            color: "#FFF",
+            fontSize: "6.94px",
+            fontWeight: 400,
+            fontFamily: "var(--font-inter)",
+            lineHeight: "9.72px",
+            padding: "2.61px 6.09px",
+            borderRadius: "3.09px",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {badge}
+        </span>
+      )}
+
+      {/* Title */}
+      <Link href={`/works/${slug}`}>
+        <div
+          className="absolute line-clamp-2"
+          style={{
+            left: "8px",
+            right: "8px",
+            top: "210px",
+            color: "#FB923C",
+            fontSize: "12px",
+            fontWeight: 600,
+            fontFamily: "var(--font-inter)",
+            lineHeight: "13px",
+          }}
+        >
+          {title}
+        </div>
+      </Link>
+
+      {/* Description */}
+      {description && (
+        <div
+          className="absolute line-clamp-2"
+          style={{
+            left: "10px",
+            right: "10px",
+            top: "238px",
+            color: "#D6D3D1",
+            fontSize: "9.26px",
+            fontWeight: 600,
+            fontFamily: "var(--font-inter)",
+            lineHeight: "12px",
+          }}
+        >
+          {description}
+        </div>
+      )}
+
+      {/* Tags + Rating — pinned to bottom with guaranteed spacing */}
+      <div className="absolute left-[8px] right-[8px] bottom-[8px] flex items-center justify-between gap-1">
+        <div className="flex items-center gap-1">
+          {cardTags.map((tag) => (
+            <span
+              key={tag}
+              style={{
+                height: "20px",
+                background: "rgba(161, 98, 7, 0.20)",
+                borderRadius: "3px",
+                display: "inline-flex",
+                alignItems: "center",
+                paddingInline: "6px",
+                color: "#FFF",
+                fontSize: "6.94px",
+                fontWeight: 400,
+                fontFamily: "var(--font-inter)",
+                lineHeight: "9.72px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {tag.toUpperCase()}
+            </span>
+          ))}
+        </div>
+        {typeof rating === "number" && (
+          <div className="flex shrink-0 items-center gap-0.5">
+            <span
+              style={{
+                color: "#FFF",
+                fontSize: "9.26px",
+                fontWeight: 600,
+                fontFamily: "var(--font-inter)",
+                lineHeight: "12px",
+              }}
+            >
+              {rating.toFixed(1)}
+            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function WorkCard({ essential, ewim, ewil, explore, ...props }: Readonly<WorkCardProps>): JSX.Element {
   if (ewil) return <EWILCard {...props} />;
   if (ewim) return <EWIMCard {...props} />;
   if (essential) return <EssentialCard {...props} />;
+  if (explore) return <ExploreCard {...props} />;
   return <StandardCard {...props} />;
 }
