@@ -42,7 +42,7 @@ export function IdeaCard({
       )}
       <h3
         className={cn(
-          "w-full justify-start text-2xl font-baskervville leading-7",
+          "w-full justify-start text-2xl font-inter leading-7",
           light ? "text-orange-950 font-bold" : "text-white",
         )}
       >

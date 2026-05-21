@@ -17,7 +17,7 @@ function StatItem({ value, label }: { value: string; label: string }) {
         gap: "4px",
         whiteSpace: "nowrap",
         color: "rgba(196, 150, 60, 0.60)",
-        fontFamily: "var(--font-montserrat)",
+        fontFamily: "var(--font-inter)",
         fontSize: "24px",
         fontWeight: 600,
         lineHeight: "110%",

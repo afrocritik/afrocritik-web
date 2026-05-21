@@ -18,7 +18,7 @@ export function ExploreIdeasSection() {
       <div className="container h-full flex items-center gap-8">
         {/* Left content */}
         <div className="flex flex-col justify-between flex-1 h-72">
-          <h2 className="text-white text-5xl font-bold capitalize leading-tight" style={{ fontFamily: "Baskervville, serif" }}>
+          <h2 className="text-white text-5xl font-bold capitalize leading-tight" style={{ fontFamily: "var(--font-baskervville)" }}>
             explore Ideas
           </h2>
           <p className="max-w-lg text-white text-[17px] font-normal capitalize leading-6" style={{ fontFamily: "var(--font-inter)" }}>
@@ -50,32 +50,32 @@ export function ExploreIdeasSection() {
 
           {/* Culture */}
           <div className="w-24 h-11 absolute rounded-lg outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center" style={{ left: "86.19px", top: "9.16px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-base font-bold" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Culture</span>
+            <span className="text-base font-bold" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Culture</span>
           </div>
           {/* Fela Kuti */}
           <div className="w-28 h-12 absolute rounded-lg outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center" style={{ left: "0.69px", top: "138.89px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-base font-bold" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Fela Kuti</span>
+            <span className="text-base font-bold" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Fela Kuti</span>
           </div>
           {/* Political Music */}
           <div className="w-44 h-12 absolute rounded-lg outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center" style={{ left: "32.42px", top: "240.52px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-base font-bold" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Political Music</span>
+            <span className="text-base font-bold" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Political Music</span>
           </div>
           {/* Black Consciousness */}
           <div className="w-44 h-16 absolute rounded-lg outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center text-center" style={{ left: "450.14px", top: "0.69px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-base font-bold leading-tight" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Black<br/>Consciousness</span>
+            <span className="text-base font-bold leading-tight" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Black<br/>Consciousness</span>
           </div>
           {/* Pan-Africanism */}
           <div className="w-44 h-12 absolute rounded-lg outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center" style={{ left: "495.02px", top: "130.42px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-base font-bold" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Pan-Africanism</span>
+            <span className="text-base font-bold" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Pan-Africanism</span>
           </div>
           {/* Soweto Uprising */}
           <div className="w-44 h-12 absolute rounded-lg outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center" style={{ left: "408.06px", top: "239.12px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-base font-bold" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Soweto Uprising</span>
+            <span className="text-base font-bold" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Soweto Uprising</span>
           </div>
 
           {/* Afrobeat — central circle */}
           <div className="size-24 absolute rounded-full outline outline-[1.37px] outline-offset-[-0.69px] flex items-center justify-center" style={{ left: "267.81px", top: "93.25px", backgroundColor: "#4D311D", outlineColor: "#9C5C08" }}>
-            <span className="text-center text-base font-bold" style={{ fontFamily: "Baskervville, serif", color: "#9C5C08" }}>Afrobeat</span>
+            <span className="text-center text-base font-bold" style={{ fontFamily: "var(--font-inter)", color: "#9C5C08" }}>Afrobeat</span>
           </div>
 
           {/* Connector nodes — circular with inner dot */}

@@ -24,9 +24,9 @@ export function EssentialWorksSection() {
             style={{
               maxWidth: "356px",
               color: "#FFF",
-              fontFamily: "var(--font-montserrat)",
-              fontSize: "36px",
-              fontWeight: 500,
+              fontFamily: "var(--font-baskervville)",
+              fontSize: "40px",
+              fontWeight: 700,
               lineHeight: "110%",
               textTransform: "capitalize",
             }}
@@ -52,6 +52,7 @@ export function EssentialWorksSection() {
                 gap: "8px",
                 borderRadius: "8px",
                 color: "#EFE4D6",
+                fontFamily: "var(--font-inter)",
                 fontSize: "14px",
                 fontWeight: 500,
               }}

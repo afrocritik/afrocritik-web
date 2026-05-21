@@ -39,7 +39,7 @@ export function PopularInterestSection() {
               <div className="absolute inset-0 bg-white/10 rounded-tl-[20px] rounded-tr-[20px]" />
             </div>
             <div className="self-stretch px-7 pt-5 pb-6 flex flex-col justify-start items-start gap-6">
-              <div className="self-stretch text-white text-base font-semibold font-['Work_Sans'] capitalize leading-6">
+              <div className="self-stretch text-white text-base font-semibold font-inter capitalize leading-6">
                 {label}
               </div>
             </div>

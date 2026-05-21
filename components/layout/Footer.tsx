@@ -45,13 +45,13 @@ export function Footer() {
         {/* Brand */}
         <div className="flex flex-col gap-3">
           <Logo />
-          <p className="max-w-xs text-xs font-semibold capitalize leading-4 text-neutral-500">
+          <p className="max-w-xs font-inter text-xs font-semibold capitalize leading-4 text-neutral-500">
             A Pan-African Non-Profit Cultural Institution Building The
             Infrastructure For African Cultural Criticism, With Bases In Lagos
             And Long Beach.
           </p>
           <div className="flex flex-col gap-3.5">
-            <p className="text-base font-normal leading-6 text-stone-300">
+            <p className="font-inter text-base font-normal leading-6 text-stone-300">
               Join our community
             </p>
             <div className="flex items-center gap-2.5">
@@ -73,8 +73,8 @@ export function Footer() {
 
         {/* Explore */}
         <div className="w-32">
-          <h4 className="mb-6 text-xl font-bold capitalize leading-9 text-amber">Explore</h4>
-          <ul className="flex flex-col gap-2 text-base text-stone-300">
+          <h4 className="mb-6 font-baskervville text-xl font-bold capitalize leading-9 text-amber">Explore</h4>
+          <ul className="flex flex-col gap-2 font-inter text-base text-stone-300">
             {EXPLORE_LINKS.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className="hover:text-white">
@@ -87,8 +87,8 @@ export function Footer() {
 
         {/* Institute */}
         <div className="w-40">
-          <h4 className="mb-6 text-xl font-bold capitalize leading-9 text-amber">Institute</h4>
-          <ul className="flex flex-col gap-2 text-base text-stone-300">
+          <h4 className="mb-6 font-baskervville text-xl font-bold capitalize leading-9 text-amber">Institute</h4>
+          <ul className="flex flex-col gap-2 font-inter text-base text-stone-300">
             {INSTITUTE_LINKS.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className="hover:text-white">
@@ -101,22 +101,22 @@ export function Footer() {
 
         {/* Newsletter */}
         <div>
-          <h4 className="mb-6 text-2xl font-bold capitalize leading-9 text-white font-sans">
+          <h4 className="mb-6 text-2xl font-bold capitalize leading-9 text-white font-baskervville">
             Join Our Weekly Digest
           </h4>
           <div className="flex flex-col gap-5">
-            <p className="max-w-xs text-base leading-6 text-stone-300">
+            <p className="max-w-xs font-inter text-base leading-6 text-stone-300">
               Get useful articles in your inbox every week.
             </p>
             <form className="flex h-14 items-center gap-3 rounded-[20px] bg-white pl-5">
               <input
                 type="email"
                 placeholder="Enter your email here"
-                className="min-w-0 flex-1 bg-transparent text-base text-zinc-800 placeholder:text-zinc-500 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent font-inter text-base text-zinc-800 placeholder:text-zinc-500 focus:outline-none"
               />
               <button
                 type="submit"
-                className="h-14 w-40 shrink-0 rounded-[20px] bg-gradient-to-r from-yellow-700 to-orange-400 text-base font-semibold text-white transition-opacity hover:opacity-90"
+                className="h-14 w-40 shrink-0 rounded-[20px] bg-gradient-to-r from-yellow-700 to-orange-400 font-inter text-base font-semibold text-white transition-opacity hover:opacity-90"
               >
                 Subscribe
               </button>

@@ -138,6 +138,7 @@ function EssentialCardBody({
           className={hovered ? "line-clamp-1" : "line-clamp-2"}
           style={{
             color: "#DD962A",
+            fontFamily: "var(--font-inter)",
             fontSize: hovered ? "16px" : "13.928px",
             fontWeight: 600,
             lineHeight: hovered ? "140%" : "100%",
@@ -150,6 +151,7 @@ function EssentialCardBody({
         className={hovered ? "line-clamp-3" : "line-clamp-1"}
         style={{
           color: "#CCC",
+          fontFamily: "var(--font-inter)",
           fontSize: hovered ? "12px" : "10.446px",
           fontWeight: 600,
           lineHeight: "140%",
@@ -171,6 +173,7 @@ function EssentialCardBody({
                 justifyContent: "center",
                 paddingInline: "7px",
                 color: "#FFF",
+                fontFamily: "var(--font-inter)",
                 fontSize: "9px",
                 fontWeight: 400,
                 lineHeight: "140%",
@@ -247,6 +250,7 @@ function EssentialCard({
             borderRadius: "3.4819px",
             background: "#B50000",
             color: "#FFF",
+            fontFamily: "var(--font-inter)",
             fontSize: "9px",
             fontWeight: 400,
             lineHeight: "140%",

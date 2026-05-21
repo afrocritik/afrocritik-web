@@ -88,7 +88,7 @@ export function RefineSidebar({ onPopularSearch }: RefineSidebarProps) {
                       </div>
                     )}
                   </div>
-                  <span className="text-gray-200 text-sm font-semibold font-montserrat leading-4">
+                  <span className="text-gray-200 text-sm font-semibold font-inter leading-4">
                     {c}
                   </span>
                 </button>
@@ -118,7 +118,7 @@ export function RefineSidebar({ onPopularSearch }: RefineSidebarProps) {
                       </div>
                     )}
                   </div>
-                  <span className="text-gray-200 text-sm font-semibold font-montserrat leading-4 text-left">
+                  <span className="text-gray-200 text-sm font-semibold font-inter leading-4 text-left">
                     {t}
                   </span>
                 </button>

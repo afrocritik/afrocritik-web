@@ -18,7 +18,7 @@ export function PillarsSection() {
     <>
       {/* Heading */}
       <div className="flex flex-col">
-        <span className="font-hedvig text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
+        <span className="font-inter text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
           Institutional Backbone
         </span>
         <h2 className="mt-2 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
@@ -52,7 +52,7 @@ export function PillarsSection() {
                 height={48}
                 className="h-12 w-12 object-contain"
               />
-              <h3 className="w-full text-center font-baskervville text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
+              <h3 className="w-full text-center font-inter text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
                 {p.title}
               </h3>
               <p className="w-full text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
