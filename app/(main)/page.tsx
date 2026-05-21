@@ -16,18 +16,15 @@ const BROWN_GRADIENT =
 export default function HomePage() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: BROWN_GRADIENT }}>
-        <HeroSection />
-      </section>
-
-      {/* ESSENTIAL WORKS */}
-      <section
-        className="relative overflow-hidden py-16"
-        style={{ background: BROWN_GRADIENT }}
-      >
-        <EssentialWorksSection />
-      </section>
+      {/* HERO + ESSENTIAL WORKS — single gradient flows across both */}
+      <div style={{ background: BROWN_GRADIENT }}>
+        <section className="relative overflow-hidden">
+          <HeroSection />
+        </section>
+        <section className="relative overflow-hidden py-16">
+          <EssentialWorksSection />
+        </section>
+      </div>
 
       {/* FIVE PILLARS */}
       <section id="pillars" className="bg-cream-panel pt-14 pb-20 md:pt-20 md:pb-28">
