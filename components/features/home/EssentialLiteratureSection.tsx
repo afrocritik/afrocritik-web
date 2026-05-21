@@ -53,6 +53,7 @@ export function EssentialLiteratureSection() {
           title="Essential Works In Literature"
           linkText="View All →"
           linkHref="/explore?q=literature"
+          font="serif"
           bleedRight
         />
       </div>

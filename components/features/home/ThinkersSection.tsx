@@ -50,7 +50,7 @@ export function ThinkersSection() {
     <>
       {/* Heading + Pagination */}
       <div className="mb-4 flex flex-col items-start text-left">
-        <span className="font-['Hedvig_Letters_Serif'] text-center justify-center text-sm font-normal capitalize leading-4 text-yellow-700">
+        <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-yellow-700">
           Explore African Philosophy
         </span>
         <h2 className="mt-6 max-w-[906px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">

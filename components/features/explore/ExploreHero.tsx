@@ -23,7 +23,7 @@ export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
         <h1
           style={{
             width: "824px",
-            fontFamily: "Baskerville",
+            fontFamily: "var(--font-baskervville)",
             fontSize: "56px",
             fontWeight: 700,
             lineHeight: "110%",

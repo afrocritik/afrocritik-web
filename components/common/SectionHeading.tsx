@@ -26,7 +26,7 @@ function ViewAllLink({
     <Link
       href={href}
       className={cn(
-        "shrink-0 text-sm font-medium text-amber transition-colors hover:text-amber-hover",
+        "shrink-0 font-inter text-sm font-medium text-amber transition-colors hover:text-amber-hover",
         bleedRight && "self-end",
       )}
       style={

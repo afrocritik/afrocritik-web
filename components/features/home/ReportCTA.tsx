@@ -18,7 +18,7 @@ export function ReportCTA() {
 
       {/* Content */}
       <div className="flex flex-col gap-6">
-        <p className="font-hedvig text-sm font-normal capitalize leading-4 text-orange-400">
+        <p className="font-inter text-sm font-normal capitalize leading-4 text-orange-400">
           The Afrocritik Report 2025
         </p>
 

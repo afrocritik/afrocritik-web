@@ -47,7 +47,7 @@ export function IdeasSection() {
     <>
       {/* Heading */}
       <div className="flex flex-col items-start text-left">
-        <span className="ml-3 font-hedvig text-center justify-center text-sm font-normal capitalize leading-4 text-orange-400">
+        <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-orange-400">
           Conceptual Frameworks
         </span>
         <h2 className="mt-3 w-[677px] justify-center text-orange-950 text-4xl font-bold font-baskervville capitalize leading-10">

@@ -10,7 +10,7 @@ export function KnowledgePipeline() {
   return (
     <>
       <div className="flex flex-col">
-        <span className="font-hedvig text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
+        <span className="font-inter text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
           How the Platform operates
         </span>
         <h2 className="mt-2 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
@@ -33,10 +33,10 @@ export function KnowledgePipeline() {
                 isFirst ? " rounded-tl-xl rounded-bl-xl" : " -ml-px"
               }${isLast ? " rounded-tr-xl rounded-br-xl" : ""}`}
             >
-              <span className="text-yellow-700/30 text-4xl font-normal font-hedvig capitalize leading-[56px]">
+              <span className="text-yellow-700/30 text-4xl font-normal font-inter capitalize leading-[56px]">
                 {s.step}
               </span>
-              <h3 className="text-center text-neutral-700 text-lg font-bold font-montserrat capitalize leading-6">
+              <h3 className="text-center text-neutral-700 text-lg font-bold font-inter capitalize leading-6">
                 {s.title}
               </h3>
               <p className="text-center text-neutral-700 text-[10px] font-normal font-inter capitalize leading-3">
