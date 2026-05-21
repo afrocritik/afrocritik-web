@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Fragment, Suspense, useMemo, useState } from "react";
+import { Fragment, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { LayoutGrid, List } from "lucide-react";
@@ -72,24 +72,119 @@ const SEARCH_TAGS = [
   "Chimamanda",
 ];
 
-const FALLBACK_WORKS = Array.from({ length: 12 }).map((_, i) => ({
+const FALLBACK_WORKS = Array.from({ length: 8 }).map((_, i) => ({
   slug: `work-${i}`,
-  title:
-    [
-      "Living in Bondage",
-      "Half of a Yellow Sun",
-      "Zombie",
-      "Tsotsi",
-      "Sankofa",
-      "Things Fall Apart",
-    ][i % 6] + ` `,
-  type: ["Film", "Literature", "Music", "Film", "Film", "Literature"][i % 6],
+  title: "Lorem ipsum dolor sit amet consect etur neque",
+  type: "Music",
   year: 2024 - i,
-  country: ["Nigeria", "Nigeria", "Nigeria", "South Africa", "Ghana", "Nigeria"][
-    i % 6
-  ],
+  country: "Nigeria",
   rating: 4 + ((i % 9) / 10),
+  badge: "ALBUM REVIEW",
+  image: `/explore-works-Image-${(i % 2) + 1}.png`,
+  description: "Lorem ipsum dolor sit amet sectetur Vivamus ner neque tempus....",
+  tags: ["Nigeria", "Afrobeat", "Music"],
 }));
+
+function YearRangeSlider({ min = 1950, max = 2025 }: { min?: number; max?: number }) {
+  const [minVal, setMinVal] = useState(min);
+  const [maxVal, setMaxVal] = useState(max);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const minRef = useRef(min);
+  const maxRef = useRef(max);
+  minRef.current = minVal;
+  maxRef.current = maxVal;
+
+  const [trackW, setTrackW] = useState(180);
+  const trackWRef = useRef(180);
+  trackWRef.current = trackW;
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const update = () => {
+      if (!containerRef.current) return;
+      setTrackW(containerRef.current.getBoundingClientRect().width - 12);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  const toPos = (val: number) =>
+    Math.round(((val - min) / (max - min)) * trackW);
+
+  const toVal = (pos: number) =>
+    Math.round((Math.max(0, Math.min(pos, trackWRef.current)) / trackWRef.current) * (max - min) + min);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (
+    e: React.PointerEvent<HTMLDivElement>,
+    which: "min" | "max"
+  ) => {
+    if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const val = toVal(e.clientX - rect.left);
+    if (which === "min") setMinVal(Math.min(val, maxRef.current - 1));
+    else setMaxVal(Math.max(val, minRef.current + 1));
+  };
+
+  const minPos = toPos(minVal);
+  const maxPos = toPos(maxVal);
+
+  return (
+    <div>
+      <div ref={containerRef} className="w-full h-3 relative select-none">
+        {/* base track */}
+        <div className="absolute h-1 rounded-lg bg-white/10" style={{ left: 6, right: 6, top: 4 }} />
+        {/* filled yellow track */}
+        <div
+          className="absolute top-[4px] h-1 bg-yellow-700 rounded-lg"
+          style={{ left: minPos + 6, width: Math.max(0, maxPos - minPos) }}
+        />
+        {/* unfilled right track */}
+        <div
+          className="absolute top-[4px] h-1 bg-zinc-100/30 rounded-lg"
+          style={{ left: maxPos + 6, width: Math.max(0, trackW - maxPos) }}
+        />
+        {/* min handle */}
+        <div
+          role="slider"
+          aria-label="Minimum year"
+          aria-valuenow={minVal}
+          aria-valuemin={min}
+          aria-valuemax={maxVal - 1}
+          tabIndex={0}
+          className="absolute top-0 size-3 z-10 cursor-grab active:cursor-grabbing rounded-full bg-white shadow-[0px_4px_12px_0px_rgba(0,0,0,0.36)] outline outline-1 outline-zinc-100"
+          style={{ left: minPos }}
+          onPointerDown={onPointerDown}
+          onPointerMove={(e) => onPointerMove(e, "min")}
+        />
+        {/* max handle */}
+        <div
+          role="slider"
+          aria-label="Maximum year"
+          aria-valuenow={maxVal}
+          aria-valuemin={minVal + 1}
+          aria-valuemax={max}
+          tabIndex={0}
+          className="absolute top-0 size-3 z-10 cursor-grab active:cursor-grabbing rounded-full bg-white shadow-[0px_4px_12px_0px_rgba(0,0,0,0.36)] outline outline-1 outline-zinc-100"
+          style={{ left: maxPos }}
+          onPointerDown={onPointerDown}
+          onPointerMove={(e) => onPointerMove(e, "max")}
+        />
+      </div>
+      <div className="mt-2 flex justify-between text-[11px] text-white/40">
+        <span>{minVal}</span>
+        <span>{maxVal}</span>
+      </div>
+    </div>
+  );
+}
 
 function ExploreContent() {
   const params = useSearchParams();
@@ -341,106 +436,12 @@ function ExploreContent() {
           {/* bottom line */}
           <div className="h-px bg-orange-400/15" />
         </section>
-      </div>
-      {/* END gradient wrapper */}
 
-      {/* RESULTS */}
-      <section className="container flex flex-col gap-8 py-10 lg:flex-row">
-        {/* Sidebar */}
-        <aside className="shrink-0 lg:w-64">
-          <div className="rounded-xl border border-amber-line bg-bg-card p-5">
-            <h3 className="font-display text-base font-bold text-white">
-              Refine results
-            </h3>
-
-            <div className="mt-5">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-secondary">
-                Year Range
-              </p>
-              <input
-                type="range"
-                min={1950}
-                max={2025}
-                defaultValue={2000}
-                className="w-full accent-amber"
-              />
-              <div className="mt-1 flex justify-between text-[11px] text-ink-muted">
-                <span>1950</span>
-                <span>2025</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-secondary">
-                Country
-              </p>
-              <div className="flex flex-col gap-2">
-                {COUNTRIES.map((c) => (
-                  <label
-                    key={c}
-                    className="flex cursor-pointer items-center gap-2 text-sm text-ink-secondary"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checkedCountries.includes(c)}
-                      onChange={() =>
-                        toggle(checkedCountries, setCheckedCountries, c)
-                      }
-                      className="h-4 w-4 accent-amber"
-                    />
-                    {c}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-secondary">
-                Theme
-              </p>
-              <div className="flex flex-col gap-2">
-                {THEMES.map((t) => (
-                  <label
-                    key={t}
-                    className="flex cursor-pointer items-center gap-2 text-sm text-ink-secondary"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checkedThemes.includes(t)}
-                      onChange={() =>
-                        toggle(checkedThemes, setCheckedThemes, t)
-                      }
-                      className="h-4 w-4 accent-amber"
-                    />
-                    {t}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-secondary">
-                Popular Searches
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {POPULAR.map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => setQuery(p)}
-                    className="rounded-full border border-amber-line px-2.5 py-1 text-[11px] text-amber hover:bg-amber-soft"
-                  >
-                    {p}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* Main */}
-        <div className="flex-1">
+        {/* RESULTS */}
+        <section className="container py-10">
+          {/* Full-width header row — above both sidebar and cards */}
           <div className="mb-5 flex items-center justify-between">
-            <p className="text-sm font-semibold text-white">
+            <p className="w-64 justify-start text-white text-2xl font-semibold font-inter leading-6">
               {formatCount(resultCount)} {activeTab.label} Found
             </p>
             <div className="flex items-center gap-1 rounded-md border border-amber-line p-1">
@@ -467,36 +468,165 @@ function ExploreContent() {
             </div>
           </div>
 
-          <div
-            className={
-              view === "grid"
-                ? "grid grid-cols-2 gap-5 sm:grid-cols-3 xl:grid-cols-4"
-                : "flex flex-col gap-3"
-            }
-          >
-            {works.map((w: any, i: number) => (
-              <WorkCard
-                key={w.slug ?? i}
-                slug={w.slug}
-                title={w.title}
-                type={w.type}
-                year={w.year}
-                country={w.country}
-                rating={w.rating}
-              />
-            ))}
-          </div>
+          {/* Sidebar + Cards — same top baseline so bottoms align */}
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          <aside className="shrink-0">
+            <div className="w-64 h-[612px] bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 overflow-y-auto">
+              <h3 className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
+                Refine results
+              </h3>
 
-          <div className="mt-10 flex justify-center">
-            <Button
-              variant="outline"
-              className="rounded-md border-amber bg-transparent px-8 text-amber hover:bg-amber-soft"
+              <div className="mt-2">
+                <p className="mb-2 w-36 justify-start text-white text-xs font-light font-inter leading-3">
+                  Year Range
+                </p>
+                <YearRangeSlider min={1950} max={2025} />
+              </div>
+
+              <div className="h-px mt-4 bg-orange-400/15" />
+
+              <div className="mt-4">
+                <p className="w-16 justify-start text-white text-sm font-bold font-inter leading-4">
+                  Country
+                </p>
+                <div className="mt-2 w-full h-7 relative">
+                  <div className="absolute inset-0 bg-yellow-950/20 rounded-md border-[0.30px] border-yellow-700" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 70 71"
+                    fill="none"
+                    className="pointer-events-none absolute left-[9px] top-[7px]"
+                  >
+                    <path
+                      d="M49.37 50.1779L59.5 60.0721M33.25 21.2019C39.049 21.2019 43.75 25.9481 43.75 31.8029M56.2333 33.6875C56.2333 46.4378 45.9956 56.774 33.3667 56.774C20.7378 56.774 10.5 46.4378 10.5 33.6875C10.5 20.9371 20.7378 10.601 33.3667 10.601C45.9956 10.601 56.2333 20.9371 56.2333 33.6875Z"
+                      stroke="rgba(156, 92, 8, 0.70)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="absolute inset-0 bg-transparent rounded-md pl-[29px] pr-2 font-inter text-[11px] text-white placeholder:text-white/30 focus:outline-none"
+                  />
+                </div>
+                <div className="mt-2 w-full p-4 rounded-xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.12)] inline-flex flex-col justify-start items-start gap-3">
+                  {COUNTRIES.map((c) => {
+                    const checked = checkedCountries.includes(c);
+                    return (
+                      <button
+                        key={c}
+                        onClick={() => toggle(checkedCountries, setCheckedCountries, c)}
+                        className="w-full inline-flex justify-start items-center gap-2"
+                      >
+                        <div className="size-4 relative shrink-0">
+                          <div className="size-4 rounded-sm border border-gray-200" />
+                          {checked && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Image src="/Vector (Stroke).svg" alt="" width={13} height={9} />
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-gray-200 text-sm font-semibold font-montserrat leading-4">
+                          {c}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="w-16 justify-start text-white text-sm font-bold font-inter leading-4">
+                  Theme
+                </p>
+                <div className="mt-2 w-full p-4 rounded-xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.12)] inline-flex flex-col justify-start items-start gap-3">
+                  {THEMES.map((t) => {
+                    const checked = checkedThemes.includes(t);
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => toggle(checkedThemes, setCheckedThemes, t)}
+                        className="w-full inline-flex justify-start items-center gap-2"
+                      >
+                        <div className="size-4 relative shrink-0">
+                          <div className="size-4 rounded-sm border border-gray-200" />
+                          {checked && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Image src="/Vector (Stroke).svg" alt="" width={13} height={9} />
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-gray-200 text-sm font-semibold font-montserrat leading-4 text-left">
+                          {t}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <p className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
+                  Popular Searches
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {POPULAR.map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => setQuery(p)}
+                      className="rounded-full border border-amber-line px-2.5 py-1 text-[11px] text-amber hover:bg-amber-soft"
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main */}
+          <div className="flex-1">
+            <div
+              className={
+                view === "grid"
+                  ? "grid grid-cols-4 gap-4"
+                  : "flex flex-col gap-3"
+              }
             >
-              Load More
-            </Button>
+              {works.map((w: any, i: number) => (
+                <WorkCard
+                  key={w.slug ?? i}
+                  explore
+                  slug={w.slug}
+                  title={w.title}
+                  type={w.type}
+                  year={w.year}
+                  country={w.country}
+                  rating={w.rating}
+                  badge={w.badge}
+                  image={w.image}
+                  description={w.description}
+                  tags={w.tags}
+                />
+              ))}
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <div className="inline-flex justify-start items-center gap-2">
+                <button className="px-3 py-2 rounded-lg flex justify-center items-center gap-2 hover:bg-white/5 transition-colors">
+                  <span className="text-stone-200 text-base font-normal font-inter leading-4">View More</span>
+                  <Image src="/Arrow right.svg" alt="" width={16} height={16} />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+          </div>{/* end sidebar+cards row */}
+        </section>
+      </div>
+      {/* END gradient wrapper */}
 
       {/* EXPLORE IDEAS NETWORK */}
       <section className="bg-bg-secondary py-16">
