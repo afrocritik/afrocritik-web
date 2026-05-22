@@ -4,17 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
-import { X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { Logo } from "./Logo";
-
-const NAV_LINKS = [
-  { label: "Archive", href: "/explore" },
-  { label: "Ideas", href: "/explore?tab=ideas" },
-  { label: "People", href: "/explore?tab=people" },
-  { label: "Reports", href: "/explore?tab=reports" },
-];
+import { MegaMenu } from "./MegaMenu";
 
 function HamburgerIcon() {
   return (
@@ -83,15 +76,11 @@ export function Navbar() {
         <div className="flex items-center gap-5 shrink-0">
           {/* Hamburger — first on the right */}
           <button
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => setMenuOpen(true)}
             className="transition-opacity hover:opacity-70"
             aria-label="Menu"
           >
-            {menuOpen ? (
-              <X className="h-7 w-7 text-[#F3E5D0]" />
-            ) : (
-              <HamburgerIcon />
-            )}
+            <HamburgerIcon />
           </button>
 
           {/* Explore — interior pages only */}
@@ -135,31 +124,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {menuOpen && (
-        <nav className="border-t border-amber-line bg-bg-secondary">
-          <div className="container flex flex-col py-4">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                onClick={() => setMenuOpen(false)}
-                className="py-2.5 text-sm text-ink-secondary transition-colors hover:text-amber"
-              >
-                {l.label}
-              </Link>
-            ))}
-            {!session && (
-              <Link
-                href="/signin"
-                onClick={() => setMenuOpen(false)}
-                className="py-2.5 text-sm font-medium text-amber"
-              >
-                Sign in
-              </Link>
-            )}
-          </div>
-        </nav>
-      )}
+      <MegaMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </header>
   );
 }

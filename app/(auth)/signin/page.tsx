@@ -36,7 +36,7 @@ export default function SignInPage() {
   return (
     <AuthLayout>
       <div className="flex flex-col gap-2.5 text-center">
-        <h1 className="font-baskervville text-[38px] font-semibold text-white leading-10">
+        <h1 className="font-baskervville text-[36px] font-semibold text-white leading-10">
           Sign in
         </h1>
         <p className="self-stretch text-center justify-center text-white text-base font-normal font-inter leading-6">
