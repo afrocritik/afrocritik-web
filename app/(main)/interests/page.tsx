@@ -51,10 +51,10 @@ export default function InterestsPage() {
       }}
     >
       <div className="container flex min-h-[70vh] flex-col items-center justify-center py-28 text-center">
-        <h1 className="font-poppins text-3xl font-semibold leading-10 text-white">
+        <h1 className="font-baskervville text-[40px] font-semibold leading-10 text-white">
           Select Interest
         </h1>
-        <p className="mt-2 max-w-md font-poppins text-base font-normal leading-6 text-white">
+        <p className="mt-2 max-w-md font-inter text-base font-normal leading-6 text-white">
           Help us tailor your experience. Please provide the following
           information
         </p>

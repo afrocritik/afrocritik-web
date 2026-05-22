@@ -39,20 +39,26 @@ function ProfileSetupForm() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex w-full flex-col gap-1 text-center">
-        <h1 className="font-inter text-3xl font-semibold leading-10 text-white">
+      <div className="flex w-full flex-col gap-2.5 text-center">
+        <h1 className="font-baskervville text-[36px] font-semibold leading-10 text-white">
           Set up your profile
         </h1>
-        <p className="mx-auto max-w-md font-poppins text-base font-normal leading-6 text-white">
+        <p className="mx-auto max-w-md font-inter text-base font-normal leading-6 text-white">
           Help us tailor your experience. Please provide the following
           information
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-10 flex w-full flex-col gap-10">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-10 flex w-full flex-col gap-10"
+      >
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="font-inter text-base font-medium leading-6 text-white opacity-60">
+            <label
+              htmlFor="email"
+              className="font-inter text-base font-medium leading-6 text-white opacity-60"
+            >
               Email Address
             </label>
             <input
@@ -61,12 +67,15 @@ function ProfileSetupForm() {
               value={email}
               readOnly
               placeholder="your@email.com"
-              className="cursor-not-allowed rounded-md border border-yellow-700/40 bg-yellow-700/30 px-5 py-5 font-poppins text-base font-medium text-white"
+              className="cursor-not-allowed rounded-md border border-yellow-700/40 bg-yellow-700/30 px-5 py-5 font-inter text-base font-medium text-white"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="username" className="font-inter text-base font-medium leading-6 text-white opacity-60">
+            <label
+              htmlFor="username"
+              className="font-inter text-base font-medium leading-6 text-white opacity-60"
+            >
               Username
             </label>
             <input
@@ -76,18 +85,21 @@ function ProfileSetupForm() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your Username"
-              className="rounded-md border border-yellow-700/40 bg-transparent px-5 py-5 font-poppins text-base text-white placeholder:text-white/60 focus:border-amber focus:outline-none"
+              className="rounded-md border border-yellow-700/40 bg-transparent px-5 py-5 font-inter text-base text-white placeholder:text-white/60 focus:border-amber focus:outline-none"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="role" className="font-inter text-base font-medium leading-6 text-white opacity-60">
+            <label
+              htmlFor="role"
+              className="font-inter text-base font-medium leading-6 text-white opacity-60"
+            >
               Role
             </label>
             <Select value={role} onValueChange={setRole}>
               <SelectTrigger
                 id="role"
-                className="h-auto rounded-md border-yellow-700/40 bg-transparent bg-[url('/nrk_arrow-dropdown.png')] bg-[length:16px_16px] bg-[position:right_1.25rem_center] bg-no-repeat px-5 py-5 pr-12 font-poppins text-base text-white [&>span]:text-white/60 data-[placeholder]:[&>span]:text-white/60 [&>svg]:hidden"
+                className="h-auto rounded-md border-yellow-700/40 bg-transparent bg-[url('/nrk_arrow-dropdown.png')] bg-[length:16px_16px] bg-[position:right_1.25rem_center] bg-no-repeat px-5 py-5 pr-12 font-inter text-base text-white [&>span]:text-white/60 data-[placeholder]:[&>span]:text-white/60 [&>svg]:hidden"
               >
                 <SelectValue placeholder="Select your role" />
               </SelectTrigger>
@@ -111,7 +123,7 @@ function ProfileSetupForm() {
             {loading ? "Saving…" : "Finish"}
           </button>
 
-          <p className="max-w-[488px] px-2 text-center font-poppins text-sm font-normal leading-relaxed tracking-tight text-white">
+          <p className="max-w-[488px] px-2 text-center font-inter text-sm font-normal leading-relaxed tracking-tight text-white">
             By clicking Finish, you agree to our{" "}
             <Link href="#" className="text-yellow-700 hover:text-yellow-800">
               Terms
@@ -128,7 +140,7 @@ function ProfileSetupForm() {
             time.
           </p>
 
-          <p className="text-center font-poppins text-base leading-6 tracking-tight text-yellow-700 pt-10">
+          <p className="text-center font-inter text-base leading-6 tracking-tight text-yellow-700 pt-10">
             Back to{" "}
             <Link href="/signup" className="underline hover:text-yellow-800">
               Sign up

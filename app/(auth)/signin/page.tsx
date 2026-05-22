@@ -36,10 +36,10 @@ export default function SignInPage() {
   return (
     <AuthLayout>
       <div className="flex flex-col gap-2.5 text-center">
-        <h1 className="font-inter text-3xl font-semibold text-white leading-10">
+        <h1 className="font-baskervville text-[38px] font-semibold text-white leading-10">
           Sign in
         </h1>
-        <p className="self-stretch text-center justify-center text-white text-base font-normal font-poppins leading-6">
+        <p className="self-stretch text-center justify-center text-white text-base font-normal font-inter leading-6">
           Welcome back! Enter your details to continue
         </p>
       </div>
@@ -76,7 +76,7 @@ export default function SignInPage() {
           </div>
         </div>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="font-inter text-sm text-red-400">{error}</p>}
 
         <div className="flex flex-col gap-4">
           <button
