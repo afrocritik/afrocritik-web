@@ -28,7 +28,7 @@ export const AuthField = forwardRef<HTMLInputElement, AuthFieldProps>(
             ref={ref}
             id={id}
             className={cn(
-              "w-full rounded-md border border-amber-line bg-transparent px-5 py-3.5 text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none",
+              "w-full rounded-md border border-amber-line bg-transparent px-5 py-3.5 font-inter text-base text-white placeholder:text-ink-muted focus:border-amber focus:outline-none",
               trailing && "pr-12",
               className,
             )}

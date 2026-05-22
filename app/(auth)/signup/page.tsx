@@ -50,10 +50,10 @@ export default function SignUpPage() {
     <AuthLayout>
       <div className="flex flex-col">
         <div className="flex flex-col gap-2.5 text-center">
-          <h1 className="font-inter text-3xl font-semibold text-white leading-10">
+          <h1 className="font-baskervville text-[36px] font-semibold text-white leading-10">
             Sign up
           </h1>
-          <p className="self-stretch text-center justify-center text-white text-base font-normal font-poppins leading-6">
+          <p className="self-stretch text-center justify-center text-white text-base font-normal font-inter leading-6">
             Get started and take the first step toward your goals!
           </p>
         </div>
@@ -86,14 +86,14 @@ export default function SignUpPage() {
               placeholder="Create your password"
             />
             <div className="mt-1">
-              <p className="mb-1.5 text-sm font-medium text-white opacity-60">
+              <p className="mb-1.5 font-inter text-sm font-medium text-white opacity-60">
                 Please include the following in your password:
               </p>
               <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                 {reqs.map((r) => (
                   <span
                     key={r.label}
-                    className={`flex items-center gap-1 text-xs ${
+                    className={`flex items-center gap-1 font-inter text-xs ${
                       r.met ? "text-green-500" : "text-red-400"
                     }`}
                   >
@@ -118,7 +118,7 @@ export default function SignUpPage() {
             placeholder="Confirm your password"
           />
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p className="font-inter text-sm text-red-400">{error}</p>}
 
           <button
             type="submit"
@@ -130,12 +130,15 @@ export default function SignUpPage() {
 
           <p className="text-white text-base font-normal font-inter leading-6 tracking-tight text-center">
             Already have an account?{" "}
-            <Link href="/signin" className="text-yellow-700 text-base font-normal font-inter leading-6 tracking-tight hover:text-yellow-800 underline">
+            <Link
+              href="/signin"
+              className="text-yellow-700 text-base font-normal font-inter leading-6 tracking-tight hover:text-yellow-800 underline"
+            >
               Sign in
             </Link>
           </p>
 
-          <label className="flex items-start gap-3 text-sm text-white">
+          <label className="flex items-start gap-3 font-inter text-sm text-white">
             <input
               type="checkbox"
               checked={agreed}
