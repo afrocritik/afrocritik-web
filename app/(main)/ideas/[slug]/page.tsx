@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Share2, Play } from "lucide-react";
+import { Share2 } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
 import { PersonCard } from "@/components/common/PersonCard";
