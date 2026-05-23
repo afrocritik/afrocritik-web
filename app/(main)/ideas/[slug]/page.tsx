@@ -2,14 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  Share2,
-  Play,
-  MapPin,
-  Calendar,
-  Target,
-  Globe,
-} from "lucide-react";
+import { Share2, Play } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
 import { PersonCard } from "@/components/common/PersonCard";
@@ -33,17 +26,17 @@ const RELATED_IDEAS = [
 ];
 
 const TIMELINE = [
-  { year: "1992", title: "The Spark", desc: "Living in Bondage ignites the home-video movement." },
-  { year: "1999", title: "The Growth", desc: "Circulation infrastructure scales the industry rapidly." },
-  { year: "2010", title: "The Expansion", desc: "New Nollywood brings cinema-quality production." },
-  { year: "2020", title: "The Global Shift", desc: "Streaming platforms carry Nollywood worldwide." },
+  { year: "1992", title: "The Spark", desc: "Survival strategies to ensure proactive domination Survival strategies to ensure proactive domination" },
+  { year: "1999", title: "The Growth", desc: "Survival strategies to ensure proactive domination Survival strategies toensure proactivedomination" },
+  { year: "2010", title: "The Expansion", desc: "Survival strategies to ensure proactive domination Survival strategies toensure proactivedomination" },
+  { year: "2020", title: "The Global Shift", desc: "Survival strategies to ensure proactive domination Survival strategies toensure proactivedomination" },
 ];
 
 const AT_A_GLANCE = [
-  { icon: MapPin, label: "Origin", value: "Nigeria" },
-  { icon: Calendar, label: "Period", value: "1992 – Present" },
-  { icon: Target, label: "Key Focus", value: "Film production, Storytelling" },
-  { icon: Globe, label: "Global Impact", value: "Viewed in 100+ countries" },
+  { icon: "/inner-glance-origin.png", label: "Origin", value: "Nigeria" },
+  { icon: "/inner-glance-period.png", label: "Period", value: "1992 – Present" },
+  { icon: "/inner-glance-key-focus.png", label: "Key Focus", value: "Film production, Storytelling" },
+  { icon: "/inner-glance-key-focus.png", label: "Global Impact", value: "Viewed in 100+ countries" },
 ];
 
 const QUICK_FACTS = [
@@ -93,7 +86,7 @@ export default function IdeaDetailPage({
   return (
     <div className="bg-[#160907]">
       <div className="container">
-        <section className="grid gap-8 lg:grid-cols-[210px_1fr_350px] lg:items-stretch pt-12 pb-4">
+        <section className="grid gap-6 lg:grid-cols-[210px_1fr_350px] lg:items-stretch pt-12 pb-4">
           {/* ── LEFT SIDEBAR ──────────────────────────────────────────── */}
           <aside className="hidden lg:flex lg:flex-col">
             <div className="flex flex-col gap-5 h-full">
@@ -133,33 +126,6 @@ export default function IdeaDetailPage({
                   </ul>
                 </div>
               </div>
-
-              {/* Related Ideas */}
-              {/* <div className="rounded-xl border border-amber-line bg-bg-card p-5">
-                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-white">
-                  Related Ideas
-                </h3>
-                <ul className="flex flex-col gap-3">
-                  {RELATED_IDEAS.map((idea) => (
-                    <li key={idea}>
-                      <Link
-                        href={`/ideas/${idea.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="flex items-center gap-3 group"
-                      >
-                        <span className="h-9 w-9 shrink-0 rounded-md bg-gradient-to-br from-[#5C2E00] to-[#1C0A00]" />
-                        <span>
-                          <span className="block text-sm leading-tight text-ink-secondary group-hover:text-amber transition-colors">
-                            {idea}
-                          </span>
-                          <span className="mt-0.5 inline-block rounded bg-amber/15 px-1.5 py-0.5 text-[9px] font-medium text-amber">
-                            Ideas
-                          </span>
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div> */}
             </div>
           </aside>
 
@@ -231,29 +197,55 @@ export default function IdeaDetailPage({
                   { label: "Type", value: "Cultural Movement" },
                   { label: "Period", value: "1992 – Present" },
                 ].map(({ label, value }) => (
-                  <div key={label} className="inline-flex justify-start items-center gap-3">
-                    <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">{label}</span>
-                    <span className="text-stone-300/50 text-base font-semibold font-inter leading-4">{value}</span>
+                  <div
+                    key={label}
+                    className="inline-flex justify-start items-center gap-3"
+                  >
+                    <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">
+                      {label}
+                    </span>
+                    <span className="text-stone-300/50 text-base font-semibold font-inter leading-4">
+                      {value}
+                    </span>
                   </div>
                 ))}
               </div>
               <div className="mt-5 flex gap-3">
                 <button className="px-1.5 py-2 bg-orange-400/60 rounded-[3px] inline-flex justify-start items-center gap-1.5">
-                  <Image src="/inner-Save.png" alt="" width={10} height={10} className="size-2.5" />
-                  <span className="text-black text-xs font-semibold font-inter leading-3">Save</span>
+                  <Image
+                    src="/inner-Save.png"
+                    alt=""
+                    width={10}
+                    height={10}
+                    className="size-2.5"
+                  />
+                  <span className="text-black text-xs font-semibold font-inter leading-3">
+                    Save
+                  </span>
                 </button>
                 <button className="px-1.5 py-2 rounded-[3px] outline outline-1 outline-offset-[-1px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5">
                   <Share2 className="size-3 text-stone-300" />
-                  <span className="text-stone-300 text-xs font-semibold font-inter leading-3">Share</span>
+                  <span className="text-stone-300 text-xs font-semibold font-inter leading-3">
+                    Share
+                  </span>
                 </button>
               </div>
               <div className="mt-4 w-[600px] flex flex-wrap items-center gap-2">
-                <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">Related themes</span>
-                {["African Storytelling", "Popular Culture", "Industry"].map((t) => (
-                  <div key={t} className="pl-2.5 pr-3 py-[5px] bg-yellow-700/40 rounded-[5px] inline-flex justify-center items-center gap-2.5">
-                    <span className="text-stone-300 text-base font-semibold font-inter leading-4">{t}</span>
-                  </div>
-                ))}
+                <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">
+                  Related themes
+                </span>
+                {["African Storytelling", "Popular Culture", "Industry"].map(
+                  (t) => (
+                    <div
+                      key={t}
+                      className="pl-2.5 pr-3 py-[5px] bg-yellow-700/40 rounded-[5px] inline-flex justify-center items-center gap-2.5"
+                    >
+                      <span className="text-stone-300 text-base font-semibold font-inter leading-4">
+                        {t}
+                      </span>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
           </div>
@@ -268,41 +260,105 @@ export default function IdeaDetailPage({
           </div>
         </section>
 
-        {/* TO BE WORKED ON */}
-        <div>
-          <div>
-            {/* Timeline */}
-            <div
-              id="key-moments"
-              className="rounded-2xl border border-amber-line bg-bg-card p-6"
-            >
-              <h2 className="font-display text-xl font-bold text-white">
-                Timeline: Key Moments in Nollywood
-              </h2>
-              <div className="relative mt-8">
-                {/* Horizontal track */}
-                <div className="absolute left-0 right-0 top-[5px] h-0 outline outline-[1.5px] outline-yellow-700/30" />
-                <div className="grid grid-cols-2 gap-y-8 sm:grid-cols-4 gap-x-4">
-                  {TIMELINE.map((t, i) => (
-                    <div key={t.year} className="relative pt-8">
-                      {/* Dot on track */}
-                      <div
-                        className="absolute top-0 size-[11px] rounded-full bg-amber shadow-[0px_4px_10px_rgba(0,0,0,0.4)] -translate-x-1/2"
-                        style={{ left: i === 0 ? "5px" : "50%" }}
+        <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-6">
+          {/* Related Ideas */}
+          <aside className="hidden lg:flex lg:flex-col">
+            <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex-1">
+              <h3 className="mb-3 justify-start text-white text-base font-semibold font-inter leading-4">
+                Related Ideas
+              </h3>
+              <ul className="flex flex-col gap-2">
+                {RELATED_IDEAS.map((idea) => (
+                  <li key={idea}>
+                    <Link
+                      href={`/ideas/${idea.toLowerCase().replace(/\s+/g, "-")}`}
+                      className="flex items-center gap-3 group"
+                    >
+                      <Image
+                        src="/inner-related-image.png"
+                        alt={idea}
+                        width={32}
+                        height={44}
+                        className="w-8 h-11 shrink-0 rounded-[5px] object-cover"
                       />
-                      <p className="text-xs font-medium text-amber">{t.year}</p>
-                      <h4 className="mt-1 font-display text-sm font-bold text-white">
-                        {t.title}
-                      </h4>
-                      <p className="mt-1 text-xs leading-relaxed text-ink-secondary">
-                        {t.desc}
-                      </p>
+                      <span className="flex flex-col gap-1">
+                        <span className="w-24 justify-start text-white text-[10px] font-light font-inter leading-[10px] group-hover:text-amber transition-colors">
+                          {idea}
+                        </span>
+                        <div className="p-1 bg-yellow-800/70 rounded-sm inline-flex justify-center items-center gap-1 self-start">
+                          <span className="text-[7.06px] font-normal font-inter leading-[7.06px] text-amber">Ideas</span>
+                        </div>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+
+          {/* Timeline */}
+          <div id="key-moments" className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0">
+            <h2 className="w-96 text-white text-xl font-semibold font-baskervville leading-5">
+              Timeline: Key Moments in Nollywood
+            </h2>
+            <div className="mt-8 flex flex-col gap-4">
+              {/* Track — dots + lines */}
+              <div className="inline-flex justify-start items-start">
+                {TIMELINE.map((t, i) => (
+                  <div key={t.year} className="w-40 h-2.5 relative">
+                    <div className="size-2.5 left-0 top-0 absolute">
+                      <div className={`size-2.5 left-0 top-0 absolute rounded-full outline outline-[3.43px] outline-yellow-700/20 ${i < 3 ? "bg-orange-400" : "bg-zinc-400"}`} />
                     </div>
-                  ))}
-                </div>
+                    <div className="w-36 h-0 left-[13.13px] top-[5.71px] absolute outline outline-[3.43px] outline-offset-[-1.71px] outline-yellow-700/20" />
+                  </div>
+                ))}
+              </div>
+              {/* Text items */}
+              <div className="inline-flex justify-start items-start">
+                {TIMELINE.map((t) => (
+                  <div key={t.year} className="w-40 inline-flex flex-col justify-start items-start gap-3">
+                    <div className="text-orange-400 text-[10.11px] font-normal font-inter">{t.year}</div>
+                    <div className="flex flex-col justify-start items-start gap-1.5">
+                      <div className="text-white text-xs font-normal font-inter">{t.title}</div>
+                      <div className="text-white text-[9.47px] font-normal font-inter leading-3">{t.desc}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
 
+          {/* At a glance */}
+          <aside className="hidden lg:flex lg:flex-col">
+            <div className="bg-yellow-950/50 rounded-2xl border-[1.20px] border-yellow-700 p-5 flex-1">
+              <h3 className="w-44 text-white text-lg font-semibold font-inter leading-5 mb-4">
+                At a glance
+              </h3>
+              <ul className="flex flex-col gap-2">
+                {AT_A_GLANCE.map((row) => (
+                  <li key={row.label} className="flex items-center gap-1.5">
+                    <div className="size-6 relative overflow-hidden shrink-0">
+                      <Image src={row.icon} alt={row.label} fill className="object-contain" />
+                    </div>
+                    <span className="flex flex-col gap-px">
+                      <div className="self-stretch justify-start">
+                        <span className="text-white text-xs font-medium font-inter leading-3">{row.label}</span>
+                      </div>
+                      <div className="self-stretch text-white text-[10px] font-light font-inter leading-3">{row.value}</div>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        {/* ── ROW 2+: Remaining content ──────────────────────────────── */}
+        <section className="grid gap-8 lg:grid-cols-[210px_1fr_350px]">
+          <div className="hidden lg:block" />
+
+          {/* Center: rest of content */}
+          <div className="flex flex-col gap-6 min-w-0">
             {/* Anchor Year */}
             <div
               id="impact-influence"
@@ -430,31 +486,9 @@ export default function IdeaDetailPage({
             </div>
           </div>
 
-          {/* ── RIGHT SIDEBAR ─────────────────────────────────────────── */}
+          {/* Right: Quick Facts + Related Works */}
           <aside className="hidden lg:block">
-            <div className="flex flex-col gap-6 pt-[72px]">
-              {/* At a glance */}
-              <div className="rounded-xl border border-amber-line bg-bg-card p-5">
-                <h3 className="mb-4 font-display text-base font-bold text-white">
-                  At a glance
-                </h3>
-                <ul className="flex flex-col gap-4">
-                  {AT_A_GLANCE.map((row) => (
-                    <li key={row.label} className="flex gap-3">
-                      <row.icon className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
-                      <span>
-                        <span className="block text-xs text-ink-muted">
-                          {row.label}
-                        </span>
-                        <span className="block text-sm text-white">
-                          {row.value}
-                        </span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
+            <div className="flex flex-col gap-6">
               {/* Quick Facts */}
               <div className="rounded-xl border border-amber-line bg-bg-card p-5">
                 <h3 className="mb-3 font-display text-base font-bold text-white">
@@ -498,7 +532,7 @@ export default function IdeaDetailPage({
               </div>
             </div>
           </aside>
-        </div>
+        </section>
       </div>
     </div>
   );
