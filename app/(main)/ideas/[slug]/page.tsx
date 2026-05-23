@@ -61,6 +61,37 @@ const PIONEERS = [
   { name: "Liz Benson", role: "Actress" },
 ];
 
+const ANCHOR_FILMS = [
+  {
+    title: "Igodo",
+    director: "Andy Amenechi & Don Pedro Obaseki",
+    desc: "An epic quest blending ancient curses with spiritual power — the Nigerian adventure that set the mold.",
+    image: "/inner-anchor-1.png",
+    rating: "9.8",
+  },
+  {
+    title: "Rattlesnake",
+    director: "Amaka Igwe",
+    desc: "A crime drama of betrayal and vengeance capturing the restless energy of urban Nigeria in transition.",
+    image: "/inner-anchor-2.jpg",
+    rating: "9.8",
+  },
+  {
+    title: "Domitilla",
+    director: "Zeb Ejiro",
+    desc: "A morality tale of survival and exploitation that became a cultural touchstone for a generation.",
+    image: "/inner-anchor-3.jpg",
+    rating: "9.8",
+  },
+  {
+    title: "Blood Money",
+    director: "Chico Ejiro",
+    desc: "Ritual wealth and its consequences — crystallizing Nollywood's fascination with the moral costs of ambition.",
+    image: "/inner-anchor-3.jpg",
+    rating: "9.8",
+  },
+];
+
 const RELATED_WORKS = [
   { title: "Living in Bondage", year: 1992 },
   { title: "The Wedding Party", year: 2016 },
@@ -260,7 +291,7 @@ export default function IdeaDetailPage({
           </div>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-6">
+        <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-4">
           {/* Related Ideas */}
           <aside className="hidden lg:flex lg:flex-col">
             <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex-1">
@@ -286,7 +317,9 @@ export default function IdeaDetailPage({
                           {idea}
                         </span>
                         <div className="p-1 bg-yellow-800/70 rounded-sm inline-flex justify-center items-center gap-1 self-start">
-                          <span className="text-[7.06px] font-normal font-inter leading-[7.06px] text-amber">Ideas</span>
+                          <span className="text-[7.06px] font-normal font-inter leading-[7.06px] text-amber">
+                            Ideas
+                          </span>
                         </div>
                       </span>
                     </Link>
@@ -297,7 +330,10 @@ export default function IdeaDetailPage({
           </aside>
 
           {/* Timeline */}
-          <div id="key-moments" className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0">
+          <div
+            id="key-moments"
+            className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0"
+          >
             <h2 className="w-96 text-white text-xl font-semibold font-baskervville leading-5">
               Timeline: Key Moments in Nollywood
             </h2>
@@ -307,7 +343,9 @@ export default function IdeaDetailPage({
                 {TIMELINE.map((t, i) => (
                   <div key={t.year} className="w-40 h-2.5 relative">
                     <div className="size-2.5 left-0 top-0 absolute">
-                      <div className={`size-2.5 left-0 top-0 absolute rounded-full outline outline-[3.43px] outline-yellow-700/20 ${i < 3 ? "bg-orange-400" : "bg-zinc-400"}`} />
+                      <div
+                        className={`size-2.5 left-0 top-0 absolute rounded-full outline outline-[3.43px] outline-yellow-700/20 ${i < 3 ? "bg-orange-400" : "bg-zinc-400"}`}
+                      />
                     </div>
                     <div className="w-36 h-0 left-[13.13px] top-[5.71px] absolute outline outline-[3.43px] outline-offset-[-1.71px] outline-yellow-700/20" />
                   </div>
@@ -316,11 +354,20 @@ export default function IdeaDetailPage({
               {/* Text items */}
               <div className="inline-flex justify-start items-start">
                 {TIMELINE.map((t) => (
-                  <div key={t.year} className="w-40 inline-flex flex-col justify-start items-start gap-3">
-                    <div className="text-orange-400 text-[10.11px] font-normal font-inter">{t.year}</div>
+                  <div
+                    key={t.year}
+                    className="w-40 inline-flex flex-col justify-start items-start gap-3"
+                  >
+                    <div className="text-orange-400 text-[10.11px] font-normal font-inter">
+                      {t.year}
+                    </div>
                     <div className="flex flex-col justify-start items-start gap-1.5">
-                      <div className="text-white text-xs font-normal font-inter">{t.title}</div>
-                      <div className="text-white text-[9.47px] font-normal font-inter leading-3">{t.desc}</div>
+                      <div className="text-white text-xs font-normal font-inter">
+                        {t.title}
+                      </div>
+                      <div className="text-white text-[9.47px] font-normal font-inter leading-3">
+                        {t.desc}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -338,13 +385,22 @@ export default function IdeaDetailPage({
                 {AT_A_GLANCE.map((row) => (
                   <li key={row.label} className="flex items-center gap-1.5">
                     <div className="size-6 relative overflow-hidden shrink-0">
-                      <Image src={row.icon} alt={row.label} fill className="object-contain" />
+                      <Image
+                        src={row.icon}
+                        alt={row.label}
+                        fill
+                        className="object-contain"
+                      />
                     </div>
                     <span className="flex flex-col gap-px">
                       <div className="self-stretch justify-start">
-                        <span className="text-white text-xs font-medium font-inter leading-3">{row.label}</span>
+                        <span className="text-white text-xs font-medium font-inter leading-3">
+                          {row.label}
+                        </span>
                       </div>
-                      <div className="self-stretch text-white text-[10px] font-light font-inter leading-3">{row.value}</div>
+                      <div className="self-stretch text-white text-[10px] font-light font-inter leading-3">
+                        {row.value}
+                      </div>
                     </span>
                   </li>
                 ))}
@@ -353,37 +409,136 @@ export default function IdeaDetailPage({
           </aside>
         </section>
 
-        {/* ── ROW 2+: Remaining content ──────────────────────────────── */}
+        {/* ── ROW 3: Anchor Year + Quick Facts + Related Works ──────── */}
+        <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-4">
+          {/* Center: Anchor Year · Circulation Era — spans col 1+2 to match Related Ideas + Timeline above */}
+          <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 lg:col-span-2">
+            <p className="justify-start text-white text-xl font-semibold font-baskervville leading-5">
+              Anchor Year · Circulation Era
+            </p>
+            <h2 className="mt-2 justify-start text-yellow-700 text-xl font-semibold font-baskervville leading-5">
+              1999 — The Reset
+            </h2>
+            <p className="mt-4 w-[594px] justify-start text-white text-[9.47px] font-normal font-inter leading-[1.5]">
+              Nollywood was in a transition phase marked by heavy VHS
+              circulation and themes of spiritual power, ancient curses, and
+              moral conflict. The industry was stabilizing after the explosive
+              1990s home-video rise — a nation grappling with its fears and
+              beliefs, producing culture at extraordinary speed. Nollywood was
+              in a transition phase marked by heavy VHS circulation and themes
+              of spiritual power, ancient curses, and moral conflict. The
+              industry was stabilizing after the explosive 1990s home-video rise
+              — a nation grappling with its fears and beliefs, producing culture
+              at extraordinary speed.
+              <br />
+              <br />
+              This era’s anchor film, “Rattlesnake” (1999), epitomizes the
+              period’s themes and style — a gritty crime drama of betrayal and
+              vengeance that captured the restless energy of urban Nigeria in
+              transition. It set a new standard for production quality and
+              storytelling ambition, solidifying Nollywood’s identity and paving
+              the way for its global expansion in the 2000s.
+            </p>
+            <div className="mt-6 flex gap-3">
+              {ANCHOR_FILMS.map((film) => (
+                <div
+                  key={film.title}
+                  className="flex-1 h-64 flex flex-col overflow-hidden bg-rose-100/10 rounded-md outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700"
+                >
+                  {/* Image */}
+                  <div className="relative mx-2 mt-2.5 h-40 rounded-sm overflow-hidden shrink-0">
+                    <Image src={film.image} alt={film.title} fill className="object-cover" />
+                  </div>
+                  {/* Info */}
+                  <div className="flex flex-col flex-1 px-[7px] pt-1.5 pb-2.5 min-h-0">
+                    <p className="text-stone-300 text-xs font-semibold font-inter leading-3 truncate">{film.title}</p>
+                    <div className="mt-1">
+                      <span className="text-stone-300 text-[6px] font-semibold font-inter leading-[8.40px] block">Dir. {film.director}</span>
+                      <span className="text-stone-300 text-[6px] font-normal font-inter leading-[8.40px] line-clamp-2">{film.desc}</span>
+                    </div>
+                    <div className="mt-3 flex items-center gap-1">
+                      <div className="inline-flex items-center bg-yellow-700/20 rounded-sm px-[5px] py-[4px]">
+                        <span className="text-white text-[6.44px] font-normal font-inter leading-none">NIGERIA</span>
+                      </div>
+                      <div className="inline-flex items-center bg-yellow-700/20 rounded-sm px-[5px] py-[4px]">
+                        <span className="text-white text-[6.44px] font-normal font-inter leading-none">FILM</span>
+                      </div>
+                      <div className="inline-flex items-center bg-yellow-700/20 rounded-sm px-[5px] py-[4px]">
+                        <span className="text-white text-[6.44px] font-normal font-inter leading-none">ENTERTAINMENT</span>
+                      </div>
+                      <div className="ml-auto flex items-center gap-0.5">
+                        <span className="text-white text-[8.59px] font-semibold font-inter leading-3">{film.rating}</span>
+                        <span className="text-yellow-400 text-[8px] leading-none">★</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Quick Facts + Related Works */}
+          <aside className="hidden lg:flex lg:flex-col gap-4">
+            {/* Quick Facts */}
+            <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex-1 flex flex-col">
+              <h3 className="w-44 text-white text-lg font-semibold font-inter leading-5 mb-4">
+                Quick Facts
+              </h3>
+              <ul className="flex flex-col justify-between flex-1">
+                {[
+                  "Nollywood produces over 2,500 films a year.",
+                  "It is the 2nd largest film industry in the world by volume.",
+                  "Nollywood films are distributed in 100+ countries.",
+                  "Contributes billions to Nigeria's economy and creates millions of jobs.",
+                  "Nollywood films are viewed across 6 continents.",
+                ].map((fact) => (
+                  <li key={fact} className="flex items-start gap-2">
+                    <span className="mt-[3px] size-1.5 shrink-0 rounded-full bg-white/60" />
+                    <span className="text-white text-[11px] font-normal font-inter leading-[1.4]">{fact}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Related Works */}
+            <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex-1">
+              <h3 className="text-white text-base font-semibold font-inter leading-4 mb-3">
+                Related Works
+              </h3>
+              <ul className="flex flex-col gap-2">
+                {RELATED_WORKS.map((w) => (
+                  <li key={w.title}>
+                    <Link href="#" className="flex items-center gap-3 group">
+                      <Image
+                        src="/inner-related-image.png"
+                        alt={w.title}
+                        width={32}
+                        height={44}
+                        className="w-8 h-11 shrink-0 rounded-[5px] object-cover"
+                      />
+                      <span className="flex flex-col gap-1">
+                        <span className="w-24 justify-start text-white text-[10px] font-light font-inter leading-[10px] group-hover:text-amber transition-colors">
+                          {w.title}
+                        </span>
+                        <div className="p-1 bg-yellow-800/70 rounded-sm inline-flex justify-center items-center gap-1 self-start">
+                          <span className="text-[7.06px] font-normal font-inter leading-[7.06px] text-amber">
+                            Film
+                          </span>
+                        </div>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        {/* ── ROW 4+: Remaining content ──────────────────────────────── */}
         <section className="grid gap-8 lg:grid-cols-[210px_1fr_350px]">
           <div className="hidden lg:block" />
 
-          {/* Center: rest of content */}
           <div className="flex flex-col gap-6 min-w-0">
-            {/* Anchor Year */}
-            <div
-              id="impact-influence"
-              className="rounded-2xl border border-amber-line bg-bg-card p-6"
-            >
-              <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                Anchor Year · Circulation Era
-              </p>
-              <h2 className="mt-1 font-display text-2xl font-bold text-amber">
-                1999 — The Reset
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
-                By 1999, Nollywood had transformed from a novelty into a
-                national industry. The mastery of low-cost production and
-                informal distribution networks made Nigeria the cultural-export
-                engine of the continent — a model later studied across emerging
-                markets.
-              </p>
-              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {FILMS.slice(0, 4).map((f) => (
-                  <WorkCard key={f.title} {...f} type="Film" />
-                ))}
-              </div>
-            </div>
-
             {/* Video + Audio */}
             <div
               id="global-reach"
@@ -486,52 +641,7 @@ export default function IdeaDetailPage({
             </div>
           </div>
 
-          {/* Right: Quick Facts + Related Works */}
-          <aside className="hidden lg:block">
-            <div className="flex flex-col gap-6">
-              {/* Quick Facts */}
-              <div className="rounded-xl border border-amber-line bg-bg-card p-5">
-                <h3 className="mb-3 font-display text-base font-bold text-white">
-                  Quick Facts
-                </h3>
-                <ul className="flex flex-col gap-2.5">
-                  {QUICK_FACTS.map((f) => (
-                    <li
-                      key={f}
-                      className="flex gap-2 text-xs leading-relaxed text-ink-secondary"
-                    >
-                      <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Related Works */}
-              <div className="rounded-xl border border-amber-line bg-bg-card p-5">
-                <h3 className="mb-3 font-display text-base font-bold text-white">
-                  Related Works
-                </h3>
-                <ul className="flex flex-col gap-3">
-                  {RELATED_WORKS.map((w) => (
-                    <li key={w.title}>
-                      <Link href="#" className="flex items-center gap-3 group">
-                        <span className="h-12 w-9 shrink-0 rounded bg-gradient-to-br from-[#5C2E00] to-[#1C0A00]" />
-                        <span className="min-w-0">
-                          <span className="block truncate text-sm text-white group-hover:text-amber transition-colors">
-                            {w.title}
-                          </span>
-                          <span className="block text-xs text-ink-muted">
-                            {w.year}
-                          </span>
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </aside>
+          <div className="hidden lg:block" />
         </section>
       </div>
     </div>
