@@ -552,14 +552,14 @@ export default function IdeaDetailPage({
             <p className="w-96 justify-start text-white text-xl font-semibold font-baskervville leading-5">
               Watch Video Archive
             </p>
-            <div className="mt-4 flex gap-3 flex-1 min-h-0">
+            <div className="mt-10 flex gap-3 flex-1 min-h-0">
               {[
                 { src: "/inner-WVA-Image-1.jpg", alt: "Video Archive 1" },
                 { src: "/inner-WVA-Image-2.jpg", alt: "Video Archive 2" },
               ].map((video) => (
                 <div
                   key={video.src}
-                  className="flex-1 relative overflow-hidden rounded-md outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700"
+                  className="flex-1 relative overflow-hidden rounded-[2px] outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700"
                 >
                   <Image src={video.src} alt={video.alt} fill className="object-cover" />
                   {/* Dark gradient overlay */}
