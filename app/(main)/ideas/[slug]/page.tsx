@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Share2 } from "lucide-react";
-import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
 import Image from "next/image";
 
@@ -714,37 +713,43 @@ export default function IdeaDetailPage({
           </div>
         </section>
 
-        {/* ── ROW 5+: Remaining content ──────────────────────────────── */}
-        <section className="grid gap-8 lg:grid-cols-[210px_1fr_350px]">
-          <div className="hidden lg:block" />
-
-          <div className="flex flex-col gap-6 min-w-0">
-            {/* Further Reading */}
-            <div id="further-reading" className="pb-16">
-              <SectionHeading title="Explore more related works" />
-              <div className="grid gap-4 sm:grid-cols-3">
-                {["African Storytelling", "Diaspora Cinema", "Afrobeat"].map(
-                  (t) => (
-                    <Link
-                      key={t}
-                      href={`/ideas/${t.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="group rounded-xl border border-amber-line bg-bg-card p-5 transition-colors hover:border-amber/50"
-                    >
-                      <h4 className="font-display text-base font-bold text-white group-hover:text-amber">
-                        {t}
-                      </h4>
-                      <p className="mt-2 line-clamp-3 text-sm text-ink-secondary">
-                        A connected cultural thread exploring how African
-                        narratives travel, evolve, and shape global audiences.
-                      </p>
-                    </Link>
-                  ),
-                )}
-              </div>
-            </div>
+        {/* ── EXPLORE MORE RELATED WORKS ───────────────────────────── */}
+        <section id="further-reading" className="mt-10 pb-16">
+          <h2 className="mb-6 text-white text-3xl font-bold font-baskervville leading-8">
+            Explore more related works
+          </h2>
+          <div className="flex gap-4">
+            {[
+              {
+                slug: "african-storytelling",
+                title: "African Storytelling",
+                desc: "Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Con",
+              },
+              {
+                slug: "diaspora-cinema",
+                title: "Diaspora Cinema",
+                desc: "Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Con",
+              },
+              {
+                slug: "afrobeat",
+                title: "Afrobeat",
+                desc: "Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Con",
+              },
+            ].map((item) => (
+              <Link
+                key={item.slug}
+                href={`/ideas/${item.slug}`}
+                className="flex-1 p-4 bg-white/10 rounded-xl flex flex-col justify-start items-start"
+              >
+                <div className="self-stretch text-white text-2xl font-semibold font-baskervville capitalize leading-7">
+                  {item.title}
+                </div>
+                <div className="self-stretch text-white text-base font-normal font-inter capitalize leading-4 mt-2">
+                  {item.desc}
+                </div>
+              </Link>
+            ))}
           </div>
-
-          <div className="hidden lg:block" />
         </section>
       </div>
     </div>
