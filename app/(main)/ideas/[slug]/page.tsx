@@ -99,15 +99,15 @@ const RELATED_WORKS = [
 ];
 
 const AUDIO_TRACKS = [
-  { title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
-  { title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: true },
-  { title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
-  { title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
-  { title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
+  { id: "track-1", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
+  { id: "track-2", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: true },
+  { id: "track-3", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
+  { id: "track-4", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
+  { id: "track-5", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
 ];
 
 const WAVEFORM_PATTERN = [9, 10, 8, 9, 5, 10, 9, 8, 10, 9, 4, 9, 10, 8, 9, 10, 7, 9, 10, 8, 2, 9, 10, 9, 8, 6, 10, 9, 8, 10, 9, 3, 9, 8, 10, 9, 5, 10, 8, 9, 10, 7, 9, 10, 8, 9, 4, 10, 9, 8, 10, 9, 6, 8, 10, 9, 2, 9, 10, 8];
-const WAVEFORM_BARS = Array.from({ length: 160 }, (_, i) => WAVEFORM_PATTERN[i % WAVEFORM_PATTERN.length]);
+const WAVEFORM_BARS = Array.from({ length: 160 }, (_, i) => ({ id: i, height: WAVEFORM_PATTERN[i % WAVEFORM_PATTERN.length] }));
 
 function titleCase(slug: string) {
   return slug
@@ -603,9 +603,9 @@ export default function IdeaDetailPage({
                 Play Audio
               </div>
               <div className="flex flex-col gap-1.5">
-                {AUDIO_TRACKS.map((track, i) => (
+                {AUDIO_TRACKS.map((track) => (
                   <div
-                    key={i}
+                    key={track.id}
                     className={`h-14 p-1.5 rounded-md outline outline-[0.40px] outline-offset-[-0.40px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5 w-full cursor-pointer${track.active ? " bg-orange-400/10" : ""}`}
                   >
                     {/* Thumbnail + play overlay */}
@@ -642,11 +642,11 @@ export default function IdeaDetailPage({
                       </div>
                       {/* Waveform bars */}
                       <div className="self-stretch h-3.5 flex items-end gap-[1px] overflow-hidden">
-                        {WAVEFORM_BARS.map((h, j) => (
+                        {WAVEFORM_BARS.map((bar) => (
                           <div
-                            key={j}
+                            key={bar.id}
                             className="w-px flex-none bg-orange-400/20"
-                            style={{ height: `${h}px` }}
+                            style={{ height: `${bar.height}px` }}
                           />
                         ))}
                       </div>
@@ -693,6 +693,23 @@ export default function IdeaDetailPage({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── IMPACT CONTEXT SECTION ───────────────────────────────── */}
+        <section className="pb-4">
+          <div className="flex gap-4 items-stretch">
+            <div className="flex-1 bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 flex flex-col justify-center gap-3">
+              <h2 className="text-white text-2xl font-semibold font-baskervville capitalize leading-7">
+                Lorem ipsum dolor sit amet
+              </h2>
+              <p className="text-white text-base font-normal font-inter capitalize leading-4">
+                Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id
+              </p>
+            </div>
+            <div className="w-96 h-56 relative rounded-2xl overflow-hidden shrink-0">
+              <Image src="/inner-WVA-Image-1.jpg" alt="Related visual" fill className="object-cover" />
             </div>
           </div>
         </section>
