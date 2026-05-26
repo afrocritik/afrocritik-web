@@ -32,7 +32,7 @@ export function DashboardNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="w-full">
       <div className="flex items-center gap-5 px-6 pt-6 pb-5 md:px-8">
         {/* Center search — always visible on the dashboard */}
         <form
@@ -58,7 +58,7 @@ export function DashboardNavbar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Works, Ideas, People, Reports..."
-            className="h-[72px] w-full rounded-xl border border-amber-line bg-transparent pl-[76px] pr-5 font-inter text-lg text-white placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-amber"
+            className="h-[72px] w-full rounded-xl border border-amber-line bg-zinc-300/30 pl-[76px] pr-5 font-inter text-lg text-white placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-amber"
           />
         </form>
 
