@@ -14,7 +14,7 @@ const RANGES = ["Last 7 days", "Last 30 days", "Last 90 days", "All time"];
 
 export function DashboardHeader() {
   const { data: session } = useSession();
-  const firstName = (session?.user?.name || "Abdul Lawal").split(" ")[0];
+  const name = session?.user?.name || "Abdul Lawal";
   const [range, setRange] = useState("Last 30 days");
   const [open, setOpen] = useState(false);
 
@@ -22,7 +22,7 @@ export function DashboardHeader() {
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 className="font-montserrat text-2xl font-bold text-white md:text-3xl">
-          Hello, {firstName}
+          Hello, {name}
         </h1>
         <p className="mt-1 font-inter text-sm text-ink-muted">
           Check your activities in this dashboard.
