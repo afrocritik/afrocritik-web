@@ -455,7 +455,7 @@ function EWIMCard({
       <div
         style={{
           position: "absolute",
-          top: "279px",
+          top: "275px",
           left: "16px",
           right: "40px",
         }}
@@ -465,7 +465,7 @@ function EWIMCard({
             style={{
               color: "#D6D3D1",
               fontFamily: "var(--font-inter)",
-              fontSize: hovered ? "16px" : "14px",
+              fontSize: hovered ? "18px" : "16px",
               fontWeight: 600,
               lineHeight: "130%",
               display: "-webkit-box",
@@ -485,7 +485,7 @@ function EWIMCard({
         <div
           style={{
             position: "absolute",
-            top: "315px",
+            top: "321px",
             left: "16px",
           }}
         >
@@ -493,7 +493,7 @@ function EWIMCard({
             style={{
               color: "#F9B65F",
               fontFamily: "var(--font-inter)",
-              fontSize: "16px",
+              fontSize: "17px",
               fontWeight: 600,
               lineHeight: "150%",
               whiteSpace: "nowrap",
@@ -508,7 +508,7 @@ function EWIMCard({
       <div
         style={{
           position: "absolute",
-          top: "345px",
+          top: "351px",
           left: "16px",
           right: "16px",
           display: "flex",
@@ -527,7 +527,7 @@ function EWIMCard({
               alignItems: "center",
               padding: "0 8px",
               color: "#FFF",
-              fontSize: "9px",
+              fontSize: "11px",
               fontWeight: 400,
               lineHeight: "140%",
               whiteSpace: "nowrap",
