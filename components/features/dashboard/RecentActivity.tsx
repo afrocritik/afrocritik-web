@@ -24,7 +24,7 @@ function ActivityIcon({ icon }: Readonly<{ icon: ActivityItem["icon"] }>) {
 export function RecentActivity() {
   return (
     <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 px-5 pt-5 pb-6">
-      <h2 className="font-['Baskervville'] text-base font-semibold leading-4 text-white">
+      <h2 className="font-['Baskervville'] text-xl font-semibold leading-5 text-white">
         Recent activity
       </h2>
       <ul className="mt-5 flex flex-col gap-[17px]">
