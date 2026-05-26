@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Calendar, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 
 const RANGES = ["Last 7 days", "Last 30 days", "Last 90 days", "All time"];
 
@@ -19,12 +19,12 @@ export function DashboardHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex items-center justify-between">
       <div>
-        <h1 className="font-montserrat text-2xl font-bold text-white md:text-3xl">
+        <h1 className="font-['Baskervville'] text-3xl font-semibold capitalize leading-8 text-white">
           Hello, {name}
         </h1>
-        <p className="mt-1 font-inter text-sm text-ink-muted">
+        <p className="mt-[10px] font-inter text-base font-light leading-4 text-orange-100">
           Check your activities in this dashboard.
         </p>
       </div>
@@ -33,11 +33,14 @@ export function DashboardHeader() {
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-lg border border-amber-line bg-white/[0.03] px-4 py-2.5 font-inter text-sm font-medium text-ink-secondary transition-colors hover:border-amber/50"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-yellow-950/50 px-3 py-2 outline outline-[0.45px] outline-offset-[-0.45px] outline-yellow-700/50 transition-opacity hover:opacity-80"
           >
-            <Calendar className="size-4 text-ink-muted" />
-            {range}
-            <ChevronDown className="size-4 text-ink-muted" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/dashboard-calendar.png" alt="" aria-hidden="true" className="size-3.5 shrink-0 brightness-0 invert" />
+            <span className="font-inter text-sm font-normal leading-4 text-white">
+              {range}
+            </span>
+            <ChevronDown className="size-3.5 shrink-0 text-white" />
           </button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-44 p-1">
