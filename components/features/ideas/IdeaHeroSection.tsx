@@ -112,7 +112,7 @@ export function IdeaHeroSection({ title }: Readonly<{ title: string }>) {
           <h1 className="justify-start text-white text-4xl font-normal font-baskervville leading-10">
             {title}
           </h1>
-          <p className="mt-4 w-[600px] text-white text-base font-normal font-inter leading-4">
+          <p className="mt-4 w-[600px] text-white text-base font-normal font-inter leading-relaxed">
             A cultural movement and home-grown film industry that transformed
             how Africa tells its own stories — built on resourcefulness,
             circulation, and an insatiable appetite for narrative.

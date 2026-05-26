@@ -213,7 +213,7 @@ export function ThinkersSection() {
                       <p className="w-44 justify-start font-inter leading-4 text-sm font-semibold tracking-[-0.28px] text-black">
                         {work.title}
                       </p>
-                      <p className="self-stretch justify-start text-xs text-[#666] font-normal font-inter leading-4">
+                      <p className="self-stretch justify-start text-xs text-[#666] font-normal font-inter leading-relaxed">
                         {work.sub}
                       </p>
                     </div>

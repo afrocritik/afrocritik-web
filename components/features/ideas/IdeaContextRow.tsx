@@ -45,12 +45,12 @@ export function IdeaContextRow() {
                     height={44}
                     className="w-8 h-11 shrink-0 rounded-[5px] object-cover"
                   />
-                  <span className="flex flex-col gap-1">
-                    <span className="w-24 justify-start text-white text-[10px] font-light font-inter leading-[10px] group-hover:text-amber transition-colors">
+                  <span className="flex flex-col gap-1.5">
+                    <span className="justify-start text-white text-base font-light font-inter leading-snug group-hover:text-amber transition-colors">
                       {idea}
                     </span>
-                    <div className="p-1 bg-yellow-800/70 rounded-sm inline-flex justify-center items-center gap-1 self-start">
-                      <span className="text-[7.06px] font-normal font-inter leading-[7.06px] text-amber">
+                    <div className="px-2 py-1 bg-yellow-800/70 rounded-sm inline-flex justify-center items-center gap-1 self-start">
+                      <span className="text-[13px] font-normal font-inter leading-tight text-amber">
                         Ideas
                       </span>
                     </div>
@@ -91,14 +91,14 @@ export function IdeaContextRow() {
                 key={t.year}
                 className="w-40 inline-flex flex-col justify-start items-start gap-3"
               >
-                <div className="text-orange-400 text-[10.11px] font-normal font-inter">
+                <div className="text-orange-400 text-sm font-normal font-inter leading-snug">
                   {t.year}
                 </div>
-                <div className="flex flex-col justify-start items-start gap-1.5">
-                  <div className="text-white text-xs font-normal font-inter">
+                <div className="flex flex-col justify-start items-start gap-2">
+                  <div className="text-white text-base font-medium font-inter leading-snug">
                     {t.title}
                   </div>
-                  <div className="text-white text-[9.47px] font-normal font-inter leading-3">
+                  <div className="text-white text-sm font-normal font-inter leading-relaxed">
                     {t.desc}
                   </div>
                 </div>
@@ -125,13 +125,13 @@ export function IdeaContextRow() {
                     className="object-contain"
                   />
                 </div>
-                <span className="flex flex-col gap-px">
+                <span className="flex flex-col gap-1">
                   <div className="self-stretch justify-start">
-                    <span className="text-white text-xs font-medium font-inter leading-3">
+                    <span className="text-white text-base font-medium font-inter leading-snug">
                       {row.label}
                     </span>
                   </div>
-                  <div className="self-stretch text-white text-[10px] font-light font-inter leading-3">
+                  <div className="self-stretch text-white text-sm font-light font-inter leading-snug">
                     {row.value}
                   </div>
                 </span>

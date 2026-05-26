@@ -39,7 +39,7 @@ export function KnowledgePipeline() {
               <h3 className="text-center text-neutral-700 text-lg font-bold font-inter capitalize leading-6">
                 {s.title}
               </h3>
-              <p className="text-center text-neutral-700 text-[10px] font-normal font-inter capitalize leading-3">
+              <p className="text-center text-neutral-700 text-xs font-normal font-inter capitalize leading-normal">
                 {s.desc}
               </p>
             </div>
