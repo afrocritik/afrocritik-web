@@ -29,7 +29,10 @@ export default function SignInPage() {
     if (res?.error) {
       setError("Invalid email or password.");
     } else {
-      router.push("/explore");
+      // Return the user to the gated page they came from, if any. Only honour
+      // relative paths to avoid open-redirects to external sites.
+      const target = new URLSearchParams(globalThis.location.search).get("callbackUrl");
+      router.push(target?.startsWith("/") ? target : "/dashboard");
     }
   };
 

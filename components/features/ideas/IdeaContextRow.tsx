@@ -36,7 +36,7 @@ export function IdeaContextRow() {
               <li key={idea}>
                 <Link
                   href={`/ideas/${idea.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="flex items-center gap-3 group"
+                  className="flex items-start gap-3 group"
                 >
                   <Image
                     src="/inner-related-image.png"
@@ -67,29 +67,29 @@ export function IdeaContextRow() {
         id="key-moments"
         className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0"
       >
-        <h2 className="w-96 text-white text-xl font-semibold font-baskervville leading-5">
+        <h2 className="w-full text-white text-xl font-semibold font-baskervville leading-5">
           Timeline: Key Moments in Nollywood
         </h2>
         <div className="mt-8 flex flex-col gap-4">
           {/* Track — dots + lines */}
-          <div className="inline-flex justify-start items-start">
+          <div className="flex justify-start items-start">
             {TIMELINE.map((t, i) => (
-              <div key={t.year} className="w-40 h-2.5 relative">
+              <div key={t.year} className="flex-1 h-2.5 relative">
                 <div className="size-2.5 left-0 top-0 absolute">
                   <div
                     className={`size-2.5 left-0 top-0 absolute rounded-full outline outline-[3.43px] outline-yellow-700/20 ${i < 3 ? "bg-orange-400" : "bg-zinc-400"}`}
                   />
                 </div>
-                <div className="w-36 h-0 left-[13.13px] top-[5.71px] absolute outline outline-[3.43px] outline-offset-[-1.71px] outline-yellow-700/20" />
+                <div className="h-0 left-[13.13px] right-0 top-[5.71px] absolute outline outline-[3.43px] outline-offset-[-1.71px] outline-yellow-700/20" />
               </div>
             ))}
           </div>
           {/* Text items */}
-          <div className="inline-flex justify-start items-start">
+          <div className="flex justify-start items-start">
             {TIMELINE.map((t) => (
               <div
                 key={t.year}
-                className="w-40 inline-flex flex-col justify-start items-start gap-3"
+                className="flex-1 inline-flex flex-col justify-start items-start gap-3 pr-4"
               >
                 <div className="text-orange-400 text-sm font-normal font-inter leading-snug">
                   {t.year}
@@ -109,14 +109,14 @@ export function IdeaContextRow() {
       </div>
 
       {/* At a glance */}
-      <aside className="hidden lg:flex lg:flex-col">
-        <div className="bg-yellow-950/50 rounded-2xl border-[1.20px] border-yellow-700 p-5 flex-1">
+      <aside className="hidden lg:flex lg:flex-col lg:self-start">
+        <div className="bg-yellow-950/50 rounded-2xl border-[1.20px] border-yellow-700 p-5">
           <h3 className="w-44 text-white text-lg font-semibold font-inter leading-5 mb-4">
             At a glance
           </h3>
           <ul className="flex flex-col gap-2">
             {AT_A_GLANCE.map((row) => (
-              <li key={row.label} className="flex items-center gap-1.5">
+              <li key={row.label} className="flex items-start gap-1.5">
                 <div className="size-6 relative overflow-hidden shrink-0">
                   <Image
                     src={row.icon}
@@ -131,7 +131,7 @@ export function IdeaContextRow() {
                       {row.label}
                     </span>
                   </div>
-                  <div className="self-stretch text-white text-sm font-light font-inter leading-snug">
+                  <div className="self-stretch text-white text-xs font-light font-inter leading-snug">
                     {row.value}
                   </div>
                 </span>
