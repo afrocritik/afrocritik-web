@@ -1,37 +1,47 @@
-import { Download, FolderPlus, Heart, PenSquare } from "lucide-react";
 import { RECENT_ACTIVITY, type ActivityItem } from "./constants";
 
-const ICONS: Record<ActivityItem["icon"], typeof Heart> = {
-  saved: Heart,
-  downloaded: Download,
-  contributed: PenSquare,
-  collection: FolderPlus,
+const ACTIVITY_ICONS: Record<ActivityItem["icon"], string> = {
+  saved: "/dashboard-saved.png",
+  downloaded: "/dashboard-download.png",
+  contributed: "/dashboard-contributor.png",
+  collection: "/dashboard-add-collections.png",
 };
+
+function ActivityIcon({ icon }: Readonly<{ icon: ActivityItem["icon"] }>) {
+  return (
+    <div className="relative size-7 shrink-0 overflow-hidden rounded-[89.43px] bg-white/5">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={ACTIVITY_ICONS[icon]}
+        alt=""
+        aria-hidden="true"
+        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-contain [filter:brightness(0)_saturate(100%)_invert(34%)_sepia(98%)_saturate(600%)_hue-rotate(22deg)_brightness(88%)] ${icon === "downloaded" ? "size-[1.375rem]" : "size-4"}`}
+      />
+    </div>
+  );
+}
 
 export function RecentActivity() {
   return (
-    <div className="h-full rounded-xl border border-amber-line bg-white/[0.03] p-5">
-      <h2 className="font-montserrat text-lg font-semibold text-white">
+    <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 px-5 pt-5 pb-6">
+      <h2 className="font-['Baskervville'] text-base font-semibold leading-4 text-white">
         Recent activity
       </h2>
-      <ul className="mt-4 flex flex-col gap-4">
-        {RECENT_ACTIVITY.map((item) => {
-          const Icon = ICONS[item.icon];
-          return (
-            <li key={item.id} className="flex items-start gap-3">
-              <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-amber-soft text-amber">
-                <Icon className="size-3.5" />
-              </span>
-              <p className="flex-1 font-inter text-sm leading-snug text-ink-secondary">
+      <ul className="mt-5 flex flex-col gap-[17px]">
+        {RECENT_ACTIVITY.map((item) => (
+          <li key={item.id} className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <ActivityIcon icon={item.icon} />
+              <p className="font-inter text-sm font-normal leading-4 text-white">
                 {item.text}{" "}
-                <span className="font-semibold text-white">{item.highlight}</span>
+                <span className="font-semibold">{item.highlight}</span>
               </p>
-              <span className="shrink-0 font-inter text-xs text-ink-muted">
-                {item.time}
-              </span>
-            </li>
-          );
-        })}
+            </div>
+            <span className="shrink-0 font-inter text-xs font-light leading-3 text-white/50">
+              {item.time}
+            </span>
+          </li>
+        ))}
       </ul>
     </div>
   );

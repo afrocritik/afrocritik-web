@@ -5,6 +5,7 @@ import { StatsRow } from "@/components/features/dashboard/StatsRow";
 import { RecentActivity } from "@/components/features/dashboard/RecentActivity";
 import { RecommendedForYou } from "@/components/features/dashboard/RecommendedForYou";
 import { CollectionsGrid } from "@/components/features/dashboard/CollectionsGrid";
+import { ContinueExploringCard } from "@/components/features/dashboard/ContinueExploringCard";
 import {
   CONTINUE_EXPLORING,
   FEATURED_WORKS,
@@ -18,17 +19,24 @@ export default function DashboardPage() {
       <StatsRow />
 
       {/* Continue Exploring + Recent activity */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <DashboardSection title="Continue Exploring" viewAllHref="/explore">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <DashboardSection title="Continue Exploring" viewAllHref="/explore" card>
+            <div className="grid grid-cols-3 gap-3">
               {CONTINUE_EXPLORING.map((work) => (
-                <WorkCard key={work.slug} explore {...work} />
+                <ContinueExploringCard
+                  key={work.slug}
+                  title={work.title}
+                  description={work.description}
+                  image={work.image}
+                />
               ))}
             </div>
           </DashboardSection>
         </div>
-        <RecentActivity />
+        <div className="self-start">
+          <RecentActivity />
+        </div>
       </div>
 
       {/* Featured Works + Recommended for you */}
