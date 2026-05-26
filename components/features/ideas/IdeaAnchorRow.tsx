@@ -58,7 +58,7 @@ export function IdeaAnchorRow() {
         <h2 className="mt-2 justify-start text-yellow-700 text-xl font-semibold font-baskervville leading-5">
           1999 — The Reset
         </h2>
-        <p className="mt-4 w-[594px] justify-start text-white text-[9.47px] font-normal font-inter leading-[1.5]">
+        <p className="mt-4 w-full justify-start text-white text-[16px] font-normal font-inter leading-[1.5]">
           Nollywood was in a transition phase marked by heavy VHS circulation
           and themes of spiritual power, ancient curses, and moral conflict. The
           industry was stabilizing after the explosive 1990s home-video rise — a
@@ -81,7 +81,7 @@ export function IdeaAnchorRow() {
           {ANCHOR_FILMS.map((film) => (
             <div
               key={film.title}
-              className="flex-1 h-64 flex flex-col overflow-hidden bg-rose-100/10 rounded-md outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700"
+              className="flex-1 h-64 flex flex-col overflow-hidden bg-rose-100/10 rounded-md outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 hover:outline-amber transition-all duration-300"
             >
               {/* Image */}
               <div className="relative mx-2 mt-2.5 h-40 rounded-sm overflow-hidden shrink-0">
@@ -116,13 +116,13 @@ export function IdeaAnchorRow() {
       </div>
 
       {/* Right: Quick Facts + Related Works */}
-      <aside className="hidden lg:flex lg:flex-col gap-4">
+      <aside className="hidden lg:flex lg:flex-col lg:self-start gap-4">
         {/* Quick Facts */}
-        <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex-1 flex flex-col">
+        <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex flex-col">
           <h3 className="w-44 text-white text-lg font-semibold font-inter leading-5 mb-4">
             Quick Facts
           </h3>
-          <ul className="flex flex-col justify-between flex-1">
+          <ul className="flex flex-col gap-3">
             {QUICK_FACTS.map((fact) => (
               <li key={fact} className="flex items-start gap-2">
                 <span className="mt-[3px] size-1.5 shrink-0 rounded-full bg-white/60" />
@@ -133,7 +133,7 @@ export function IdeaAnchorRow() {
         </div>
 
         {/* Related Works */}
-        <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 flex-1">
+        <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-5">
           <h3 className="text-white text-base font-semibold font-inter leading-4 mb-3">
             Related Works
           </h3>

@@ -39,10 +39,10 @@ export function PillarsSection() {
             <button
               key={p.title}
               onClick={() => setSelected(isSelected ? null : p.title)}
-              className={`flex h-[279px] w-full flex-col items-center gap-3 rounded-[15.409px] bg-white px-4 py-6 transition-all duration-300 ${
+              className={`flex h-[279px] w-full flex-col items-center gap-3 rounded-[15.409px] border bg-white px-4 py-6 transition-colors duration-300 ${
                 isSelected
-                  ? "shadow-[6px_6px_0px_rgba(0,0,0,0.25)] -translate-y-px"
-                  : "shadow-none hover:shadow-[3px_3px_0px_rgba(0,0,0,0.10)]"
+                  ? "border-amber"
+                  : "border-black/10 hover:border-amber"
               }`}
             >
               <Image

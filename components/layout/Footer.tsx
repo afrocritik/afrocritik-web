@@ -45,7 +45,7 @@ export function Footer() {
         {/* Brand */}
         <div className="flex flex-col gap-3">
           <Logo />
-          <p className="max-w-xs font-inter text-xs font-semibold capitalize leading-4 text-neutral-500">
+          <p className="max-w-xs font-inter text-xs font-semibold capitalize leading-relaxed text-neutral-500">
             A Pan-African Non-Profit Cultural Institution Building The
             Infrastructure For African Cultural Criticism, With Bases In Lagos
             And Long Beach.

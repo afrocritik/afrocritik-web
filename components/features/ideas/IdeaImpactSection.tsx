@@ -8,7 +8,7 @@ export function IdeaImpactSection() {
           <h2 className="text-white text-2xl font-semibold font-baskervville capitalize leading-7">
             Lorem ipsum dolor sit amet
           </h2>
-          <p className="text-white text-base font-normal font-inter capitalize leading-4">
+          <p className="text-white text-base font-normal font-inter capitalize leading-relaxed">
             Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id
           </p>
         </div>

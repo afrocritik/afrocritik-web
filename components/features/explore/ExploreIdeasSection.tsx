@@ -21,7 +21,7 @@ export function ExploreIdeasSection() {
           <h2 className="text-white text-5xl font-bold capitalize leading-tight" style={{ fontFamily: "var(--font-baskervville)" }}>
             explore Ideas
           </h2>
-          <p className="max-w-lg text-white text-[17px] font-normal capitalize leading-6" style={{ fontFamily: "var(--font-inter)" }}>
+          <p className="max-w-lg text-white text-[17px] font-normal capitalize leading-relaxed" style={{ fontFamily: "var(--font-inter)" }}>
             Each year, the Afrocritik Report maps the cultural forces shaping Africa and its diaspora — the breakthroughs, the ruptures, and the tensions that define the moment. The 2025 edition reveals a continent whose creative output is globally ascendant, even as the infrastructure beneath it remains deeply contested.
           </p>
           <Link href="/explore?tab=ideas">

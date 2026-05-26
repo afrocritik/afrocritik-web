@@ -25,7 +25,7 @@ export function ExploreMoreSection() {
             <div className="self-stretch text-white text-2xl font-semibold font-baskervville capitalize leading-7">
               {item.title}
             </div>
-            <div className="self-stretch text-white text-base font-normal font-inter capitalize leading-4 mt-2">
+            <div className="self-stretch text-white text-base font-normal font-inter capitalize leading-relaxed mt-2">
               {item.desc}
             </div>
           </Link>

@@ -6,7 +6,7 @@ export function JoinNetworkCTA() {
       <h2 className="w-[681px] text-center justify-center text-white text-5xl font-bold font-baskervville capitalize leading-[52.80px]">
         Join The Network Building Africa&apos;s Cultural Infrastructure
       </h2>
-      <p className="w-[704px] text-center justify-center text-orange-100 text-sm font-semibold font-inter capitalize leading-4 pt-4">
+      <p className="w-[704px] text-center justify-center text-orange-100 text-sm font-semibold font-inter capitalize leading-relaxed pt-4">
         Whether you&apos;re a scholar, critic, funder, or creative — the
         Afrocritik Institute is building something that must exist. The question
         is whether you&apos;ll help shape it.

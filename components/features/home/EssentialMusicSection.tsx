@@ -13,7 +13,7 @@ const EWIM_MUSIC = [
   },
   {
     title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
+    author: "Asake",
     badge: "ALBUM REVIEW",
     tags: ["NIGERIA", "AFROBEAT", "MUSIC"],
     rating: 9.8,
@@ -29,7 +29,7 @@ const EWIM_MUSIC = [
   },
   {
     title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
+    author: "Amara Okafor",
     badge: "LITERATURE",
     tags: ["WRITER", "POLITICS", "POETRY"],
     rating: 9.8,

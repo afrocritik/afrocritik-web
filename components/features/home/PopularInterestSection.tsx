@@ -27,7 +27,7 @@ export function PopularInterestSection() {
           <Link
             key={label}
             href={`/explore?q=${label.toLowerCase()}`}
-            className="h-80 bg-yellow-700 rounded-[20px] flex flex-col justify-start items-center"
+            className="h-80 bg-yellow-700 rounded-[20px] border-2 border-transparent hover:border-orange-400 transition-colors duration-300 flex flex-col justify-start items-center"
           >
             <div className="self-stretch h-60 relative rounded-tl-[20px] rounded-tr-[20px]">
               <Image
