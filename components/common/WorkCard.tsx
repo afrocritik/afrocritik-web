@@ -781,7 +781,7 @@ function ExploreCard({
   return (
     <div
       className={cn(
-        "w-full h-[298px] relative bg-rose-100/10 rounded-md outline outline-[0.77px] outline-offset-[-0.77px] outline-yellow-700",
+        "w-full h-[298px] relative bg-rose-100/10 rounded-md outline outline-[0.77px] outline-offset-[-0.77px] outline-yellow-700 transition-transform duration-300 hover:scale-[1.05] hover:z-10",
         className
       )}
     >
