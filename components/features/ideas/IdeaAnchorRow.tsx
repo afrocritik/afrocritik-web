@@ -81,7 +81,7 @@ export function IdeaAnchorRow() {
           {ANCHOR_FILMS.map((film) => (
             <div
               key={film.title}
-              className="flex-1 h-64 flex flex-col overflow-hidden bg-rose-100/10 rounded-md outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 hover:outline-amber transition-all duration-300"
+              className="flex-1 h-64 flex flex-col overflow-hidden bg-rose-100/10 rounded-md outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 hover:outline-2 hover:outline-orange-400 transition-all duration-300"
             >
               {/* Image */}
               <div className="relative mx-2 mt-2.5 h-40 rounded-sm overflow-hidden shrink-0">

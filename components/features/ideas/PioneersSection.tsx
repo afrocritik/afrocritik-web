@@ -19,7 +19,7 @@ export function PioneersSection() {
           {PIONEERS.map((p) => (
             <div
               key={p.name}
-              className="h-64 flex flex-col bg-orange-950 rounded-xl outline outline-[0.83px] outline-offset-[-0.83px] outline-yellow-700 hover:outline-amber transition-all duration-300 overflow-hidden"
+              className="h-64 flex flex-col bg-orange-950 rounded-xl outline outline-[0.83px] outline-offset-[-0.83px] outline-yellow-700 hover:outline-2 hover:outline-orange-400 transition-all duration-300 overflow-hidden"
             >
               <div className="relative flex-1 mx-[2px] mt-[1px] rounded-tl-xl rounded-tr-xl overflow-hidden">
                 <Image src={p.image} alt={p.name} fill className="object-cover" />
