@@ -39,7 +39,7 @@ export function PillarsSection() {
             <button
               key={p.title}
               onClick={() => setSelected(isSelected ? null : p.title)}
-              className={`flex h-[279px] w-full flex-col items-center gap-3 rounded-[15.409px] border bg-white px-4 py-6 transition-colors duration-300 ${
+              className={`flex w-full flex-col items-center justify-center gap-3 rounded-[15.409px] border bg-white px-4 py-6 transition-colors duration-300 ${
                 isSelected
                   ? "border-amber"
                   : "border-black/10 hover:border-amber"

@@ -576,19 +576,26 @@ function EWILCard({
   rating,
   className,
 }: Readonly<Omit<WorkCardProps, "essential" | "ewim" | "ewil">>) {
+  const { hovered, onEnter, onLeave } = useHoverDelay();
+
   return (
     <fieldset
       className={cn(className)}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+      onFocus={onEnter}
+      onBlur={onLeave}
       style={{
         position: "relative",
         padding: 0,
         margin: 0,
         flexShrink: 0,
-        width: "268px",
+        width: hovered ? "338px" : "268px",
         height: "384px",
         borderRadius: "8px",
         border: "1px solid #B45309",
         background: "rgba(255, 241, 242, 0.10)",
+        transition: "width 0.4s ease",
       }}
     >
       <legend className="sr-only">{title}</legend>
@@ -680,13 +687,14 @@ function EWILCard({
             style={{
               color: "#D6D3D1",
               fontFamily: "var(--font-inter)",
-              fontSize: "14px",
+              fontSize: hovered ? "16px" : "14px",
               fontWeight: 600,
               lineHeight: "130%",
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
+              transition: "font-size 0.4s ease",
             }}
           >
             {title}
