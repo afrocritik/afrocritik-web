@@ -1,0 +1,119 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "next-auth/react";
+import { MegaMenu } from "./MegaMenu";
+
+function HamburgerIcon() {
+  return (
+    <div className="flex size-16 items-center justify-center overflow-hidden">
+      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} />
+    </div>
+  );
+}
+
+/**
+ * Signed-in app chrome for the dashboard. Differs from the marketing `Navbar`:
+ * search is always present and there's a notification bell.
+ */
+export function DashboardNavbar() {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) router.push(`/explore?q=${encodeURIComponent(query)}`);
+  };
+
+  return (
+    <header className="sticky top-0 z-50 w-full">
+      <div className="flex items-center gap-5 px-6 pt-6 pb-5 md:px-8">
+        {/* Center search — always visible on the dashboard */}
+        <form
+          onSubmit={submitSearch}
+          className="relative hidden h-[72px] flex-1 md:block"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="58"
+            height="58"
+            viewBox="0 0 70 71"
+            fill="none"
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"
+          >
+            <path
+              d="M49.37 50.1779L59.5 60.0721M33.25 21.2019C39.049 21.2019 43.75 25.9481 43.75 31.8029M56.2333 33.6875C56.2333 46.4378 45.9956 56.774 33.3667 56.774C20.7378 56.774 10.5 46.4378 10.5 33.6875C10.5 20.9371 20.7378 10.601 33.3667 10.601C45.9956 10.601 56.2333 20.9371 56.2333 33.6875Z"
+              stroke="rgba(212, 212, 216, 0.30)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search Works, Ideas, People, Reports..."
+            className="h-[72px] w-full rounded-xl border border-amber-line bg-transparent pl-[76px] pr-5 font-inter text-lg text-white placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-amber"
+          />
+        </form>
+
+        {/* Right actions: Bell → Hamburger → Explore → Avatar */}
+        <div className="flex items-center gap-5 shrink-0">
+          {/* Notifications */}
+          <button
+            type="button"
+            aria-label="Notifications"
+            className="flex size-16 items-center justify-center transition-opacity hover:opacity-70"
+          >
+            <Image
+              src="/dashboard-notification-icon.png"
+              alt="Notifications"
+              width={40}
+              height={40}
+              className="size-10 object-contain"
+            />
+          </button>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="transition-opacity hover:opacity-70"
+            aria-label="Menu"
+          >
+            <HamburgerIcon />
+          </button>
+
+          {/* Explore */}
+          <Link
+            href="/explore"
+            className="hidden md:inline-flex h-[60px] items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-2xl font-medium capitalize leading-8 text-yellow-950 transition-opacity hover:opacity-90"
+            style={{
+              background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
+            }}
+          >
+            Explore
+          </Link>
+
+          {/* Avatar */}
+          <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
+            <AvatarImage
+              src={session?.user?.image || "/Interest-Avatar.png"}
+              alt="User"
+              className="size-12 object-cover"
+            />
+            <AvatarFallback className="bg-bg-secondary text-amber">
+              {session?.user?.name?.[0]?.toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+      </div>
+
+      <MegaMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+    </header>
+  );
+}
