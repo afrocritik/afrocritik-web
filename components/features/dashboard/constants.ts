@@ -68,32 +68,37 @@ export const CONTINUE_EXPLORING: WorkCardProps[] = [
   },
 ];
 
-export const FEATURED_WORKS: WorkCardProps[] = [
+import type { FeaturedWorkItem } from "./FeaturedWorkCard";
+
+export const FEATURED_WORKS: FeaturedWorkItem[] = [
   {
     slug: "igodo",
     title: "Igodo",
+    director: "Andy Amenechi & Don Pedro Obaseki",
     description:
-      "An epic, award-blending ancient curses with spiritual power — the Nigerian adventure that set the mold.",
-    image: "/explore-works-Image-1.png",
-    tags: ["Nigeria", "Film", "Entertainment"],
+      "An epic quest blending ancient curses with spiritual power — the Nigerian adventure that set the mold.",
+    image: "/inner-anchor-1.png",
+    tags: ["NIGERIA", "FILM", "ENTERTAINMENT"],
     rating: 9.8,
   },
   {
     slug: "rattlesnake",
     title: "Rattlesnake",
+    director: "Amaka Igwe",
     description:
       "A crime drama of betrayal and vengeance capturing the restless energy of urban Nigeria in transition.",
-    image: "/explore-works-Image-2.png",
-    tags: ["Nigeria", "Film", "Entertainment"],
+    image: "/inner-anchor-2.jpg",
+    tags: ["NIGERIA", "FILM", "ENTERTAINMENT"],
     rating: 9.8,
   },
   {
     slug: "domitilla",
     title: "Domitilla",
+    director: "Zeb Ejiro",
     description:
-      "A brutally told tale of survival and exploitation that became a cultural touchstone for a generation.",
-    image: "/EW-Image-4.jpg",
-    tags: ["Nigeria", "Film", "Entertainment"],
+      "A morality tale of survival and exploitation that became a cultural touchstone for a generation.",
+    image: "/inner-anchor-3.jpg",
+    tags: ["NIGERIA", "FILM", "ENTERTAINMENT"],
     rating: 9.8,
   },
 ];
