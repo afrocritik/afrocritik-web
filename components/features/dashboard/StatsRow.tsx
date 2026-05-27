@@ -1,7 +1,7 @@
 import { Users, Layers2 } from "lucide-react";
 import { STATS, type DashboardStat } from "./constants";
 
-function StatIcon({ icon }: { icon: DashboardStat["icon"] }) {
+function StatIcon({ icon }: Readonly<{ icon: DashboardStat["icon"] }>) {
   if (icon === "reviewed") {
     return (
       // eslint-disable-next-line @next/next/no-img-element

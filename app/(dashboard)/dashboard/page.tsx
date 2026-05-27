@@ -1,15 +1,10 @@
 import { DashboardHeader } from "@/components/features/dashboard/DashboardHeader";
-import { DashboardSection } from "@/components/features/dashboard/DashboardSection";
 import { StatsRow } from "@/components/features/dashboard/StatsRow";
+import { ContinueExploringSection } from "@/components/features/dashboard/ContinueExploringSection";
 import { RecentActivity } from "@/components/features/dashboard/RecentActivity";
+import { FeaturedWorksSection } from "@/components/features/dashboard/FeaturedWorksSection";
 import { RecommendedForYou } from "@/components/features/dashboard/RecommendedForYou";
-import { CollectionsGrid } from "@/components/features/dashboard/CollectionsGrid";
-import { ContinueExploringCard } from "@/components/features/dashboard/ContinueExploringCard";
-import { FeaturedWorkCard } from "@/components/features/dashboard/FeaturedWorkCard";
-import {
-  CONTINUE_EXPLORING,
-  FEATURED_WORKS,
-} from "@/components/features/dashboard/constants";
+import { MyCollectionsSection } from "@/components/features/dashboard/MyCollectionsSection";
 
 export default function DashboardPage() {
   return (
@@ -21,42 +16,20 @@ export default function DashboardPage() {
       {/* Continue Exploring + Recent activity */}
       <div className="grid gap-3 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <DashboardSection title="Continue Exploring" viewAllHref="/explore" card>
-            <div className="grid grid-cols-3 gap-3">
-              {CONTINUE_EXPLORING.map((work) => (
-                <ContinueExploringCard
-                  key={work.slug}
-                  title={work.title}
-                  description={work.description}
-                  image={work.image}
-                />
-              ))}
-            </div>
-          </DashboardSection>
+          <ContinueExploringSection />
         </div>
-        <div>
-          <RecentActivity />
-        </div>
+        <RecentActivity />
       </div>
 
       {/* Featured Works + Recommended for you */}
       <div className="grid gap-3 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <DashboardSection title="Featured Works" viewAllHref="/explore" card>
-            <div className="flex gap-3">
-              {FEATURED_WORKS.map((work) => (
-                <FeaturedWorkCard key={work.slug} {...work} />
-              ))}
-            </div>
-          </DashboardSection>
+          <FeaturedWorksSection />
         </div>
         <RecommendedForYou />
       </div>
 
-      {/* My Collections */}
-      <DashboardSection title="My Collections" viewAllHref="/dashboard/collections" card>
-        <CollectionsGrid />
-      </DashboardSection>
+      <MyCollectionsSection />
     </div>
   );
 }

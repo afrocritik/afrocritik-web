@@ -1,4 +1,5 @@
 import type { WorkCardProps } from "@/components/common/WorkCard";
+import type { FeaturedWorkItem } from "./FeaturedWorkCard";
 
 export interface DashboardNavItem {
   label: string;
@@ -67,8 +68,6 @@ export const CONTINUE_EXPLORING: WorkCardProps[] = [
     rating: 9.8,
   },
 ];
-
-import type { FeaturedWorkItem } from "./FeaturedWorkCard";
 
 export const FEATURED_WORKS: FeaturedWorkItem[] = [
   {
@@ -163,4 +162,66 @@ export const COLLECTIONS: CollectionItem[] = [
   { slug: "african-writers", name: "African Writers", count: 12, image: "/EBOPI-Image-2.jpg" },
   { slug: "political-movements", name: "Political Movements", count: 2, image: "/EBOPI-Image-3.png" },
   { slug: "african-history", name: "African History", count: 5, image: "/EBOPI-Image-4.jpg" },
+];
+
+export const LIBRARY_WORKS: WorkCardProps[] = [
+  {
+    slug: "igodo",
+    title: "Igodo",
+    description: "An epic quest blending ancient curses with spiritual power.",
+    image: "/inner-anchor-1.png",
+    tags: ["Nigeria", "Film"],
+    rating: 9.8,
+  },
+  {
+    slug: "rattlesnake",
+    title: "Rattlesnake",
+    description: "A crime drama of betrayal and vengeance in urban Nigeria.",
+    image: "/inner-anchor-2.jpg",
+    tags: ["Nigeria", "Film"],
+    rating: 9.5,
+  },
+  {
+    slug: "domitilla",
+    title: "Domitilla",
+    description: "A morality tale of survival that became a cultural touchstone.",
+    image: "/inner-anchor-3.jpg",
+    tags: ["Nigeria", "Film"],
+    rating: 9.2,
+  },
+  {
+    slug: "purple-hibiscus",
+    title: "Purple Hibiscus",
+    description: "Chimamanda Ngozi Adichie's coming-of-age debut novel.",
+    image: "/inner-pioneer-Image-3.png",
+    tags: ["Nigeria", "Novel"],
+    rating: 9.6,
+  },
+];
+
+export const SAVED_WORKS: WorkCardProps[] = [
+  {
+    slug: "living-in-bondage-1992",
+    title: "Living in Bondage (1992)",
+    description: "Kenneth Nnebue's landmark film that launched Nollywood.",
+    image: "/inner-pioneer-Image-1.png",
+    tags: ["Nigeria", "Film"],
+    rating: 9.4,
+  },
+  {
+    slug: "making-of-modern-africa-2023",
+    title: "The Making of Modern Africa (2023)",
+    description: "Afrocritik Institute's flagship cultural intelligence report.",
+    image: "/inner-pioneer-Image-2.png",
+    tags: ["Report"],
+    rating: 9.1,
+  },
+  {
+    slug: "afrobeat-origins",
+    title: "Afrobeat Origins",
+    description: "Tracing the roots of Fela Kuti's revolutionary sound.",
+    image: "/EW-Image-1.png",
+    tags: ["Afrobeat", "Music"],
+    rating: 9.8,
+  },
 ];
