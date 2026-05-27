@@ -1,4 +1,3 @@
-import { WorkCard } from "@/components/common/WorkCard";
 import { DashboardHeader } from "@/components/features/dashboard/DashboardHeader";
 import { DashboardSection } from "@/components/features/dashboard/DashboardSection";
 import { StatsRow } from "@/components/features/dashboard/StatsRow";
@@ -6,6 +5,7 @@ import { RecentActivity } from "@/components/features/dashboard/RecentActivity";
 import { RecommendedForYou } from "@/components/features/dashboard/RecommendedForYou";
 import { CollectionsGrid } from "@/components/features/dashboard/CollectionsGrid";
 import { ContinueExploringCard } from "@/components/features/dashboard/ContinueExploringCard";
+import { FeaturedWorkCard } from "@/components/features/dashboard/FeaturedWorkCard";
 import {
   CONTINUE_EXPLORING,
   FEATURED_WORKS,
@@ -13,7 +13,7 @@ import {
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-10 px-6 py-8 md:px-8">
+    <div className="flex flex-col gap-6 px-6 py-8 md:px-8">
       <DashboardHeader />
 
       <StatsRow />
@@ -34,18 +34,18 @@ export default function DashboardPage() {
             </div>
           </DashboardSection>
         </div>
-        <div className="self-start">
+        <div>
           <RecentActivity />
         </div>
       </div>
 
       {/* Featured Works + Recommended for you */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <DashboardSection title="Featured Works" viewAllHref="/explore">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <DashboardSection title="Featured Works" viewAllHref="/explore" card>
+            <div className="flex gap-3">
               {FEATURED_WORKS.map((work) => (
-                <WorkCard key={work.slug} explore {...work} />
+                <FeaturedWorkCard key={work.slug} {...work} />
               ))}
             </div>
           </DashboardSection>
