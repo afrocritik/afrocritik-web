@@ -8,13 +8,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex min-h-screen bg-base">
-      <DashboardSidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <DashboardNavbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+    <div className="flex min-h-screen flex-col bg-base">
+      {/* Sidebar + scrollable content area side by side */}
+      <div className="flex flex-1">
+        <DashboardSidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <DashboardNavbar />
+          <main className="flex-1">{children}</main>
+        </div>
       </div>
+
+      {/* Footer spans full viewport width, below sidebar */}
+      <Footer className="border-t-0 bg-[#50321C80]" />
     </div>
   );
 }

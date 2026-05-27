@@ -42,7 +42,7 @@ export function DashboardSection({
 
   if (card) {
     return (
-      <section className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-5">
+      <section className="rounded-xl border border-yellow-700 bg-[#50321C80] p-5">
         {header}
         {children}
       </section>
