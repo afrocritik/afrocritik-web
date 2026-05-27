@@ -9,7 +9,7 @@ function StatIcon({ icon }: { icon: DashboardStat["icon"] }) {
         src="/dashboard-icon_works.png"
         alt=""
         aria-hidden="true"
-        className="size-4 [filter:brightness(0)_saturate(100%)_invert(38%)_sepia(64%)_saturate(550%)_hue-rotate(20deg)_brightness(95%)]"
+        className="size-4 [filter:brightness(0)_saturate(100%)_invert(32%)_sepia(100%)_saturate(500%)_brightness(88%)]"
       />
     );
   }
@@ -20,7 +20,7 @@ function StatIcon({ icon }: { icon: DashboardStat["icon"] }) {
         src="/dashboard-Icon_write.png"
         alt=""
         aria-hidden="true"
-        className="size-4 [filter:brightness(0)_saturate(100%)_invert(38%)_sepia(64%)_saturate(550%)_hue-rotate(20deg)_brightness(95%)]"
+        className="size-4 [filter:brightness(0)_saturate(100%)_invert(32%)_sepia(100%)_saturate(500%)_brightness(88%)]"
       />
     );
   }
@@ -32,7 +32,7 @@ function StatIcon({ icon }: { icon: DashboardStat["icon"] }) {
 
 function StatCard({ stat }: Readonly<{ stat: DashboardStat }>) {
   return (
-    <div className="flex h-32 w-full flex-col justify-between rounded-2xl bg-yellow-950/50 px-6 py-5 outline outline-1 outline-offset-[-1.01px] outline-amber-600">
+    <div className="flex h-32 w-full flex-col justify-between rounded-2xl bg-[#50321C80] px-6 py-5 outline outline-1 outline-offset-[-1.01px] outline-amber-600">
       <div className="flex items-center justify-between">
         <span className="font-inter text-sm font-semibold leading-3 text-white">
           {stat.label}

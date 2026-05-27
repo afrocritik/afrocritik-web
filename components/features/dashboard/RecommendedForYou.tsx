@@ -3,7 +3,7 @@ import { RECOMMENDED } from "./constants";
 
 export function RecommendedForYou() {
   return (
-    <div className="h-full rounded-xl border border-yellow-700 bg-yellow-950/50 p-5">
+    <div className="h-full rounded-xl border border-yellow-700 bg-[#50321C80] p-5">
       <h2 className="font-['Baskervville'] text-xl font-semibold leading-5 text-white">
         Recommended for you
       </h2>

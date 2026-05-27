@@ -38,9 +38,11 @@ const INSTITUTE_LINKS = [
   { label: "Contribute", href: "#" },
 ];
 
-export function Footer() {
+import { cn } from "@/lib/utils";
+
+export function Footer({ className }: Readonly<{ className?: string }>) {
   return (
-    <footer className="border-t border-amber-line bg-base pt-16 pb-24">
+    <footer className={cn("border-t border-amber-line bg-base pt-16 pb-24", className)}>
       <div className="container grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1fr_auto_auto_1fr]">
         {/* Brand */}
         <div className="flex flex-col gap-3">

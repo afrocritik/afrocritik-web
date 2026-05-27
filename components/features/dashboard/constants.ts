@@ -159,8 +159,8 @@ export interface CollectionItem {
 }
 
 export const COLLECTIONS: CollectionItem[] = [
-  { slug: "african-music", name: "African Music", count: 20, image: "/EW-Image-1.png" },
-  { slug: "african-writers", name: "African Writers", count: 12, image: "/inner-pioneer-Image-3.png" },
-  { slug: "political-movements", name: "Political Movements", count: 2, image: "/explore-works-Image-1.png" },
-  { slug: "african-history", name: "African History", count: 5, image: "/inner-pioneer-Image-4.png" },
+  { slug: "african-music", name: "African Music", count: 20, image: "/explore-works-Image-1.png" },
+  { slug: "african-writers", name: "African Writers", count: 12, image: "/EBOPI-Image-2.jpg" },
+  { slug: "political-movements", name: "Political Movements", count: 2, image: "/EBOPI-Image-3.png" },
+  { slug: "african-history", name: "African History", count: 5, image: "/EBOPI-Image-4.jpg" },
 ];

@@ -54,7 +54,7 @@ export default function DashboardPage() {
       </div>
 
       {/* My Collections */}
-      <DashboardSection title="My Collections" viewAllHref="/dashboard/collections">
+      <DashboardSection title="My Collections" viewAllHref="/dashboard/collections" card>
         <CollectionsGrid />
       </DashboardSection>
     </div>

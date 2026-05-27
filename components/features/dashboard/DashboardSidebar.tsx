@@ -66,7 +66,7 @@ function NavLink({
       className={cn(
         "flex h-11 w-full items-center gap-3 rounded-xl pl-6 py-3 font-inter text-base font-semibold leading-4 transition-colors",
         active
-          ? "bg-yellow-950/50 outline outline-1 outline-offset-[-0.89px] outline-yellow-700 text-orange-400"
+          ? "bg-[#50321C80] outline outline-1 outline-offset-[-0.89px] outline-yellow-700 text-orange-400"
           : "text-white hover:bg-white/5"
       )}
     >
@@ -110,7 +110,7 @@ export function DashboardSidebar() {
   const name = session?.user?.name || "Abdul Lawal";
 
   return (
-    <aside className="hidden w-64 shrink-0 self-start flex-col px-4 lg:flex bg-yellow-950/50 border-r border-yellow-700">
+    <aside className="hidden w-64 shrink-0 self-start flex-col px-4 lg:flex bg-[#50321C80] border-r border-yellow-700">
       <div className="flex h-[116px] shrink-0 items-center">
         <Logo />
       </div>
