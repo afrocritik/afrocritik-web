@@ -17,7 +17,7 @@ export function PersonCard({
   image,
   variant = "circle",
   className,
-}: PersonCardProps) {
+}: Readonly<PersonCardProps>) {
   if (variant === "tile") {
     return (
       <Link
