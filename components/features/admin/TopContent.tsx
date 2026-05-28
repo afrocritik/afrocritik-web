@@ -25,15 +25,16 @@ export function TopContent() {
               {item.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-md bg-amber-soft px-1.5 py-0.5 font-inter text-[10px] font-medium text-amber"
+                  className="rounded-[3.16px] px-1.5 py-0.5 font-inter text-[10px] font-medium text-white"
+                  style={{ background: "#94623EB2" }}
                 >
                   {tag}
                 </span>
               ))}
             </div>
           </div>
-          <span className="inline-flex shrink-0 items-center gap-1 font-inter text-xs font-medium text-ink-secondary">
-            <Eye className="size-3.5 text-ink-muted" />
+          <span className="inline-flex shrink-0 items-center gap-1 font-inter text-xs font-medium text-white">
+            <Eye className="size-3.5 text-white" />
             {item.views}
           </span>
         </li>

@@ -190,31 +190,31 @@ export const TOP_CONTENT: TopContentItem[] = [
     title: "Davido",
     tags: ["Person", "Music"],
     views: "12.4K",
-    image: "/inner-pioneer-Image-1.png",
+    image: "/EW-Image-3.png",
   },
   {
     title: "Half of a Yellow Sun",
     tags: ["Work", "Literature"],
     views: "9.8k",
-    image: "/inner-pioneer-Image-3.png",
+    image: "/EBOPI-Image-2.jpg",
   },
   {
     title: "Fela Kuti: Rebel and Icon",
     tags: ["Person", "Music"],
     views: "7.6k",
-    image: "/EW-Image-2.png",
+    image: "/EW-Image-4.jpg",
   },
   {
     title: "Ngũgĩ wa Thiong'o",
     tags: ["Person", "History"],
     views: "6.3k",
-    image: "/inner-pioneer-Image-2.png",
+    image: "/admin-image-4.png",
   },
   {
     title: "Nollywood History",
     tags: ["Work", "Film"],
     views: "4.8k",
-    image: "/inner-anchor-1.png",
+    image: "/inner-anchor-2.jpg",
   },
 ];
 
