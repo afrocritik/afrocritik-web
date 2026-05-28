@@ -18,7 +18,7 @@ export function AdminPageHeader() {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 className="font-baskervville text-3xl font-semibold leading-9 text-white">
+        <h1 className="font-baskervville text-4xl font-semibold leading-10 text-white">
           Dashboard
         </h1>
         <p className="mt-2.5 font-inter text-base font-light leading-4 text-orange-100">
@@ -30,7 +30,7 @@ export function AdminPageHeader() {
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-yellow-950/50 px-3 py-2 outline outline-[0.44px] outline-offset-[-0.44px] outline-yellow-700/50 transition-colors hover:bg-yellow-950/70"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#50321C80] px-3 py-2 outline outline-[0.44px] outline-offset-[-0.44px] outline-yellow-700/50 transition-colors hover:bg-[#50321C99]"
           >
             <Calendar className="size-3.5 shrink-0 text-white" />
             <span className="font-inter text-sm font-normal text-white">{range}</span>

@@ -16,7 +16,7 @@ export default function AdminLayout({
           <main className="flex-1">{children}</main>
         </div>
       </div>
-      <Footer className="border-t border-line bg-bg-secondary" />
+      <Footer className="border-t-0 bg-[#50321C80]" />
     </div>
   );
 }

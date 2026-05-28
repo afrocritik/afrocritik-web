@@ -242,7 +242,7 @@ export const RECENT_ENTRIES: RecentEntry[] = [
     addedBy: "Admin",
     date: "May 19, 2025",
     status: "Published",
-    image: "/inner-pioneer-Image-1.png",
+    image: "/EBOPI-Image-2.jpg",
   },
   {
     title: "Fela Kuti",
@@ -251,7 +251,7 @@ export const RECENT_ENTRIES: RecentEntry[] = [
     addedBy: "Admin",
     date: "May 19, 2025",
     status: "Published",
-    image: "/EW-Image-2.png",
+    image: "/EW-Image-4.jpg",
   },
   {
     title: "Afrobeats Global Impact",
@@ -260,7 +260,7 @@ export const RECENT_ENTRIES: RecentEntry[] = [
     addedBy: "Editor",
     date: "May 19, 2025",
     status: "Published",
-    image: "/EW-Image-1.png",
+    image: "/admin-image-4.png",
   },
   {
     title: "Purple Hibiscus",
@@ -269,7 +269,7 @@ export const RECENT_ENTRIES: RecentEntry[] = [
     addedBy: "Editor",
     date: "May 19, 2025",
     status: "Draft",
-    image: "/inner-pioneer-Image-3.png",
+    image: "/EBOPI-Image-2.jpg",
   },
   {
     title: "Afrocritik 2025 Report",
@@ -278,6 +278,6 @@ export const RECENT_ENTRIES: RecentEntry[] = [
     addedBy: "Admin",
     date: "May 19, 2025",
     status: "Published",
-    image: "/inner-pioneer-Image-2.png",
+    image: "/EW-Image-3.png",
   },
 ];

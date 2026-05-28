@@ -9,7 +9,7 @@ import { RecentEntriesTable } from "@/components/features/admin/RecentEntriesTab
 
 export default function AdminDashboardPage() {
   return (
-    <div className="flex flex-col gap-6 px-4 py-6 md:px-6">
+    <div className="flex flex-col gap-6 px-4 pt-6 pb-[72px] md:px-6">
       <AdminPageHeader />
 
       <AdminStatCards />
