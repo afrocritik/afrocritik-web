@@ -21,7 +21,7 @@ export function DashboardHeader() {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h1 className="font-['Baskervville'] text-3xl font-semibold capitalize leading-8 text-white">
+        <h1 className="font-baskervville text-3xl font-semibold capitalize leading-8 text-white">
           Hello, {name}
         </h1>
         <p className="mt-[10px] font-inter text-base font-light leading-4 text-orange-100">

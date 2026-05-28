@@ -61,7 +61,7 @@ export function IdeaCard({
       {excerpt && (
         <p
           className={cn(
-            "mt-3 line-clamp-4 flex-1 w-full justify-start text-base font-normal font-['Inter'] leading-5",
+            "mt-3 line-clamp-4 flex-1 w-full justify-start text-base font-normal font-inter leading-5",
             light ? "text-zinc-600" : "text-ink-secondary",
           )}
         >
@@ -78,7 +78,7 @@ export function IdeaCard({
               <span
                 key={t}
                 className={cn(
-                  "justify-start text-yellow-700 text-xs font-normal font-['Inter'] leading-4",
+                  "justify-start text-yellow-700 text-xs font-normal font-inter leading-4",
                   light
                     ? "bg-[#F0E6D0] text-yellow-700"
                     : "bg-amber-soft text-amber",

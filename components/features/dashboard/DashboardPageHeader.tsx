@@ -7,7 +7,7 @@ export function DashboardPageHeader({
 }>) {
   return (
     <div>
-      <h1 className="font-['Baskervville'] text-3xl font-semibold capitalize leading-8 text-white">
+      <h1 className="font-baskervville text-3xl font-semibold capitalize leading-8 text-white">
         {title}
       </h1>
       {description && (

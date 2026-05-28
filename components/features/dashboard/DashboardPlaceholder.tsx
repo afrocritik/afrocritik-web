@@ -12,7 +12,7 @@ export function DashboardPlaceholder({
       <DashboardPageHeader title={title} description={description} />
 
       <div className="flex min-h-[320px] flex-col items-center justify-center gap-3 rounded-xl border border-yellow-700 bg-[#50321C80] p-10 text-center">
-        <p className="font-['Baskervville'] text-xl font-semibold text-white">
+        <p className="font-baskervville text-xl font-semibold text-white">
           Coming soon
         </p>
         <p className="max-w-md font-inter text-sm font-light leading-5 text-orange-100">

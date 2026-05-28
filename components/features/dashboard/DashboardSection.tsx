@@ -18,7 +18,7 @@ export function DashboardSection({
       <h2
         className={cn(
           card
-            ? "font-['Baskervville'] text-xl font-semibold leading-5 text-white"
+            ? "font-baskervville text-xl font-semibold leading-5 text-white"
             : "font-montserrat text-lg font-semibold text-white"
         )}
       >

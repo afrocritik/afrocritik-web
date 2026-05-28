@@ -61,9 +61,9 @@ export function RecentEntriesTable() {
   const pages = [1, 2, 3, 4, 5];
 
   return (
-    <div className="rounded-2xl border border-line bg-bg-secondary p-5">
+    <div className="rounded-xl border border-yellow-700 p-5" style={{ background: "#50321C80" }}>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-inter text-base font-semibold text-white">Recent Entries</h2>
+        <h2 className="font-baskervville text-lg font-semibold leading-5 text-white">Recent Entries</h2>
         <Link
           href="/admin/works"
           className="inline-flex items-center gap-1 font-inter text-xs font-medium text-amber transition-opacity hover:opacity-80"
