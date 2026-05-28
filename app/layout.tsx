@@ -44,6 +44,7 @@ const hedvigLettersSerif = Hedvig_Letters_Serif({
   subsets: ["latin"],
   variable: "--font-hedvig",
   weight: ["400"],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
