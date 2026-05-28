@@ -22,7 +22,7 @@ export function ChartCard({
       style={{ background: "#50321C80" }}
     >
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-baskervville text-lg font-semibold leading-5 text-white">{title}</h2>
+        <h2 className="font-baskervville text-xl font-semibold leading-6 text-white">{title}</h2>
         {viewAllHref && (
           <Link
             href={viewAllHref}

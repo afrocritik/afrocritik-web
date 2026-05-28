@@ -16,12 +16,12 @@ export function EngagementChart() {
     <div className="mt-8">
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={ENGAGEMENT_DATA} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-          <CartesianGrid stroke="#737373" strokeOpacity={0.5} vertical={false} />
+          <CartesianGrid stroke="#7E7D7C" strokeWidth={2} vertical={false} />
           <XAxis
             dataKey="entity"
             tick={{ fill: "#FFFFFF", fontSize: 14 }}
             tickLine={false}
-            axisLine={{ stroke: "#FFFFFF" }}
+            axisLine={{ stroke: "#7E7D7C", strokeWidth: 2 }}
             interval={0}
           />
           <YAxis
