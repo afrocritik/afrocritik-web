@@ -27,11 +27,11 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    // TEMP: /dashboard is ungated for client demos. Re-add the two lines
-    // below to restore sign-in protection.
+    // TEMP: /dashboard and /admin are ungated for client demos. Re-add the
+    // lines below to restore sign-in / admin-role protection.
     // "/dashboard",
     // "/dashboard/:path*",
-    "/admin",
-    "/admin/:path*",
+    // "/admin",
+    // "/admin/:path*",
   ],
 };
