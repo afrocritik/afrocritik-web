@@ -16,12 +16,12 @@ export function AdminPageHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
         <h1 className="font-['Baskervville'] text-3xl font-semibold leading-9 text-white">
           Dashboard
         </h1>
-        <p className="mt-1.5 font-inter text-sm font-light text-ink-secondary">
+        <p className="mt-2.5 font-inter text-base font-light leading-4 text-orange-100">
           Welcome back, Admin. Check the activities in this dashboard.
         </p>
       </div>
@@ -30,11 +30,11 @@ export function AdminPageHeader() {
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="inline-flex h-10 items-center gap-2 rounded-lg border border-line bg-bg-secondary px-3 py-2 transition-colors hover:bg-white/5"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-yellow-950/50 px-3 py-2 outline outline-[0.44px] outline-offset-[-0.44px] outline-yellow-700/50 transition-colors hover:bg-yellow-950/70"
           >
-            <Calendar className="size-4 shrink-0 text-ink-secondary" />
+            <Calendar className="size-3.5 shrink-0 text-white" />
             <span className="font-inter text-sm font-normal text-white">{range}</span>
-            <ChevronDown className="size-4 shrink-0 text-ink-secondary" />
+            <ChevronDown className="size-3.5 shrink-0 text-white" />
           </button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-44 p-1">
