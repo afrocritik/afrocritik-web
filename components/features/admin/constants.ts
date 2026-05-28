@@ -1,14 +1,10 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
-  BarChart3,
   Clock,
-  FileText,
   Hash,
   Image as ImageIcon,
   LayoutDashboard,
-  Lightbulb,
-  Network,
   Settings,
   Shield,
   Users,
@@ -87,17 +83,17 @@ export const ADMIN_NAV: AdminNavGroup[] = [
 export interface AdminStat {
   label: string;
   value: string;
-  delta: string;
-  icon: LucideIcon;
+  pct: string;
+  icon: LucideIcon | string;
 }
 
 export const ADMIN_STATS: AdminStat[] = [
-  { label: "Total Works", value: "1,248", delta: "12% this month", icon: FileText },
-  { label: "People", value: "500", delta: "10% this month", icon: Users },
-  { label: "Ideas", value: "800", delta: "8% this month", icon: Lightbulb },
-  { label: "Reports", value: "28", delta: "16% this month", icon: BarChart3 },
-  { label: "Connections", value: "3,123", delta: "7% this month", icon: Network },
-  { label: "Users", value: "165", delta: "18% this month", icon: Users },
+  { label: "Total Works", value: "1,248", pct: "12%", icon: "dashboard-icon_works.png" },
+  { label: "People", value: "500", pct: "10%", icon: "explore-icon_people.svg" },
+  { label: "Ideas", value: "800", pct: "8%", icon: "explore-icon_ideas.svg" },
+  { label: "Reports", value: "28", pct: "16%", icon: "explore-icon_analytics.svg" },
+  { label: "Connections", value: "3,123", pct: "7%", icon: "inner-Share.png" },
+  { label: "Users", value: "165", pct: "18%", icon: "explore-icon_people.svg" },
 ];
 
 /* ------------------------------------------------------------------ */
