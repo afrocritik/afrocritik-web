@@ -107,11 +107,10 @@ export interface GrowthSeries {
 }
 
 export const GROWTH_SERIES: GrowthSeries[] = [
-  { key: "film", label: "Film", color: "#B91C1C" },
-  { key: "music", label: "Music", color: "#EA580C" },
-  { key: "literature", label: "Literature", color: "#C8922A" },
-  { key: "ideas", label: "Ideas", color: "#15803D" },
-  { key: "people", label: "People", color: "#0E7490" },
+  { key: "film", label: "Film", color: "#C2410C" },
+  { key: "music", label: "Music", color: "#CA8A04" },
+  { key: "literature", label: "Literature", color: "#065F46" },
+  { key: "ideas", label: "Ideas", color: "#0C4A6E" },
 ];
 
 export interface GrowthPoint {
@@ -120,25 +119,24 @@ export interface GrowthPoint {
   music: number;
   literature: number;
   ideas: number;
-  people: number;
 }
 
 export const GROWTH_DATA: GrowthPoint[] = [
-  { date: "Apr 25", film: 10, music: 8, literature: 6, ideas: 5, people: 4 },
-  { date: "Apr 27", film: 11, music: 8, literature: 6, ideas: 5, people: 4 },
-  { date: "Apr 29", film: 11, music: 9, literature: 7, ideas: 6, people: 5 },
-  { date: "May 1", film: 12, music: 9, literature: 7, ideas: 6, people: 5 },
-  { date: "May 3", film: 13, music: 10, literature: 8, ideas: 7, people: 5 },
-  { date: "May 5", film: 14, music: 11, literature: 8, ideas: 7, people: 6 },
-  { date: "May 7", film: 15, music: 11, literature: 9, ideas: 8, people: 6 },
-  { date: "May 9", film: 16, music: 12, literature: 9, ideas: 8, people: 7 },
-  { date: "May 11", film: 17, music: 13, literature: 10, ideas: 9, people: 7 },
-  { date: "May 13", film: 18, music: 14, literature: 11, ideas: 10, people: 8 },
-  { date: "May 15", film: 19, music: 15, literature: 12, ideas: 10, people: 8 },
-  { date: "May 17", film: 21, music: 16, literature: 13, ideas: 11, people: 9 },
-  { date: "May 19", film: 22, music: 17, literature: 14, ideas: 12, people: 9 },
-  { date: "May 21", film: 24, music: 18, literature: 15, ideas: 13, people: 10 },
-  { date: "May 24", film: 26, music: 20, literature: 16, ideas: 14, people: 11 },
+  { date: "Apr 25", film: 48, music: 30, literature: 22, ideas: 13 },
+  { date: "Apr 27", film: 55, music: 35, literature: 26, ideas: 16 },
+  { date: "Apr 29", film: 60, music: 32, literature: 23, ideas: 10 },
+  { date: "May 1",  film: 53, music: 41, literature: 30, ideas: 17 },
+  { date: "May 3",  film: 58, music: 36, literature: 25, ideas: 12 },
+  { date: "May 5",  film: 65, music: 38, literature: 28, ideas: 14 },
+  { date: "May 7",  film: 56, music: 31, literature: 21, ideas: 8 },
+  { date: "May 9",  film: 50, music: 34, literature: 27, ideas: 16 },
+  { date: "May 11", film: 46, music: 28, literature: 23, ideas: 11 },
+  { date: "May 13", film: 54, music: 40, literature: 30, ideas: 14 },
+  { date: "May 15", film: 62, music: 37, literature: 26, ideas: 9 },
+  { date: "May 17", film: 72, music: 44, literature: 32, ideas: 17 },
+  { date: "May 19", film: 78, music: 48, literature: 28, ideas: 13 },
+  { date: "May 21", film: 85, music: 46, literature: 31, ideas: 12 },
+  { date: "May 24", film: 80, music: 50, literature: 28, ideas: 15 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -152,11 +150,11 @@ export interface CategorySlice {
 }
 
 export const CATEGORY_DATA: CategorySlice[] = [
-  { label: "Film", value: 32, color: "#B91C1C" },
-  { label: "Ideas", value: 24, color: "#15803D" },
-  { label: "Music", value: 22, color: "#C8922A" },
-  { label: "Literature", value: 18, color: "#1D4ED8" },
-  { label: "Others", value: 14, color: "#7E22CE" },
+  { label: "Film", value: 32, color: "#C2410C" },
+  { label: "Ideas", value: 24, color: "#0C4A6E" },
+  { label: "Music", value: 22, color: "#CA8A04" },
+  { label: "Literature", value: 18, color: "#065F46" },
+  { label: "Others", value: 14, color: "#A855F7" },
 ];
 
 /* ------------------------------------------------------------------ */

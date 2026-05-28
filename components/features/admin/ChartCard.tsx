@@ -16,12 +16,13 @@ export function ChartCard({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-2xl border border-line bg-bg-secondary p-5",
+        "flex flex-col rounded-xl border border-yellow-700 p-5",
         className
       )}
+      style={{ background: "#50321C80" }}
     >
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-inter text-base font-semibold text-white">{title}</h2>
+        <h2 className="font-baskervville text-lg font-semibold leading-5 text-white">{title}</h2>
         {viewAllHref && (
           <Link
             href={viewAllHref}

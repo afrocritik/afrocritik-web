@@ -18,7 +18,7 @@ export function AdminPageHeader() {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 className="font-['Baskervville'] text-3xl font-semibold leading-9 text-white">
+        <h1 className="font-baskervville text-3xl font-semibold leading-9 text-white">
           Dashboard
         </h1>
         <p className="mt-2.5 font-inter text-base font-light leading-4 text-orange-100">

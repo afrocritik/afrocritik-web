@@ -17,7 +17,8 @@ export function ContentByCategoryChart() {
             innerRadius={58}
             outerRadius={90}
             paddingAngle={2}
-            stroke="none"
+            stroke="white"
+            strokeWidth={1.36}
           >
             {CATEGORY_DATA.map((slice) => (
               <Cell key={slice.label} fill={slice.color} />
@@ -35,14 +36,16 @@ export function ContentByCategoryChart() {
         </PieChart>
       </ResponsiveContainer>
 
-      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+      <div className="inline-flex flex-wrap items-center justify-center gap-2.5">
         {CATEGORY_DATA.map((slice) => (
-          <div key={slice.label} className="flex items-center gap-1.5">
+          <div key={slice.label} className="flex items-center gap-2">
             <span
-              className="size-2.5 shrink-0 rounded-full"
+              className="size-2 shrink-0 rounded-[1px]"
               style={{ backgroundColor: slice.color }}
             />
-            <span className="font-inter text-xs text-ink-secondary">{slice.label}</span>
+            <span className="font-inter text-xs font-normal leading-5 text-white">
+              {slice.label}
+            </span>
           </div>
         ))}
       </div>
