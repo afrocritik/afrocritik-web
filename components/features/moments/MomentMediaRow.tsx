@@ -3,21 +3,24 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { getVideoEmbed } from "@/lib/media-embed";
+import { AudioEmbed } from "@/components/common/AudioEmbed";
 
 const VIDEOS = [
-  { id: "v1", src: "/inner-WVA-Image-1.jpg", alt: "Moment Video 1", caption: "Sed malesuada felis vitae blandit molestie" },
-  { id: "v2", src: "/inner-WVA-Image-2.jpg", alt: "Moment Video 2", caption: "Sed malesuada felis vitae blandit molestie" },
-  { id: "v3", src: "/inner-WVA-Image-1.jpg", alt: "Moment Video 3", caption: "Sed malesuada felis vitae blandit molestie" },
+  { id: "v1", src: "/inner-WVA-Image-1.jpg", alt: "Moment Video 1", caption: "Sed malesuada felis vitae blandit molestie", url: "https://www.youtube.com/watch?v=ZbZSe6N_BXs" },
+  { id: "v2", src: "/inner-WVA-Image-2.jpg", alt: "Moment Video 2", caption: "Sed malesuada felis vitae blandit molestie", url: "https://vimeo.com/76979871" },
+  { id: "v3", src: "/inner-WVA-Image-1.jpg", alt: "Moment Video 3", caption: "Sed malesuada felis vitae blandit molestie", url: "https://www.youtube.com/watch?v=aqz-KE-bpKQ" },
 ];
 
 type VideoItem = (typeof VIDEOS)[number];
 
 const AUDIO_TRACKS: ReadonlyArray<AudioTrackData> = [
-  { id: "track-1", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
-  { id: "track-2", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: true },
-  { id: "track-3", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
-  { id: "track-4", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
-  { id: "track-5", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", active: false },
+  { id: "track-1", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+  { id: "track-2", title: "The Sound of a Continent", type: "Other", views: "412", subtitle: "Essay reading", duration: "18 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+  { id: "track-3", title: "Storytelling as Resistance", type: "Other", views: "638", subtitle: "Essay reading", duration: "25 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+  { id: "track-4", title: "Diaspora and the Screen", type: "Other", views: "291", subtitle: "Essay reading", duration: "20 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+  { id: "track-5", title: "Archives of the Future", type: "Other", views: "503", subtitle: "Essay reading", duration: "19 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
 ];
 
 interface AudioTrackData {
@@ -27,7 +30,7 @@ interface AudioTrackData {
   views: string;
   subtitle: string;
   duration: string;
-  active: boolean;
+  url: string;
 }
 
 const WAVEFORM_PATTERN = [9, 10, 8, 9, 5, 10, 9, 8, 10, 9, 4, 9, 10, 8, 9, 10, 7, 9, 10, 8, 2, 9, 10, 9, 8, 6, 10, 9, 8, 10, 9, 3, 9, 8, 10, 9, 5, 10, 8, 9, 10, 7, 9, 10, 8, 9, 4, 10, 9, 8, 10, 9, 6, 8, 10, 9, 2, 9, 10, 8];
@@ -103,10 +106,19 @@ function VideoThumbnail({
 }
 
 /* ── Single audio track row ─────────────────────────────────────────── */
-function AudioTrack({ track }: Readonly<{ track: AudioTrackData }>) {
+function AudioTrack({
+  track,
+  active,
+  onSelect,
+}: Readonly<{ track: AudioTrackData; active: boolean; onSelect: () => void }>) {
   return (
-    <div
-      className={`h-14 p-1.5 rounded-md outline outline-[0.40px] outline-offset-[-0.40px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5 w-full cursor-pointer${track.active ? " bg-orange-400/10" : ""}`}
+    <button
+      type="button"
+      onClick={onSelect}
+      className={cn(
+        "h-14 p-1.5 rounded-md outline outline-[0.40px] outline-offset-[-0.40px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5 w-full cursor-pointer text-left transition-colors hover:bg-orange-400/5",
+        active && "bg-orange-400/10"
+      )}
     >
       {/* Thumbnail */}
       <div className="size-10 relative shrink-0">
@@ -151,7 +163,7 @@ function AudioTrack({ track }: Readonly<{ track: AudioTrackData }>) {
           ))}
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -191,8 +203,30 @@ function VideoPopup({ video, onClose }: Readonly<{ video: VideoItem; onClose: ()
 
       {/* Video — fills remaining viewport */}
       <div className="relative flex-1 overflow-hidden">
-        <Image src={video.src} alt={video.alt} fill priority className="object-cover" />
-        <PlayerChrome caption={video.caption} large />
+        {(() => {
+          const embed = getVideoEmbed(video.url);
+          if (embed?.kind === "iframe") {
+            return (
+              <iframe
+                src={`${embed.src}?autoplay=1`}
+                title={video.alt}
+                allow="accelerated-encoder; autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 size-full"
+              />
+            );
+          }
+          if (embed?.kind === "file") {
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            return <video src={embed.src} controls autoPlay className="absolute inset-0 size-full object-contain" />;
+          }
+          return (
+            <>
+              <Image src={video.src} alt={video.alt} fill priority className="object-cover" />
+              <PlayerChrome caption={video.caption} large />
+            </>
+          );
+        })()}
       </div>
     </div>
   );
@@ -200,6 +234,8 @@ function VideoPopup({ video, onClose }: Readonly<{ video: VideoItem; onClose: ()
 
 export function MomentMediaRow() {
   const [selected, setSelected] = useState<VideoItem | null>(null);
+  const [activeAudioId, setActiveAudioId] = useState(AUDIO_TRACKS[0]?.id);
+  const activeAudio = AUDIO_TRACKS.find((t) => t.id === activeAudioId);
 
   return (
     <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-4">
@@ -223,9 +259,19 @@ export function MomentMediaRow() {
           </div>
           <div className="flex flex-col gap-1.5">
             {AUDIO_TRACKS.map((track) => (
-              <AudioTrack key={track.id} track={track} />
+              <AudioTrack
+                key={track.id}
+                track={track}
+                active={track.id === activeAudioId}
+                onSelect={() => setActiveAudioId(track.id)}
+              />
             ))}
           </div>
+          {activeAudio && (
+            <div className="mt-auto pt-2">
+              <AudioEmbed url={activeAudio.url} title={activeAudio.title} />
+            </div>
+          )}
         </div>
       </aside>
 
