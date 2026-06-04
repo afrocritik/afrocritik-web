@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminReportsPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Reports"
-      description="Publish and manage cultural intelligence reports."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("reports")!} />
+    </Suspense>
   );
 }

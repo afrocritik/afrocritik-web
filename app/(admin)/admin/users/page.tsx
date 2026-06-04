@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminUsersPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Users"
-      description="Manage platform users and their access."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("users")!} />
+    </Suspense>
   );
 }

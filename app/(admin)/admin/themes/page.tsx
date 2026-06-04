@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminThemesPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Themes"
-      description="Manage thematic tags applied across the archive."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("themes")!} />
+    </Suspense>
   );
 }

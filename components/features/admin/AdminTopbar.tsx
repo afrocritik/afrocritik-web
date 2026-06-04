@@ -1,12 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { MegaMenu } from "@/components/layout/MegaMenu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+const QUICK_CREATE = [
+  { label: "Work", href: "/admin/works/new" },
+  { label: "Person", href: "/admin/people/new" },
+  { label: "Idea", href: "/admin/ideas/new" },
+  { label: "Report", href: "/admin/reports/new" },
+  { label: "Collection", href: "/admin/collections/new" },
+];
 
 function HamburgerIcon() {
   return (
@@ -80,16 +94,34 @@ export function AdminTopbar() {
             <HamburgerIcon />
           </button>
 
-          <button
-            type="button"
-            className="hidden md:inline-flex h-[60px] items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-2xl font-medium capitalize leading-8 text-yellow-950 transition-opacity hover:opacity-90"
-            style={{
-              background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
-            }}
-          >
-            <Plus className="size-6" />
-            Add New
-          </button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="hidden md:inline-flex h-[60px] items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-2xl font-medium capitalize leading-8 text-yellow-950 transition-opacity hover:opacity-90"
+                style={{
+                  background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
+                }}
+              >
+                <Plus className="size-6" />
+                Add New
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="w-48 border-yellow-700/60 bg-[#2C1500] p-1"
+            >
+              {QUICK_CREATE.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block rounded-md px-3 py-2 font-inter text-sm text-white transition-colors hover:bg-white/5"
+                >
+                  New {item.label}
+                </Link>
+              ))}
+            </PopoverContent>
+          </Popover>
 
           <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
             <AvatarImage

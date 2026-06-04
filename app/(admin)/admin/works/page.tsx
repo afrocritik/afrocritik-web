@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminWorksPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Works"
-      description="Manage films, albums, books and other archived works."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("works")!} />
+    </Suspense>
   );
 }
