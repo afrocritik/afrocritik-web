@@ -138,6 +138,9 @@ export function EntityFormView({
                 ? `Update the details for this ${config.singular.toLowerCase()}.`
                 : `Add a new ${config.singular.toLowerCase()} to the archive.`}
             </p>
+            <p className="mt-1.5 font-inter text-xs text-white/45">
+              Fields marked <span className="text-orange-400">*</span> are required.
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <Link

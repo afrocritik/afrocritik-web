@@ -110,7 +110,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "rating", label: "Rating", type: "number", min: 0, max: 5, description: "0–5, one decimal (e.g. 4.8)." },
           { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
           { name: "language", label: "Language", type: "text", placeholder: "English" },
-          { name: "duration", label: "Duration", type: "text", placeholder: "2h 15m or 45 mins", description: "Runtime / length of the piece.", showWhen: { field: "type", in: ["film", "music", "theatre", "television"] } },
+          { name: "duration", label: "Duration", type: "text", placeholder: "2h 15m or 45 mins" },
         ],
       },
       {
