@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminCollectionsPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Collections"
-      description="Group related works into curated collections."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("collections")!} />
+    </Suspense>
   );
 }

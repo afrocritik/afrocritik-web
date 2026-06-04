@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminIdeasPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Ideas"
-      description="Curate the ideas shaping African culture."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("ideas")!} />
+    </Suspense>
   );
 }

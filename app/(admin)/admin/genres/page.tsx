@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminGenresPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Genres"
-      description="Organize content by genre across the archive."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("genres")!} />
+    </Suspense>
   );
 }

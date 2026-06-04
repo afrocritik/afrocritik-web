@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminCountriesPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Countries"
-      description="Manage country associations for works and people."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("countries")!} />
+    </Suspense>
   );
 }

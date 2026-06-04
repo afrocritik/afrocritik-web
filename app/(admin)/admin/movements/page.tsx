@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminMovementsPage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="Movements"
-      description="Track cultural and artistic movements over time."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("movements")!} />
+    </Suspense>
   );
 }

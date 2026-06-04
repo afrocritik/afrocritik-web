@@ -1,10 +1,5 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { ActivityLog } from "@/components/features/admin/crud/ActivityLog";
 
 export default function AdminActivityPage() {
-  return (
-    <AdminPlaceholder
-      title="Activity Log"
-      description="Review recent admin and editor activity."
-    />
-  );
+  return <ActivityLog />;
 }

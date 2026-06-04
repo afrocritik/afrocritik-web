@@ -1,10 +1,5 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { SettingsForm } from "@/components/features/admin/crud/SettingsForm";
 
 export default function AdminSettingsPage() {
-  return (
-    <AdminPlaceholder
-      title="Settings"
-      description="Configure the Afrocritik admin platform."
-    />
-  );
+  return <SettingsForm />;
 }

@@ -1,10 +1,11 @@
-import { AdminPlaceholder } from "@/components/features/admin/AdminPlaceholder";
+import { Suspense } from "react";
+import { EntityListView } from "@/components/features/admin/crud/EntityListView";
+import { getEntity } from "@/components/features/admin/crud/entities";
 
-export default function AdminPeoplePage() {
+export default function Page() {
   return (
-    <AdminPlaceholder
-      title="People"
-      description="Manage critics, artists, thinkers and public figures."
-    />
+    <Suspense>
+      <EntityListView config={getEntity("people")!} />
+    </Suspense>
   );
 }
