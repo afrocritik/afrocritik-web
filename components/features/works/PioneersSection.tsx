@@ -9,6 +9,8 @@ const PIONEERS = [
 ];
 
 export function PioneersSection() {
+  if (PIONEERS.length === 0) return null;
+
   return (
     <section id="pioneers-icons" className="pb-4">
       <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6">

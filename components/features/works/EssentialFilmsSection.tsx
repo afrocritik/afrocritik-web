@@ -9,8 +9,10 @@ const FILMS = [
 ];
 
 export function EssentialFilmsSection() {
+  if (FILMS.length === 0) return null;
+
   return (
-    <section id="related-works" className="pb-4">
+    <section id="related-works">
       <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6">
         <h2 className="mb-6 w-96 text-white text-xl font-semibold font-baskervville leading-5">
           Essential Nollywood Films

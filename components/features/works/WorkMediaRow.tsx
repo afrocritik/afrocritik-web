@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -36,14 +36,37 @@ const AUDIO_TRACKS = [
 const WAVEFORM_PATTERN = [9, 10, 8, 9, 5, 10, 9, 8, 10, 9, 4, 9, 10, 8, 9, 10, 7, 9, 10, 8, 2, 9, 10, 9, 8, 6, 10, 9, 8, 10, 9, 3, 9, 8, 10, 9, 5, 10, 8, 9, 10, 7, 9, 10, 8, 9, 4, 10, 9, 8, 10, 9, 6, 8, 10, 9, 2, 9, 10, 8];
 const WAVEFORM_BARS = Array.from({ length: 160 }, (_, i) => ({ id: i, height: WAVEFORM_PATTERN[i % WAVEFORM_PATTERN.length] }));
 
-export function IdeaMediaRow() {
+export function WorkMediaRow() {
   const [activeId, setActiveId] = useState(AUDIO_TRACKS[0]?.id);
   const activeTrack = AUDIO_TRACKS.find((t) => t.id === activeId);
 
+  // Slide the Play Audio card on/off screen as the Watch Video Archive
+  // card enters or leaves the viewport.
+  const archiveRef = useRef<HTMLDivElement>(null);
+  const [archiveInView, setArchiveInView] = useState(false);
+
+  useEffect(() => {
+    const el = archiveRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setArchiveInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Play Audio is anchored to the Watch Video Archive card, so the row only
+  // renders when there is a video archive to attach to.
+  if (VIDEOS.length === 0) return null;
+
   return (
-    <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-4">
-      {/* Watch Video Archive — spans col 1+2 matching Anchor Year width */}
-      <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 lg:col-span-2 flex flex-col">
+    <div className="relative">
+      {/* Watch Video Archive — full content width, matching Timeline & Anchor */}
+      <div
+        ref={archiveRef}
+        className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 min-h-[360px] flex flex-col"
+      >
         <p className="w-96 justify-start text-white text-xl font-semibold font-baskervville leading-5">
           Watch Video Archive
         </p>
@@ -61,9 +84,18 @@ export function IdeaMediaRow() {
         </div>
       </div>
 
-      {/* Play Audio — in col 3 matching Related Works width */}
-      <aside className="hidden lg:flex lg:flex-col">
-        <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-4 flex-1 flex flex-col gap-3">
+      {/* Play Audio — anchored to the Watch Video Archive card, aligned with the
+          right aside column; rises into view / drops out with its visibility */}
+      {AUDIO_TRACKS.length > 0 && (
+      <aside
+        className={cn(
+          "hidden lg:flex lg:flex-col absolute top-0 left-full ml-4 w-[250px] transition-all duration-500 ease-out",
+          archiveInView
+            ? "translate-y-0 opacity-100"
+            : "translate-y-[120%] opacity-0 pointer-events-none"
+        )}
+      >
+        <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-4 flex flex-col gap-3">
           <div className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
             Play Audio
           </div>
@@ -137,6 +169,7 @@ export function IdeaMediaRow() {
           )}
         </div>
       </aside>
-    </section>
+      )}
+    </div>
   );
 }
