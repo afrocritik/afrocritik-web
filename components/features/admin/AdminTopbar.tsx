@@ -19,7 +19,6 @@ const QUICK_CREATE = [
   { label: "Person", href: "/admin/people/new" },
   { label: "Idea", href: "/admin/ideas/new" },
   { label: "Report", href: "/admin/reports/new" },
-  { label: "Collection", href: "/admin/collections/new" },
 ];
 
 function HamburgerIcon() {

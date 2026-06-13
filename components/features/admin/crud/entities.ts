@@ -1,4 +1,4 @@
-import type { EntityConfig, SelectOption } from "./types";
+import type { EntityConfig, FormSection, SelectOption } from "./types";
 
 /* ------------------------------------------------------------------ */
 /* Shared option sets (mirrors the Payload collection definitions)     */
@@ -76,6 +76,131 @@ const META_FIELDS = {
   ],
 };
 
+/**
+ * Editorial detail-page sections shared by the rich detail layout
+ * (used by both Works and Ideas). Each section maps to a card on the page.
+ * Free-form blocks like "Anchor" expose an editable title and a rich-text
+ * body so editors are never locked into a fixed heading or text style.
+ */
+const EDITORIAL_SECTIONS: FormSection[] = [
+  {
+    title: "At a glance",
+    description: "Key facts shown in the right-hand 'At a glance' card.",
+    fields: [
+      {
+        name: "atAGlance",
+        label: "At a glance",
+        type: "group",
+        fields: [
+          { name: "origin", label: "Origin", type: "text" },
+          { name: "period", label: "Period", type: "text" },
+          { name: "region", label: "Region", type: "text" },
+          { name: "keyFocus", label: "Key focus", type: "text", placeholder: "Film production, Storytelling" },
+          { name: "globalImpact", label: "Global impact", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Anchor section",
+    description:
+      'A free-form editorial block (e.g. "Anchor Year · Circulation Era"). The title is editable and the body can be styled with the toolbar.',
+    fields: [
+      {
+        name: "anchor",
+        label: "Anchor",
+        type: "group",
+        fields: [
+          {
+            name: "heading",
+            label: "Section title",
+            type: "text",
+            placeholder: "Anchor Year · Circulation Era",
+            description: 'Editable — not fixed to "Anchor".',
+          },
+          { name: "subheading", label: "Subheading", type: "text", placeholder: "1999 — The Reset" },
+          {
+            name: "body",
+            label: "Body",
+            type: "richtext",
+            placeholder: "Write this section's content…",
+            description: "Style with bold, italics, headings, lists and links — your choice.",
+          },
+          { name: "films", label: "Anchor works", type: "relationship", options: WORK_OPTS },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Timeline",
+    description: "Key moments shown on the detail page.",
+    fields: [
+      {
+        name: "timeline",
+        label: "Event",
+        type: "repeater",
+        addLabel: "Add timeline event",
+        fields: [
+          { name: "year", label: "Year", type: "text" },
+          { name: "label", label: "Label", type: "text" },
+          { name: "description", label: "Description", type: "richtext" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Quick facts",
+    description: "Bullet facts shown in the Quick Facts card.",
+    fields: [
+      {
+        name: "quickFacts",
+        label: "Quick fact",
+        type: "repeater",
+        addLabel: "Add quick fact",
+        fields: [
+          { name: "label", label: "Label", type: "text" },
+          { name: "value", label: "Value", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Video archive",
+    description: "Clips shown in the Watch Video Archive card.",
+    fields: [
+      {
+        name: "videoArchive",
+        label: "Video",
+        type: "repeater",
+        addLabel: "Add video",
+        fields: [
+          { name: "title", label: "Title", type: "text" },
+          { name: "thumbnail", label: "Thumbnail", type: "image", minWidth: 320, minHeight: 180, maxSizeMB: 3 },
+          { name: "url", label: "Video URL", type: "url" },
+          { name: "duration", label: "Duration", type: "text", placeholder: "4:32" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Audio archive",
+    description: "Tracks shown in the Play Audio card.",
+    fields: [
+      {
+        name: "audioArchive",
+        label: "Track",
+        type: "repeater",
+        addLabel: "Add track",
+        fields: [
+          { name: "title", label: "Title", type: "text" },
+          { name: "url", label: "Audio URL", type: "url" },
+          { name: "duration", label: "Duration", type: "text", placeholder: "3:10" },
+        ],
+      },
+    ],
+  },
+];
+
 /* ------------------------------------------------------------------ */
 /* Entities                                                            */
 /* ------------------------------------------------------------------ */
@@ -125,11 +250,14 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "content", label: "Full content", type: "richtext" },
         ],
       },
+      ...EDITORIAL_SECTIONS,
       {
         title: "Relationships",
         description: "Connect this work to the rest of the archive.",
         fields: [
-          { name: "people", label: "People", type: "relationship", options: PEOPLE_OPTS, description: "Directors, authors, musicians, etc." },
+          { name: "people", label: "Pioneers & people", type: "relationship", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
+          { name: "essentialWorks", label: "Essential works", type: "relationship", options: WORK_OPTS, description: "Shown in the Essential Films grid." },
+          { name: "relatedWorks", label: "Related works", type: "relationship", options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
           { name: "ideas", label: "Ideas", type: "relationship", options: IDEA_OPTS },
           { name: "genres", label: "Genres", type: "relationship", options: GENRE_OPTS },
           { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
@@ -288,123 +416,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "content", label: "Full content", type: "richtext" },
         ],
       },
-      {
-        title: "At a glance",
-        fields: [
-          {
-            name: "atAGlance",
-            label: "At a glance",
-            type: "group",
-            fields: [
-              { name: "origin", label: "Origin", type: "text" },
-              { name: "period", label: "Period", type: "text" },
-              { name: "region", label: "Region", type: "text" },
-              { name: "keyFocus", label: "Key focus", type: "text", placeholder: "Film production, Storytelling" },
-              { name: "globalImpact", label: "Global impact", type: "text" },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Anchor year",
-        description: "The \"Anchor Year · Circulation Era\" card.",
-        fields: [
-          {
-            name: "anchor",
-            label: "Anchor",
-            type: "group",
-            fields: [
-              { name: "year", label: "Year", type: "text", placeholder: "1992" },
-              { name: "eraLabel", label: "Era label", type: "text", placeholder: "Circulation Era" },
-              { name: "films", label: "Anchor films", type: "relationship", options: WORK_OPTS },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Impact block",
-        description: "Editorial block shown below Pioneers & Icons.",
-        fields: [
-          {
-            name: "impact",
-            label: "Impact",
-            type: "group",
-            fields: [
-              { name: "heading", label: "Heading", type: "text" },
-              { name: "body", label: "Body", type: "textarea" },
-              { name: "image", label: "Image", type: "image", minWidth: 600, minHeight: 400, maxSizeMB: 5 },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Timeline",
-        description: "Key moments shown on the idea's detail page.",
-        fields: [
-          {
-            name: "timeline",
-            label: "Event",
-            type: "repeater",
-            addLabel: "Add timeline event",
-            fields: [
-              { name: "year", label: "Year", type: "text" },
-              { name: "label", label: "Label", type: "text" },
-              { name: "description", label: "Description", type: "textarea" },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Quick facts",
-        description: "Label/value pairs shown in the Quick Facts card.",
-        fields: [
-          {
-            name: "quickFacts",
-            label: "Quick fact",
-            type: "repeater",
-            addLabel: "Add quick fact",
-            fields: [
-              { name: "label", label: "Label", type: "text" },
-              { name: "value", label: "Value", type: "text" },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Video archive",
-        description: "Clips shown in the Watch Video Archive card.",
-        fields: [
-          {
-            name: "videoArchive",
-            label: "Video",
-            type: "repeater",
-            addLabel: "Add video",
-            fields: [
-              { name: "title", label: "Title", type: "text" },
-              { name: "thumbnail", label: "Thumbnail", type: "image", minWidth: 320, minHeight: 180, maxSizeMB: 3 },
-              { name: "url", label: "Video URL", type: "url" },
-              { name: "duration", label: "Duration", type: "text", placeholder: "4:32" },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Audio archive",
-        description: "Tracks shown in the Play Audio card.",
-        fields: [
-          {
-            name: "audioArchive",
-            label: "Track",
-            type: "repeater",
-            addLabel: "Add track",
-            fields: [
-              { name: "title", label: "Title", type: "text" },
-              { name: "url", label: "Audio URL", type: "url" },
-              { name: "duration", label: "Duration", type: "text", placeholder: "3:10" },
-            ],
-          },
-        ],
-      },
+      ...EDITORIAL_SECTIONS,
       {
         title: "Relationships",
         fields: [
@@ -596,21 +608,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
         ],
       },
       {
-        title: "Impact block",
-        fields: [
-          {
-            name: "impact",
-            label: "Impact",
-            type: "group",
-            fields: [
-              { name: "heading", label: "Heading", type: "text" },
-              { name: "body", label: "Body", type: "textarea" },
-              { name: "image", label: "Image", type: "image", minWidth: 600, minHeight: 400, maxSizeMB: 5 },
-            ],
-          },
-        ],
-      },
-      {
         title: "Video archive",
         fields: [
           {
@@ -668,63 +665,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
       { id: "mo2", title: "Rise of Afrobeats", typeLabel: "Music Movement", year: "2010 – Present", status: "published", image: "/EW-Image-4.jpg" },
       { id: "mo3", title: "FESTAC '77", typeLabel: "Festival", year: "1977", status: "published", image: "/admin-image-4.png" },
       { id: "mo4", title: "Drum Magazine Era", typeLabel: "Print Culture", year: "1950s", status: "draft", image: "/EWIL-Image-1.png" },
-    ],
-  },
-
-  /* ---------------------------------------------------------------- */
-  collections: {
-    slug: "collections",
-    singular: "Collection",
-    plural: "Collections",
-    description: "Curate groups of works, people and ideas into collections.",
-    titleField: "title",
-    searchPlaceholder: "Search collections...",
-    columns: [
-      { key: "title", label: "Collection", render: "media", subKey: "count" },
-      { key: "visibility", label: "Visibility", className: "capitalize" },
-      { key: "status", label: "Status", render: "status", align: "center" },
-    ],
-    filters: [{ key: "status", label: "All statuses", options: STATUS }],
-    form: [
-      {
-        title: "Basics",
-        fields: [
-          { name: "title", label: "Title", type: "text", required: true },
-          { name: "description", label: "Description", type: "textarea" },
-          { name: "coverImage", label: "Cover image", type: "image", minWidth: 800, minHeight: 500, maxSizeMB: 5, description: "Landscape image, at least 800×500px." },
-        ],
-      },
-      {
-        title: "Items",
-        fields: [
-          { name: "works", label: "Works", type: "relationship", options: WORK_OPTS },
-          { name: "people", label: "People", type: "relationship", options: PEOPLE_OPTS },
-          { name: "ideas", label: "Ideas", type: "relationship", options: IDEA_OPTS },
-        ],
-      },
-      {
-        title: "",
-        fields: [
-          { name: "status", label: "Status", type: "select", required: true, options: STATUS, sidebar: true },
-          {
-            name: "visibility",
-            label: "Visibility",
-            type: "select",
-            sidebar: true,
-            options: [
-              { label: "Public", value: "public" },
-              { label: "Private", value: "private" },
-              { label: "Unlisted", value: "unlisted" },
-            ],
-          },
-        ],
-      },
-    ],
-    sample: [
-      { id: "c1", title: "Essential Nollywood", count: "24 items", visibility: "public", status: "published", image: "/EBOPI-Image-2.jpg" },
-      { id: "c2", title: "Foundational Thinkers", count: "12 items", visibility: "public", status: "published", image: "/Image-Ngugi.png" },
-      { id: "c3", title: "Afrobeats Pioneers", count: "18 items", visibility: "public", status: "draft", image: "/EW-Image-4.jpg" },
-      { id: "c4", title: "Staff Picks 2025", count: "9 items", visibility: "private", status: "draft", image: "/EWIM-Image-1.png" },
     ],
   },
 

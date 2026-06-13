@@ -38,7 +38,6 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { label: "Moments", href: "/admin/moments", icon: Clock },
       { label: "People", href: "/admin/people", icon: "explore-icon_people.svg" },
       { label: "Reports", href: "/admin/reports", icon: "explore-icon_analytics.svg" },
-      { label: "Collections", href: "/admin/collections", icon: "dashboard-Icon_write.png" },
     ],
   },
   {
