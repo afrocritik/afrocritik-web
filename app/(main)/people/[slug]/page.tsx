@@ -102,14 +102,16 @@ export default function PersonDetailPage({
         </section>
 
         {/* Selected Works */}
-        <section className="pb-20">
-          <SectionHeading title="Selected Works" font="serif" linkText="See all →" linkHref="/explore" />
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {WORKS.map((w) => (
-              <WorkCard key={w.slug} explore {...w} />
-            ))}
-          </div>
-        </section>
+        {WORKS.length > 0 && (
+          <section className="pb-20">
+            <SectionHeading title="Selected Works" font="serif" linkText="See all →" linkHref="/explore" />
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {WORKS.map((w) => (
+                <WorkCard key={w.slug} explore {...w} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

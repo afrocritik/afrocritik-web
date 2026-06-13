@@ -10,6 +10,8 @@ const RELATED = [
 ];
 
 export function MomentExploreMore() {
+  if (RELATED.length === 0) return null;
+
   return (
     <section className="mt-10 pb-4">
       <h2 className="mb-6 text-white text-3xl font-bold font-baskervville leading-8">

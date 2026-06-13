@@ -237,10 +237,13 @@ export function MomentMediaRow() {
   const [activeAudioId, setActiveAudioId] = useState(AUDIO_TRACKS[0]?.id);
   const activeAudio = AUDIO_TRACKS.find((t) => t.id === activeAudioId);
 
+  if (VIDEOS.length === 0 && AUDIO_TRACKS.length === 0) return null;
+
   return (
-    <section className="grid gap-4 lg:grid-cols-[210px_1fr_250px] lg:items-stretch pb-4">
-      {/* Play Video — spans col 1+2 */}
-      <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 lg:col-span-2 flex flex-col">
+    <section className="flex flex-col gap-4 lg:flex-row lg:items-stretch pb-4">
+      {/* Play Video */}
+      {VIDEOS.length > 0 && (
+      <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 flex-1 flex flex-col">
         <p className="justify-start text-white text-2xl font-semibold font-baskervville leading-7">
           Play Video
         </p>
@@ -250,9 +253,11 @@ export function MomentMediaRow() {
           ))}
         </div>
       </div>
+      )}
 
-      {/* Play Audio — in col 3 */}
-      <aside className="hidden lg:flex lg:flex-col">
+      {/* Play Audio */}
+      {AUDIO_TRACKS.length > 0 && (
+      <aside className="hidden lg:flex lg:w-[250px] lg:shrink-0 lg:flex-col">
         <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-4 flex-1 flex flex-col gap-3">
           <div className="justify-start text-white text-lg font-semibold font-baskervville leading-tight">
             Play Audio
@@ -274,6 +279,7 @@ export function MomentMediaRow() {
           )}
         </div>
       </aside>
+      )}
 
       {selected && <VideoPopup video={selected} onClose={() => setSelected(null)} />}
     </section>

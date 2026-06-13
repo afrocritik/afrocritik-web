@@ -45,6 +45,8 @@ const RELATED_MOMENTS = [
 ];
 
 export function RelatedMomentsSection() {
+  if (RELATED_MOMENTS.length === 0) return null;
+
   return (
     <section id="related-works" className="pb-4">
       <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6">

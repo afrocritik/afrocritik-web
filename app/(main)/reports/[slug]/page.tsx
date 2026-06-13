@@ -87,26 +87,28 @@ export default function ReportDetailPage({
         </section>
 
         {/* Signals */}
-        <section className="pb-20">
-          <h2 className="mb-6 font-baskervville text-3xl font-semibold capitalize text-white">
-            What The Report Signals
-          </h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            {SIGNALS.map((s) => (
-              <div
-                key={s.title}
-                className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6"
-              >
-                <h3 className="font-baskervville text-xl font-semibold text-amber">
-                  {s.title}
-                </h3>
-                <p className="mt-2 font-inter text-sm font-light leading-relaxed text-orange-100">
-                  {s.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {SIGNALS.length > 0 && (
+          <section className="pb-20">
+            <h2 className="mb-6 font-baskervville text-3xl font-semibold capitalize text-white">
+              What The Report Signals
+            </h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {SIGNALS.map((s) => (
+                <div
+                  key={s.title}
+                  className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6"
+                >
+                  <h3 className="font-baskervville text-xl font-semibold text-amber">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2 font-inter text-sm font-light leading-relaxed text-orange-100">
+                    {s.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
