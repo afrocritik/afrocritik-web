@@ -37,7 +37,11 @@ function Chevron() {
   );
 }
 
-export function IdeaHeroSection({ title }: Readonly<{ title: string }>) {
+export function WorkHeroSection({
+  title,
+  sectionLabel = "Works",
+  sectionHref = "/explore?tab=works",
+}: Readonly<{ title: string; sectionLabel?: string; sectionHref?: string }>) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -96,10 +100,10 @@ export function IdeaHeroSection({ title }: Readonly<{ title: string }>) {
           </Link>
           <Chevron />
           <Link
-            href="/explore?tab=ideas"
+            href={sectionHref}
             className="justify-start text-white/50 text-base font-semibold font-inter leading-4 hover:text-amber transition-colors"
           >
-            Ideas
+            {sectionLabel}
           </Link>
           <Chevron />
           <span className="justify-start text-orange-400/50 text-base font-semibold font-inter leading-4">

@@ -9,17 +9,22 @@ const RELATED = [
   { slug: "afrobeat", title: "Afrobeat", desc: LOREM },
 ];
 
-export function ExploreMoreSection() {
+export function ExploreMoreSection({
+  heading = "Explore more related ideas",
+  hrefBase = "/ideas",
+}: Readonly<{ heading?: string; hrefBase?: string }> = {}) {
+  if (RELATED.length === 0) return null;
+
   return (
     <section id="further-reading" className="mt-10 pb-16">
       <h2 className="mb-6 text-white text-3xl font-bold font-baskervville leading-8">
-        Explore more related works
+        {heading}
       </h2>
       <div className="flex gap-4">
         {RELATED.map((item) => (
           <Link
             key={item.slug}
-            href={`/ideas/${item.slug}`}
+            href={`${hrefBase}/${item.slug}`}
             className="flex-1 p-4 bg-white/10 rounded-xl flex flex-col justify-start items-start"
           >
             <div className="self-stretch text-white text-2xl font-semibold font-baskervville capitalize leading-7">
