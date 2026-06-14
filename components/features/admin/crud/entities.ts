@@ -31,15 +31,6 @@ const IDEA_CATEGORIES: SelectOption[] = [
   { label: "Science & Technology", value: "science-technology" },
 ];
 
-const REVIEW_TYPES: SelectOption[] = [
-  { label: "Album Review", value: "album-review" },
-  { label: "Book Review", value: "book-review" },
-  { label: "Film Review", value: "film-review" },
-  { label: "Biography", value: "biography" },
-  { label: "Essay", value: "essay" },
-  { label: "Feature", value: "feature" },
-];
-
 const PERSON_ROLES: SelectOption[] = [
   { label: "Director", value: "director" },
   { label: "Author", value: "author" },
@@ -60,7 +51,6 @@ const PEOPLE_OPTS = opt(["Chinua Achebe", "Fela Kuti", "Ngũgĩ wa Thiong'o", "W
 const IDEA_OPTS = opt(["Pan-Africanism", "Négritude", "Afrofuturism", "Ubuntu", "Decolonisation"]);
 const MOMENT_OPTS = opt(["Birth of Nollywood", "Rise of Afrobeats", "FESTAC '77", "Drum Magazine Era"]);
 const WORK_OPTS = opt(["Things Fall Apart", "Half of a Yellow Sun", "Living in Bondage", "Purple Hibiscus"]);
-const GENRE_OPTS = opt(["Drama", "Afrobeats", "Highlife", "Fiction", "Documentary", "Poetry"]);
 const THEME_OPTS = opt(["Colonialism", "Identity", "Diaspora", "Resistance", "Tradition", "Modernity"]);
 const COUNTRY_OPTS = opt(["Nigeria", "Ghana", "Kenya", "South Africa", "Senegal", "Egypt"]);
 const TAG_OPTS = opt(["Classic", "Award-winning", "Essential", "Contemporary", "Foundational"]);
@@ -230,12 +220,8 @@ export const ENTITIES: Record<string, EntityConfig> = {
         fields: [
           { name: "title", label: "Title", type: "text", required: true, maxLength: 160, placeholder: "e.g. Things Fall Apart" },
           { name: "type", label: "Type", type: "select", required: true, options: WORK_TYPES },
-          { name: "reviewType", label: "Review type (badge)", type: "select", options: REVIEW_TYPES, description: "Badge shown on cards." },
+          { name: "typeLabel", label: "Type label", type: "text", placeholder: "Cultural Movement", description: "Free-text label shown in the hero." },
           { name: "year", label: "Year", type: "number", min: 1800, max: 2030, placeholder: "1992" },
-          { name: "rating", label: "Rating", type: "number", min: 0, max: 5, description: "0–5, one decimal (e.g. 4.8)." },
-          { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
-          { name: "language", label: "Language", type: "text", placeholder: "English" },
-          { name: "duration", label: "Duration", type: "text", placeholder: "2h 15m or 45 mins" },
         ],
       },
       {
@@ -246,7 +232,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
         title: "Content",
         fields: [
           { name: "summary", label: "Summary", type: "textarea", required: true, description: "Shown in cards and search results." },
-          { name: "cardDescription", label: "Card description", type: "textarea", description: "Short blurb for cards / hover (falls back to summary)." },
           { name: "content", label: "Full content", type: "richtext" },
         ],
       },
@@ -255,11 +240,10 @@ export const ENTITIES: Record<string, EntityConfig> = {
         title: "Relationships",
         description: "Connect this work to the rest of the archive.",
         fields: [
-          { name: "people", label: "Pioneers & people", type: "relationship", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
-          { name: "essentialWorks", label: "Essential works", type: "relationship", options: WORK_OPTS, description: "Shown in the Essential Films grid." },
+          { name: "people", label: "Pioneers & icons", type: "relationship", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
           { name: "relatedWorks", label: "Related works", type: "relationship", options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
           { name: "ideas", label: "Ideas", type: "relationship", options: IDEA_OPTS },
-          { name: "genres", label: "Genres", type: "relationship", options: GENRE_OPTS },
+          { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
           { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
         ],
@@ -269,7 +253,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
         fields: [
           { name: "status", label: "Status", type: "select", required: true, options: STATUS, sidebar: true },
           { name: "isFeatured", label: "Featured", type: "toggle", sidebar: true, description: "Highlight on the homepage." },
-          { name: "isEssential", label: "Essential work", type: "toggle", sidebar: true, description: "Show in Essential Works sections." },
           META_FIELDS,
         ],
       },
