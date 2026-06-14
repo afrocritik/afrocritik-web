@@ -73,4 +73,16 @@
     color: #fb923c;
     text-decoration: underline;
   }
+  .rich-text-editor blockquote {
+    border-left: 3px solid rgba(251, 146, 60, 0.6);
+    padding-left: 0.875rem;
+    margin: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-style: italic;
+  }
+  .rich-text-editor h2:first-child,
+  .rich-text-editor h3:first-child,
+  .rich-text-editor blockquote:first-child {
+    margin-top: 0;
+  }
 }

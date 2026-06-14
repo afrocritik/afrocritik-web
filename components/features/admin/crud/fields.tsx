@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   AlertCircle,
@@ -15,7 +15,11 @@ import {
   List,
   ListOrdered,
   Loader2,
+  Pilcrow,
   Plus,
+  Quote,
+  RemoveFormatting,
+  Strikethrough,
   Trash2,
   Underline,
   Upload,
@@ -461,24 +465,52 @@ function RepeaterControl({ field, value, onChange }: ControlProps) {
 /* Rich text — contentEditable with a lightweight formatting toolbar   */
 /* ------------------------------------------------------------------ */
 
-const RICH_TEXT_TOOLS: ReadonlyArray<{
-  cmd: string;
-  arg?: string;
+type RichTool = {
+  /** Unique key used to look up the button's active state. */
+  key: string;
   label: string;
   icon: LucideIcon;
-}> = [
-  { cmd: "bold", label: "Bold", icon: Bold },
-  { cmd: "italic", label: "Italic", icon: Italic },
-  { cmd: "underline", label: "Underline", icon: Underline },
-  { cmd: "formatBlock", arg: "h2", label: "Heading", icon: Heading2 },
-  { cmd: "formatBlock", arg: "h3", label: "Subheading", icon: Heading3 },
-  { cmd: "insertUnorderedList", label: "Bullet list", icon: List },
-  { cmd: "insertOrderedList", label: "Numbered list", icon: ListOrdered },
+  /** execCommand name. */
+  cmd: string;
+  /** Optional argument (e.g. block tag for formatBlock). */
+  arg?: string;
+  /**
+   * How the button's pressed state is derived:
+   *  - "state": document.queryCommandState(cmd) (bold, lists, …)
+   *  - "block": current formatBlock value === arg (h2, h3, quote, …)
+   *  - "none":  no toggle state (link, clear formatting)
+   */
+  active: "state" | "block" | "none";
+};
+
+/* Toolbar grouped into logical clusters, rendered with dividers between them. */
+const RICH_TEXT_GROUPS: ReadonlyArray<ReadonlyArray<RichTool>> = [
+  [
+    { key: "bold", label: "Bold", icon: Bold, cmd: "bold", active: "state" },
+    { key: "italic", label: "Italic", icon: Italic, cmd: "italic", active: "state" },
+    { key: "underline", label: "Underline", icon: Underline, cmd: "underline", active: "state" },
+    { key: "strikeThrough", label: "Strikethrough", icon: Strikethrough, cmd: "strikeThrough", active: "state" },
+  ],
+  [
+    { key: "p", label: "Normal text", icon: Pilcrow, cmd: "formatBlock", arg: "p", active: "block" },
+    { key: "h2", label: "Heading", icon: Heading2, cmd: "formatBlock", arg: "h2", active: "block" },
+    { key: "h3", label: "Subheading", icon: Heading3, cmd: "formatBlock", arg: "h3", active: "block" },
+    { key: "blockquote", label: "Quote", icon: Quote, cmd: "formatBlock", arg: "blockquote", active: "block" },
+  ],
+  [
+    { key: "insertUnorderedList", label: "Bullet list", icon: List, cmd: "insertUnorderedList", active: "state" },
+    { key: "insertOrderedList", label: "Numbered list", icon: ListOrdered, cmd: "insertOrderedList", active: "state" },
+  ],
+  [
+    { key: "createLink", label: "Insert link", icon: Link2, cmd: "createLink", active: "none" },
+    { key: "removeFormat", label: "Clear formatting", icon: RemoveFormatting, cmd: "removeFormat", active: "none" },
+  ],
 ];
 
 function RichTextControl({ field, value, onChange, error, setError }: ControlProps) {
   const ref = useRef<HTMLDivElement>(null);
   const html = (value as string) ?? "";
+  const [active, setActive] = useState<Record<string, boolean>>({});
 
   // Sync external value changes into the editor, but never while the user is
   // typing in it — that would reset the caret to the start.
@@ -489,18 +521,56 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
     }
   }, [html]);
 
+  // Recompute which toolbar buttons are "active" for the current selection so
+  // the toolbar reflects the formatting under the caret, like a real editor.
+  const refreshActive = useCallback(() => {
+    const el = ref.current;
+    const sel = window.getSelection();
+    if (!el || !sel || sel.rangeCount === 0 || !el.contains(sel.anchorNode)) {
+      setActive((prev) => (Object.keys(prev).length ? {} : prev));
+      return;
+    }
+    const block = (document.queryCommandValue("formatBlock") || "").toLowerCase();
+    const next: Record<string, boolean> = {};
+    for (const group of RICH_TEXT_GROUPS) {
+      for (const tool of group) {
+        if (tool.active === "state") {
+          try {
+            next[tool.key] = document.queryCommandState(tool.cmd);
+          } catch {
+            next[tool.key] = false;
+          }
+        } else if (tool.active === "block") {
+          next[tool.key] = block === tool.arg;
+        }
+      }
+    }
+    setActive(next);
+  }, []);
+
+  // The caret can move without an input event (arrow keys, clicks elsewhere),
+  // so track selection globally and reflect it only while this editor owns it.
+  useEffect(() => {
+    document.addEventListener("selectionchange", refreshActive);
+    return () => document.removeEventListener("selectionchange", refreshActive);
+  }, [refreshActive]);
+
   const sync = () => onChange(ref.current?.innerHTML ?? "");
 
-  const runCommand = (cmd: string, arg?: string) => {
+  const runCommand = (tool: RichTool) => {
     ref.current?.focus();
-    if (cmd === "createLink") {
+    if (tool.cmd === "createLink") {
       const url = window.prompt("Link URL");
-      if (!url) return;
-      document.execCommand(cmd, false, url);
+      if (url) document.execCommand(tool.cmd, false, url);
+    } else if (tool.cmd === "formatBlock") {
+      // Toggle the block back to a normal paragraph when already applied.
+      const current = (document.queryCommandValue("formatBlock") || "").toLowerCase();
+      document.execCommand("formatBlock", false, current === tool.arg ? "p" : tool.arg);
     } else {
-      document.execCommand(cmd, false, arg);
+      document.execCommand(tool.cmd, false, undefined);
     }
     sync();
+    refreshActive();
   };
 
   return (
@@ -511,29 +581,35 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
       )}
     >
       <div className="flex flex-wrap items-center gap-0.5 border-b border-yellow-700/40 p-1.5">
-        {RICH_TEXT_TOOLS.map((tool) => (
-          <button
-            key={tool.label}
-            type="button"
-            title={tool.label}
-            aria-label={tool.label}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => runCommand(tool.cmd, tool.arg)}
-            className="flex size-7 items-center justify-center rounded-md text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            <tool.icon className="size-4" />
-          </button>
+        {RICH_TEXT_GROUPS.map((group, gi) => (
+          <div key={group[0].key} className="flex items-center gap-0.5">
+            {gi > 0 && (
+              <span className="mx-1 h-5 w-px shrink-0 bg-yellow-700/40" aria-hidden />
+            )}
+            {group.map((tool) => {
+              const isActive = Boolean(active[tool.key]);
+              return (
+                <button
+                  key={tool.key}
+                  type="button"
+                  title={tool.label}
+                  aria-label={tool.label}
+                  aria-pressed={tool.active === "none" ? undefined : isActive}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => runCommand(tool)}
+                  className={cn(
+                    "flex size-7 items-center justify-center rounded-md transition-colors",
+                    isActive
+                      ? "bg-orange-500 text-white shadow-sm shadow-orange-900/40"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                  )}
+                >
+                  <tool.icon className="size-4" />
+                </button>
+              );
+            })}
+          </div>
         ))}
-        <button
-          type="button"
-          title="Insert link"
-          aria-label="Insert link"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => runCommand("createLink")}
-          className="flex size-7 items-center justify-center rounded-md text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-        >
-          <Link2 className="size-4" />
-        </button>
       </div>
       <div
         ref={ref}
@@ -544,6 +620,9 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
         aria-label={field.label}
         data-placeholder={field.placeholder}
         onInput={sync}
+        onKeyUp={refreshActive}
+        onMouseUp={refreshActive}
+        onFocus={refreshActive}
         onBlur={() => setError?.(validateField(field, ref.current?.innerHTML ?? ""))}
         className="rich-text-editor custom-scrollbar max-h-[420px] min-h-[160px] overflow-y-auto px-3.5 py-2.5 font-inter text-sm leading-6 text-white focus:outline-none"
       />
