@@ -1,3 +1,4 @@
+import { Toaster } from "sonner";
 import { AdminSidebar } from "@/components/features/admin/AdminSidebar";
 import { AdminTopbar } from "@/components/features/admin/AdminTopbar";
 import { SmallScreenNotice } from "@/components/features/admin/SmallScreenNotice";
@@ -26,6 +27,15 @@ export default function AdminLayout({
         </div>
         <Footer className="border-t-0 bg-[#50321C80]" />
       </div>
+
+      <Toaster
+        position="bottom-right"
+        theme="dark"
+        richColors
+        toastOptions={{
+          className: "font-inter",
+        }}
+      />
     </>
   );
 }

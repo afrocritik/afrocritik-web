@@ -1,16 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronDown, Plus, Search } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { TablePagination } from "../TablePagination";
 import { StatusPill } from "./StatusPill";
 import { RowActions } from "./RowActions";
 import { DeleteDialog } from "./DeleteDialog";
-import { Toast } from "./Toast";
 import type { ColumnConfig, EntityConfig, EntityRecord } from "./types";
 
 const PAGE_SIZE = 8;
@@ -122,13 +122,14 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [page, setPage] = useState(1);
   const [toDelete, setToDelete] = useState<EntityRecord | null>(null);
-  const [toast, setToast] = useState<string | null>(
-    flash === "created"
-      ? `${config.singular} created successfully.`
-      : flash === "updated"
-        ? `${config.singular} updated successfully.`
-        : null
-  );
+
+  useEffect(() => {
+    if (flash === "created") {
+      toast.success(`${config.singular} created successfully.`);
+    } else if (flash === "updated") {
+      toast.success(`${config.singular} updated successfully.`);
+    }
+  }, [flash, config.singular]);
 
   const filtered = useMemo(() => {
     return rows.filter((r) => {
@@ -158,7 +159,7 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
   const confirmDelete = () => {
     if (!toDelete) return;
     setRows((prev) => prev.filter((r) => r.id !== toDelete.id));
-    setToast(`${config.singular} "${String(toDelete[titleField])}" deleted.`);
+    toast.success(`${config.singular} "${String(toDelete[titleField])}" deleted.`);
     setToDelete(null);
   };
 
@@ -293,7 +294,6 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
         onCancel={() => setToDelete(null)}
         onConfirm={confirmDelete}
       />
-      <Toast message={toast} onClose={() => setToast(null)} />
     </div>
   );
 }

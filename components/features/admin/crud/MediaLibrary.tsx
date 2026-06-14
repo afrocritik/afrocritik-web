@@ -3,8 +3,8 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { Search, Trash2, Upload } from "lucide-react";
+import { toast } from "sonner";
 import { DeleteDialog } from "./DeleteDialog";
-import { Toast } from "./Toast";
 
 interface Asset {
   id: string;
@@ -30,7 +30,6 @@ export function MediaLibrary() {
   const [assets, setAssets] = useState<Asset[]>(SAMPLE);
   const [query, setQuery] = useState("");
   const [toDelete, setToDelete] = useState<Asset | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filtered = assets.filter((a) =>
@@ -47,13 +46,13 @@ export function MediaLibrary() {
       meta: `${(f.size / 1024).toFixed(0)} KB`,
     }));
     setAssets((prev) => [...added, ...prev]);
-    setToast(`${files.length} file${files.length > 1 ? "s" : ""} uploaded.`);
+    toast.success(`${files.length} file${files.length > 1 ? "s" : ""} uploaded.`);
   };
 
   const confirmDelete = () => {
     if (!toDelete) return;
     setAssets((prev) => prev.filter((a) => a.id !== toDelete.id));
-    setToast(`"${toDelete.name}" deleted.`);
+    toast.success(`"${toDelete.name}" deleted.`);
     setToDelete(null);
   };
 
@@ -154,7 +153,6 @@ export function MediaLibrary() {
         onCancel={() => setToDelete(null)}
         onConfirm={confirmDelete}
       />
-      <Toast message={toast} onClose={() => setToast(null)} />
     </div>
   );
 }
