@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { FieldRenderer } from "./fields";
-import { Toast } from "./Toast";
 import { validateField } from "./validation";
 import type { FormSection } from "./types";
 
@@ -51,7 +51,6 @@ const INITIAL: Record<string, unknown> = {
 export function SettingsForm() {
   const [values, setValues] = useState<Record<string, unknown>>(INITIAL);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const set = (name: string, value: unknown) =>
@@ -80,7 +79,7 @@ export function SettingsForm() {
     setSaving(true);
     await new Promise((r) => setTimeout(r, 600));
     setSaving(false);
-    setToast("Settings saved.");
+    toast.success("Settings saved.");
   };
 
   return (
@@ -137,8 +136,6 @@ export function SettingsForm() {
           </section>
         ))}
       </div>
-
-      <Toast message={toast} onClose={() => setToast(null)} />
     </form>
   );
 }
