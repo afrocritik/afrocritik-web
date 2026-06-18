@@ -68,63 +68,32 @@ const META_FIELDS = {
 
 /**
  * Editorial detail-page sections shared by the rich detail layout
- * (used by both Works and Ideas). Each section maps to a card on the page.
- * Free-form blocks like "Anchor" expose an editable title and a rich-text
+ * (used by both Works and Ideas). The order here mirrors the live page so
+ * editors aren't confused: Timeline → Content → MultiMedia run down the main
+ * column, while "At a glance" and "Quick facts" sit in the right-hand aside.
+ * Free-form blocks like "Content" expose an editable title and a rich-text
  * body so editors are never locked into a fixed heading or text style.
  */
+const IMAGE_SIZES: SelectOption[] = [
+  { label: "Small", value: "small" },
+  { label: "Medium", value: "medium" },
+  { label: "Large", value: "large" },
+  { label: "Full width", value: "full" },
+];
+
 const EDITORIAL_SECTIONS: FormSection[] = [
-  {
-    title: "At a glance",
-    description: "Key facts shown in the right-hand 'At a glance' card.",
-    fields: [
-      {
-        name: "atAGlance",
-        label: "At a glance",
-        type: "group",
-        fields: [
-          { name: "origin", label: "Origin", type: "text" },
-          { name: "period", label: "Period", type: "text" },
-          { name: "region", label: "Region", type: "text" },
-          { name: "keyFocus", label: "Key focus", type: "text", placeholder: "Film production, Storytelling" },
-          { name: "globalImpact", label: "Global impact", type: "text" },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Anchor section",
-    description:
-      'A free-form editorial block (e.g. "Anchor Year · Circulation Era"). The title is editable and the body can be styled with the toolbar.',
-    fields: [
-      {
-        name: "anchor",
-        label: "Anchor",
-        type: "group",
-        fields: [
-          {
-            name: "heading",
-            label: "Section title",
-            type: "text",
-            placeholder: "Anchor Year · Circulation Era",
-            description: 'Editable — not fixed to "Anchor".',
-          },
-          { name: "subheading", label: "Subheading", type: "text", placeholder: "1999 — The Reset" },
-          {
-            name: "body",
-            label: "Body",
-            type: "richtext",
-            placeholder: "Write this section's content…",
-            description: "Style with bold, italics, headings, lists and links — your choice.",
-          },
-          { name: "films", label: "Anchor works", type: "relationship", options: WORK_OPTS },
-        ],
-      },
-    ],
-  },
   {
     title: "Timeline",
     description: "Key moments shown on the detail page.",
     fields: [
+      {
+        name: "timelineHeading",
+        label: "Section title",
+        type: "text",
+        full: true,
+        placeholder: "Key Moments in Nollywood",
+        description: 'Shown after the fixed "Timeline:" prefix in the card heading.',
+      },
       {
         name: "timeline",
         label: "Event",
@@ -139,25 +108,57 @@ const EDITORIAL_SECTIONS: FormSection[] = [
     ],
   },
   {
-    title: "Quick facts",
-    description: "Bullet facts shown in the Quick Facts card.",
+    title: "Content",
+    description:
+      'A free-form editorial block (e.g. "Anchor Year · Circulation Era"). The title is editable and the body can be styled with the toolbar.',
     fields: [
       {
-        name: "quickFacts",
-        label: "Quick fact",
-        type: "repeater",
-        addLabel: "Add quick fact",
+        name: "anchor",
+        label: "Content block",
+        type: "group",
         fields: [
-          { name: "label", label: "Label", type: "text" },
-          { name: "value", label: "Value", type: "text" },
+          {
+            name: "heading",
+            label: "Section title",
+            type: "text",
+            placeholder: "Anchor Year · Circulation Era",
+            description: "Editable — name this content block whatever fits.",
+          },
+          { name: "subheading", label: "Subheading", type: "text", placeholder: "1999 — The Reset" },
+          {
+            name: "body",
+            label: "Body",
+            type: "richtext",
+            placeholder: "Write this section's content…",
+            description: "Style with bold, italics, headings, lists and links — your choice.",
+          },
+          { name: "films", label: "Featured works", type: "relationship", options: WORK_OPTS },
         ],
       },
     ],
   },
   {
-    title: "Video archive",
-    description: "Clips shown in the Watch Video Archive card.",
+    title: "MultiMedia",
+    description: "Images, video clips and audio tracks shown on the detail page.",
     fields: [
+      {
+        name: "images",
+        label: "Image",
+        type: "repeater",
+        addLabel: "Add image",
+        fields: [
+          { name: "image", label: "Image", type: "image", minWidth: 320, minHeight: 180, maxSizeMB: 5 },
+          { name: "caption", label: "Caption", type: "text" },
+          {
+            name: "size",
+            label: "Display size",
+            type: "select",
+            options: IMAGE_SIZES,
+            placeholder: "Medium",
+            description: "Expand or reduce how large this image appears.",
+          },
+        ],
+      },
       {
         name: "videoArchive",
         label: "Video",
@@ -170,12 +171,6 @@ const EDITORIAL_SECTIONS: FormSection[] = [
           { name: "duration", label: "Duration", type: "text", placeholder: "4:32" },
         ],
       },
-    ],
-  },
-  {
-    title: "Audio archive",
-    description: "Tracks shown in the Play Audio card.",
-    fields: [
       {
         name: "audioArchive",
         label: "Track",
@@ -185,6 +180,42 @@ const EDITORIAL_SECTIONS: FormSection[] = [
           { name: "title", label: "Title", type: "text" },
           { name: "url", label: "Audio URL", type: "url" },
           { name: "duration", label: "Duration", type: "text", placeholder: "3:10" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "At a glance",
+    description: "Key facts shown in the right-hand 'At a glance' card.",
+    fields: [
+      {
+        name: "atAGlance",
+        label: "At a glance",
+        type: "group",
+        sidebar: true,
+        fields: [
+          { name: "origin", label: "Origin", type: "text" },
+          { name: "period", label: "Period", type: "text" },
+          { name: "region", label: "Region", type: "text" },
+          { name: "keyFocus", label: "Key focus", type: "text", placeholder: "Film production, Storytelling" },
+          { name: "globalImpact", label: "Global impact", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Quick facts",
+    description: "Bullet facts shown in the Quick Facts card.",
+    fields: [
+      {
+        name: "quickFacts",
+        label: "Quick fact",
+        type: "repeater",
+        sidebar: true,
+        addLabel: "Add quick fact",
+        fields: [
+          { name: "label", label: "Label", type: "text" },
+          { name: "value", label: "Value", type: "text" },
         ],
       },
     ],
@@ -216,24 +247,19 @@ export const ENTITIES: Record<string, EntityConfig> = {
     ],
     form: [
       {
-        title: "Basics",
+        title: "Overview",
+        description: "Shown in the hero — title, type and intro.",
         fields: [
           { name: "title", label: "Title", type: "text", required: true, maxLength: 160, placeholder: "e.g. Things Fall Apart" },
           { name: "type", label: "Type", type: "select", required: true, options: WORK_TYPES },
           { name: "typeLabel", label: "Type label", type: "text", placeholder: "Cultural Movement", description: "Free-text label shown in the hero." },
           { name: "year", label: "Year", type: "number", min: 1800, max: 2030, placeholder: "1992" },
+          { name: "summary", label: "Intro", type: "textarea", required: true, description: "Intro paragraph shown in the hero and in cards." },
         ],
       },
       {
         title: "Media",
-        fields: [{ name: "coverImage", label: "Cover image", type: "image", minWidth: 800, minHeight: 500, maxSizeMB: 5, description: "Landscape image, at least 800×500px." }],
-      },
-      {
-        title: "Content",
-        fields: [
-          { name: "summary", label: "Summary", type: "textarea", required: true, description: "Shown in cards and search results." },
-          { name: "content", label: "Full content", type: "richtext" },
-        ],
+        fields: [{ name: "coverImage", label: "Cover image", type: "image", sidebar: true, minWidth: 800, minHeight: 500, maxSizeMB: 5, description: "Landscape image, at least 800×500px." }],
       },
       ...EDITORIAL_SECTIONS,
       {
@@ -241,11 +267,16 @@ export const ENTITIES: Record<string, EntityConfig> = {
         description: "Connect this work to the rest of the archive.",
         fields: [
           { name: "people", label: "Pioneers & icons", type: "relationship", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
-          { name: "relatedWorks", label: "Related works", type: "relationship", options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
           { name: "ideas", label: "Ideas", type: "relationship", options: IDEA_OPTS },
           { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
           { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
+        ],
+      },
+      {
+        title: "Related works",
+        fields: [
+          { name: "relatedWorks", label: "Related works", type: "relationship", sidebar: true, options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
         ],
       },
       {
@@ -384,31 +415,31 @@ export const ENTITIES: Record<string, EntityConfig> = {
     ],
     form: [
       {
-        title: "Basics",
+        title: "Overview",
+        description: "Shown in the hero — title, category and intro.",
         fields: [
           { name: "title", label: "Title", type: "text", required: true },
           { name: "category", label: "Category", type: "select", required: true, options: IDEA_CATEGORIES },
           { name: "typeLabel", label: "Type label", type: "text", placeholder: "Cultural Movement", description: "Free-text label shown in the hero." },
+          { name: "summary", label: "Intro", type: "textarea", required: true, description: "Intro paragraph shown in the hero and in cards." },
         ],
       },
-      { title: "Media", fields: [{ name: "coverImage", label: "Cover image", type: "image", minWidth: 800, minHeight: 500, maxSizeMB: 5, description: "Landscape image, at least 800×500px." }] },
-      {
-        title: "Content",
-        fields: [
-          { name: "summary", label: "Summary", type: "textarea", required: true, description: "Short description shown in cards and search results." },
-          { name: "content", label: "Full content", type: "richtext" },
-        ],
-      },
+      { title: "Media", fields: [{ name: "coverImage", label: "Cover image", type: "image", sidebar: true, minWidth: 800, minHeight: 500, maxSizeMB: 5, description: "Landscape image, at least 800×500px." }] },
       ...EDITORIAL_SECTIONS,
       {
         title: "Relationships",
         fields: [
           { name: "people", label: "Key thinkers", type: "relationship", options: PEOPLE_OPTS },
           { name: "works", label: "Works", type: "relationship", options: WORK_OPTS },
-          { name: "relatedIdeas", label: "Related ideas", type: "relationship", options: IDEA_OPTS },
           { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
           { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
+        ],
+      },
+      {
+        title: "Related ideas",
+        fields: [
+          { name: "relatedIdeas", label: "Related ideas", type: "relationship", sidebar: true, options: IDEA_OPTS },
         ],
       },
       {
