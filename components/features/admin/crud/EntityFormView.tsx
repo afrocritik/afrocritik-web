@@ -60,8 +60,17 @@ export function EntityFormView({
       return next;
     });
 
-  const sidebarFields = useMemo(
-    () => config.form.flatMap((s) => s.fields.filter((f) => f.sidebar)),
+  // Each section that carries sidebar fields becomes its own card in the right
+  // column — mirroring the live detail page, where Cover image, At a glance,
+  // Quick Facts and Related Works each sit in a separate aside card.
+  const sidebarSections = useMemo(
+    () =>
+      config.form
+        .map((s) => ({
+          title: s.title || "Publishing",
+          fields: s.fields.filter((f) => f.sidebar),
+        }))
+        .filter((s) => s.fields.length > 0),
     [config.form]
   );
 
@@ -198,19 +207,22 @@ export function EntityFormView({
           })}
         </div>
 
-        {sidebarFields.length > 0 && (
+        {sidebarSections.length > 0 && (
           <aside className="flex flex-col gap-6">
-            <section
-              className="rounded-xl border border-yellow-700 p-5"
-              style={{ background: "#50321C80" }}
-            >
-              <h2 className="mb-5 font-baskervville text-xl font-semibold leading-6 text-white">
-                Publishing
-              </h2>
-              <div className="flex flex-col gap-5">
-                {sidebarFields.map(renderField)}
-              </div>
-            </section>
+            {sidebarSections.map((section, i) => (
+              <section
+                key={`${section.title}-${i}`}
+                className="rounded-xl border border-yellow-700 p-5"
+                style={{ background: "#50321C80" }}
+              >
+                <h2 className="mb-5 font-baskervville text-xl font-semibold leading-6 text-white">
+                  {section.title}
+                </h2>
+                <div className="flex flex-col gap-5">
+                  {section.fields.map(renderField)}
+                </div>
+              </section>
+            ))}
           </aside>
         )}
       </div>
