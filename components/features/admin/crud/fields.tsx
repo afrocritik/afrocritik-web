@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   AlertCircle,
+  AlignLeft,
+  AlignRight,
   Bold,
   Check,
   ChevronDown,
@@ -507,10 +509,32 @@ const RICH_TEXT_GROUPS: ReadonlyArray<ReadonlyArray<RichTool>> = [
   ],
 ];
 
+/** Width presets offered when an inline image is selected. */
+const IMAGE_PRESETS: ReadonlyArray<{ label: string; pct: number }> = [
+  { label: "S", pct: 25 },
+  { label: "M", pct: 50 },
+  { label: "L", pct: 75 },
+  { label: "Full", pct: 100 },
+];
+
+/** Horizontal padding of the editor body (px-3.5 = 14px each side). */
+const EDITOR_PADDING_X = 28;
+
 function RichTextControl({ field, value, onChange, error, setError }: ControlProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  // Last caret position inside the editor — restored before inserting an image,
+  // since opening the file dialog steals focus and collapses the selection.
+  const savedRange = useRef<Range | null>(null);
   const html = (value as string) ?? "";
   const [active, setActive] = useState<Record<string, boolean>>({});
+
+  // Currently selected inline image + its on-screen box (for the resize overlay).
+  const [selImg, setSelImg] = useState<HTMLImageElement | null>(null);
+  const [box, setBox] = useState<
+    { top: number; left: number; width: number; height: number } | null
+  >(null);
 
   // Sync external value changes into the editor, but never while the user is
   // typing in it — that would reset the caret to the start.
@@ -530,6 +554,8 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
       setActive((prev) => (Object.keys(prev).length ? {} : prev));
       return;
     }
+    // Remember where the caret is so a later image insert lands in place.
+    savedRange.current = sel.getRangeAt(0).cloneRange();
     const block = (document.queryCommandValue("formatBlock") || "").toLowerCase();
     const next: Record<string, boolean> = {};
     for (const group of RICH_TEXT_GROUPS) {
@@ -573,10 +599,144 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
     refreshActive();
   };
 
+  /* ---- Inline images: insert at caret, then select + resize ---- */
+
+  // Recompute the overlay box from the selected image's on-screen position.
+  // Hidden while the image is scrolled out of the editor's visible area.
+  const recalcBox = useCallback(() => {
+    const outer = outerRef.current;
+    const ed = ref.current;
+    if (!outer || !ed || !selImg || !ed.contains(selImg)) {
+      setBox(null);
+      return;
+    }
+    const o = outer.getBoundingClientRect();
+    const i = selImg.getBoundingClientRect();
+    const e = ed.getBoundingClientRect();
+    if (i.bottom < e.top + 4 || i.top > e.bottom - 4) {
+      setBox(null);
+      return;
+    }
+    setBox({ top: i.top - o.top, left: i.left - o.left, width: i.width, height: i.height });
+  }, [selImg]);
+
+  useEffect(() => {
+    recalcBox();
+  }, [recalcBox]);
+
+  // Keep the overlay glued to the image as the editor scrolls or the page resizes.
+  useEffect(() => {
+    const ed = ref.current;
+    if (!ed) return;
+    const handler = () => recalcBox();
+    ed.addEventListener("scroll", handler);
+    window.addEventListener("resize", handler);
+    return () => {
+      ed.removeEventListener("scroll", handler);
+      window.removeEventListener("resize", handler);
+    };
+  }, [recalcBox]);
+
+  // Clicking anywhere outside the editor clears the image selection.
+  useEffect(() => {
+    const onDocDown = (e: PointerEvent) => {
+      const outer = outerRef.current;
+      if (outer && !outer.contains(e.target as Node)) setSelImg(null);
+    };
+    document.addEventListener("pointerdown", onDocDown);
+    return () => document.removeEventListener("pointerdown", onDocDown);
+  }, []);
+
+  const insertImageAtCaret = (url: string) => {
+    const el = ref.current;
+    if (!el) return;
+    el.focus();
+    const sel = window.getSelection();
+    if (
+      savedRange.current &&
+      el.contains(savedRange.current.commonAncestorContainer)
+    ) {
+      sel?.removeAllRanges();
+      sel?.addRange(savedRange.current);
+    }
+    // 50% width by default; editors drag the corner or pick a preset to resize.
+    document.execCommand(
+      "insertHTML",
+      false,
+      `<img src="${url}" alt="" class="rich-img" style="width:50%;" />`
+    );
+    sync();
+  };
+
+  const onPickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file after a rejection
+    if (!file) return;
+    const problem = await validateFileSelection(field, file);
+    if (problem) {
+      setError?.(problem);
+      return;
+    }
+    setError?.(null);
+    insertImageAtCaret(URL.createObjectURL(file));
+  };
+
+  const setImgWidth = (pct: number) => {
+    if (!selImg) return;
+    selImg.style.width = `${pct}%`;
+    selImg.style.height = "auto";
+    recalcBox();
+    sync();
+  };
+
+  // Float the image so body text wraps to its right (left) / left (right).
+  const setImgAlign = (align: "left" | "right") => {
+    if (!selImg) return;
+    selImg.style.float = align;
+    selImg.style.margin =
+      align === "left" ? "0.25rem 1rem 0.5rem 0" : "0.25rem 0 0.5rem 1rem";
+    recalcBox();
+    sync();
+  };
+
+  const removeImg = () => {
+    if (!selImg) return;
+    selImg.remove();
+    setSelImg(null);
+    sync();
+  };
+
+  // Drag the corner handle to freely enlarge / shrink the selected image.
+  const startResize = (e: React.PointerEvent) => {
+    e.preventDefault();
+    const ed = ref.current;
+    if (!ed || !selImg) return;
+    const startX = e.clientX;
+    const startW = selImg.getBoundingClientRect().width;
+    const contentW = ed.clientWidth - EDITOR_PADDING_X;
+    const onMove = (ev: PointerEvent) => {
+      const pct = Math.max(
+        15,
+        Math.min(100, ((startW + (ev.clientX - startX)) / contentW) * 100)
+      );
+      selImg.style.width = `${pct.toFixed(1)}%`;
+      selImg.style.height = "auto";
+      recalcBox();
+    };
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      sync();
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
+
   return (
     <div
+      ref={outerRef}
       className={cn(
-        "rounded-lg border border-yellow-700/50 bg-[#3A2417]/50 transition-colors focus-within:border-yellow-600 focus-within:ring-2 focus-within:ring-amber/40",
+        "relative rounded-lg border border-yellow-700/50 bg-[#3A2417]/50 transition-colors focus-within:border-yellow-600 focus-within:ring-2 focus-within:ring-amber/40",
         error && "border-red-500/70"
       )}
     >
@@ -610,6 +770,28 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
             })}
           </div>
         ))}
+        {field.allowImages && (
+          <div className="flex items-center gap-0.5">
+            <span className="mx-1 h-5 w-px shrink-0 bg-yellow-700/40" aria-hidden />
+            <button
+              type="button"
+              title="Insert image at cursor"
+              aria-label="Insert image at cursor"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => fileRef.current?.click()}
+              className="flex size-7 items-center justify-center rounded-md text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              <ImagePlus className="size-4" />
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={onPickImage}
+              className="hidden"
+            />
+          </div>
+        )}
       </div>
       <div
         ref={ref}
@@ -619,13 +801,85 @@ function RichTextControl({ field, value, onChange, error, setError }: ControlPro
         aria-multiline="true"
         aria-label={field.label}
         data-placeholder={field.placeholder}
-        onInput={sync}
+        onInput={() => {
+          sync();
+          recalcBox();
+        }}
         onKeyUp={refreshActive}
         onMouseUp={refreshActive}
         onFocus={refreshActive}
+        onClick={(e) => {
+          const t = e.target as HTMLElement;
+          setSelImg(t.tagName === "IMG" ? (t as HTMLImageElement) : null);
+        }}
         onBlur={() => setError?.(validateField(field, ref.current?.innerHTML ?? ""))}
         className="rich-text-editor custom-scrollbar max-h-[420px] min-h-[160px] overflow-y-auto px-3.5 py-2.5 font-inter text-sm leading-6 text-white focus:outline-none"
       />
+
+      {/* Resize overlay for the selected inline image */}
+      {field.allowImages && box && selImg && (
+        <>
+          <div
+            className="pointer-events-none absolute z-10 rounded-md ring-2 ring-orange-400"
+            style={{ top: box.top, left: box.left, width: box.width, height: box.height }}
+            aria-hidden
+          />
+          {/* Drag handle (bottom-right corner) */}
+          <div
+            onPointerDown={startResize}
+            title="Drag to resize"
+            className="absolute z-20 size-3.5 cursor-nwse-resize rounded-full border-2 border-white bg-orange-500 shadow"
+            style={{ top: box.top + box.height - 7, left: box.left + box.width - 7 }}
+          />
+          {/* Size presets + delete */}
+          <div
+            className="absolute z-20 flex items-center gap-0.5 rounded-lg border border-yellow-700/60 bg-[#2C1500] p-1 shadow-lg"
+            style={{ top: Math.max(box.top - 38, 2), left: box.left }}
+          >
+            {(
+              [
+                { align: "left", label: "Wrap text on the right", icon: AlignLeft },
+                { align: "right", label: "Wrap text on the left", icon: AlignRight },
+              ] as const
+            ).map((a) => (
+              <button
+                key={a.align}
+                type="button"
+                title={a.label}
+                aria-label={a.label}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => setImgAlign(a.align)}
+                className="flex size-7 items-center justify-center rounded-md text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <a.icon className="size-4" />
+              </button>
+            ))}
+            <span className="mx-0.5 h-5 w-px shrink-0 bg-yellow-700/40" aria-hidden />
+            {IMAGE_PRESETS.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => setImgWidth(p.pct)}
+                className="rounded-md px-2 py-1 font-inter text-xs font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                {p.label}
+              </button>
+            ))}
+            <span className="mx-0.5 h-5 w-px shrink-0 bg-yellow-700/40" aria-hidden />
+            <button
+              type="button"
+              title="Remove image"
+              aria-label="Remove image"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={removeImg}
+              className="flex size-7 items-center justify-center rounded-md text-red-300 transition-colors hover:bg-red-500/10"
+            >
+              <Trash2 className="size-4" />
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

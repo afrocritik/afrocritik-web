@@ -85,4 +85,14 @@
   .rich-text-editor blockquote:first-child {
     margin-top: 0;
   }
+  /* Inline images dropped into the body at the caret position */
+  .rich-text-editor img,
+  .rich-text-editor .rich-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0.75rem 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
 }

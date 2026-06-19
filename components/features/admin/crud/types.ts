@@ -54,6 +54,12 @@ export interface FieldConfig {
   addLabel?: string;
   /** Lives in the right sidebar column rather than the main column */
   sidebar?: boolean;
+  /**
+   * For `richtext` fields: allow editors to insert and resize images inline,
+   * placed at the caret position within the body. Inserted images obey the
+   * same `maxSizeMB` / `minWidth` / `minHeight` constraints as image fields.
+   */
+  allowImages?: boolean;
 
   /* --- Validation constraints --- */
   /** Max character length for text-like fields */

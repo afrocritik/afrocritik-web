@@ -74,13 +74,6 @@ const META_FIELDS = {
  * Free-form blocks like "Content" expose an editable title and a rich-text
  * body so editors are never locked into a fixed heading or text style.
  */
-const IMAGE_SIZES: SelectOption[] = [
-  { label: "Small", value: "small" },
-  { label: "Medium", value: "medium" },
-  { label: "Large", value: "large" },
-  { label: "Full width", value: "full" },
-];
-
 const EDITORIAL_SECTIONS: FormSection[] = [
   {
     title: "Timeline",
@@ -129,8 +122,10 @@ const EDITORIAL_SECTIONS: FormSection[] = [
             name: "body",
             label: "Body",
             type: "richtext",
+            allowImages: true,
             placeholder: "Write this section's content…",
-            description: "Style with bold, italics, headings, lists and links — your choice.",
+            description:
+              "Style with bold, italics, headings, lists and links. Use the image button to drop a picture where your cursor is — then drag its corner to resize, or wrap text to its left or right.",
           },
           { name: "films", label: "Featured works", type: "relationship", options: WORK_OPTS },
         ],
@@ -139,26 +134,9 @@ const EDITORIAL_SECTIONS: FormSection[] = [
   },
   {
     title: "MultiMedia",
-    description: "Images, video clips and audio tracks shown on the detail page.",
+    description:
+      "Video clips and audio tracks shown on the detail page. (Inline images now live in the Content body — add them right where your cursor is.)",
     fields: [
-      {
-        name: "images",
-        label: "Image",
-        type: "repeater",
-        addLabel: "Add image",
-        fields: [
-          { name: "image", label: "Image", type: "image", minWidth: 320, minHeight: 180, maxSizeMB: 5 },
-          { name: "caption", label: "Caption", type: "text" },
-          {
-            name: "size",
-            label: "Display size",
-            type: "select",
-            options: IMAGE_SIZES,
-            placeholder: "Medium",
-            description: "Expand or reduce how large this image appears.",
-          },
-        ],
-      },
       {
         name: "videoArchive",
         label: "Video",
