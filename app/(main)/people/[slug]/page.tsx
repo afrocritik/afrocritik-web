@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, Bookmark } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { WorkCard } from "@/components/common/WorkCard";
 import { SectionHeading } from "@/components/common/SectionHeading";
+import { FollowButton } from "@/components/features/people/FollowButton";
 import { api, getMediaUrl, mapWorkToCard } from "@/lib/api";
 
 function resolveNames(arr: any[]): string[] {
@@ -97,12 +98,11 @@ export default async function PersonDetailPage({
                 </div>
               )}
             </div>
-            <button
-              className="mt-5 inline-flex h-11 w-full max-w-56 items-center justify-center gap-2 rounded-xl px-6 font-inter text-sm font-medium text-yellow-950 transition-opacity hover:opacity-90"
-              style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)" }}
-            >
-              <Bookmark className="size-4" /> Follow
-            </button>
+            <FollowButton
+              personId={String(person.id)}
+              personName={name}
+              personSlug={person.slug ?? params.slug}
+            />
           </div>
 
           <div className="flex flex-col">

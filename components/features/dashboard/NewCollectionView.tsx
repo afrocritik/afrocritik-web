@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { api, getMediaUrl } from "@/lib/api";
+import { logActivity } from "@/lib/activity";
 
 export function NewCollectionView() {
   const router = useRouter();
@@ -48,8 +49,15 @@ export function NewCollectionView() {
     }
     setSaving(true);
     try {
-      await api.collections.create(
+      const created = await api.collections.create(
         { name: name.trim(), description, works: selected },
+        token
+      );
+      const slug = created?.doc?.slug ?? created?.slug;
+      await logActivity(
+        "collection",
+        name.trim(),
+        slug ? `/dashboard/collections/${slug}` : "/dashboard/collections",
         token
       );
       toast.success("Collection created.");
