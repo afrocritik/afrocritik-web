@@ -31,8 +31,8 @@ export const config = {
     // unauthenticated visitors to /signin).
     "/admin",
     "/admin/:path*",
-    // /dashboard stays ungated for client demos. Re-add to require sign-in:
-    // "/dashboard",
-    // "/dashboard/:path*",
+    // /dashboard requires a signed-in user (any role).
+    "/dashboard",
+    "/dashboard/:path*",
   ],
 };
