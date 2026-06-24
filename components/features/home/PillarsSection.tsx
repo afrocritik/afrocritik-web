@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const PILLARS = [
+interface Pillar {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+const DEFAULT_PILLARS: Pillar[] = [
   { icon: "/TFP-Digital-Archive.png", title: "Digital Archive", desc: "A comprehensive, searchable database of African cultural works and critical analysis — the continent's cultural memory." },
   { icon: "/TFP-Critic.svg", title: "Critic & Journalist Development", desc: "Fellowships, mentorship, and editorial support for the next generation of African cultural critics and journalists." },
   { icon: "/TFP-Ratings.svg", title: "Ratings & Index", desc: "Structured evaluation frameworks that bring transparency and rigor to African cultural assessment." },
@@ -11,8 +17,9 @@ const PILLARS = [
   { icon: "/TFP-Philosophy.svg", title: "African Philosophy", desc: "Documenting and connecting the philosophical traditions — Ubuntu, Négritude, Maat, Sankofa, Omolúàbí — that undergird African cultural production." },
 ];
 
-export function PillarsSection() {
+export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
   const [selected, setSelected] = useState<string | null>(null);
+  const items = pillars && pillars.length > 0 ? pillars : DEFAULT_PILLARS;
 
   return (
     <>
@@ -33,7 +40,7 @@ export function PillarsSection() {
 
       {/* Cards */}
       <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:pr-12">
-        {PILLARS.map((p) => {
+        {items.map((p) => {
           const isSelected = selected === p.title;
           return (
             <button
