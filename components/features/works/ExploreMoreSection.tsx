@@ -1,19 +1,24 @@
 import Link from "next/link";
 
-const LOREM =
-  "Lorem ipsum dolor sit amet consectetur. Congue id sapien ibh ac.suspendisse et nibh laoreet viverra. Augue metus pharetra nibh ac m dolor sit amet consectetur. Congue id Lorem ipsum dolor sit amet consectetur. Con";
+interface RelatedItem {
+  slug: string;
+  title: string;
+  desc?: string;
+  summary?: string;
+}
 
-const RELATED = [
-  { slug: "african-storytelling", title: "African Storytelling", desc: LOREM },
-  { slug: "diaspora-cinema", title: "Diaspora Cinema", desc: LOREM },
-  { slug: "afrobeat", title: "Afrobeat", desc: LOREM },
-];
+interface Props {
+  heading?: string;
+  hrefBase?: string;
+  related?: RelatedItem[];
+}
 
 export function ExploreMoreSection({
   heading = "Explore more related ideas",
   hrefBase = "/ideas",
-}: Readonly<{ heading?: string; hrefBase?: string }> = {}) {
-  if (RELATED.length === 0) return null;
+  related = [],
+}: Readonly<Props> = {}) {
+  if (related.length === 0) return null;
 
   return (
     <section id="further-reading" className="mt-10 pb-16">
@@ -21,7 +26,7 @@ export function ExploreMoreSection({
         {heading}
       </h2>
       <div className="flex gap-4">
-        {RELATED.map((item) => (
+        {related.map((item) => (
           <Link
             key={item.slug}
             href={`${hrefBase}/${item.slug}`}
@@ -30,9 +35,11 @@ export function ExploreMoreSection({
             <div className="self-stretch text-white text-2xl font-semibold font-baskervville capitalize leading-7">
               {item.title}
             </div>
-            <div className="self-stretch text-white text-base font-normal font-inter capitalize leading-relaxed mt-2">
-              {item.desc}
-            </div>
+            {(item.desc || item.summary) && (
+              <div className="self-stretch text-white text-base font-normal font-inter capitalize leading-relaxed mt-2 line-clamp-3">
+                {item.desc ?? item.summary}
+              </div>
+            )}
           </Link>
         ))}
       </div>
