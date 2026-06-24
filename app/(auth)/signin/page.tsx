@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { OAuthButtons, OrDivider } from "@/components/features/auth/OAuthButtons";
 import { AuthField } from "@/components/features/auth/AuthField";
@@ -32,7 +32,15 @@ export default function SignInPage() {
       // Return the user to the gated page they came from, if any. Only honour
       // relative paths to avoid open-redirects to external sites.
       const target = new URLSearchParams(globalThis.location.search).get("callbackUrl");
-      router.push(target?.startsWith("/") ? target : "/dashboard");
+      if (target?.startsWith("/")) {
+        router.push(target);
+        return;
+      }
+      // Otherwise route by role: admins/editors land in the admin area,
+      // everyone else in their dashboard.
+      const session = await getSession();
+      const role = (session?.user as { role?: string } | undefined)?.role;
+      router.push(role === "admin" || role === "editor" ? "/admin" : "/dashboard");
     }
   };
 

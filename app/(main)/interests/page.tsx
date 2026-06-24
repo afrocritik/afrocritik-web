@@ -38,7 +38,7 @@ export default function InterestsPage() {
     } catch {
       /* non-blocking */
     } finally {
-      router.push("/explore");
+      router.push("/dashboard");
     }
   };
 
@@ -91,7 +91,7 @@ export default function InterestsPage() {
             {loading ? "Saving…" : "Next"}
           </button>
           <button
-            onClick={() => router.push("/explore")}
+            onClick={() => router.push("/dashboard")}
             className="inline-flex w-56 items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-xl font-medium capitalize leading-7 text-neutral-500 outline outline-1 -outline-offset-1 outline-orange-400/40 transition-colors hover:text-white"
           >
             Skip
