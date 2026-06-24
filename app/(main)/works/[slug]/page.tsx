@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { WorkHeroSection } from "@/components/features/works/WorkHeroSection";
 import { WorkContextRow } from "@/components/features/works/WorkContextRow";
 import { WorkAnchorRow } from "@/components/features/works/WorkAnchorRow";
@@ -6,53 +7,158 @@ import { WorkInfoAside } from "@/components/features/works/WorkInfoAside";
 import { EssentialFilmsSection } from "@/components/features/works/EssentialFilmsSection";
 import { PioneersSection } from "@/components/features/works/PioneersSection";
 import { ExploreMoreSection } from "@/components/features/works/ExploreMoreSection";
+import { api, getMediaUrl } from "@/lib/api";
 
-function titleCase(slug: string) {
-  return slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+function resolveNames(arr: any[]): string[] {
+  return arr
+    .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+    .filter(Boolean);
 }
 
-export default function WorkDetailPage({
+export default async function WorkDetailPage({
   params,
 }: {
   readonly params: { slug: string };
 }) {
-  const title = titleCase(params.slug || "nollywood-history");
+  let work: any = null;
+  try {
+    const res = await api.works.bySlug(params.slug);
+    work = res?.docs?.[0] ?? null;
+  } catch {
+    // API unreachable
+  }
+
+  if (!work) {
+    return (
+      <div className="bg-[#160907] min-h-screen">
+        <div className="container py-20 text-center">
+          <h1 className="text-white font-baskervville text-4xl">Work not found</h1>
+          <p className="text-orange-100/50 mt-4 font-inter">
+            This work has not been published yet or could not be found.
+          </p>
+          <Link href="/explore" className="mt-8 inline-block text-amber hover:underline font-inter">
+            Browse all works →
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const title = work.title ?? "";
+  const description = work.cardDescription || work.summary || "";
+  const image = getMediaUrl(work.coverImage);
+
+  const countryNames = resolveNames(
+    Array.isArray(work.country) ? work.country : work.country ? [work.country] : []
+  );
+
+  const meta = [
+    work.atAGlance?.origin && { label: "Origin", value: work.atAGlance.origin },
+    work.type && { label: "Type", value: work.type.charAt(0).toUpperCase() + work.type.slice(1) },
+    work.atAGlance?.period && { label: "Period", value: work.atAGlance.period },
+    countryNames.length > 0 && { label: "Country", value: countryNames.join(", ") },
+    work.year && { label: "Year", value: String(work.year) },
+  ].filter(Boolean) as { label: string; value: string }[];
+
+  const relatedThemes = resolveNames(Array.isArray(work.themes) ? work.themes : []);
+
+  const timeline = Array.isArray(work.timeline)
+    ? work.timeline.map((t: any) => ({
+        year: String(t.year ?? ""),
+        label: t.label ?? "",
+        description: typeof t.description === "string" ? t.description : undefined,
+      }))
+    : [];
+
+  const atAGlance = [
+    work.atAGlance?.origin && { label: "Origin", value: work.atAGlance.origin },
+    work.atAGlance?.period && { label: "Period", value: work.atAGlance.period },
+    work.atAGlance?.region && { label: "Region", value: work.atAGlance.region },
+    work.atAGlance?.keyFocus && { label: "Key Focus", value: work.atAGlance.keyFocus },
+    work.atAGlance?.globalImpact && { label: "Global Impact", value: work.atAGlance.globalImpact },
+  ].filter(Boolean) as { label: string; value: string }[];
+
+  const quickFacts = Array.isArray(work.quickFacts)
+    ? work.quickFacts.map((f: any) => `${f.label}: ${f.value}`)
+    : [];
+
+  const asideRelatedWorks = Array.isArray(work.relatedWorks)
+    ? work.relatedWorks.map((r: any) => ({
+        title: r.title ?? "",
+        year: r.year,
+        slug: r.slug ?? "",
+      }))
+    : [];
+
+  const essentialWorks = Array.isArray(work.essentialWorks) ? work.essentialWorks : [];
+  const pioneers = Array.isArray(work.people) ? work.people : [];
+
+  const videoArchive = Array.isArray(work.videoArchive)
+    ? work.videoArchive.map((v: any, i: number) => ({
+        id: `v${i}`,
+        title: v.title ?? "",
+        url: v.url ?? "",
+        thumbnail: getMediaUrl(v.thumbnail),
+        duration: v.duration,
+      }))
+    : [];
+
+  const audioArchive = Array.isArray(work.audioArchive)
+    ? work.audioArchive.map((a: any, i: number) => ({
+        id: `track-${i}`,
+        title: a.title ?? "",
+        url: a.url ?? "",
+        duration: a.duration,
+      }))
+    : [];
+
+  const exploreMore = Array.isArray(work.relatedWorks)
+    ? work.relatedWorks.map((r: any) => ({
+        slug: r.slug ?? "",
+        title: r.title ?? "",
+        summary: r.summary || r.cardDescription,
+      }))
+    : [];
 
   return (
     <div className="bg-[#160907]">
       <div className="container">
-        {/* HERO — TOC + breadcrumb/header + image */}
-        <WorkHeroSection title={title} />
+        <WorkHeroSection
+          title={title}
+          description={description}
+          image={image}
+          meta={meta}
+          relatedThemes={relatedThemes}
+        />
 
-        {/* MAIN — left content column + right info aside */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
-          {/* LEFT: stacked content — all sections share this column's width */}
           <div className="flex min-w-0 flex-1 flex-col gap-4">
-            {/* TIMELINE: Key Moments */}
-            <WorkContextRow />
-
-            {/* ANCHOR YEAR */}
-            <WorkAnchorRow />
-
-            {/* WATCH VIDEO ARCHIVE (+ PLAY AUDIO slides in/out on the right) */}
-            <WorkMediaRow />
-
-            {/* ESSENTIAL NOLLYWOOD FILMS */}
-            <EssentialFilmsSection />
-
-            {/* PIONEERS & ICONS */}
-            <PioneersSection />
+            <WorkContextRow workTitle={title} timeline={timeline} />
+            <WorkAnchorRow
+              heading={work.anchor?.heading}
+              subheading={work.anchor?.subheading}
+              body={typeof work.anchor?.body === "string" ? work.anchor.body : undefined}
+            />
+            <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
+            <EssentialFilmsSection
+              heading={`Essential ${work.type ? work.type.charAt(0).toUpperCase() + work.type.slice(1) : "Works"}`}
+              works={essentialWorks}
+            />
+            <PioneersSection people={pioneers} />
           </div>
 
-          {/* RIGHT: At a glance + Quick Facts + Related Works */}
-          <WorkInfoAside />
+          <WorkInfoAside
+            atAGlance={atAGlance}
+            quickFacts={quickFacts}
+            relatedWorks={asideRelatedWorks}
+          />
         </div>
 
-        {/* EXPLORE MORE RELATED WORKS */}
-        <ExploreMoreSection heading="Explore more related works" hrefBase="/works" />
+        <ExploreMoreSection
+          heading="Explore more related works"
+          hrefBase="/works"
+          related={exploreMore}
+        />
       </div>
     </div>
   );

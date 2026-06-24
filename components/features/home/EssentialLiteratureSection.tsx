@@ -1,51 +1,15 @@
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
 import { CarouselNextButton } from "@/components/common/CarouselNextButton";
+import { mapWorkToCard } from "@/lib/api";
 
-const EWIL_LITERATURE = [
-  {
-    title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
-    badge: "Book Review",
-    tags: ["PROTEST", "AFROBEAT", "MUSIC"],
-    rating: 9.8,
-    image: "/EWIL-Image-1.png",
-  },
-  {
-    title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
-    badge: "Book Review",
-    tags: ["LITERATURE", "COLONIALISM"],
-    rating: 9.8,
-    image: "/EWIL-Image-2.png",
-  },
-  {
-    title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
-    badge: "Book Review",
-    tags: ["NOLLYWOOD", "SEASONS", "CAST & CREW"],
-    rating: 9.8,
-    image: "/EWIL-Image-3.png",
-  },
-  {
-    title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
-    badge: "Book Review",
-    tags: ["CELEBRITY", "AFROBEAT", "MUSIC"],
-    rating: 9.8,
-    image: "/EWIL-Image-4.png",
-  },
-  {
-    title: "Lorem ipsum dolor sit amet consec",
-    author: "Criticker",
-    badge: "Book Review",
-    tags: ["WRITER", "POLITICS", "POETRY"],
-    rating: 9.8,
-    image: "/EWIL-Image-5.png",
-  },
-];
+interface Props {
+  works?: any[];
+}
 
-export function EssentialLiteratureSection() {
+export function EssentialLiteratureSection({ works = [] }: Props) {
+  const cards = works.map(mapWorkToCard);
+
   return (
     <>
       <div className="container">
@@ -57,16 +21,26 @@ export function EssentialLiteratureSection() {
           bleedRight
         />
       </div>
-      {/* Full-width row so the NEXT button can bleed off the viewport right edge */}
       <div className="relative">
-        <div
-          className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
-          style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
-        >
-          {EWIL_LITERATURE.map((w) => (
-            <WorkCard key={w.image} {...w} ewil />
-          ))}
-        </div>
+        {cards.length > 0 ? (
+          <div
+            className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          >
+            {cards.map((w) => (
+              <WorkCard key={w.slug} {...w} ewil />
+            ))}
+          </div>
+        ) : (
+          <div
+            className="flex items-center justify-center py-14"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          >
+            <p className="text-orange-200/50 font-inter text-sm italic">
+              Literature works coming soon — content is being curated.
+            </p>
+          </div>
+        )}
         <CarouselNextButton />
       </div>
     </>

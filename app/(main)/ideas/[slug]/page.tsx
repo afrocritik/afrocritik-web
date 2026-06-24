@@ -1,62 +1,131 @@
+import Link from "next/link";
 import { WorkHeroSection } from "@/components/features/works/WorkHeroSection";
 import { WorkContextRow } from "@/components/features/works/WorkContextRow";
-import { WorkAnchorRow } from "@/components/features/works/WorkAnchorRow";
 import { WorkMediaRow } from "@/components/features/works/WorkMediaRow";
 import { WorkInfoAside } from "@/components/features/works/WorkInfoAside";
-import { EssentialFilmsSection } from "@/components/features/works/EssentialFilmsSection";
-import { PioneersSection } from "@/components/features/works/PioneersSection";
 import { ExploreMoreSection } from "@/components/features/works/ExploreMoreSection";
+import { api, getMediaUrl } from "@/lib/api";
 
-function titleCase(slug: string) {
-  return slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+function resolveNames(arr: any[]): string[] {
+  return arr
+    .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+    .filter(Boolean);
 }
 
-export default function IdeaDetailPage({
+export default async function IdeaDetailPage({
   params,
 }: {
   readonly params: { slug: string };
 }) {
-  const title = titleCase(params.slug || "nollywood-history");
+  let idea: any = null;
+  try {
+    const res = await api.ideas.bySlug(params.slug);
+    idea = res?.docs?.[0] ?? null;
+  } catch {
+    // API unreachable
+  }
+
+  if (!idea) {
+    return (
+      <div className="bg-[#160907] min-h-screen">
+        <div className="container py-20 text-center">
+          <h1 className="text-white font-baskervville text-4xl">Idea not found</h1>
+          <p className="text-orange-100/50 mt-4 font-inter">
+            This idea has not been published yet or could not be found.
+          </p>
+          <Link href="/explore?tab=ideas" className="mt-8 inline-block text-amber hover:underline font-inter">
+            Browse all ideas →
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const title = idea.title ?? "";
+  const description = idea.summary ?? "";
+  const image = getMediaUrl(idea.coverImage);
+
+  const countryNames = resolveNames(
+    Array.isArray(idea.country) ? idea.country : idea.country ? [idea.country] : []
+  );
+
+  const meta = [
+    idea.category && { label: "Category", value: idea.category.replace(/-/g, " & ").replace(/\b\w/g, (c: string) => c.toUpperCase()) },
+    idea.typeLabel && { label: "Type", value: idea.typeLabel },
+    countryNames.length > 0 && { label: "Origin", value: countryNames.join(", ") },
+    idea.period && { label: "Period", value: idea.period },
+  ].filter(Boolean) as { label: string; value: string }[];
+
+  const relatedThemes = resolveNames(Array.isArray(idea.themes) ? idea.themes : []);
+
+  const timeline = Array.isArray(idea.timeline)
+    ? idea.timeline.map((t: any) => ({
+        year: String(t.year ?? ""),
+        label: t.label ?? "",
+        description: typeof t.description === "string" ? t.description : undefined,
+      }))
+    : [];
+
+  const atAGlance = [
+    idea.origin && { label: "Origin", value: idea.origin },
+    idea.period && { label: "Period", value: idea.period },
+    countryNames.length > 0 && { label: "Country", value: countryNames.join(", ") },
+  ].filter(Boolean) as { label: string; value: string }[];
+
+  const videoArchive = Array.isArray(idea.videoArchive)
+    ? idea.videoArchive.map((v: any, i: number) => ({
+        id: `v${i}`,
+        title: v.title ?? "",
+        url: v.url ?? "",
+        thumbnail: getMediaUrl(v.thumbnail),
+        duration: v.duration,
+      }))
+    : [];
+
+  const audioArchive = Array.isArray(idea.audioArchive)
+    ? idea.audioArchive.map((a: any, i: number) => ({
+        id: `track-${i}`,
+        title: a.title ?? "",
+        url: a.url ?? "",
+        duration: a.duration,
+      }))
+    : [];
+
+  const relatedWorks = Array.isArray(idea.works)
+    ? idea.works.map((r: any) => ({
+        slug: r.slug ?? "",
+        title: r.title ?? "",
+        summary: r.summary || r.cardDescription,
+      }))
+    : [];
 
   return (
     <div className="bg-[#160907]">
       <div className="container">
-        {/* HERO — TOC + breadcrumb/header + image */}
         <WorkHeroSection
           title={title}
           sectionLabel="Ideas"
           sectionHref="/explore?tab=ideas"
+          description={description}
+          image={image}
+          meta={meta}
+          relatedThemes={relatedThemes}
         />
 
-        {/* MAIN — left content column + right info aside */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
-          {/* LEFT: stacked content — all sections share this column's width */}
           <div className="flex min-w-0 flex-1 flex-col gap-4">
-            {/* TIMELINE: Key Moments */}
-            <WorkContextRow />
-
-            {/* ANCHOR YEAR */}
-            <WorkAnchorRow />
-
-            {/* WATCH VIDEO ARCHIVE (+ PLAY AUDIO slides in/out on the right) */}
-            <WorkMediaRow />
-
-            {/* ESSENTIAL NOLLYWOOD FILMS */}
-            <EssentialFilmsSection />
-
-            {/* PIONEERS & ICONS */}
-            <PioneersSection />
+            <WorkContextRow workTitle={title} timeline={timeline} />
+            <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
           </div>
 
-          {/* RIGHT: At a glance + Quick Facts + Related Works */}
-          <WorkInfoAside />
+          <WorkInfoAside atAGlance={atAGlance} />
         </div>
 
-        {/* EXPLORE MORE RELATED IDEAS */}
-        <ExploreMoreSection />
+        <ExploreMoreSection
+          heading="Explore related works"
+          hrefBase="/works"
+          related={relatedWorks}
+        />
       </div>
     </div>
   );
