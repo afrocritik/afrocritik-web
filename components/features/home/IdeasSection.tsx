@@ -2,50 +2,28 @@
 
 import { IdeaCard } from "@/components/common/IdeaCard";
 
-const IDEAS = [
-  {
-    slug: "ubuntu",
-    title: "Ubuntu",
-    // category: "Philosophy",
-    subtitle: '“I Am Because We Are"',
-    excerpt:
-      "A Nguni Bantu term describing the interconnectedness of humanity — a person is a person through other persons.",
-    tags: ["Ethics", "Community"],
-  },
-  {
-    slug: "sankofa",
-    title: "Sankofa",
-    // category: "Symbolism",
-    subtitle: '"Return and Get It"',
-    excerpt:
-      "An Akan principle teaching that there is wisdom in learning from the past to build a better future.",
-    tags: ["Heritage", "Akan"],
-  },
-  {
-    slug: "maat",
-    title: "Maat",
-    // category: "Cosmology",
-    subtitle: "Truth, Justice & Cosmic Order",
-    excerpt:
-      "The ancient Kemetic concept of cosmic harmony, justice, and the moral order of the universe.",
-    tags: ["Justice", "Kemet"],
-  },
-  {
-    slug: "negritude",
-    title: "Négritude",
-    // category: "Movement",
-    subtitle: `"Reclaiming blackness"`,
-    excerpt:
-      "A literary and ideological movement reclaiming the value of Black identity and African culture.",
-    tags: ["Literature", "Politics"],
-  },
-];
+interface Props {
+  ideas?: any[];
+}
 
-export function IdeasSection() {
+function mapIdea(idea: any) {
+  const tags = Array.isArray(idea.tags)
+    ? idea.tags.map((t: any) => (typeof t === "string" ? t : t?.name ?? "")).filter(Boolean)
+    : [];
+  return {
+    slug: idea.slug ?? "#",
+    title: idea.title ?? "",
+    category: idea.category,
+    excerpt: idea.summary,
+    tags,
+  };
+}
+
+export function IdeasSection({ ideas = [] }: Props) {
+  const mapped = ideas.map(mapIdea);
 
   return (
     <>
-      {/* Heading */}
       <div className="flex flex-col items-start text-left">
         <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-orange-400">
           Conceptual Frameworks
@@ -59,11 +37,16 @@ export function IdeasSection() {
         </p>
       </div>
 
-      {/* Idea Card */}
       <div className="mt-6 grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:pr-12">
-        {IDEAS.map((idea) => (
-          <IdeaCard key={idea.slug} {...idea} theme="light" />
-        ))}
+        {mapped.length > 0 ? (
+          mapped.map((idea) => (
+            <IdeaCard key={idea.slug} {...idea} theme="light" />
+          ))
+        ) : (
+          <p className="col-span-4 text-neutral-400 font-inter text-sm py-8 text-center italic">
+            Ideas are being curated — check back soon.
+          </p>
+        )}
       </div>
     </>
   );

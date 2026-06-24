@@ -80,3 +80,48 @@ export const api = {
 };
 
 export { API_BASE };
+
+export function getMediaUrl(media: any): string | undefined {
+  if (!media) return undefined;
+  if (typeof media === "string") {
+    return media.startsWith("http") ? media : `${API_BASE}${media}`;
+  }
+  const url = media?.url;
+  if (!url) return undefined;
+  return url.startsWith("http") ? url : `${API_BASE}${url}`;
+}
+
+export function mapWorkToCard(w: any) {
+  const country = Array.isArray(w.country)
+    ? w.country
+        .map((c: any) => (typeof c === "string" ? c : c?.name ?? ""))
+        .filter(Boolean)
+        .join(", ")
+    : typeof w.country === "object"
+    ? w.country?.name ?? ""
+    : w.country ?? "";
+
+  const tags = Array.isArray(w.tags)
+    ? w.tags
+        .map((t: any) => (typeof t === "string" ? t : t?.name ?? ""))
+        .filter(Boolean)
+    : [];
+
+  const badge = w.reviewType
+    ? w.reviewType.replace(/-/g, " ").toUpperCase()
+    : undefined;
+
+  return {
+    slug: w.slug ?? "",
+    title: w.title ?? "",
+    type: w.type ?? "",
+    year: w.year,
+    country,
+    rating: w.rating,
+    badge,
+    image: getMediaUrl(w.coverImage),
+    description: w.cardDescription || w.summary || "",
+    hoverDescription: w.cardDescription || w.summary || "",
+    tags,
+  };
+}

@@ -1,21 +1,15 @@
 import Link from "next/link";
 import { WorkCard } from "@/components/common/WorkCard";
 import { CarouselNextButton } from "@/components/common/CarouselNextButton";
+import { mapWorkToCard } from "@/lib/api";
 
-const EW_TAGS       = ["NIGERIA", "AFROBEAT", "MUSIC"];
-const EW_TITLE      = "Lorem ipsum dolor sit amet consect etur neque";
-const EW_DESC       = "Lorem ipsum dolor sit amet sectetur Vivamus ner neque tempus....";
-const EW_HOVER_DESC = "Lorem ipsum dolor sit amet consectetur. Vivamus neque tempus ut ultricies porttitor pretium amet. Scelerisque ut tristique dolor elementum eque tempus.";
-const EW_BADGE      = "ALBUM REVIEW";
+interface Props {
+  works?: any[];
+}
 
-const ESSENTIAL_WORKS = [
-  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Music",      year: 1982, country: "Nigeria",      rating: 4.8, image: "/EW-Image-1.png" },
-  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Literature", year: 1958, country: "Nigeria",      rating: 4.9, image: "/EW-Image-2.png" },
-  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Film",       year: 2019, country: "Malawi",       rating: 4.6, image: "/EW-Image-3.png" },
-  { title: EW_TITLE, description: EW_DESC, hoverDescription: EW_HOVER_DESC, badge: EW_BADGE, tags: EW_TAGS, type: "Film",       year: 2005, country: "South Africa", rating: 4.5, image: "/EW-Image-4.jpg" },
-];
+export function EssentialWorksSection({ works = [] }: Props) {
+  const cards = works.map(mapWorkToCard);
 
-export function EssentialWorksSection() {
   return (
     <>
       <div className="container">
@@ -76,16 +70,26 @@ export function EssentialWorksSection() {
           </Link>
         </div>
       </div>
-      {/* Full-width row so the NEXT button can bleed off the viewport right edge */}
       <div className="relative" style={{ minHeight: "395px" }}>
-        <div
-          className="flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
-          style={{ paddingLeft: "max(24px, calc(50vw - 636px))", paddingRight: "12px" }}
-        >
-          {ESSENTIAL_WORKS.map((w) => (
-            <WorkCard key={w.title} {...w} essential />
-          ))}
-        </div>
+        {cards.length > 0 ? (
+          <div
+            className="flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))", paddingRight: "12px" }}
+          >
+            {cards.map((w) => (
+              <WorkCard key={w.slug} {...w} essential />
+            ))}
+          </div>
+        ) : (
+          <div
+            className="flex items-center justify-center py-16"
+            style={{ paddingLeft: "max(24px, calc(50vw - 636px))" }}
+          >
+            <p className="text-orange-200/50 font-inter text-sm italic">
+              Essential works coming soon — our curators are on it.
+            </p>
+          </div>
+        )}
         <CarouselNextButton top="30%" />
       </div>
     </>
