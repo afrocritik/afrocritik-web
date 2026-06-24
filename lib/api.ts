@@ -59,6 +59,21 @@ export const api = {
         })
         .then((r) => r.data),
   },
+  users: {
+    me: (token?: string) =>
+      apiClient
+        .get("/api/users/me", {
+          params: { depth: 1 },
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+    update: (id: string, data: Record<string, any>, token?: string) =>
+      apiClient
+        .patch(`/api/users/${id}`, data, {
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+  },
   search: (q: string, filters?: Record<string, any>) =>
     apiClient
       .get("/api/search", { params: { q, ...filters } })
