@@ -129,8 +129,26 @@ export const api = {
       .then((r) => r.data),
   archive: (filters?: Record<string, any>) =>
     apiClient
-      .get("/api/search/archive", { params: filters })
+      .get("/api/search/archive", {
+        params: filters,
+        // Serialise arrays as repeated keys (country=a&country=b) so Express
+        // parses them as arrays for the `in` filters.
+        paramsSerializer: { indexes: null },
+      })
       .then((r) => r.data),
+  counts: () => apiClient.get("/api/search/counts").then((r) => r.data),
+  countries: {
+    list: (params?: Record<string, any>) =>
+      apiClient
+        .get("/api/countries", { params: { limit: 200, sort: "name", ...params } })
+        .then((r) => r.data),
+  },
+  themes: {
+    list: (params?: Record<string, any>) =>
+      apiClient
+        .get("/api/themes", { params: { limit: 200, sort: "name", ...params } })
+        .then((r) => r.data),
+  },
   homepage: () =>
     apiClient.get("/api/globals/homepage").then((r) => r.data),
   auth: {

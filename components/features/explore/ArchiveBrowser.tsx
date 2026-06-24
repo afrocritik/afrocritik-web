@@ -46,10 +46,30 @@ export function ArchiveBrowser() {
   const [tab, setTab] = useState(params.get("tab") || "works");
   const [query, setQuery] = useState(params.get("q") || "");
   const [view, setView] = useState<"grid" | "list">("grid");
+  const [sort, setSort] = useState("newest");
+  const [countries, setCountries] = useState<string[]>([]);
+  const [themes, setThemes] = useState<string[]>([]);
+  const [yearFrom, setYearFrom] = useState<number | undefined>(undefined);
+  const [yearTo, setYearTo] = useState<number | undefined>(undefined);
+
+  const { data: countsData } = useQuery({
+    queryKey: ["archive-counts"],
+    queryFn: () => api.counts(),
+    staleTime: 5 * 60_000,
+  });
 
   const { data, isLoading } = useQuery({
-    queryKey: ["archive", tab, query],
-    queryFn: () => api.archive({ q: query, type: tab }),
+    queryKey: ["archive", tab, query, sort, countries, themes, yearFrom, yearTo],
+    queryFn: () =>
+      api.archive({
+        type: tab,
+        q: query || undefined,
+        sort,
+        country: countries.length ? countries : undefined,
+        theme: themes.length ? themes : undefined,
+        yearFrom,
+        yearTo,
+      }),
     retry: false,
     staleTime: 60_000,
   });
@@ -62,17 +82,42 @@ export function ArchiveBrowser() {
   const activeTab = TABS.find((t) => t.key === tab) ?? TABS[0];
   const resultCount = (data as any)?.totalDocs ?? 0;
 
+  const toggle = (
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    id: string
+  ) =>
+    setter((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+
+  const onYearChange = (from: number, to: number) => {
+    setYearFrom(from);
+    setYearTo(to);
+  };
+
   return (
     <div style={{ background: BROWN_GRADIENT }}>
       <ExploreHero query={query} onQueryChange={setQuery} />
-      <ArchiveTabsBar activeKey={tab} onSelect={setTab} />
+      <ArchiveTabsBar
+        activeKey={tab}
+        onSelect={setTab}
+        counts={countsData}
+        sort={sort}
+        onSortChange={setSort}
+      />
       <ArchiveResults
         works={works}
         resultCount={resultCount}
         tabLabel={activeTab.label}
         view={view}
         onViewChange={setView}
-        onPopularSearch={setQuery}
+        refine={{
+          selectedCountries: countries,
+          onToggleCountry: (id) => toggle(setCountries, id),
+          selectedThemes: themes,
+          onToggleTheme: (id) => toggle(setThemes, id),
+          onYearChange,
+        }}
         loading={isLoading}
       />
     </div>
