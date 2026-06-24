@@ -1,14 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const INTERESTS = [
+interface InterestItem {
+  label: string;
+  image: string;
+  category?: string;
+}
+
+const DEFAULT_INTERESTS: InterestItem[] = [
   { label: "Movies", image: "/EBOPI-Image-1.png" },
   { label: "Literature", image: "/EBOPI-Image-2.jpg" },
   { label: "Report", image: "/EBOPI-Image-3.png" },
   { label: "Biography", image: "/EBOPI-Image-4.jpg" },
 ];
 
-export function PopularInterestSection() {
+export function PopularInterestSection({
+  interests,
+}: Readonly<{ interests?: InterestItem[] }>) {
+  const items = interests && interests.length > 0 ? interests : DEFAULT_INTERESTS;
+
   return (
     <>
       <div className="flex flex-col gap-2 pb-4">
@@ -23,10 +33,10 @@ export function PopularInterestSection() {
         </Link>
       </div>
       <div className="grid grid-cols-4 gap-5">
-        {INTERESTS.map(({ label, image }) => (
+        {items.map(({ label, image, category }) => (
           <Link
             key={label}
-            href={`/explore?q=${label.toLowerCase()}`}
+            href={`/explore?q=${encodeURIComponent(category || label.toLowerCase())}`}
             className="h-80 bg-yellow-700 rounded-[20px] border-2 border-transparent hover:border-orange-400 transition-colors duration-300 flex flex-col justify-start items-center"
           >
             <div className="self-stretch h-60 relative rounded-tl-[20px] rounded-tr-[20px]">

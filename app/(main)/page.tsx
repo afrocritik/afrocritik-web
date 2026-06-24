@@ -9,7 +9,7 @@ import { PopularInterestSection } from "@/components/features/home/PopularIntere
 import { EssentialLiteratureSection } from "@/components/features/home/EssentialLiteratureSection";
 import { KnowledgePipeline } from "@/components/features/home/KnowledgePipeline";
 import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
-import { api } from "@/lib/api";
+import { api, getMediaUrl } from "@/lib/api";
 
 const BROWN_GRADIENT =
   "linear-gradient(180deg, #4D311D 17.79%, #794C2D 52.4%, #4D311D 95.19%)";
@@ -28,12 +28,41 @@ export default async function HomePage() {
   const essentialMusicWorks: any[] = homepage?.essentialMusicWorks ?? [];
   const essentialLiteratureWorks: any[] = homepage?.essentialLiteratureWorks ?? [];
 
+  const hero = homepage?.hero;
+  const stats: { value: string; label: string }[] = homepage?.stats ?? [];
+  const suggestedSearches: string[] = Array.isArray(hero?.suggestedSearches)
+    ? hero.suggestedSearches.map((s: any) => s?.term).filter(Boolean)
+    : [];
+
+  const pillars = Array.isArray(homepage?.fivePillars)
+    ? homepage.fivePillars.map((p: any) => ({
+        icon: getMediaUrl(p.icon) ?? "/TFP-Digital-Archive.png",
+        title: p.title ?? "",
+        desc: p.description ?? "",
+      }))
+    : [];
+
+  const popularInterests = Array.isArray(homepage?.popularInterestCategories)
+    ? homepage.popularInterestCategories.map((c: any) => ({
+        label: c.label ?? "",
+        category: c.category,
+        image: getMediaUrl(c.image) ?? "/EBOPI-Image-1.png",
+      }))
+    : [];
+
+  const cta = homepage?.cta;
+  const featuredReport = homepage?.featuredReport;
+
   return (
     <>
       {/* HERO + ESSENTIAL WORKS — single gradient flows across both */}
       <div style={{ background: BROWN_GRADIENT }}>
         <section className="relative overflow-hidden">
-          <HeroSection />
+          <HeroSection
+            hero={hero}
+            suggestedSearches={suggestedSearches}
+            stats={stats}
+          />
         </section>
         <section className="relative overflow-hidden py-16">
           <EssentialWorksSection works={featuredWorks} />
@@ -43,7 +72,7 @@ export default async function HomePage() {
       {/* FIVE PILLARS */}
       <section id="pillars" className="bg-cream-panel pt-14 pb-20 md:pt-20 md:pb-28">
         <div className="container">
-          <PillarsSection />
+          <PillarsSection pillars={pillars} />
         </div>
       </section>
 
@@ -63,7 +92,7 @@ export default async function HomePage() {
 
       {/* REPORT CTA */}
       <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 from 18% via-yellow-900 to-yellow-950">
-        <ReportCTA />
+        <ReportCTA report={featuredReport} />
       </section>
 
       {/* ESSENTIAL WORKS IN MUSIC */}
@@ -76,7 +105,7 @@ export default async function HomePage() {
       {/* EXPLORE BASED ON POPULAR INTEREST */}
       <section className="bg-[#59341F] pt-32 pb-12">
         <div className="container">
-          <PopularInterestSection />
+          <PopularInterestSection interests={popularInterests} />
         </div>
       </section>
 
@@ -94,7 +123,7 @@ export default async function HomePage() {
 
       {/* JOIN NETWORK CTA */}
       <section className="bg-[#59341F] pt-32 pb-24">
-        <JoinNetworkCTA />
+        <JoinNetworkCTA cta={cta} />
       </section>
     </>
   );

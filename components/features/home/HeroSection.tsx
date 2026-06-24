@@ -2,9 +2,34 @@ import Link from "next/link";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
 import { StatsMarquee } from "@/components/features/home/StatsMarquee";
 
-const SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
+const DEFAULT_SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
 
-export function HeroSection() {
+interface HeroContent {
+  headline?: string;
+  highlightedText?: string;
+  subheadline?: string;
+  description?: string;
+}
+
+export function HeroSection({
+  hero,
+  suggestedSearches,
+  stats,
+}: Readonly<{
+  hero?: HeroContent;
+  suggestedSearches?: string[];
+  stats?: { value: string; label: string }[];
+}>) {
+  const headline = hero?.headline || "Building Africa's";
+  const highlighted = hero?.highlightedText || "Cultural Intelligence";
+  const subheadline = hero?.subheadline || "Platform";
+  const description =
+    hero?.description || "connecting works, ideas, and people across African culture.";
+  const suggested =
+    suggestedSearches && suggestedSearches.length > 0
+      ? suggestedSearches
+      : DEFAULT_SUGGESTED;
+
   return (
     <>
       <div className="container flex flex-col items-center py-12 text-center md:py-16">
@@ -20,10 +45,10 @@ export function HeroSection() {
             textAlign: "center",
           }}
         >
-          Building Africa&apos;s
+          {headline}
           <br />
-          <span style={{ color: "#C4963C" }}>Cultural Intelligence</span>{" "}
-          Platform
+          <span style={{ color: "#C4963C" }}>{highlighted}</span>{" "}
+          {subheadline}
         </h1>
         <p
           className="mt-5 font-semibold leading-[110%]"
@@ -34,12 +59,12 @@ export function HeroSection() {
             color: "#F3E5D0",
           }}
         >
-          connecting works, ideas, and people across African culture.
+          {description}
         </p>
         <div className="mt-9 w-full" style={{ maxWidth: "888px" }}>
           <HeroSearch />
           <div className="mt-4 flex flex-wrap justify-center gap-2">
-            {SUGGESTED.map((s) => (
+            {suggested.map((s) => (
               <Link
                 key={s}
                 href={`/explore?q=${encodeURIComponent(s)}`}
@@ -98,7 +123,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      <StatsMarquee />
+      <StatsMarquee stats={stats} />
     </>
   );
 }

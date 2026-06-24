@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { Fragment } from "react";
 
-const STATS = [
+interface StatEntry {
+  value: string;
+  label: string;
+}
+
+const DEFAULT_STATS: StatEntry[] = [
   { value: "1,000+", label: "Works" },
   { value: "15,000+", label: "Articles" },
   { value: "50+", label: "Countries" },
@@ -30,8 +35,9 @@ function StatItem({ value, label }: { value: string; label: string }) {
   );
 }
 
-export function StatsMarquee() {
-  const repeatedStats = Array.from({ length: 10 }, () => STATS).flat();
+export function StatsMarquee({ stats }: Readonly<{ stats?: StatEntry[] }>) {
+  const source = stats && stats.length > 0 ? stats : DEFAULT_STATS;
+  const repeatedStats = Array.from({ length: 10 }, () => source).flat();
 
   return (
     <div
