@@ -3,9 +3,11 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { FieldRenderer } from "./fields";
 import { validateField } from "./validation";
+import { apiClient } from "@/lib/api";
 import type { EntityConfig, EntityRecord, FieldConfig, FormSection } from "./types";
 
 function defaultFor(field: FieldConfig): unknown {
@@ -45,12 +47,15 @@ export function EntityFormView({
   record,
 }: Readonly<{ config: EntityConfig; record?: EntityRecord }>) {
   const router = useRouter();
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
   const isEdit = Boolean(record);
   const [values, setValues] = useState<Record<string, unknown>>(() =>
     buildInitial(config.form, record)
   );
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const setFieldError = (name: string, message: string | null) =>
     setErrors((prev) => {
@@ -101,15 +106,47 @@ export function EntityFormView({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
     if (!validate()) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setSaving(true);
-    // API-ready: POST/PATCH `values` to the Payload collection here.
-    // await apiClient[isEdit ? "patch" : "post"](`/api/${config.slug}`, values)
-    await new Promise((r) => setTimeout(r, 600));
-    router.push(`/admin/${config.slug}?flash=${isEdit ? "updated" : "created"}`);
+
+    // Only send fields that belong to the form and are currently visible, so
+    // hidden conditional fields don't overwrite server values with blanks.
+    const payload: Record<string, unknown> = {};
+    for (const section of config.form) {
+      for (const field of section.fields) {
+        if (isVisible(field)) payload[field.name] = values[field.name];
+      }
+    }
+
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+
+    try {
+      if (isEdit && record?.id) {
+        await apiClient.patch(`/api/${config.slug}/${record.id}`, payload, {
+          headers,
+        });
+      } else {
+        await apiClient.post(`/api/${config.slug}`, payload, { headers });
+      }
+      router.push(
+        `/admin/${config.slug}?flash=${isEdit ? "updated" : "created"}`
+      );
+    } catch (err) {
+      const response = (err as {
+        response?: { data?: { errors?: { message?: string }[]; message?: string } };
+      }).response;
+      const message =
+        response?.data?.errors?.[0]?.message ||
+        response?.data?.message ||
+        "Something went wrong while saving. Please try again.";
+      setSubmitError(message);
+      setSaving(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const renderField = (field: FieldConfig) => {
@@ -174,6 +211,12 @@ export function EntityFormView({
       {Object.keys(errors).length > 0 && (
         <p className="rounded-lg border border-red-700/50 bg-red-900/20 px-4 py-3 font-inter text-sm text-red-200">
           Please fill in all required fields before saving.
+        </p>
+      )}
+
+      {submitError && (
+        <p className="rounded-lg border border-red-700/50 bg-red-900/20 px-4 py-3 font-inter text-sm text-red-200">
+          {submitError}
         </p>
       )}
 
