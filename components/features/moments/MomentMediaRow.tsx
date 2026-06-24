@@ -6,19 +6,13 @@ import { cn } from "@/lib/utils";
 import { VideoEmbed } from "@/components/common/VideoEmbed";
 import { AudioEmbed } from "@/components/common/AudioEmbed";
 
-const VIDEOS = [
-  { id: "v1", title: "Moment Video 1", caption: "Sed malesuada felis vitae blandit molestie", thumbnail: "/inner-WVA-Image-1.jpg", url: "https://www.youtube.com/watch?v=ZbZSe6N_BXs" },
-  { id: "v2", title: "Moment Video 2", caption: "Sed malesuada felis vitae blandit molestie", thumbnail: "/inner-WVA-Image-2.jpg", url: "https://vimeo.com/76979871" },
-  { id: "v3", title: "Moment Video 3", caption: "Sed malesuada felis vitae blandit molestie", thumbnail: "/inner-WVA-Image-1.jpg", url: "https://www.youtube.com/watch?v=aqz-KE-bpKQ" },
-];
-
-const AUDIO_TRACKS: ReadonlyArray<AudioTrackData> = [
-  { id: "track-1", title: "Nollywood's Political Unconsciousness", type: "Other", views: "757", subtitle: "Essay reading", duration: "22 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-  { id: "track-2", title: "The Sound of a Continent", type: "Other", views: "412", subtitle: "Essay reading", duration: "18 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-  { id: "track-3", title: "Storytelling as Resistance", type: "Other", views: "638", subtitle: "Essay reading", duration: "25 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-  { id: "track-4", title: "Diaspora and the Screen", type: "Other", views: "291", subtitle: "Essay reading", duration: "20 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-  { id: "track-5", title: "Archives of the Future", type: "Other", views: "503", subtitle: "Essay reading", duration: "19 min", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
-];
+export interface MomentVideo {
+  id: string;
+  title: string;
+  caption?: string;
+  thumbnail?: string;
+  url: string;
+}
 
 interface AudioTrackData {
   id: string;
@@ -95,22 +89,28 @@ function AudioTrack({
   );
 }
 
-export function MomentMediaRow() {
-  const [activeAudioId, setActiveAudioId] = useState(AUDIO_TRACKS[0]?.id);
-  const activeAudio = AUDIO_TRACKS.find((t) => t.id === activeAudioId);
+export function MomentMediaRow({
+  videos = [],
+  audioTracks = [],
+}: Readonly<{
+  videos?: MomentVideo[];
+  audioTracks?: AudioTrackData[];
+}>) {
+  const [activeAudioId, setActiveAudioId] = useState(audioTracks[0]?.id);
+  const activeAudio = audioTracks.find((t) => t.id === activeAudioId);
 
-  if (VIDEOS.length === 0 && AUDIO_TRACKS.length === 0) return null;
+  if (videos.length === 0 && audioTracks.length === 0) return null;
 
   return (
     <section className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
       {/* Play Video */}
-      {VIDEOS.length > 0 && (
+      {videos.length > 0 && (
       <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 flex-1 flex flex-col">
         <p className="justify-start text-white text-2xl font-semibold font-baskervville leading-7">
           Play Video
         </p>
         <div className="mt-10 grid grid-cols-2 gap-3 flex-1 min-h-0">
-          {VIDEOS.map((video) => (
+          {videos.map((video) => (
             <VideoEmbed
               key={video.id}
               url={video.url}
@@ -125,14 +125,14 @@ export function MomentMediaRow() {
       )}
 
       {/* Play Audio */}
-      {AUDIO_TRACKS.length > 0 && (
+      {audioTracks.length > 0 && (
       <aside className="hidden lg:flex lg:w-[250px] lg:shrink-0 lg:flex-col">
         <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-4 flex flex-col gap-3">
           <div className="justify-start text-white text-lg font-semibold font-baskervville leading-tight">
             Play Audio
           </div>
           <div className="flex flex-col gap-1.5">
-            {AUDIO_TRACKS.map((track) => (
+            {audioTracks.map((track) => (
               <AudioTrack
                 key={track.id}
                 track={track}

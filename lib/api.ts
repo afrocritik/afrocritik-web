@@ -49,6 +49,16 @@ export const api = {
     list: (params?: Record<string, any>) =>
       apiClient.get("/api/reports", { params }).then((r) => r.data),
   },
+  moments: {
+    list: (params?: Record<string, any>) =>
+      apiClient.get("/api/moments", { params }).then((r) => r.data),
+    bySlug: (slug: string) =>
+      apiClient
+        .get("/api/moments", {
+          params: { "where[slug][equals]": slug, depth: 2 },
+        })
+        .then((r) => r.data),
+  },
   search: (q: string, filters?: Record<string, any>) =>
     apiClient
       .get("/api/search", { params: { q, ...filters } })
