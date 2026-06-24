@@ -59,6 +59,40 @@ export const api = {
         })
         .then((r) => r.data),
   },
+  collections: {
+    list: (token?: string, params?: Record<string, any>) =>
+      apiClient
+        .get("/api/collections", {
+          params: { depth: 1, limit: 100, sort: "-createdAt", ...params },
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+    bySlug: (slug: string, token?: string) =>
+      apiClient
+        .get("/api/collections", {
+          params: { "where[slug][equals]": slug, depth: 2, limit: 1 },
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+    create: (data: Record<string, any>, token?: string) =>
+      apiClient
+        .post("/api/collections", data, {
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+    update: (id: string, data: Record<string, any>, token?: string) =>
+      apiClient
+        .patch(`/api/collections/${id}`, data, {
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+    remove: (id: string, token?: string) =>
+      apiClient
+        .delete(`/api/collections/${id}`, {
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+  },
   users: {
     me: (token?: string) =>
       apiClient

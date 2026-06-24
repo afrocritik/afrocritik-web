@@ -1,21 +1,13 @@
-import { DashboardPlaceholder } from "@/components/features/dashboard/DashboardPlaceholder";
-import { COLLECTIONS } from "@/components/features/dashboard/constants";
+import { CollectionDetailView } from "@/components/features/dashboard/CollectionDetailView";
 
 export default function CollectionDetailPage({
   params,
 }: {
   readonly params: { slug: string };
 }) {
-  const collection = COLLECTIONS.find((c) => c.slug === params.slug);
-
   return (
-    <DashboardPlaceholder
-      title={collection?.name ?? "Collection"}
-      description={
-        collection
-          ? `${collection.count} items in this collection.`
-          : "This collection's works will appear here."
-      }
-    />
+    <div className="flex flex-col gap-6 px-6 py-8 md:px-8">
+      <CollectionDetailView slug={params.slug} />
+    </div>
   );
 }
