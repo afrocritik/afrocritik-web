@@ -1,6 +1,5 @@
 import { DashboardPageHeader } from "@/components/features/dashboard/DashboardPageHeader";
-import { WorksGrid } from "@/components/features/dashboard/WorksGrid";
-import { SAVED_WORKS } from "@/components/features/dashboard/constants";
+import { SavedWorksView } from "@/components/features/dashboard/SavedWorksView";
 
 export default function SavedPage() {
   return (
@@ -9,7 +8,7 @@ export default function SavedPage() {
         title="Saved"
         description="Works, reports and ideas you've bookmarked for later."
       />
-      <WorksGrid works={SAVED_WORKS} />
+      <SavedWorksView emptyLabel="You haven't saved anything yet. Browse the archive and bookmark works to find them here." />
     </div>
   );
 }
