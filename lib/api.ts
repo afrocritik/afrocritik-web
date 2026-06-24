@@ -1,7 +1,31 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+/**
+ * Turns an axios/Payload error into a human-readable message.
+ * Payload REST validation errors come back as `{ errors: [{ message, field }] }`;
+ * custom endpoints return `{ message }`. Falls back to a generic message.
+ */
+export function getApiErrorMessage(err: unknown, fallback: string): string {
+  const data = (err as AxiosError<any>)?.response?.data;
+  const errors = data?.errors;
+  if (Array.isArray(errors) && errors.length) {
+    // Friendlier copy for the common duplicate-account case.
+    if (
+      errors.some(
+        (e: any) => e?.field === "email" && /unique/i.test(e?.message || ""),
+      )
+    ) {
+      return "An account with this email already exists. Try signing in instead.";
+    }
+    const messages = errors.map((e: any) => e?.message).filter(Boolean);
+    if (messages.length) return messages.join(" ");
+  }
+  if (typeof data?.message === "string" && data.message) return data.message;
+  return fallback;
+}
 
 export const apiClient = axios.create({
   baseURL: API_BASE,
@@ -162,9 +186,13 @@ export const api = {
       apiClient
         .post("/api/auth/complete-profile", payload)
         .then((r) => r.data),
-    saveInterests: (interests: string[]) =>
+    saveInterests: (userId: string, interests: string[], token?: string) =>
       apiClient
-        .post("/api/auth/interests", { interests })
+        .post(
+          "/api/auth/interests",
+          { userId, interests },
+          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+        )
         .then((r) => r.data),
     googleUrl: `${API_BASE}/api/auth/google`,
     facebookUrl: `${API_BASE}/api/auth/facebook`,

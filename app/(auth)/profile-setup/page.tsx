@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import {
   Select,
@@ -11,31 +12,70 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { api } from "@/lib/api";
+import { api, getApiErrorMessage } from "@/lib/api";
+import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 
 const ROLES = ["User", "Critic", "Contributor"];
 
 function ProfileSetupForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const email = params.get("email") || "";
+  const { data: session, status, update } = useSession();
+  const { data: currentUser, isLoading: userLoading } = useCurrentUser();
+
+  const userId = (session?.user as any)?.id as string | undefined;
+  const email = params.get("email") || session?.user?.email || "";
 
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Gate: only users who haven't finished onboarding belong here. Send
+  // anonymous visitors to sign up, and bounce anyone who already completed
+  // their profile straight to the dashboard.
+  useEffect(() => {
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
+      router.replace("/signup");
+      return;
+    }
+    if (currentUser?.isProfileComplete) {
+      router.replace("/dashboard");
+    }
+  }, [status, currentUser, router]);
+
+  const checkingAccess =
+    status === "loading" ||
+    status === "unauthenticated" ||
+    userLoading ||
+    currentUser?.isProfileComplete;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    if (!userId) {
+      return setError("Your session has expired. Please sign in again.");
+    }
     setLoading(true);
     try {
-      await api.auth.completeProfile({ email, username, role });
-    } catch {
-      // Proceed to interests even if the profile call is unavailable
+      await api.auth.completeProfile({ userId, username, role });
+      // Flip the session flag so the gates everywhere see a complete profile
+      // without waiting for a re-login.
+      await update({ isProfileComplete: true });
+      router.push("/dashboard");
+    } catch (err) {
+      setError(
+        getApiErrorMessage(err, "Could not save your profile. Please try again."),
+      );
     } finally {
       setLoading(false);
-      router.push("/interests");
     }
   };
+
+  if (checkingAccess) {
+    return <div className="h-96" />;
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -115,6 +155,9 @@ function ProfileSetupForm() {
         </div>
 
         <div className="flex flex-col items-center gap-6">
+          {error && (
+            <p className="w-full font-inter text-sm text-red-400">{error}</p>
+          )}
           <button
             type="submit"
             disabled={loading || !username || !role}
