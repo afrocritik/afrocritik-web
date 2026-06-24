@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { WorkCard } from "@/components/common/WorkCard";
-import { CarouselNextButton } from "@/components/common/CarouselNextButton";
+import { CarouselRow } from "@/components/common/CarouselRow";
 import { mapWorkToCard } from "@/lib/api";
 
 interface Props {
@@ -27,6 +27,7 @@ export function EssentialWorksSection({ works = [] }: Props) {
           >
             Essential Works
           </h2>
+          {cards.length > 0 && (
           <Link
             href="/explore"
             className="shrink-0 self-end"
@@ -68,18 +69,20 @@ export function EssentialWorksSection({ works = [] }: Props) {
               />
             </svg>
           </Link>
+          )}
         </div>
       </div>
-      <div className="relative" style={{ minHeight: "395px" }}>
+      <div style={{ minHeight: "395px" }}>
         {cards.length > 0 ? (
-          <div
-            className="flex gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+          <CarouselRow
+            className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2"
             style={{ paddingLeft: "max(24px, calc(50vw - 636px))", paddingRight: "12px" }}
+            buttonTop="30%"
           >
             {cards.map((w) => (
               <WorkCard key={w.slug} {...w} essential />
             ))}
-          </div>
+          </CarouselRow>
         ) : (
           <div
             className="flex items-center justify-center py-16"
@@ -90,7 +93,6 @@ export function EssentialWorksSection({ works = [] }: Props) {
             </p>
           </div>
         )}
-        <CarouselNextButton top="30%" />
       </div>
     </>
   );
