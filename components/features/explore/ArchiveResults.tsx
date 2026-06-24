@@ -6,13 +6,21 @@ import { WorkCard } from "@/components/common/WorkCard";
 import { formatCount } from "@/lib/utils";
 import { RefineSidebar } from "./RefineSidebar";
 
+type RefineState = Readonly<{
+  selectedCountries: string[];
+  onToggleCountry: (id: string) => void;
+  selectedThemes: string[];
+  onToggleTheme: (id: string) => void;
+  onYearChange: (from: number, to: number) => void;
+}>;
+
 type ArchiveResultsProps = Readonly<{
   works: any[];
   resultCount: number;
   tabLabel: string;
   view: "grid" | "list";
   onViewChange: (view: "grid" | "list") => void;
-  onPopularSearch: (value: string) => void;
+  refine: RefineState;
   loading?: boolean;
 }>;
 
@@ -22,7 +30,7 @@ export function ArchiveResults({
   tabLabel,
   view,
   onViewChange,
-  onPopularSearch,
+  refine,
   loading,
 }: ArchiveResultsProps) {
   return (
@@ -58,7 +66,7 @@ export function ArchiveResults({
 
       {/* Sidebar + Cards — same top baseline so bottoms align */}
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-        <RefineSidebar onPopularSearch={onPopularSearch} />
+        <RefineSidebar {...refine} />
 
         {/* Main */}
         <div className="flex-1">

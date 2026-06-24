@@ -2,7 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function YearRangeSlider({ min = 1950, max = 2025 }: Readonly<{ min?: number; max?: number }>) {
+export function YearRangeSlider({
+  min = 1950,
+  max = 2025,
+  onChange,
+}: Readonly<{
+  min?: number;
+  max?: number;
+  onChange?: (from: number, to: number) => void;
+}>) {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,6 +44,15 @@ export function YearRangeSlider({ min = 1950, max = 2025 }: Readonly<{ min?: num
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    // Only emit once the user releases a handle, so we don't refetch on every
+    // pixel of movement.
+    onChange?.(minRef.current, maxRef.current);
   };
 
   const onPointerMove = (
@@ -80,6 +97,7 @@ export function YearRangeSlider({ min = 1950, max = 2025 }: Readonly<{ min?: num
           style={{ left: minPos }}
           onPointerDown={onPointerDown}
           onPointerMove={(e) => onPointerMove(e, "min")}
+          onPointerUp={onPointerUp}
         />
         {/* max handle */}
         <div
@@ -93,6 +111,7 @@ export function YearRangeSlider({ min = 1950, max = 2025 }: Readonly<{ min?: num
           style={{ left: maxPos }}
           onPointerDown={onPointerDown}
           onPointerMove={(e) => onPointerMove(e, "max")}
+          onPointerUp={onPointerUp}
         />
       </div>
       <div className="mt-2 flex justify-between text-[11px] text-white/40">

@@ -6,46 +6,33 @@ import { FilterPill } from "@/components/common/FilterPill";
 import { formatCount } from "@/lib/utils";
 import { TABS } from "./constants";
 
-const FILTER_OPTIONS = {
-  Year: [
-    { label: "2020 – Present", value: "2020s" },
-    { label: "2000 – 2019", value: "2000s" },
-    { label: "1980 – 1999", value: "1980s" },
-    { label: "Pre-1980", value: "pre1980" },
-  ],
-  Country: [
-    { label: "Nigeria", value: "nigeria" },
-    { label: "Ghana", value: "ghana" },
-    { label: "Kenya", value: "kenya" },
-    { label: "Others", value: "others" },
-  ],
-  Genre: [
-    { label: "Music", value: "music" },
-    { label: "Films", value: "films" },
-    { label: "Literature", value: "literature" },
-    { label: "Event", value: "event" },
-    { label: "Politics", value: "politics" },
-    { label: "Report", value: "report" },
-  ],
-  Theme: [
-    { label: "Black Consciousness", value: "black-consciousness" },
-    { label: "Nollywood", value: "nollywood" },
-    { label: "Afrobeat", value: "afrobeat" },
-    { label: "Audio", value: "audio" },
-  ],
-  Medium: [
-    { label: "Print", value: "print" },
-    { label: "Audio", value: "audio" },
-    { label: "Video", value: "video" },
-  ],
-};
+const SORT_OPTIONS = [
+  { label: "Relevance", value: "relevance" },
+  { label: "Newest", value: "newest" },
+  { label: "Oldest", value: "oldest" },
+  { label: "A – Z", value: "az" },
+  { label: "Top Rated", value: "rating" },
+];
+
+const SORT_LABELS: Record<string, string> = Object.fromEntries(
+  SORT_OPTIONS.map((o) => [o.value, o.label])
+);
 
 type ArchiveTabsBarProps = Readonly<{
   activeKey: string;
   onSelect: (key: string) => void;
+  counts?: Record<string, number>;
+  sort: string;
+  onSortChange: (value: string) => void;
 }>;
 
-export function ArchiveTabsBar({ activeKey, onSelect }: ArchiveTabsBarProps) {
+export function ArchiveTabsBar({
+  activeKey,
+  onSelect,
+  counts,
+  sort,
+  onSortChange,
+}: ArchiveTabsBarProps) {
   return (
     <section style={{ height: "249px" }}>
       {/* top line */}
@@ -87,7 +74,9 @@ export function ArchiveTabsBar({ activeKey, onSelect }: ArchiveTabsBarProps) {
                       active ? "text-sm leading-4" : "text-xs"
                     }`}
                   >
-                    {formatCount(t.count)}+
+                    {counts && typeof counts[t.key] === "number"
+                      ? `${formatCount(counts[t.key])}+`
+                      : "…"}
                   </div>
                 </div>
               </button>
@@ -107,17 +96,16 @@ export function ArchiveTabsBar({ activeKey, onSelect }: ArchiveTabsBarProps) {
         className="container flex flex-wrap items-center gap-2"
         style={{ height: "104px" }}
       >
-        {Object.entries(FILTER_OPTIONS).map(([label, options]) => (
-          <FilterPill key={label} label={label} options={options} />
-        ))}
+        <p className="font-inter text-sm text-white/60">
+          Use{" "}
+          <span className="font-semibold text-white/80">Refine results</span> to
+          filter by country, theme and year.
+        </p>
         <div className="ml-auto">
           <FilterPill
-            label="Sort by: Relevance"
-            options={[
-              { label: "Relevance", value: "relevance" },
-              { label: "Newest", value: "newest" },
-              { label: "Top Rated", value: "rating" },
-            ]}
+            label={`Sort by: ${SORT_LABELS[sort] ?? "Relevance"}`}
+            options={SORT_OPTIONS}
+            onSelect={(values) => onSortChange(values[values.length - 1] || "newest")}
           />
         </div>
       </div>
