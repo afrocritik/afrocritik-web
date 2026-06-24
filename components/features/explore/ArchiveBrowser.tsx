@@ -3,11 +3,43 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
-import { BROWN_GRADIENT, FALLBACK_WORKS, TABS } from "./constants";
+import { api, getMediaUrl, mapWorkToCard } from "@/lib/api";
+import { BROWN_GRADIENT, TABS } from "./constants";
 import { ExploreHero } from "./ExploreHero";
 import { ArchiveTabsBar } from "./ArchiveTabsBar";
 import { ArchiveResults } from "./ArchiveResults";
+
+function resolveNames(arr: any): string {
+  return Array.isArray(arr)
+    ? arr
+        .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+        .filter(Boolean)
+        .join(", ")
+    : "";
+}
+
+// The archive endpoint returns raw Payload docs; normalise each to the card
+// shape ArchiveResults / WorkCard expect, per tab.
+function toCard(doc: any, tab: string) {
+  if (tab === "people") {
+    return {
+      slug: doc.slug ?? "",
+      title: doc.name ?? "",
+      type: "person",
+      year: undefined,
+      country: resolveNames(doc.country),
+      rating: undefined,
+      badge: undefined,
+      image: getMediaUrl(doc.photo),
+      description: doc.summary ?? "",
+      tags: resolveNames(doc.tags)
+        ? resolveNames(doc.tags).split(", ")
+        : [],
+    };
+  }
+  // works / ideas / reports / moments all share coverImage + summary.
+  return mapWorkToCard(doc);
+}
 
 export function ArchiveBrowser() {
   const params = useSearchParams();
@@ -15,7 +47,7 @@ export function ArchiveBrowser() {
   const [query, setQuery] = useState(params.get("q") || "");
   const [view, setView] = useState<"grid" | "list">("grid");
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["archive", tab, query],
     queryFn: () => api.archive({ q: query, type: tab }),
     retry: false,
@@ -24,11 +56,11 @@ export function ArchiveBrowser() {
 
   const works = useMemo(() => {
     const docs = (data as any)?.docs;
-    return Array.isArray(docs) && docs.length > 0 ? docs : FALLBACK_WORKS;
-  }, [data]);
+    return Array.isArray(docs) ? docs.map((d: any) => toCard(d, tab)) : [];
+  }, [data, tab]);
 
   const activeTab = TABS.find((t) => t.key === tab) ?? TABS[0];
-  const resultCount = (data as any)?.totalDocs ?? activeTab.count;
+  const resultCount = (data as any)?.totalDocs ?? 0;
 
   return (
     <div style={{ background: BROWN_GRADIENT }}>
@@ -41,6 +73,7 @@ export function ArchiveBrowser() {
         view={view}
         onViewChange={setView}
         onPopularSearch={setQuery}
+        loading={isLoading}
       />
     </div>
   );
