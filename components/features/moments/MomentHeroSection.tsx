@@ -15,13 +15,10 @@ const TOC = [
   "Further Reading",
 ];
 
-const META = [
-  { label: "Origin", value: "Nigeria" },
-  { label: "Type", value: "Cultural Movement" },
-  { label: "Period", value: "1992 – Present" },
-];
-
-const RELATED_THEMES = ["African Storytelling", "Popular Culture", "Industry"];
+interface MetaItem {
+  label: string;
+  value: string;
+}
 
 function Chevron() {
   return (
@@ -37,7 +34,17 @@ function Chevron() {
   );
 }
 
-export function MomentHeroSection({ title }: Readonly<{ title: string }>) {
+export function MomentHeroSection({
+  title,
+  summary,
+  meta = [],
+  relatedThemes = [],
+}: Readonly<{
+  title: string;
+  summary?: string;
+  meta?: MetaItem[];
+  relatedThemes?: string[];
+}>) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -112,13 +119,18 @@ export function MomentHeroSection({ title }: Readonly<{ title: string }>) {
           <h1 className="justify-start text-white text-4xl font-normal font-baskervville leading-10">
             {title}
           </h1>
-          <p className="mt-4 max-w-[600px] text-white text-base font-normal font-inter leading-relaxed">
-            A cultural movement and home-grown film industry that transformed
-            how Africa tells its own stories — built on resourcefulness,
-            circulation, and an insatiable appetite for narrative.
-          </p>
+          {summary ? (
+            <p className="mt-4 max-w-[600px] text-white text-base font-normal font-inter leading-relaxed">
+              {summary}
+            </p>
+          ) : (
+            <p className="mt-4 max-w-[600px] text-white/40 text-base font-normal font-inter italic leading-relaxed">
+              Overview not uploaded yet.
+            </p>
+          )}
+          {meta.length > 0 && (
           <div className="mt-8 max-w-[600px] flex flex-wrap gap-x-6 gap-y-2">
-            {META.map(({ label, value }) => (
+            {meta.map(({ label, value }) => (
               <div
                 key={label}
                 className="inline-flex justify-start items-center gap-3"
@@ -132,6 +144,7 @@ export function MomentHeroSection({ title }: Readonly<{ title: string }>) {
               </div>
             ))}
           </div>
+          )}
           <div className="mt-5 flex gap-3">
             <button className="px-1.5 py-2 bg-orange-400/60 rounded-[3px] inline-flex justify-start items-center gap-1.5">
               <Image
@@ -152,11 +165,12 @@ export function MomentHeroSection({ title }: Readonly<{ title: string }>) {
               </span>
             </button>
           </div>
+          {relatedThemes.length > 0 && (
           <div className="mt-4 max-w-[600px] flex flex-wrap items-center gap-2">
             <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">
               Related themes
             </span>
-            {RELATED_THEMES.map((t) => (
+            {relatedThemes.map((t) => (
               <div
                 key={t}
                 className="pl-2.5 pr-3 py-[5px] bg-yellow-700/40 rounded-[5px] inline-flex justify-center items-center gap-2.5"
@@ -167,6 +181,7 @@ export function MomentHeroSection({ title }: Readonly<{ title: string }>) {
               </div>
             ))}
           </div>
+          )}
         </div>
       </div>
     </section>
