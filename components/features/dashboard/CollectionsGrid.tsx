@@ -1,19 +1,31 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Plus } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { api, getMediaUrl } from "@/lib/api";
 
 export interface CollectionItem {
   slug: string;
   name: string;
   count: number;
-  image: string;
+  image?: string;
 }
 
-/**
- * Collections are not yet backed by the API, so the grid renders only the
- * "create" affordance until a Collections collection exists server-side.
- */
-const COLLECTIONS: CollectionItem[] = [];
+function mapCollection(doc: any): CollectionItem {
+  const works = Array.isArray(doc.works) ? doc.works : [];
+  const firstWorkCover = works
+    .map((w: any) => (typeof w === "object" ? getMediaUrl(w.coverImage) : undefined))
+    .find(Boolean);
+  return {
+    slug: doc.slug ?? doc.id,
+    name: doc.name ?? "Untitled collection",
+    count: works.length,
+    image: getMediaUrl(doc.coverImage) ?? firstWorkCover,
+  };
+}
 
 function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
   return (
@@ -23,7 +35,15 @@ function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
     >
       {/* Cover image — spans full card width */}
       <div className="absolute left-[8px] right-[8px] top-[10px] h-[153px] overflow-hidden rounded-sm">
-        <Image src={item.image} alt={item.name} fill className="object-cover" />
+        {item.image ? (
+          <Image src={item.image} alt={item.name} fill className="object-cover" />
+        ) : (
+          <div className="flex h-full items-center justify-center bg-yellow-950/50">
+            <span className="font-baskervville text-3xl text-white/30">
+              {item.name.charAt(0)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Count badge — top-right, anchored to card edge */}
@@ -66,9 +86,20 @@ function CreateCollectionCard() {
 }
 
 export function CollectionsGrid() {
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+
+  const { data } = useQuery({
+    queryKey: ["collections", token ?? "anon"],
+    queryFn: () => api.collections.list(token),
+    enabled: Boolean(token),
+  });
+
+  const collections: CollectionItem[] = (data?.docs ?? []).map(mapCollection);
+
   return (
-    <div className="flex gap-2.5">
-      {COLLECTIONS.map((item) => (
+    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+      {collections.map((item) => (
         <CollectionCard key={item.slug} item={item} />
       ))}
       <CreateCollectionCard />
