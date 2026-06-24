@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { Check } from "lucide-react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { OAuthButtons, OrDivider } from "@/components/features/auth/OAuthButtons";
@@ -38,6 +39,9 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       await api.auth.register({ email, password });
+      // Establish a session immediately so the rest of onboarding (and the
+      // dashboard it lands on) is authenticated.
+      await signIn("credentials", { email, password, redirect: false });
       router.push(`/profile-setup?email=${encodeURIComponent(email)}`);
     } catch {
       setError("Could not create account. Try again.");
