@@ -4,13 +4,16 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { ChevronDown, Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { apiClient } from "@/lib/api";
 import { TablePagination } from "../TablePagination";
 import { StatusPill } from "./StatusPill";
 import { RowActions } from "./RowActions";
 import { DeleteDialog } from "./DeleteDialog";
+import { normalizeRecord } from "./normalize";
 import type { ColumnConfig, EntityConfig, EntityRecord } from "./types";
 
 const PAGE_SIZE = 8;
@@ -117,6 +120,9 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
   const params = useSearchParams();
   const flash = params.get("flash");
 
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+
   const [rows, setRows] = useState<EntityRecord[]>(config.sample);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -130,6 +136,29 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
       toast.success(`${config.singular} updated successfully.`);
     }
   }, [flash, config.singular]);
+
+  // Load live records from the Payload collection. If the request fails (API
+  // offline, etc.) the seeded sample data stays in place so the admin is still
+  // demoable.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await apiClient.get(`/api/${config.slug}`, {
+          params: { limit: 100, depth: 1 },
+        });
+        const docs = res?.data?.docs;
+        if (active && Array.isArray(docs) && docs.length > 0) {
+          setRows(docs.map((d) => normalizeRecord(d, config)));
+        }
+      } catch {
+        // Keep sample data on failure.
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [config]);
 
   const filtered = useMemo(() => {
     return rows.filter((r) => {
@@ -156,11 +185,28 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
 
   const titleField = config.titleField;
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!toDelete) return;
-    setRows((prev) => prev.filter((r) => r.id !== toDelete.id));
-    toast.success(`${config.singular} "${String(toDelete[titleField])}" deleted.`);
+    const target = toDelete;
     setToDelete(null);
+    try {
+      await apiClient.delete(`/api/${config.slug}/${target.id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      setRows((prev) => prev.filter((r) => r.id !== target.id));
+      toast.success(
+        `${config.singular} "${String(target[titleField])}" deleted.`
+      );
+    } catch (err) {
+      const response = (err as {
+        response?: { data?: { errors?: { message?: string }[]; message?: string } };
+      }).response;
+      toast.error(
+        response?.data?.errors?.[0]?.message ||
+          response?.data?.message ||
+          `Could not delete this ${config.singular.toLowerCase()}.`
+      );
+    }
   };
 
   return (
