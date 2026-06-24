@@ -6,7 +6,7 @@ import { YearRangeSlider } from "./YearRangeSlider";
 
 const COUNTRIES = ["Nigeria", "Ghana", "Kenya", "Others"];
 const THEMES = ["Black Consciousness", "Nollywood", "Afrobeat", "Audio"];
-const POPULAR = ["Fela Kuti", "Nollywood", "Chimamanda", "Makossa", "Sankofa"];
+const POPULAR: string[] = [];
 
 const toggle = (
   list: string[],
@@ -22,11 +22,8 @@ type RefineSidebarProps = Readonly<{
 }>;
 
 export function RefineSidebar({ onPopularSearch }: RefineSidebarProps) {
-  const [checkedCountries, setCheckedCountries] = useState<string[]>([
-    "Nigeria",
-    "Kenya",
-  ]);
-  const [checkedThemes, setCheckedThemes] = useState<string[]>(["Afrobeat"]);
+  const [checkedCountries, setCheckedCountries] = useState<string[]>([]);
+  const [checkedThemes, setCheckedThemes] = useState<string[]>([]);
 
   return (
     <aside className="shrink-0">
@@ -131,17 +128,24 @@ export function RefineSidebar({ onPopularSearch }: RefineSidebarProps) {
           <p className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
             Popular Searches
           </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {POPULAR.map((p) => (
-              <button
-                key={p}
-                onClick={() => onPopularSearch(p)}
-                className="rounded-full border border-amber-line px-2.5 py-1 text-[11px] text-amber hover:bg-amber-soft"
-              >
-                {p}
-              </button>
-            ))}
-          </div>
+          {POPULAR.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {POPULAR.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => onPopularSearch(p)}
+                  className="rounded-full border border-amber-line px-2.5 py-1 text-[11px] text-amber hover:bg-amber-soft"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 font-inter text-[11px] italic leading-4 text-white/40">
+              No popular searches yet — they&apos;ll appear here as the archive
+              grows.
+            </p>
+          )}
         </div>
       </div>
     </aside>
