@@ -93,6 +93,21 @@ export const api = {
         })
         .then((r) => r.data),
   },
+  activity: {
+    list: (token?: string, params?: Record<string, any>) =>
+      apiClient
+        .get("/api/activity", {
+          params: { limit: 20, sort: "-createdAt", depth: 0, ...params },
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+    create: (data: Record<string, any>, token?: string) =>
+      apiClient
+        .post("/api/activity", data, {
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+  },
   users: {
     me: (token?: string) =>
       apiClient

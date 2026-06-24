@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, Download } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { ReportDownloadButton } from "@/components/features/reports/ReportDownloadButton";
 import { api, getMediaUrl } from "@/lib/api";
 
 export default async function ReportDetailPage({
@@ -110,25 +111,12 @@ export default async function ReportDetailPage({
               </div>
             )}
 
-            {pdfUrl ? (
-              <a
-                href={pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-7 inline-flex h-12 w-fit items-center gap-2 rounded-xl px-7 font-inter text-sm font-medium text-yellow-950 transition-opacity hover:opacity-90"
-                style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)" }}
-              >
-                <Download className="size-4" /> Download Report
-              </a>
-            ) : (
-              <button
-                disabled
-                className="mt-7 inline-flex h-12 w-fit items-center gap-2 rounded-xl px-7 font-inter text-sm font-medium text-yellow-950/50 cursor-not-allowed"
-                style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)", opacity: 0.4 }}
-              >
-                <Download className="size-4" /> Download Not Available Yet
-              </button>
-            )}
+            <ReportDownloadButton
+              reportId={String(report.id)}
+              reportTitle={title}
+              reportSlug={report.slug ?? params.slug}
+              pdfUrl={pdfUrl}
+            />
           </div>
         </section>
 

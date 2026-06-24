@@ -1,6 +1,9 @@
 "use client";
 
 import { Users, Layers2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { api } from "@/lib/api";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 
 type StatIconKind = "reviewed" | "following" | "collections" | "published";
@@ -65,10 +68,22 @@ function StatCard({ stat }: Readonly<{ stat: DashboardStat }>) {
 }
 
 export function StatsRow() {
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
   const { data: user } = useCurrentUser();
 
+  const { data: collectionsData } = useQuery({
+    queryKey: ["stats-collections", token ?? "anon"],
+    enabled: Boolean(token),
+    queryFn: () => api.collections.list(token, { limit: 0 }),
+  });
+
   const savedCount = Array.isArray(user?.savedWorks) ? user.savedWorks.length : 0;
-  const interestsCount = Array.isArray(user?.interests) ? user.interests.length : 0;
+  const followingCount = Array.isArray(user?.following) ? user.following.length : 0;
+  const downloadedCount = Array.isArray(user?.downloadedReports)
+    ? user.downloadedReports.length
+    : 0;
+  const collectionsCount = collectionsData?.totalDocs ?? 0;
 
   const stats: DashboardStat[] = [
     {
@@ -78,13 +93,23 @@ export function StatsRow() {
       icon: "reviewed",
     },
     {
-      label: "Interests",
-      value: String(interestsCount),
-      delta: interestsCount > 0 ? "topics you follow" : undefined,
+      label: "Following",
+      value: String(followingCount),
+      delta: followingCount > 0 ? "people you follow" : undefined,
       icon: "following",
     },
-    { label: "Collections", value: "—", icon: "collections" },
-    { label: "Reports", value: "—", icon: "published" },
+    {
+      label: "Collections",
+      value: String(collectionsCount),
+      delta: collectionsCount > 0 ? "curated sets" : undefined,
+      icon: "collections",
+    },
+    {
+      label: "Reports",
+      value: String(downloadedCount),
+      delta: downloadedCount > 0 ? "downloaded" : undefined,
+      icon: "published",
+    },
   ];
 
   return (
