@@ -5,13 +5,15 @@ declare module "next-auth" {
     id: string;
     role?: string;
     token?: string;
+    isProfileComplete?: boolean;
   }
-  
+
   interface Session {
     user: User & {
       id: string;
       role?: string;
       token?: string;
+      isProfileComplete?: boolean;
     }
   }
 }
@@ -21,5 +23,6 @@ declare module "next-auth/jwt" {
     id?: string;
     role?: string;
     token?: string;
+    isProfileComplete?: boolean;
   }
 }

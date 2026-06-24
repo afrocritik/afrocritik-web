@@ -9,7 +9,7 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 import { OAuthButtons, OrDivider } from "@/components/features/auth/OAuthButtons";
 import { AuthField } from "@/components/features/auth/AuthField";
 import { PasswordField } from "@/components/features/auth/PasswordField";
-import { api } from "@/lib/api";
+import { api, getApiErrorMessage } from "@/lib/api";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -37,17 +37,38 @@ export default function SignUpPage() {
     if (password !== confirm) return setError("Passwords do not match.");
     if (!agreed) return setError("Please accept the Terms of Service.");
     setLoading(true);
+
+    // Step 1: create the account. Payload requires a unique username at
+    // creation; the user picks their real one on the next (profile-setup)
+    // step, which overrides this placeholder via complete-profile.
     try {
-      await api.auth.register({ email, password });
-      // Establish a session immediately so the rest of onboarding (and the
-      // dashboard it lands on) is authenticated.
-      await signIn("credentials", { email, password, redirect: false });
-      router.push(`/profile-setup?email=${encodeURIComponent(email)}`);
-    } catch {
-      setError("Could not create account. Try again.");
-    } finally {
+      const username = `${email.split("@")[0]}_${Date.now()}`;
+      await api.auth.register({ email, password, username });
+    } catch (err) {
       setLoading(false);
+      return setError(
+        getApiErrorMessage(err, "Could not create your account. Please try again."),
+      );
     }
+
+    // Step 2: establish a session so the rest of onboarding (and the
+    // dashboard it eventually lands on) is authenticated.
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    setLoading(false);
+
+    if (result?.error) {
+      // The account was created but auto sign-in failed — don't strand them.
+      return setError(
+        "Your account was created, but we couldn't sign you in automatically. Please sign in.",
+      );
+    }
+
+    // Onboarding order: interests first, then profile-setup (final step).
+    router.push("/interests");
   };
 
   return (

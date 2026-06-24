@@ -1,46 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 
-const INTERESTS = [
-  "Culture",
-  "Music",
-  "Reports",
-  "Literature",
-  "Film",
-  "African Philosophy",
-  "Afrobeat",
-  "Archive",
-  "African History",
-  "Biography",
-  "Book Review",
+// Display label → backend select value (see Users.interests options).
+const INTERESTS: { label: string; value: string }[] = [
+  { label: "Culture", value: "culture" },
+  { label: "Music", value: "music" },
+  { label: "Reports", value: "reports" },
+  { label: "Literature", value: "literature" },
+  { label: "Film", value: "film" },
+  { label: "African Philosophy", value: "african-philosophy" },
+  { label: "Afrobeat", value: "afrobeat" },
+  { label: "Archive", value: "archive" },
+  { label: "African History", value: "african-history" },
+  { label: "Biography", value: "biography" },
+  { label: "Book Review", value: "book-review" },
 ];
 
 export default function InterestsPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const userId = session?.user?.id;
+  const token = session?.user?.token;
+
   const [selected, setSelected] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const toggle = (interest: string) =>
+  // Onboarding step — only for signed-in users. Already-onboarded users skip
+  // straight to the dashboard; anonymous visitors go sign up.
+  useEffect(() => {
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
+      router.replace("/signup");
+      return;
+    }
+    if (session?.user?.isProfileComplete) {
+      router.replace("/dashboard");
+    }
+  }, [status, session, router]);
+
+  const toggle = (value: string) =>
     setSelected((prev) =>
-      prev.includes(interest)
-        ? prev.filter((i) => i !== interest)
-        : [...prev, interest],
+      prev.includes(value)
+        ? prev.filter((i) => i !== value)
+        : [...prev, value],
     );
 
+  // Both "Next" and "Skip" advance to the final profile-setup step; only
+  // "Next" persists the chosen interests first.
+  const goToProfileSetup = () => router.push("/profile-setup");
+
   const handleNext = async () => {
+    if (!userId) return goToProfileSetup();
     setLoading(true);
     try {
-      await api.auth.saveInterests(selected);
+      await api.auth.saveInterests(userId, selected, token);
     } catch {
-      /* non-blocking */
+      /* non-blocking — interests are optional */
     } finally {
-      router.push("/dashboard");
+      setLoading(false);
+      goToProfileSetup();
     }
   };
+
+  if (status === "loading" || status === "unauthenticated" || session?.user?.isProfileComplete) {
+    return <section className="min-h-[70vh]" />;
+  }
 
   return (
     <section
@@ -61,11 +90,11 @@ export default function InterestsPage() {
 
         <div className="mt-20 flex max-w-2xl flex-wrap justify-center gap-3">
           {INTERESTS.map((interest) => {
-            const active = selected.includes(interest);
+            const active = selected.includes(interest.value);
             return (
               <button
-                key={interest}
-                onClick={() => toggle(interest)}
+                key={interest.value}
+                onClick={() => toggle(interest.value)}
                 className={cn(
                   "inline-flex items-center justify-center gap-2.5 rounded-xl px-3.5 py-2.5 font-inter text-base font-semibold leading-5 text-white transition-all",
                   active
@@ -73,7 +102,7 @@ export default function InterestsPage() {
                     : "bg-yellow-700/40 hover:bg-yellow-700/60",
                 )}
               >
-                {interest}
+                {interest.label}
               </button>
             );
           })}
@@ -91,7 +120,7 @@ export default function InterestsPage() {
             {loading ? "Saving…" : "Next"}
           </button>
           <button
-            onClick={() => router.push("/dashboard")}
+            onClick={goToProfileSetup}
             className="inline-flex w-56 items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-xl font-medium capitalize leading-7 text-neutral-500 outline outline-1 -outline-offset-1 outline-orange-400/40 transition-colors hover:text-white"
           >
             Skip
