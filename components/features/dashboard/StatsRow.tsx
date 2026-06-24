@@ -1,7 +1,18 @@
-import { Users, Layers2 } from "lucide-react";
-import { STATS, type DashboardStat } from "./constants";
+"use client";
 
-function StatIcon({ icon }: Readonly<{ icon: DashboardStat["icon"] }>) {
+import { Users, Layers2 } from "lucide-react";
+import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
+
+type StatIconKind = "reviewed" | "following" | "collections" | "published";
+
+interface DashboardStat {
+  label: string;
+  value: string;
+  delta?: string;
+  icon: StatIconKind;
+}
+
+function StatIcon({ icon }: Readonly<{ icon: StatIconKind }>) {
   if (icon === "reviewed") {
     return (
       // eslint-disable-next-line @next/next/no-img-element
@@ -43,18 +54,42 @@ function StatCard({ stat }: Readonly<{ stat: DashboardStat }>) {
         <p className="font-inter text-3xl font-semibold leading-7 text-white">
           {stat.value}
         </p>
-        <p className="mt-2 font-inter text-[10.24px] font-light leading-[10.24px] text-white">
-          {stat.delta}
-        </p>
+        {stat.delta && (
+          <p className="mt-2 font-inter text-[10.24px] font-light leading-[10.24px] text-white/70">
+            {stat.delta}
+          </p>
+        )}
       </div>
     </div>
   );
 }
 
 export function StatsRow() {
+  const { data: user } = useCurrentUser();
+
+  const savedCount = Array.isArray(user?.savedWorks) ? user.savedWorks.length : 0;
+  const interestsCount = Array.isArray(user?.interests) ? user.interests.length : 0;
+
+  const stats: DashboardStat[] = [
+    {
+      label: "Saved Works",
+      value: String(savedCount),
+      delta: savedCount > 0 ? "in your library" : undefined,
+      icon: "reviewed",
+    },
+    {
+      label: "Interests",
+      value: String(interestsCount),
+      delta: interestsCount > 0 ? "topics you follow" : undefined,
+      icon: "following",
+    },
+    { label: "Collections", value: "—", icon: "collections" },
+    { label: "Reports", value: "—", icon: "published" },
+  ];
+
   return (
     <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-      {STATS.map((stat) => (
+      {stats.map((stat) => (
         <StatCard key={stat.label} stat={stat} />
       ))}
     </div>

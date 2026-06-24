@@ -1,7 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { COLLECTIONS, type CollectionItem } from "./constants";
+
+export interface CollectionItem {
+  slug: string;
+  name: string;
+  count: number;
+  image: string;
+}
+
+/**
+ * Collections are not yet backed by the API, so the grid renders only the
+ * "create" affordance until a Collections collection exists server-side.
+ */
+const COLLECTIONS: CollectionItem[] = [];
 
 function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
   return (
