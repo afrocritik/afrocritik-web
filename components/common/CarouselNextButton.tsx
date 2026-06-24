@@ -1,11 +1,13 @@
 interface CarouselNextButtonProps {
   top?: string;
+  onClick?: () => void;
 }
 
-export function CarouselNextButton({ top = "40%" }: Readonly<CarouselNextButtonProps>) {
+export function CarouselNextButton({ top = "40%", onClick }: Readonly<CarouselNextButtonProps>) {
   return (
     <button
       aria-label="Next"
+      onClick={onClick}
       className="absolute hidden lg:flex items-center justify-center"
       style={{
         top,

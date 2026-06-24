@@ -1,6 +1,6 @@
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { WorkCard } from "@/components/common/WorkCard";
-import { CarouselNextButton } from "@/components/common/CarouselNextButton";
+import { CarouselRow } from "@/components/common/CarouselRow";
 import { mapWorkToCard } from "@/lib/api";
 
 interface Props {
@@ -15,22 +15,22 @@ export function EssentialMusicSection({ works = [] }: Props) {
       <div className="container">
         <SectionHeading
           title="Essential Works In Music"
-          linkText="View All →"
-          linkHref="/explore?q=music"
+          linkText={cards.length > 0 ? "View All →" : undefined}
+          linkHref={cards.length > 0 ? "/explore?q=music" : undefined}
           font="serif"
           bleedRight
         />
       </div>
-      <div className="relative">
+      <div>
         {cards.length > 0 ? (
-          <div
-            className="hide-scrollbar flex justify-between gap-5 overflow-x-auto scroll-smooth pb-2 lg:overflow-x-visible"
+          <CarouselRow
+            className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth pb-2"
             style={{ paddingLeft: "max(24px, calc(50vw - 636px))", paddingRight: "24px" }}
           >
             {cards.map((w) => (
               <WorkCard key={w.slug} {...w} ewim />
             ))}
-          </div>
+          </CarouselRow>
         ) : (
           <div
             className="flex items-center justify-center py-14"
@@ -41,7 +41,6 @@ export function EssentialMusicSection({ works = [] }: Props) {
             </p>
           </div>
         )}
-        <CarouselNextButton />
       </div>
     </>
   );

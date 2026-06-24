@@ -14,7 +14,11 @@ export function ContinueExploringSection() {
   const works: any[] = data?.docs ?? [];
 
   return (
-    <DashboardSection title="Continue Exploring" viewAllHref="/explore" card>
+    <DashboardSection
+      title="Continue Exploring"
+      viewAllHref={works.length > 0 ? "/explore" : undefined}
+      card
+    >
       {works.length > 0 ? (
         <div className="grid grid-cols-3 gap-3">
           {works.map((work) => (

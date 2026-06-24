@@ -56,7 +56,11 @@ export function FeaturedWorksSection() {
   if (works.length === 0) works = fallback?.docs ?? [];
 
   return (
-    <DashboardSection title="Featured Works" viewAllHref="/explore" card>
+    <DashboardSection
+      title="Featured Works"
+      viewAllHref={works.length > 0 ? "/explore" : undefined}
+      card
+    >
       {works.length > 0 ? (
         <div className="flex gap-3">
           {works.map((work) => (
