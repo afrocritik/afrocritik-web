@@ -1,16 +1,33 @@
-import Image from "next/image";
+"use client";
+
 import { Eye } from "lucide-react";
 import { TOP_CONTENT } from "./constants";
+import { useDashboardData } from "./useDashboardData";
 
 export function TopContent() {
+  const { data, isLoading } = useDashboardData();
+  if (isLoading && !data)
+    return (
+      <ul className="flex flex-col">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <li key={i} className="flex items-center gap-3 py-2.5">
+            <span className="size-10 shrink-0 animate-pulse rounded-lg bg-[#50321C40]" />
+            <span className="h-3 flex-1 animate-pulse rounded bg-[#50321C40]" />
+          </li>
+        ))}
+      </ul>
+    );
+  const items = data?.topContent?.length ? data.topContent : TOP_CONTENT;
   return (
     <ul className="flex flex-col">
-      {TOP_CONTENT.map((item) => (
+      {items.map((item) => (
         <li
           key={item.title}
           className="flex items-center gap-3 border-b border-line/60 py-2.5 last:border-b-0"
         >
-          <Image
+          {/* Plain img: real media is on DigitalOcean Spaces, not configured
+              for next/image. eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={item.image}
             alt={item.title}
             width={40}
