@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
+import { LoadingOverlay } from "@/components/common/LoadingOverlay";
 
 // Display label → backend select value (see Users.interests options).
 const INTERESTS: { label: string; value: string }[] = [
@@ -79,6 +80,7 @@ export default function InterestsPage() {
           "linear-gradient(180deg, #4D311D 0%, #794C2D 50%, #4D311D 100%)",
       }}
     >
+      <LoadingOverlay show={loading} message="Saving your interests…" />
       <div className="container flex min-h-[70vh] flex-col items-center justify-center py-28 text-center">
         <h1 className="font-baskervville text-[40px] font-semibold leading-10 text-white">
           Select Interest

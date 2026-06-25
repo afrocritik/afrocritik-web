@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { LoadingOverlay } from "@/components/common/LoadingOverlay";
 import { OAuthButtons, OrDivider } from "@/components/features/auth/OAuthButtons";
 import { AuthField } from "@/components/features/auth/AuthField";
 import { PasswordField } from "@/components/features/auth/PasswordField";
@@ -25,27 +26,30 @@ export default function SignInPage() {
       password,
       redirect: false,
     });
-    setLoading(false);
     if (res?.error) {
+      setLoading(false);
       setError("Invalid email or password.");
-    } else {
-      // Return the user to the gated page they came from, if any. Only honour
-      // relative paths to avoid open-redirects to external sites.
-      const target = new URLSearchParams(globalThis.location.search).get("callbackUrl");
-      if (target?.startsWith("/")) {
-        router.push(target);
-        return;
-      }
-      // Otherwise route by role: admins/editors land in the admin area,
-      // everyone else in their dashboard.
-      const session = await getSession();
-      const role = (session?.user as { role?: string } | undefined)?.role;
-      router.push(role === "admin" || role === "editor" ? "/admin" : "/dashboard");
+      return;
     }
+    // Success — keep the overlay up through resolving the role and navigating
+    // (the route change unmounts this page).
+    // Return the user to the gated page they came from, if any. Only honour
+    // relative paths to avoid open-redirects to external sites.
+    const target = new URLSearchParams(globalThis.location.search).get("callbackUrl");
+    if (target?.startsWith("/")) {
+      router.push(target);
+      return;
+    }
+    // Otherwise route by role: admins/editors land in the admin area,
+    // everyone else in their dashboard.
+    const session = await getSession();
+    const role = (session?.user as { role?: string } | undefined)?.role;
+    router.push(role === "admin" || role === "editor" ? "/admin" : "/dashboard");
   };
 
   return (
     <AuthLayout>
+      <LoadingOverlay show={loading} message="Signing you in…" />
       <div className="flex flex-col gap-2.5 text-center">
         <h1 className="font-baskervville text-[36px] font-semibold text-white leading-10">
           Sign in
