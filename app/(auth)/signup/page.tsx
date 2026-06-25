@@ -6,6 +6,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Check } from "lucide-react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { LoadingOverlay } from "@/components/common/LoadingOverlay";
 import { OAuthButtons, OrDivider } from "@/components/features/auth/OAuthButtons";
 import { AuthField } from "@/components/features/auth/AuthField";
 import { PasswordField } from "@/components/features/auth/PasswordField";
@@ -58,21 +59,23 @@ export default function SignUpPage() {
       password,
       redirect: false,
     });
-    setLoading(false);
 
     if (result?.error) {
       // The account was created but auto sign-in failed — don't strand them.
+      setLoading(false);
       return setError(
         "Your account was created, but we couldn't sign you in automatically. Please sign in.",
       );
     }
 
-    // Onboarding order: interests first, then profile-setup (final step).
+    // Success — keep the overlay through navigation. Onboarding order:
+    // interests first, then profile-setup (final step).
     router.push("/interests");
   };
 
   return (
     <AuthLayout>
+      <LoadingOverlay show={loading} message="Creating your account…" />
       <div className="flex flex-col">
         <div className="flex flex-col gap-2.5 text-center">
           <h1 className="font-baskervville text-[36px] font-semibold text-white leading-10">

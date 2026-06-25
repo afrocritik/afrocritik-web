@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { LoadingOverlay } from "@/components/common/LoadingOverlay";
 
 /**
  * Landing page for the backend OAuth (Google/Facebook) redirect. The backend
@@ -40,11 +41,7 @@ function OAuthCallback() {
     })();
   }, [params, router]);
 
-  return (
-    <div className="flex h-96 items-center justify-center font-inter text-white">
-      Signing you in…
-    </div>
-  );
+  return <LoadingOverlay show message="Signing you in…" />;
 }
 
 export default function OAuthCallbackPage() {

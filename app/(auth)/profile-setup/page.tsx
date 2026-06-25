@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { LoadingOverlay } from "@/components/common/LoadingOverlay";
 import {
   Select,
   SelectContent,
@@ -79,6 +80,7 @@ function ProfileSetupForm() {
 
   return (
     <div className="flex flex-col items-center">
+      <LoadingOverlay show={loading} message="Saving your profile…" />
       <div className="flex w-full flex-col gap-2.5 text-center">
         <h1 className="font-baskervville text-[36px] font-semibold leading-10 text-white">
           Set up your profile
