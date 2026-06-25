@@ -18,12 +18,24 @@ function resolveNames(arr: any): string {
     : "";
 }
 
+// Each tab maps to its own detail route, so a card links to the right page.
+const TAB_ROUTE: Record<string, string> = {
+  works: "works",
+  ideas: "ideas",
+  people: "people",
+  reports: "reports",
+  moments: "moments",
+};
+
 // The archive endpoint returns raw Payload docs; normalise each to the card
 // shape ArchiveResults / WorkCard expect, per tab.
 function toCard(doc: any, tab: string) {
+  const base = TAB_ROUTE[tab] ?? "works";
   if (tab === "people") {
+    const slug = doc.slug ?? "";
     return {
-      slug: doc.slug ?? "",
+      slug,
+      href: `/${base}/${slug}`,
       title: doc.name ?? "",
       type: "person",
       year: undefined,
@@ -38,7 +50,8 @@ function toCard(doc: any, tab: string) {
     };
   }
   // works / ideas / reports / moments all share coverImage + summary.
-  return mapWorkToCard(doc);
+  const card = mapWorkToCard(doc);
+  return { ...card, href: `/${base}/${card.slug}` };
 }
 
 export function ArchiveBrowser() {

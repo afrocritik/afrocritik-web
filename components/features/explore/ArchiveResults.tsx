@@ -82,6 +82,7 @@ export function ArchiveResults({
                     key={w.slug}
                     explore
                     slug={w.slug}
+                    href={w.href}
                     title={w.title}
                     type={w.type}
                     year={w.year}
