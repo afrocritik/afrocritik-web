@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RECENT_ENTRIES } from "./constants";
 import { RecentEntryRow } from "./RecentEntryRow";
-import { TablePagination } from "./TablePagination";
+import { useDashboardData } from "./useDashboardData";
 
-const TOTAL_PAGES = 25;
 const COLUMNS = ["Title", "Type", "Category", "Added By", "Date", "Status", ""];
 
 export function RecentEntriesTable() {
-  const [page, setPage] = useState(1);
+  const { data, isLoading } = useDashboardData();
+  const entries = data?.recent?.length ? data.recent : isLoading ? [] : RECENT_ENTRIES;
 
   return (
     <div className="rounded-xl border border-yellow-700 p-5" style={{ background: "#50321C80" }}>
@@ -47,19 +46,28 @@ export function RecentEntriesTable() {
             </tr>
           </thead>
           <tbody>
-            {RECENT_ENTRIES.map((entry) => (
-              <RecentEntryRow key={entry.title} entry={entry} />
+            {entries.map((entry, i) => (
+              <RecentEntryRow key={`${entry.title}-${i}`} entry={entry} />
             ))}
+            {entries.length === 0 && (
+              <tr>
+                <td
+                  colSpan={COLUMNS.length}
+                  className="py-12 text-center font-inter text-sm text-white/50"
+                >
+                  {isLoading ? "Loading recent entries…" : "No entries yet."}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      <TablePagination
-        page={page}
-        totalPages={TOTAL_PAGES}
-        onPageChange={setPage}
-        summary={`Showing 1 to ${RECENT_ENTRIES.length} of ${TOTAL_PAGES * RECENT_ENTRIES.length} entries`}
-      />
+      {entries.length > 0 && (
+        <p className="mt-4 font-inter text-xs text-white/50">
+          Showing the {entries.length} most recent entries
+        </p>
+      )}
     </div>
   );
 }

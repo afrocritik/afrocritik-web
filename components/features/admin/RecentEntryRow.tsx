@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { MoreHorizontal } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 import type { RecentEntry } from "./constants";
@@ -10,7 +9,9 @@ export function RecentEntryRow({ entry }: Readonly<{ entry: RecentEntry }>) {
     <tr>
       <td className="h-16 border-b-[0.09px] border-neutral-500/50 px-3 py-2 align-middle">
         <div className="flex items-center gap-2">
-          <Image
+          {/* Plain img: real media is served from DigitalOcean Spaces, which
+              isn't configured for next/image. eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={entry.image}
             alt={entry.title}
             width={36}

@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { LogOut, Plus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import {
   Popover,
@@ -122,16 +122,52 @@ export function AdminTopbar() {
             </PopoverContent>
           </Popover>
 
-          <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
-            <AvatarImage
-              src={session?.user?.image || "/Interest-Avatar.png"}
-              alt="Admin"
-              className="size-12 object-cover"
-            />
-            <AvatarFallback className="bg-bg-secondary text-amber">
-              {session?.user?.name?.[0]?.toUpperCase() || "A"}
-            </AvatarFallback>
-          </Avatar>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button type="button" aria-label="Account menu" className="rounded-full">
+                <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
+                  <AvatarImage
+                    src={session?.user?.image || "/Interest-Avatar.png"}
+                    alt="Admin"
+                    className="size-12 object-cover"
+                  />
+                  <AvatarFallback className="bg-bg-secondary text-amber">
+                    {session?.user?.name?.[0]?.toUpperCase() || "A"}
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="w-56 border-yellow-700/60 bg-[#2C1500] p-1"
+            >
+              <div className="px-3 py-2">
+                <p className="truncate font-inter text-sm font-medium text-white">
+                  {session?.user?.name || "Admin"}
+                </p>
+                {session?.user?.email && (
+                  <p className="truncate font-inter text-xs text-white/50">
+                    {session.user.email}
+                  </p>
+                )}
+              </div>
+              <div className="my-1 h-px bg-yellow-700/40" />
+              <Link
+                href="/"
+                className="block rounded-md px-3 py-2 font-inter text-sm text-white transition-colors hover:bg-white/5"
+              >
+                View site
+              </Link>
+              <button
+                type="button"
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left font-inter text-sm text-red-300 transition-colors hover:bg-white/5"
+              >
+                <LogOut className="size-4" />
+                Logout
+              </button>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 

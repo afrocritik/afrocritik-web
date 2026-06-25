@@ -1,5 +1,8 @@
+"use client";
+
 import type { LucideIcon } from "lucide-react";
 import { ADMIN_STATS, type AdminStat } from "./constants";
+import { useDashboardData } from "./useDashboardData";
 
 function StatIcon({ icon }: Readonly<{ icon: AdminStat["icon"] }>) {
   if (typeof icon === "string") {
@@ -40,11 +43,21 @@ function StatCard({ stat }: Readonly<{ stat: AdminStat }>) {
 }
 
 export function AdminStatCards() {
+  const { data, isLoading } = useDashboardData();
+  // Show skeletons during the first load rather than flashing the static
+  // placeholder values; fall back to statics only if the fetch failed.
+  const stats = data?.stats ?? (isLoading ? null : ADMIN_STATS);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {ADMIN_STATS.map((stat) => (
-        <StatCard key={stat.label} stat={stat} />
-      ))}
+      {stats
+        ? stats.map((stat) => <StatCard key={stat.label} stat={stat} />)
+        : Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-32 animate-pulse rounded-2xl outline outline-1 outline-offset-[-1.01px] outline-yellow-700/40"
+              style={{ background: "#50321C40" }}
+            />
+          ))}
     </div>
   );
 }

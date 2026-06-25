@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ViewTracker } from "@/components/common/ViewTracker";
 import { WorkHeroSection } from "@/components/features/works/WorkHeroSection";
 import { WorkContextRow } from "@/components/features/works/WorkContextRow";
 import { WorkAnchorRow } from "@/components/features/works/WorkAnchorRow";
@@ -122,6 +123,7 @@ export default async function WorkDetailPage({
 
   return (
     <div className="bg-[#160907]">
+      <ViewTracker collection="works" id={work.id} />
       <div className="container">
         <WorkHeroSection
           title={title}

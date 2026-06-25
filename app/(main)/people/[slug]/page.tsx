@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
+import { ViewTracker } from "@/components/common/ViewTracker";
 import { WorkCard } from "@/components/common/WorkCard";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { FollowButton } from "@/components/features/people/FollowButton";
@@ -76,6 +77,7 @@ export default async function PersonDetailPage({
 
   return (
     <div className="bg-[#160907]">
+      <ViewTracker collection="people" id={person.id} />
       <div className="container">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1.5 py-4 font-inter text-xs text-orange-100/70">

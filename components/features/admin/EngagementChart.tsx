@@ -10,12 +10,22 @@ import {
   YAxis,
 } from "recharts";
 import { ENGAGEMENT_DATA } from "./constants";
+import { useDashboardData } from "./useDashboardData";
 
 export function EngagementChart() {
+  const { data, isLoading } = useDashboardData();
+  if (isLoading && !data)
+    return (
+      <div
+        className="mt-8 h-[280px] w-full animate-pulse rounded-lg"
+        style={{ background: "#50321C40" }}
+      />
+    );
+  const ENGAGEMENT = data?.engagement?.length ? data.engagement : ENGAGEMENT_DATA;
   return (
     <div className="mt-8">
       <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={ENGAGEMENT_DATA} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+        <BarChart data={ENGAGEMENT} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
           <CartesianGrid stroke="#7E7D7C" strokeWidth={2} vertical={false} />
           <XAxis
             dataKey="entity"
@@ -28,8 +38,12 @@ export function EngagementChart() {
             tick={{ fill: "#FFFFFF", fontSize: 14 }}
             tickLine={false}
             axisLine={false}
-            domain={[0, 100]}
-            ticks={[0, 20, 40, 60, 80, 100]}
+            domain={[0, "auto"]}
+            allowDecimals={false}
+            width={48}
+            tickFormatter={(v: number) =>
+              v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v)
+            }
           />
           <Tooltip
             cursor={{ fill: "rgba(200, 146, 42, 0.08)" }}

@@ -2,14 +2,24 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { CATEGORY_DATA } from "./constants";
+import { useDashboardData } from "./useDashboardData";
 
 export function ContentByCategoryChart() {
+  const { data, isLoading } = useDashboardData();
+  if (isLoading && !data)
+    return (
+      <div
+        className="h-[256px] w-full animate-pulse rounded-lg"
+        style={{ background: "#50321C40" }}
+      />
+    );
+  const CATEGORY = data?.category?.length ? data.category : CATEGORY_DATA;
   return (
     <div className="flex flex-col items-center gap-4">
       <ResponsiveContainer width="100%" height={220}>
         <PieChart>
           <Pie
-            data={CATEGORY_DATA}
+            data={CATEGORY}
             dataKey="value"
             nameKey="label"
             cx="50%"
@@ -20,7 +30,7 @@ export function ContentByCategoryChart() {
             stroke="white"
             strokeWidth={1.36}
           >
-            {CATEGORY_DATA.map((slice) => (
+            {CATEGORY.map((slice) => (
               <Cell key={slice.label} fill={slice.color} />
             ))}
           </Pie>
@@ -37,7 +47,7 @@ export function ContentByCategoryChart() {
       </ResponsiveContainer>
 
       <div className="inline-flex flex-wrap items-center justify-center gap-2.5">
-        {CATEGORY_DATA.map((slice) => (
+        {CATEGORY.map((slice) => (
           <div key={slice.label} className="flex items-center gap-2">
             <span
               className="size-2 shrink-0 rounded-[1px]"

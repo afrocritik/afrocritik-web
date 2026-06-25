@@ -175,6 +175,13 @@ export const api = {
   },
   homepage: () =>
     apiClient.get("/api/globals/homepage").then((r) => r.data),
+  track: {
+    // Fire-and-forget detail-page view counter (public, no auth needed).
+    view: (collection: string, id: string | number) =>
+      apiClient
+        .post("/api/track/view", { collection, id })
+        .then((r) => r.data),
+  },
   auth: {
     login: (email: string, password: string) =>
       apiClient

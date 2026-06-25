@@ -10,15 +10,25 @@ import {
   YAxis,
 } from "recharts";
 import { GROWTH_DATA, GROWTH_SERIES } from "./constants";
+import { useDashboardData } from "./useDashboardData";
 
 const GRID = "rgba(255,255,255,0.3)";
 const AXIS_LINE = "rgba(255,255,255,0.5)";
 const TICK = "#ffffff";
 
 export function ContentGrowthChart() {
+  const { data, isLoading } = useDashboardData();
+  if (isLoading && !data)
+    return (
+      <div
+        className="h-[288px] w-full animate-pulse rounded-lg"
+        style={{ background: "#50321C40" }}
+      />
+    );
+  const GROWTH = data?.growth?.length ? data.growth : GROWTH_DATA;
   return (
     <ResponsiveContainer width="100%" height={288}>
-      <AreaChart data={GROWTH_DATA} margin={{ top: 10, right: 8, left: -16, bottom: 0 }}>
+      <AreaChart data={GROWTH} margin={{ top: 10, right: 8, left: -16, bottom: 0 }}>
         <defs>
           {GROWTH_SERIES.map((s) => (
             <linearGradient key={s.key} id={`growth-${s.key}`} x1="0" y1="0" x2="0" y2="1">
@@ -47,8 +57,8 @@ export function ContentGrowthChart() {
           tick={{ fill: TICK, fontSize: 9 }}
           tickLine={false}
           axisLine={false}
-          domain={[0, 100]}
-          ticks={[0, 25, 50, 75, 100]}
+          domain={[0, "auto"]}
+          allowDecimals={false}
         />
         <Tooltip
           contentStyle={{
