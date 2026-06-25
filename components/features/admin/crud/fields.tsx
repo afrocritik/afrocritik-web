@@ -28,13 +28,15 @@ import {
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { FieldConfig } from "./types";
+import { apiClient, API_BASE, getMediaUrl } from "@/lib/api";
+import type { FieldConfig, SelectOption } from "./types";
 import { acceptKind, validateField, validateFileSelection } from "./validation";
 
 /* Shared control styling so every field matches the admin theme. */
@@ -206,6 +208,173 @@ function MultiSelectControl({ field, value, onChange }: ControlProps) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Relationship (live options fetched from the target collection)      */
+/* ------------------------------------------------------------------ */
+
+// Cache fetched options per collection so multiple fields / re-renders don't
+// refetch the same list within a session.
+const relOptionsCache: Record<string, SelectOption[]> = {};
+
+function useRelationshipOptions(relationTo?: string, token?: string) {
+  const [options, setOptions] = useState<SelectOption[]>(() =>
+    relationTo && relOptionsCache[relationTo] ? relOptionsCache[relationTo] : []
+  );
+  const [loading, setLoading] = useState(
+    Boolean(relationTo) && !(relationTo && relOptionsCache[relationTo])
+  );
+
+  useEffect(() => {
+    if (!relationTo) return;
+    if (relOptionsCache[relationTo]) {
+      setOptions(relOptionsCache[relationTo]);
+      setLoading(false);
+      return;
+    }
+    let active = true;
+    setLoading(true);
+    apiClient
+      .get(`/api/${relationTo}`, {
+        params: { limit: 200, depth: 0 },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      })
+      .then((res) => {
+        const docs: any[] = res?.data?.docs ?? [];
+        const opts: SelectOption[] = docs.map((d) => ({
+          value: String(d.id),
+          label: d.name ?? d.title ?? d.slug ?? `#${d.id}`,
+        }));
+        relOptionsCache[relationTo] = opts;
+        if (active) setOptions(opts);
+      })
+      .catch(() => {
+        /* leave empty; the field falls back to any static options */
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [relationTo, token]);
+
+  return { options, loading };
+}
+
+function RelationshipControl({ field, value, onChange }: ControlProps) {
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+  const { options: fetched, loading } = useRelationshipOptions(
+    field.relationTo,
+    token
+  );
+  // Live options when available; static `options` only as an offline fallback.
+  const options = fetched.length ? fetched : field.options ?? [];
+
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  // Stored as an array of related-record IDs. Compare loosely so a numeric id
+  // (Postgres) and its string form both resolve to the same option.
+  const selected = Array.isArray(value) ? (value as (string | number)[]) : [];
+  const isSel = (optVal: string) => selected.some((s) => String(s) === optVal);
+
+  const toggle = (optVal: string) => {
+    if (isSel(optVal)) {
+      onChange(selected.filter((s) => String(s) !== optVal));
+    } else {
+      // Submit a number when the id is numeric — Payload/Postgres requires it.
+      const n = Number(optVal);
+      onChange([...selected, Number.isNaN(n) ? optVal : n]);
+    }
+  };
+
+  const labelFor = (val: string | number) =>
+    options.find((o) => o.value === String(val))?.label ?? `#${val}`;
+
+  const filtered = search
+    ? options.filter((o) =>
+        o.label.toLowerCase().includes(search.toLowerCase())
+      )
+    : options;
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            controlBase,
+            "flex min-h-11 items-center justify-between gap-2 py-2 text-left"
+          )}
+        >
+          <span className="flex flex-1 flex-wrap gap-1.5">
+            {selected.length === 0 && (
+              <span className="text-white/40">
+                {field.placeholder ?? `Select ${field.label.toLowerCase()}`}
+              </span>
+            )}
+            {selected.map((val) => (
+              <span
+                key={String(val)}
+                className="inline-flex items-center gap-1 rounded-md bg-yellow-950/60 px-2 py-0.5 text-xs text-orange-200 outline outline-1 outline-yellow-700/60"
+              >
+                {labelFor(val)}
+                <span
+                  role="button"
+                  tabIndex={-1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggle(String(val));
+                  }}
+                  className="text-orange-200/70 hover:text-white"
+                >
+                  <X className="size-3" />
+                </span>
+              </span>
+            ))}
+          </span>
+          <ChevronDown className="size-4 shrink-0 text-white/50" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        className="max-h-72 w-[--radix-popover-trigger-width] overflow-y-auto border-yellow-700/60 bg-[#2C1500] p-1"
+      >
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search…"
+          className="mb-1 w-full rounded-md border border-yellow-700/50 bg-[#3A2417]/50 px-2.5 py-1.5 font-inter text-sm text-white placeholder:text-white/40 focus:outline-none"
+        />
+        {loading && (
+          <p className="flex items-center gap-2 px-2.5 py-2 text-sm text-white/50">
+            <Loader2 className="size-3.5 animate-spin" /> Loading…
+          </p>
+        )}
+        {!loading &&
+          filtered.map((opt) => {
+            const sel = isSel(opt.value);
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => toggle(opt.value)}
+                className="flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-2 text-left font-inter text-sm text-white transition-colors hover:bg-white/5"
+              >
+                {opt.label}
+                {sel && <Check className="size-4 text-orange-400" />}
+              </button>
+            );
+          })}
+        {!loading && filtered.length === 0 && (
+          <p className="px-2.5 py-2 text-sm text-white/50">No matches</p>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Free-form tag input                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -256,15 +425,55 @@ function TagsControl({ field, value, onChange }: ControlProps) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Image / file upload (visual stub — stores file name)               */
+/* Image / file upload — uploads to the Payload media collection            */
 /* ------------------------------------------------------------------ */
 
 function ImageControl({ field, value, onChange, error, setError }: ControlProps) {
-  const current = value as string | undefined;
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
   const kind = acceptKind(field);
   const isImage = kind === "image";
   const [checking, setChecking] = useState(false);
+  // Preview URL (image) and display name (file) resolved from the stored value.
+  const [preview, setPreview] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
 
+  // Resolve whatever is stored — a media id (from depth=0), a populated media
+  // object (depth>0), or a legacy blob/string — into something displayable.
+  useEffect(() => {
+    if (!value) {
+      setPreview(null);
+      setFileName(null);
+      return;
+    }
+    if (typeof value === "object") {
+      setPreview(getMediaUrl(value) ?? null);
+      setFileName((value as { filename?: string }).filename ?? null);
+      return;
+    }
+    if (typeof value === "string" && /^(blob:|https?:)/.test(value)) {
+      setPreview(value);
+      return;
+    }
+    // A media id — fetch the doc to show its url / filename.
+    let active = true;
+    apiClient
+      .get(`/api/media/${value}`, {
+        params: { depth: 0 },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      })
+      .then((r) => {
+        if (!active) return;
+        setPreview(getMediaUrl(r.data) ?? null);
+        setFileName(r.data?.filename ?? null);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [value, token]);
+
+  const current = preview ?? fileName;
   const maxMB = field.maxSizeMB ?? (isImage ? 5 : 25);
   const hint = isImage
     ? `PNG, JPG or WEBP up to ${maxMB}MB${
@@ -279,14 +488,35 @@ function ImageControl({ field, value, onChange, error, setError }: ControlProps)
 
     setChecking(true);
     const problem = await validateFileSelection(field, file);
-    setChecking(false);
-
     if (problem) {
+      setChecking(false);
       setError?.(problem);
       return;
     }
     setError?.(null);
-    onChange(isImage ? URL.createObjectURL(file) : file.name);
+
+    // Upload to the Payload media collection and store the returned id, which
+    // is what relationship/upload fields validate against. (fetch sets the
+    // multipart boundary for FormData; the shared axios client forces JSON.)
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch(`${API_BASE}/api/media`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        body: fd,
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      const doc = data?.doc ?? data;
+      onChange(doc.id);
+      setPreview(isImage ? getMediaUrl(doc) || URL.createObjectURL(file) : null);
+      setFileName(doc?.filename ?? file.name);
+    } catch {
+      setError?.("Upload failed. Please try again.");
+    } finally {
+      setChecking(false);
+    }
   };
 
   return (
@@ -966,9 +1196,13 @@ export function FieldRenderer({
       control = <SelectControl field={field} value={value} onChange={handleChange} />;
       break;
     case "multiselect":
-    case "relationship":
       control = (
         <MultiSelectControl field={field} value={value} onChange={handleChange} />
+      );
+      break;
+    case "relationship":
+      control = (
+        <RelationshipControl field={field} value={value} onChange={handleChange} />
       );
       break;
     case "tags":

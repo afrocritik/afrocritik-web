@@ -48,6 +48,12 @@ export interface FieldConfig {
   description?: string;
   /** Options for select / multiselect / relationship / tags */
   options?: SelectOption[];
+  /**
+   * For `relationship` fields: the target collection slug (e.g. "themes",
+   * "works"). Options are fetched live from `/api/<relationTo>` so values are
+   * real record IDs. `options` is kept only as an offline fallback.
+   */
+  relationTo?: string;
   /** Sub-fields for group / repeater */
   fields?: FieldConfig[];
   /** Label shown on the add button of a repeater */

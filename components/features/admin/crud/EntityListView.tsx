@@ -123,7 +123,10 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
 
-  const [rows, setRows] = useState<EntityRecord[]>(config.sample);
+  // Start empty (not with sample data) so the seeded/live data doesn't flash
+  // the static placeholder first. Sample is only used as an offline fallback.
+  const [rows, setRows] = useState<EntityRecord[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [page, setPage] = useState(1);
@@ -148,11 +151,15 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
           params: { limit: 100, depth: 1 },
         });
         const docs = res?.data?.docs;
-        if (active && Array.isArray(docs) && docs.length > 0) {
+        if (active && Array.isArray(docs)) {
           setRows(docs.map((d) => normalizeRecord(d, config)));
         }
       } catch {
-        // Keep sample data on failure.
+        // Offline / API error — fall back to the seeded sample so the admin
+        // stays demoable.
+        if (active) setRows(config.sample);
+      } finally {
+        if (active) setLoaded(true);
       }
     })();
     return () => {
@@ -311,7 +318,9 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
                     colSpan={config.columns.length + 1}
                     className="py-16 text-center font-inter text-sm text-white/50"
                   >
-                    No {config.plural.toLowerCase()} found.
+                    {loaded
+                      ? `No ${config.plural.toLowerCase()} found.`
+                      : `Loading ${config.plural.toLowerCase()}…`}
                   </td>
                 </tr>
               )}

@@ -127,7 +127,7 @@ const EDITORIAL_SECTIONS: FormSection[] = [
             description:
               "Style with bold, italics, headings, lists and links. Use the image button to drop a picture where your cursor is — then drag its corner to resize, or wrap text to its left or right.",
           },
-          { name: "films", label: "Featured works", type: "relationship", options: WORK_OPTS },
+          { name: "films", label: "Featured works", type: "relationship", relationTo: "works", options: WORK_OPTS },
         ],
       },
     ],
@@ -244,17 +244,17 @@ export const ENTITIES: Record<string, EntityConfig> = {
         title: "Relationships",
         description: "Connect this work to the rest of the archive.",
         fields: [
-          { name: "people", label: "Pioneers & icons", type: "relationship", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
-          { name: "ideas", label: "Ideas", type: "relationship", options: IDEA_OPTS },
-          { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
+          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
+          { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas", options: IDEA_OPTS },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
         ],
       },
       {
         title: "Related works",
         fields: [
-          { name: "relatedWorks", label: "Related works", type: "relationship", sidebar: true, options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
+          { name: "relatedWorks", label: "Related works", type: "relationship", sidebar: true, relationTo: "works", options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
         ],
       },
       {
@@ -305,7 +305,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "role", label: "Roles", type: "multiselect", options: PERSON_ROLES },
           { name: "born", label: "Born", type: "text", placeholder: "1938, Kampala, Uganda" },
           { name: "died", label: "Died", type: "text", description: "Leave empty if still alive." },
-          { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
         ],
       },
       {
@@ -332,9 +332,9 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "works", label: "Works", type: "relationship", options: WORK_OPTS },
-          { name: "ideas", label: "Ideas", type: "relationship", options: IDEA_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
+          { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
+          { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas", options: IDEA_OPTS },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
         ],
       },
@@ -407,17 +407,17 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "people", label: "Key thinkers", type: "relationship", options: PEOPLE_OPTS },
-          { name: "works", label: "Works", type: "relationship", options: WORK_OPTS },
-          { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
+          { name: "people", label: "Key thinkers", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
+          { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
         ],
       },
       {
         title: "Related ideas",
         fields: [
-          { name: "relatedIdeas", label: "Related ideas", type: "relationship", sidebar: true, options: IDEA_OPTS },
+          { name: "relatedIdeas", label: "Related ideas", type: "relationship", sidebar: true, relationTo: "ideas", options: IDEA_OPTS },
         ],
       },
       {
@@ -511,9 +511,9 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
-          { name: "relatedWorks", label: "Related works", type: "relationship", options: WORK_OPTS },
-          { name: "relatedPeople", label: "Related people", type: "relationship", options: PEOPLE_OPTS },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
+          { name: "relatedWorks", label: "Related works", type: "relationship", relationTo: "works", options: WORK_OPTS },
+          { name: "relatedPeople", label: "Related people", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
         ],
       },
@@ -635,11 +635,11 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "people", label: "Pioneers & icons", type: "relationship", options: PEOPLE_OPTS },
-          { name: "works", label: "Works", type: "relationship", options: WORK_OPTS },
-          { name: "relatedMoments", label: "Related moments", type: "relationship", options: MOMENT_OPTS },
-          { name: "country", label: "Country", type: "relationship", options: COUNTRY_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", options: THEME_OPTS },
+          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
+          { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
+          { name: "relatedMoments", label: "Related moments", type: "relationship", relationTo: "moments", options: MOMENT_OPTS },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
           { name: "tags", label: "Tags", type: "tags" },
         ],
       },
@@ -779,7 +779,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "period", label: "Period", type: "text", placeholder: "1930s–1950s" },
           { name: "region", label: "Region", type: "text" },
           { name: "description", label: "Description", type: "textarea" },
-          { name: "relatedPeople", label: "Key figures", type: "relationship", options: PEOPLE_OPTS },
+          { name: "relatedPeople", label: "Key figures", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
         ],
       },
     ],
@@ -843,8 +843,8 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "works", label: "Related works", type: "relationship", options: WORK_OPTS },
-          { name: "people", label: "Related people", type: "relationship", options: PEOPLE_OPTS },
+          { name: "works", label: "Related works", type: "relationship", relationTo: "works", options: WORK_OPTS },
+          { name: "people", label: "Related people", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
         ],
       },
       {
