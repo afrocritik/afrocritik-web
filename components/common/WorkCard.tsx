@@ -5,8 +5,14 @@ import Link from "next/link";
 import { Bookmark, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Explore cards are narrow; cap visible tags and ellipsis-truncate each so a
+// long or numerous tag set can't overflow the card. Extras collapse into "+N".
+const MAX_EXPLORE_TAGS = 2;
+
 export interface WorkCardProps {
   slug?: string;
+  /** Detail-page link. Defaults to /works/[slug]; set per entity on explore. */
+  href?: string;
   title: string;
   author?: string;
   description?: string;
@@ -764,6 +770,7 @@ function EWILCard({
 
 function ExploreCard({
   slug = "#",
+  href,
   title,
   description,
   badge,
@@ -777,6 +784,7 @@ function ExploreCard({
   const cardTags = tags?.length
     ? tags
     : ([country, type].filter(Boolean) as string[]);
+  const detailHref = href ?? `/works/${slug}`;
 
   return (
     <div
@@ -786,7 +794,7 @@ function ExploreCard({
       )}
     >
       {/* Image */}
-      <Link href={`/works/${slug}`}>
+      <Link href={detailHref}>
         <div className="absolute left-[10px] top-[12px] right-[10px] h-[191px] overflow-hidden rounded-sm bg-[#3D1F00]">
           {image ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -820,7 +828,7 @@ function ExploreCard({
       )}
 
       {/* Title */}
-      <Link href={`/works/${slug}`}>
+      <Link href={detailHref}>
         <div
           className="absolute line-clamp-2"
           style={{
@@ -859,10 +867,41 @@ function ExploreCard({
 
       {/* Tags + Rating — pinned to bottom with guaranteed spacing */}
       <div className="absolute left-[8px] right-[8px] bottom-[8px] flex items-center justify-between gap-1">
-        <div className="flex items-center gap-1">
-          {cardTags.map((tag) => (
+        <div className="flex min-w-0 items-center gap-1 overflow-hidden">
+          {cardTags.slice(0, MAX_EXPLORE_TAGS).map((tag) => (
             <span
               key={tag}
+              title={tag}
+              style={{
+                height: "20px",
+                maxWidth: "92px",
+                background: "rgba(161, 98, 7, 0.20)",
+                borderRadius: "3px",
+                display: "inline-flex",
+                alignItems: "center",
+                paddingInline: "6px",
+                color: "#FFF",
+                fontSize: "6.94px",
+                fontWeight: 400,
+                fontFamily: "var(--font-inter)",
+                lineHeight: "9.72px",
+                overflow: "hidden",
+                flexShrink: 0,
+              }}
+            >
+              <span
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {tag.toUpperCase()}
+              </span>
+            </span>
+          ))}
+          {cardTags.length > MAX_EXPLORE_TAGS && (
+            <span
               style={{
                 height: "20px",
                 background: "rgba(161, 98, 7, 0.20)",
@@ -876,11 +915,12 @@ function ExploreCard({
                 fontFamily: "var(--font-inter)",
                 lineHeight: "9.72px",
                 whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
             >
-              {tag.toUpperCase()}
+              +{cardTags.length - MAX_EXPLORE_TAGS}
             </span>
-          ))}
+          )}
         </div>
         {typeof rating === "number" && (
           <div className="flex shrink-0 items-center gap-0.5">
