@@ -24,6 +24,8 @@ export type FieldType =
 export interface SelectOption {
   label: string;
   value: string;
+  /** Render the option greyed-out and unselectable (e.g. already chosen). */
+  disabled?: boolean;
 }
 
 /** Show this field only when another field's value matches. */
@@ -58,6 +60,12 @@ export interface FieldConfig {
   fields?: FieldConfig[];
   /** Label shown on the add button of a repeater */
   addLabel?: string;
+  /**
+   * For a `select` sub-field inside a `repeater`: a value chosen in one row is
+   * disabled in the others, so each option can be used by at most one row (e.g.
+   * one "Essential Works" section per work type).
+   */
+  uniqueInRepeater?: boolean;
   /** Lives in the right sidebar column rather than the main column */
   sidebar?: boolean;
   /**

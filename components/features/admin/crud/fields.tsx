@@ -112,8 +112,14 @@ function SelectControl({ field, value, onChange }: ControlProps) {
           {field.placeholder ?? `Select ${field.label.toLowerCase()}`}
         </option>
         {field.options?.map((opt) => (
-          <option key={opt.value} value={opt.value} className="bg-[#2C1500]">
+          <option
+            key={opt.value}
+            value={opt.value}
+            disabled={opt.disabled}
+            className="bg-[#2C1500]"
+          >
             {opt.label}
+            {opt.disabled ? " — already added" : ""}
           </option>
         ))}
       </select>
@@ -650,6 +656,23 @@ function RepeaterControl({ field, value, onChange }: ControlProps) {
     const next = rows.map((row, idx) => (idx === i ? { ...row, [k]: v } : row));
     onChange(next);
   };
+
+  // For a `uniqueInRepeater` select, grey out any option already chosen in
+  // another row so each value can be picked at most once across the repeater.
+  const fieldForRow = (sub: FieldConfig, rowIndex: number): FieldConfig => {
+    if (!sub.uniqueInRepeater || !sub.options) return sub;
+    const takenElsewhere = new Set(
+      rows
+        .map((row, idx) => (idx === rowIndex ? null : row[sub.name]))
+        .filter(Boolean)
+    );
+    return {
+      ...sub,
+      options: sub.options.map((opt) =>
+        takenElsewhere.has(opt.value) ? { ...opt, disabled: true } : opt
+      ),
+    };
+  };
   const setErr = (key: string, msg: string | null) =>
     setErrs((prev) => {
       const next = { ...prev };
@@ -681,7 +704,7 @@ function RepeaterControl({ field, value, onChange }: ControlProps) {
             {field.fields?.map((sub) => (
               <FieldRenderer
                 key={sub.name}
-                field={sub}
+                field={fieldForRow(sub, i)}
                 value={row[sub.name]}
                 onChange={(v) => update(i, sub.name, v)}
                 error={errs[`${i}.${sub.name}`]}

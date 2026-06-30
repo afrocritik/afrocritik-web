@@ -103,7 +103,7 @@ const SECTIONS: FormSection[] = [
         type: "repeater",
         addLabel: "Add essential section",
         fields: [
-          { name: "type", label: "Work type", type: "select", required: true, options: WORK_TYPES },
+          { name: "type", label: "Work type", type: "select", required: true, options: WORK_TYPES, uniqueInRepeater: true },
           { name: "heading", label: "Custom heading", type: "text", placeholder: "Defaults to 'Essential Works In {Type}'" },
           { name: "works", label: "Pinned works (optional)", type: "relationship", relationTo: "works" },
         ],
