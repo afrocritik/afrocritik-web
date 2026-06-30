@@ -1,13 +1,85 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { CSSProperties, useRef, useState } from "react";
 import Link from "next/link";
 import { Bookmark, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CardImage } from "./CardImage";
 
-// Explore cards are narrow; cap visible tags and ellipsis-truncate each so a
-// long or numerous tag set can't overflow the card. Extras collapse into "+N".
+// Cap visible tags and ellipsis-truncate each so a long or numerous tag set
+// can't overflow (or stretch) the card. Extras collapse into a "+N" pill.
 const MAX_EXPLORE_TAGS = 2;
+
+/**
+ * Shared tag row used by every card variant so the tag experience is identical
+ * everywhere: each pill truncates with an ellipsis (full text in the native
+ * hover tooltip), and overflow beyond `max` collapses into a "+N" pill. Cards
+ * that expand on hover pass `hovered` to reveal a couple more tags first.
+ */
+function CardTags({
+  tags,
+  hovered = false,
+  max = 2,
+  fontSize,
+  height,
+  radius,
+  maxWidth,
+  uppercase = false,
+  background = "rgba(161, 98, 7, 0.20)",
+}: Readonly<{
+  tags: string[];
+  hovered?: boolean;
+  max?: number;
+  fontSize: string;
+  height: string;
+  radius: string;
+  maxWidth: number;
+  uppercase?: boolean;
+  background?: string;
+}>) {
+  if (!tags.length) return null;
+
+  const visibleCount = hovered ? Math.min(tags.length, max + 2) : max;
+  const visible = tags.slice(0, visibleCount);
+  const extra = tags.length - visible.length;
+
+  const pill: CSSProperties = {
+    height,
+    borderRadius: radius,
+    background,
+    display: "inline-flex",
+    alignItems: "center",
+    paddingInline: "7px",
+    color: "#FFF",
+    fontFamily: "var(--font-inter)",
+    fontSize,
+    fontWeight: 400,
+    lineHeight: "140%",
+    flexShrink: 0,
+    transition: "height 0.4s ease, border-radius 0.4s ease",
+  };
+
+  return (
+    <div className="flex min-w-0 items-center gap-1 overflow-hidden">
+      {visible.map((tag) => (
+        <span key={tag} title={tag} style={{ ...pill, maxWidth, overflow: "hidden" }}>
+          <span
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {uppercase ? tag.toUpperCase() : tag}
+          </span>
+        </span>
+      ))}
+      {extra > 0 && (
+        <span style={{ ...pill, whiteSpace: "nowrap" }}>+{extra}</span>
+      )}
+    </div>
+  );
+}
 
 export interface WorkCardProps {
   slug?: string;
@@ -100,12 +172,13 @@ function EssentialCardImage({
       }}
     >
       <Link href={`/works/${slug}`} className="block h-full">
-        {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={title} className="h-full w-full object-cover" />
-        ) : (
-          <div className="h-full w-full" />
-        )}
+        <CardImage
+          src={image}
+          alt={title}
+          title={title}
+          className="h-full w-full object-cover"
+          letterClassName="text-4xl"
+        />
       </Link>
     </div>
   );
@@ -166,31 +239,15 @@ function EssentialCardBody({
         {hovered ? hovDesc : desc}
       </p>
       <div className="mt-1 flex items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1">
-          {cardTags.map((tag) => (
-            <span
-              key={tag}
-              style={{
-                height: hovered ? "24px" : "20.891px",
-                borderRadius: hovered ? "5px" : "4.352px",
-                background: "rgba(156, 92, 8, 0.20)",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingInline: "7px",
-                color: "#FFF",
-                fontFamily: "var(--font-inter)",
-                fontSize: "9px",
-                fontWeight: 400,
-                lineHeight: "140%",
-                whiteSpace: "nowrap",
-                transition: "height 0.4s ease, border-radius 0.4s ease",
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        <CardTags
+          tags={cardTags}
+          hovered={hovered}
+          fontSize="9px"
+          height={hovered ? "24px" : "20.891px"}
+          radius={hovered ? "5px" : "4.352px"}
+          maxWidth={hovered ? 150 : 120}
+          background="rgba(156, 92, 8, 0.20)"
+        />
         {typeof rating === "number" && <EssentialRating rating={rating} hovered={hovered} />}
       </div>
     </div>
@@ -228,10 +285,12 @@ function EssentialCard({
         position: "relative",
         padding: 0,
         margin: 0,
-        flexGrow: hovered ? 0 : 1,
-        flexShrink: hovered ? 0 : 1,
-        flexBasis: hovered ? "418px" : "0px",
-        minWidth: "200px",
+        flexGrow: 0,
+        flexShrink: 0,
+        // Fixed idle width so ~4 fit per view and a larger pool overflows the
+        // row — which is what makes the carousel's Next button appear.
+        flexBasis: hovered ? "418px" : "300px",
+        width: hovered ? "418px" : "300px",
         height: hovered ? "385px" : "335px",
         borderRadius: hovered ? "8px" : "6.964px",
         border: `${hovered ? "1" : "0.87"}px solid #9C5C08`,
@@ -301,14 +360,16 @@ function StandardCard({
         href={`/works/${slug}`}
         className="relative block aspect-[3/4] overflow-hidden bg-bg-secondary"
       >
-        {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={title} className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#3D1F00] to-[#1C0A00] text-xs text-ink-muted">
-            {type}
-          </div>
-        )}
+        <CardImage
+          src={image}
+          alt={title}
+          className="h-full w-full object-cover"
+          fallback={
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#3D1F00] to-[#1C0A00] text-xs text-ink-muted">
+              {type}
+            </div>
+          }
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
         <button
           aria-label="Save"
@@ -414,14 +475,13 @@ function EWIMCard({
         }}
       >
         <Link href={`/works/${slug}`} className="block h-full">
-          {image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={image}
-              alt={title}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          )}
+          <CardImage
+            src={image}
+            alt={title}
+            title={title}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            letterClassName="text-5xl"
+          />
         </Link>
       </div>
 
@@ -520,28 +580,18 @@ function EWIMCard({
           display: "flex",
           alignItems: "center",
           gap: "6px",
+          overflow: "hidden",
         }}
       >
-        {tags?.map((tag) => (
-          <span
-            key={tag}
-            style={{
-              height: "24px",
-              borderRadius: "5px",
-              background: "rgba(180, 83, 9, 0.20)",
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "0 8px",
-              color: "#FFF",
-              fontSize: "11px",
-              fontWeight: 400,
-              lineHeight: "140%",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {tag}
-          </span>
-        ))}
+        <CardTags
+          tags={tags ?? []}
+          hovered={hovered}
+          fontSize="11px"
+          height="24px"
+          radius="5px"
+          maxWidth={140}
+          background="rgba(180, 83, 9, 0.20)"
+        />
         {hovered && (
           <button
             aria-label="Share"
@@ -640,14 +690,13 @@ function EWILCard({
         }}
       >
         <Link href={`/works/${slug}`} className="block h-full">
-          {image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={image}
-              alt={title}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          )}
+          <CardImage
+            src={image}
+            alt={title}
+            title={title}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            letterClassName="text-5xl"
+          />
         </Link>
       </div>
 
@@ -743,26 +792,15 @@ function EWILCard({
           overflow: "hidden",
         }}
       >
-        {tags?.map((tag) => (
-          <span
-            key={tag}
-            style={{
-              height: "24px",
-              borderRadius: "5px",
-              background: "rgba(180, 83, 9, 0.20)",
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "0 8px",
-              color: "#FFF",
-              fontSize: "9px",
-              fontWeight: 400,
-              lineHeight: "140%",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {tag}
-          </span>
-        ))}
+        <CardTags
+          tags={tags ?? []}
+          hovered={hovered}
+          fontSize="9px"
+          height="24px"
+          radius="5px"
+          maxWidth={120}
+          background="rgba(180, 83, 9, 0.20)"
+        />
       </div>
     </fieldset>
   );
@@ -796,12 +834,13 @@ function ExploreCard({
       {/* Image */}
       <Link href={detailHref}>
         <div className="absolute left-[10px] top-[12px] right-[10px] h-[191px] overflow-hidden rounded-sm bg-[#3D1F00]">
-          {image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={image} alt={title} className="h-full w-full object-cover" />
-          ) : (
-            <div className="h-full w-full" />
-          )}
+          <CardImage
+            src={image}
+            alt={title}
+            title={title}
+            className="h-full w-full object-cover"
+            letterClassName="text-3xl"
+          />
         </div>
       </Link>
 
@@ -867,61 +906,15 @@ function ExploreCard({
 
       {/* Tags + Rating — pinned to bottom with guaranteed spacing */}
       <div className="absolute left-[8px] right-[8px] bottom-[8px] flex items-center justify-between gap-1">
-        <div className="flex min-w-0 items-center gap-1 overflow-hidden">
-          {cardTags.slice(0, MAX_EXPLORE_TAGS).map((tag) => (
-            <span
-              key={tag}
-              title={tag}
-              style={{
-                height: "20px",
-                maxWidth: "92px",
-                background: "rgba(161, 98, 7, 0.20)",
-                borderRadius: "3px",
-                display: "inline-flex",
-                alignItems: "center",
-                paddingInline: "6px",
-                color: "#FFF",
-                fontSize: "6.94px",
-                fontWeight: 400,
-                fontFamily: "var(--font-inter)",
-                lineHeight: "9.72px",
-                overflow: "hidden",
-                flexShrink: 0,
-              }}
-            >
-              <span
-                style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tag.toUpperCase()}
-              </span>
-            </span>
-          ))}
-          {cardTags.length > MAX_EXPLORE_TAGS && (
-            <span
-              style={{
-                height: "20px",
-                background: "rgba(161, 98, 7, 0.20)",
-                borderRadius: "3px",
-                display: "inline-flex",
-                alignItems: "center",
-                paddingInline: "6px",
-                color: "#FFF",
-                fontSize: "6.94px",
-                fontWeight: 400,
-                fontFamily: "var(--font-inter)",
-                lineHeight: "9.72px",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
-            >
-              +{cardTags.length - MAX_EXPLORE_TAGS}
-            </span>
-          )}
-        </div>
+        <CardTags
+          tags={cardTags}
+          max={MAX_EXPLORE_TAGS}
+          fontSize="6.94px"
+          height="20px"
+          radius="3px"
+          maxWidth={92}
+          uppercase
+        />
         {typeof rating === "number" && (
           <div className="flex shrink-0 items-center gap-0.5">
             <span

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { CardImage } from "@/components/common/CardImage";
 
 export interface FeaturedWorkItem {
   slug: string;
@@ -24,13 +24,13 @@ export function FeaturedWorkCard({
     <div className="flex h-64 flex-1 flex-col overflow-hidden rounded-md bg-rose-100/10 outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400">
       {/* Image */}
       <Link href={`/works/${slug}`} className="relative mx-2 mt-2.5 block h-40 shrink-0 overflow-hidden rounded-sm">
-        {image ? (
-          <Image src={image} alt={title} fill className="object-cover" />
-        ) : (
-          <div className="flex h-full items-center justify-center bg-yellow-950/50">
-            <span className="font-baskervville text-3xl text-white/30">{title.charAt(0)}</span>
-          </div>
-        )}
+        <CardImage
+          src={image}
+          alt={title}
+          title={title}
+          className="h-full w-full object-cover"
+          letterClassName="text-3xl"
+        />
       </Link>
 
       {/* Info */}
