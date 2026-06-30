@@ -151,13 +151,16 @@ export const api = {
     apiClient
       .get("/api/search", { params: { q, ...filters } })
       .then((r) => r.data),
-  archive: (filters?: Record<string, any>) =>
+  archive: (filters?: Record<string, any>, token?: string) =>
     apiClient
       .get("/api/search/archive", {
         params: filters,
         // Serialise arrays as repeated keys (country=a&country=b) so Express
         // parses them as arrays for the `in` filters.
         paramsSerializer: { indexes: null },
+        // The token lets the API decide whether to gate results; without it the
+        // request is treated as anonymous and search/sort results are withheld.
+        ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
       })
       .then((r) => r.data),
   counts: () => apiClient.get("/api/search/counts").then((r) => r.data),
@@ -175,6 +178,13 @@ export const api = {
   },
   homepage: () =>
     apiClient.get("/api/globals/homepage").then((r) => r.data),
+  // Update the Homepage global from the custom /admin editor (editor+ only).
+  updateHomepage: (data: Record<string, any>, token?: string) =>
+    apiClient
+      .post("/api/globals/homepage", data, {
+        ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+      })
+      .then((r) => r.data),
   track: {
     // Fire-and-forget detail-page view counter (public, no auth needed).
     view: (collection: string, id: string | number) =>
