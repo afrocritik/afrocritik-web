@@ -379,8 +379,18 @@ function RelationshipControl({ field, value, onChange }: ControlProps) {
 /* ------------------------------------------------------------------ */
 
 function TagsControl({ field, value, onChange }: ControlProps) {
+  const { data: session } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+  // Tags are a relationship under the hood, so an existing record seeds this
+  // field with tag IDs. Fetch the tag list to show names instead of raw IDs;
+  // freshly typed tags (not yet saved) display as-is and are resolved to IDs
+  // server-side on save.
+  const { options } = useRelationshipOptions(field.relationTo ?? "tags", token);
+  const labelFor = (v: string) =>
+    options.find((o) => o.value === v)?.label ?? v;
+
   const [draft, setDraft] = useState("");
-  const tags = Array.isArray(value) ? (value as string[]) : [];
+  const tags = Array.isArray(value) ? (value as (string | number)[]).map(String) : [];
 
   const add = () => {
     const v = draft.trim();
@@ -395,7 +405,7 @@ function TagsControl({ field, value, onChange }: ControlProps) {
           key={tag}
           className="inline-flex items-center gap-1 rounded-md bg-yellow-950/60 px-2 py-0.5 text-xs text-orange-200 outline outline-1 outline-yellow-700/60"
         >
-          {tag}
+          {labelFor(tag)}
           <button
             type="button"
             onClick={() => onChange(tags.filter((t) => t !== tag))}
