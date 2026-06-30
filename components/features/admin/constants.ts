@@ -3,6 +3,7 @@ import {
   Activity,
   Clock,
   Hash,
+  Home,
   Image as ImageIcon,
   LayoutDashboard,
   Settings,
@@ -28,7 +29,10 @@ export interface AdminNavGroup {
 export const ADMIN_NAV: AdminNavGroup[] = [
   {
     heading: "Main",
-    items: [{ label: "Dashboard", href: "/admin", icon: LayoutDashboard }],
+    items: [
+      { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+      { label: "Homepage", href: "/admin/homepage", icon: Home },
+    ],
   },
   {
     heading: "Archive",
