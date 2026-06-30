@@ -4,15 +4,35 @@ import { PillarsSection } from "@/components/features/home/PillarsSection";
 import { ThinkersSection } from "@/components/features/home/ThinkersSection";
 import { IdeasSection } from "@/components/features/home/IdeasSection";
 import { ReportCTA } from "@/components/features/home/ReportCTA";
-import { EssentialMusicSection } from "@/components/features/home/EssentialMusicSection";
+import { EssentialWorksByTypeSection } from "@/components/features/home/EssentialWorksByTypeSection";
 import { PopularInterestSection } from "@/components/features/home/PopularInterestSection";
-import { EssentialLiteratureSection } from "@/components/features/home/EssentialLiteratureSection";
 import { KnowledgePipeline } from "@/components/features/home/KnowledgePipeline";
 import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
 import { api, getMediaUrl } from "@/lib/api";
 
+// Regenerate the static homepage at most once a minute so admin-added content
+// (and the newest-first fallbacks) surface promptly without rendering on every
+// request. Data is fetched via axios, which Next can't track, so ISR at the
+// route level is what keeps the page fresh.
+export const revalidate = 60;
+
 const BROWN_GRADIENT =
   "linear-gradient(180deg, #4D311D 17.79%, #794C2D 52.4%, #4D311D 95.19%)";
+
+// Pull the newest rows from a collection when an editor hasn't curated a
+// section. Failures degrade to an empty list so the homepage never breaks.
+async function newest(
+  list: (params?: Record<string, any>) => Promise<any>,
+  limit: number,
+  where?: Record<string, any>,
+): Promise<any[]> {
+  try {
+    const res = await list({ limit, sort: "-createdAt", depth: 2, ...where });
+    return res?.docs ?? [];
+  } catch {
+    return [];
+  }
+}
 
 export default async function HomePage() {
   let homepage: any = null;
@@ -22,11 +42,57 @@ export default async function HomePage() {
     // API unreachable — fall through to empty states
   }
 
-  const featuredWorks: any[] = homepage?.featuredWorks ?? [];
-  const featuredPeople: any[] = homepage?.featuredPeople ?? [];
-  const featuredIdeas: any[] = homepage?.featuredIdeas ?? [];
-  const essentialMusicWorks: any[] = homepage?.essentialMusicWorks ?? [];
-  const essentialLiteratureWorks: any[] = homepage?.essentialLiteratureWorks ?? [];
+  // Curated relationship lists take precedence; when an editor leaves one
+  // empty we auto-populate it from the database, newest first — so any
+  // content an admin adds surfaces on the landing page without extra steps.
+  const curatedWorks: any[] = homepage?.featuredWorks ?? [];
+  const curatedPeople: any[] = homepage?.featuredPeople ?? [];
+  const curatedIdeas: any[] = homepage?.featuredIdeas ?? [];
+  const curatedReport: any = homepage?.featuredReport ?? null;
+
+  // "Essential Works In …" sections are admin-driven. Each row is bound to a
+  // Work type; if the editor pinned specific works we use those, otherwise we
+  // auto-fill with the newest published works of that type. With no rows
+  // configured we fall back to the original Music + Literature sections.
+  const sectionConfigs: { type: string; heading?: string; works: any[] }[] =
+    Array.isArray(homepage?.essentialSections) && homepage.essentialSections.length
+      ? homepage.essentialSections.map((s: any) => ({
+          type: s?.type ?? "film",
+          heading: s?.heading || undefined,
+          works: Array.isArray(s?.works) ? s.works : [],
+        }))
+      : [
+          { type: "music", works: [] },
+          { type: "literature", works: [] },
+        ];
+
+  const [fallbackWorks, fallbackPeople, fallbackIdeas, fallbackReport, ...sectionFallbacks] =
+    await Promise.all([
+      curatedWorks.length
+        ? Promise.resolve([])
+        : newest(api.works.list, 8, {
+            "where[type][not_in][0]": "music",
+            "where[type][not_in][1]": "literature",
+          }),
+      curatedPeople.length ? Promise.resolve([]) : newest(api.people.list, 4),
+      curatedIdeas.length ? Promise.resolve([]) : newest(api.ideas.list, 4),
+      curatedReport ? Promise.resolve([]) : newest(api.reports.list, 1),
+      ...sectionConfigs.map((s) =>
+        s.works.length
+          ? Promise.resolve([])
+          : newest(api.works.list, 6, { "where[type][equals]": s.type }),
+      ),
+    ]);
+
+  const essentialSections = sectionConfigs.map((s, i) => ({
+    type: s.type,
+    heading: s.heading,
+    works: s.works.length ? s.works : sectionFallbacks[i] ?? [],
+  }));
+
+  const featuredWorks: any[] = curatedWorks.length ? curatedWorks : fallbackWorks;
+  const featuredPeople: any[] = curatedPeople.length ? curatedPeople : fallbackPeople;
+  const featuredIdeas: any[] = curatedIdeas.length ? curatedIdeas : fallbackIdeas;
 
   const hero = homepage?.hero;
   const stats: { value: string; label: string }[] = homepage?.stats ?? [];
@@ -51,7 +117,7 @@ export default async function HomePage() {
     : [];
 
   const cta = homepage?.cta;
-  const featuredReport = homepage?.featuredReport;
+  const featuredReport = curatedReport ?? fallbackReport[0] ?? null;
 
   return (
     <>
@@ -95,12 +161,12 @@ export default async function HomePage() {
         <ReportCTA report={featuredReport} />
       </section>
 
-      {/* ESSENTIAL WORKS IN MUSIC */}
-      <section
-        className="relative overflow-hidden bg-[#794C2D] pt-24 pb-12"
-      >
-        <EssentialMusicSection works={essentialMusicWorks} />
-      </section>
+      {/* ESSENTIAL WORKS IN … (first admin-curated section) */}
+      {essentialSections[0] && (
+        <section className="relative overflow-hidden bg-[#794C2D] pt-24 pb-12">
+          <EssentialWorksByTypeSection {...essentialSections[0]} />
+        </section>
+      )}
 
       {/* EXPLORE BASED ON POPULAR INTEREST */}
       <section className="bg-[#59341F] pt-32 pb-12">
@@ -109,10 +175,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ESSENTIAL WORKS IN LITERATURE */}
-      <section className="relative overflow-hidden bg-[#59341F] py-24">
-        <EssentialLiteratureSection works={essentialLiteratureWorks} />
-      </section>
+      {/* ESSENTIAL WORKS IN … (remaining admin-curated sections) */}
+      {essentialSections.slice(1).map((section, i) => (
+        <section
+          key={`${section.type}-${i}`}
+          className="relative overflow-hidden bg-[#59341F] py-24"
+        >
+          <EssentialWorksByTypeSection {...section} />
+        </section>
+      ))}
 
       {/* FROM CULTURE TO KNOWLEDGE */}
       <section className="bg-cream py-20">
