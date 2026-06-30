@@ -133,12 +133,16 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
   const [toDelete, setToDelete] = useState<EntityRecord | null>(null);
 
   useEffect(() => {
-    if (flash === "created") {
-      toast.success(`${config.singular} created successfully.`);
-    } else if (flash === "updated") {
-      toast.success(`${config.singular} updated successfully.`);
-    }
-  }, [flash, config.singular]);
+    if (flash !== "created" && flash !== "updated") return;
+    // Stable id so React StrictMode's double-effect (dev) and any re-render
+    // collapse into a single toast instead of stacking two.
+    toast.success(
+      `${config.singular} ${flash === "created" ? "created" : "updated"} successfully.`,
+      { id: `entity-flash-${config.slug}` },
+    );
+    // Drop the flash param so a refresh/back-nav doesn't replay the toast.
+    router.replace(`/admin/${config.slug}`);
+  }, [flash, config.singular, config.slug, router]);
 
   // Load live records from the Payload collection. If the request fails (API
   // offline, etc.) the seeded sample data stays in place so the admin is still
