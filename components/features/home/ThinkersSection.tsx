@@ -56,8 +56,8 @@ function mapPersonToThinker(p: any): ThinkerData {
     image: getMediaUrl(p.photo),
     tags: tagLabels,
     coreContribution: p.summary ?? "",
-    keyIdeas: undefined,
-    knowledgeSovereignty: undefined,
+    keyIdeas: p.keyIdeas || undefined,
+    knowledgeSovereignty: p.knowledgeSovereignty || undefined,
     selectedWorks,
     relatedTopics,
   };
