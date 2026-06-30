@@ -1,6 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getMediaUrl } from "@/lib/api";
+import { CardImage } from "@/components/common/CardImage";
+
+const DEFAULT_COVER = "/The-Afrocritik-Report-2.png";
 
 interface FeaturedReport {
   slug?: string;
@@ -18,7 +21,8 @@ export function ReportCTA({ report }: Readonly<{ report?: FeaturedReport }>) {
   const summary =
     report?.summary ||
     "Each year, the Afrocritik Report maps the cultural forces shaping Africa and its diaspora — the breakthroughs, the ruptures, and the tensions that define the moment. The 2025 edition reveals a continent whose creative output is globally ascendant, even as the infrastructure beneath it remains deeply contested.";
-  const coverUrl = getMediaUrl(report?.coverImage) || "/The-Afrocritik-Report-2.png";
+  const remoteCover = getMediaUrl(report?.coverImage);
+  const coverAlt = report?.title || "The Afrocritik Report 2025";
   const badges =
     report?.stats && report.stats.length > 0
       ? report.stats
@@ -31,13 +35,22 @@ export function ReportCTA({ report }: Readonly<{ report?: FeaturedReport }>) {
     <div className="container flex min-h-[692px] items-center gap-12 py-10">
       {/* Book cover — allowed to overflow top/bottom */}
       <div className="relative hidden shrink-0 lg:block">
-        <Image
-          src={coverUrl}
-          alt={report?.title || "The Afrocritik Report 2025"}
-          width={517}
-          height={625}
+        <CardImage
+          src={remoteCover || undefined}
+          alt={coverAlt}
           className="relative z-10 object-cover"
-          style={{ maxHeight: "625px" }}
+          style={{ width: "517px", height: "625px", maxHeight: "625px" }}
+          // No cover, or a broken remote cover → fall back to the bundled default.
+          fallback={
+            <Image
+              src={DEFAULT_COVER}
+              alt={coverAlt}
+              width={517}
+              height={625}
+              className="relative z-10 object-cover"
+              style={{ maxHeight: "625px" }}
+            />
+          }
         />
       </div>
 
