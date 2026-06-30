@@ -4,7 +4,10 @@ import { NextResponse } from "next/server";
 // Pages reachable without a session. Everything else requires a signed-in user.
 // /oauth-callback must be public: it's where the OAuth redirect lands *before*
 // a session exists, so it can exchange the backend token for one.
-const PUBLIC_PATHS = ["/", "/signin", "/signup", "/oauth-callback"];
+// /explore is public so signed-out visitors can search and reach the gated
+// results (count + a few previews + sign-in wall) instead of being bounced to
+// the sign-in page before the gate can render.
+const PUBLIC_PATHS = ["/", "/signin", "/signup", "/oauth-callback", "/explore"];
 
 // Onboarding steps — reachable while signed in but not yet complete; excluded
 // from the "finish onboarding" redirect so users can actually finish.
