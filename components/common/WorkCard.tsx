@@ -485,138 +485,129 @@ function EWIMCard({
         </Link>
       </div>
 
-      {/* Rating */}
-      {typeof rating === "number" && (
-        <div
-          style={{
-            position: "absolute",
-            top: "268px",
-            right: "16px",
-            display: "flex",
-            alignItems: "center",
-            gap: "3px",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/Star.svg"
-            alt=""
-            style={{ width: "12px", height: "10px" }}
-          />
-          <span
-            style={{
-              color: "#FFF",
-              fontFamily: "var(--font-inter)",
-              fontSize: "12px",
-              fontWeight: 600,
-              lineHeight: "140%",
-            }}
-          >
-            {rating % 1 === 0 ? rating.toFixed(1) : String(rating)}
-          </span>
-        </div>
-      )}
-
-      {/* Title */}
+      {/* Text block — flows just under the image so title, artist and tags keep
+          consistent spacing whether or not an artist/author is set (no dead gap
+          above the tags when the creator line is empty). */}
       <div
         style={{
           position: "absolute",
-          top: "275px",
+          top: "268px",
           left: "16px",
-          right: "40px",
+          right: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
         }}
       >
-        <Link href={`/works/${slug}`}>
-          <h3
-            style={{
-              color: "#D6D3D1",
-              fontFamily: "var(--font-inter)",
-              fontSize: hovered ? "18px" : "16px",
-              fontWeight: 600,
-              lineHeight: "130%",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              transition: "font-size 0.4s ease",
-            }}
-          >
-            {title}
-          </h3>
-        </Link>
-      </div>
+        {/* Title + rating */}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+          <Link href={`/works/${slug}`} style={{ flex: 1, minWidth: 0 }}>
+            <h3
+              style={{
+                color: "#D6D3D1",
+                fontFamily: "var(--font-inter)",
+                fontSize: hovered ? "18px" : "16px",
+                fontWeight: 600,
+                lineHeight: "130%",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                transition: "font-size 0.4s ease",
+              }}
+            >
+              {title}
+            </h3>
+          </Link>
+          {typeof rating === "number" && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "3px",
+                flexShrink: 0,
+                marginTop: "2px",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
+              <span
+                style={{
+                  color: "#FFF",
+                  fontFamily: "var(--font-inter)",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  lineHeight: "140%",
+                }}
+              >
+                {rating % 1 === 0 ? rating.toFixed(1) : String(rating)}
+              </span>
+            </div>
+          )}
+        </div>
 
-      {/* Author */}
-      {author && (
-        <div
-          style={{
-            position: "absolute",
-            top: "321px",
-            left: "16px",
-          }}
-        >
+        {/* Artist / author */}
+        {author && (
           <span
             style={{
               color: "#F9B65F",
               fontFamily: "var(--font-inter)",
               fontSize: "17px",
               fontWeight: 600,
-              lineHeight: "150%",
+              lineHeight: "130%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               whiteSpace: "nowrap",
             }}
           >
             {author}
           </span>
-        </div>
-      )}
-
-      {/* Tags + Bookmark */}
-      <div
-        style={{
-          position: "absolute",
-          top: "351px",
-          left: "16px",
-          right: "16px",
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-          overflow: "hidden",
-        }}
-      >
-        <CardTags
-          tags={tags ?? []}
-          hovered={hovered}
-          fontSize="11px"
-          height="24px"
-          radius="5px"
-          maxWidth={140}
-          background="rgba(180, 83, 9, 0.20)"
-        />
-        {hovered && (
-          <button
-            aria-label="Share"
-            style={{
-              marginLeft: "auto",
-              width: "28px",
-              height: "24px",
-              border: "1px solid #737373",
-              borderRadius: "5px",
-              background: "transparent",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/Share-Icon.png"
-              alt=""
-              style={{ width: "16px", height: "16px", objectFit: "contain" }}
-            />
-          </button>
         )}
+
+        {/* Tags + Share */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            overflow: "hidden",
+          }}
+        >
+          <CardTags
+            tags={tags ?? []}
+            hovered={hovered}
+            fontSize="11px"
+            height="24px"
+            radius="5px"
+            maxWidth={140}
+            background="rgba(180, 83, 9, 0.20)"
+          />
+          {hovered && (
+            <button
+              aria-label="Share"
+              style={{
+                marginLeft: "auto",
+                width: "28px",
+                height: "24px",
+                border: "1px solid #737373",
+                borderRadius: "5px",
+                background: "transparent",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/Share-Icon.png"
+                alt=""
+                style={{ width: "16px", height: "16px", objectFit: "contain" }}
+              />
+            </button>
+          )}
+        </div>
       </div>
     </fieldset>
   );
@@ -700,107 +691,106 @@ function EWILCard({
         </Link>
       </div>
 
-      {typeof rating === "number" && (
-        <div
-          style={{
-            position: "absolute",
-            top: "268px",
-            right: "16px",
-            display: "flex",
-            alignItems: "center",
-            gap: "3px",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/heart-icon.svg" alt="" style={{ width: "12px", height: "10px" }} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
-          <span
-            style={{
-              color: "#FFF",
-              fontFamily: "var(--font-inter)",
-              fontSize: "12px",
-              fontWeight: 600,
-              lineHeight: "140%",
-            }}
-          >
-            {rating % 1 === 0 ? rating.toFixed(1) : String(rating)}
-          </span>
-        </div>
-      )}
-
+      {/* Text block — flows just under the image so title, author and tags keep
+          consistent spacing whether or not an author is set (no dead gap above
+          the tags when the author line is empty). */}
       <div
         style={{
           position: "absolute",
-          top: "279px",
+          top: "272px",
           left: "16px",
           right: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
         }}
       >
-        <Link href={`/works/${slug}`}>
-          <h3
-            style={{
-              color: "#D6D3D1",
-              fontFamily: "var(--font-inter)",
-              fontSize: hovered ? "16px" : "14px",
-              fontWeight: 600,
-              lineHeight: "130%",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              transition: "font-size 0.4s ease",
-            }}
-          >
-            {title}
-          </h3>
-        </Link>
-      </div>
+        {/* Title + rating */}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+          <Link href={`/works/${slug}`} style={{ flex: 1, minWidth: 0 }}>
+            <h3
+              style={{
+                color: "#D6D3D1",
+                fontFamily: "var(--font-inter)",
+                fontSize: hovered ? "16px" : "14px",
+                fontWeight: 600,
+                lineHeight: "130%",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                transition: "font-size 0.4s ease",
+              }}
+            >
+              {title}
+            </h3>
+          </Link>
+          {typeof rating === "number" && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "3px",
+                flexShrink: 0,
+                marginTop: "2px",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/heart-icon.svg" alt="" style={{ width: "12px", height: "10px" }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
+              <span
+                style={{
+                  color: "#FFF",
+                  fontFamily: "var(--font-inter)",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  lineHeight: "140%",
+                }}
+              >
+                {rating % 1 === 0 ? rating.toFixed(1) : String(rating)}
+              </span>
+            </div>
+          )}
+        </div>
 
-      {author && (
-        <div
-          style={{
-            position: "absolute",
-            top: "315px",
-            left: "16px",
-          }}
-        >
+        {/* Author */}
+        {author && (
           <span
             style={{
               color: "#b45309",
               fontFamily: "var(--font-inter)",
               fontSize: "16px",
               fontWeight: 600,
-              lineHeight: "150%",
+              lineHeight: "130%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               whiteSpace: "nowrap",
             }}
           >
             {author}
           </span>
-        </div>
-      )}
+        )}
 
-      <div
-        style={{
-          position: "absolute",
-          top: "345px",
-          left: "16px",
-          right: "16px",
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-          overflow: "hidden",
-        }}
-      >
-        <CardTags
-          tags={tags ?? []}
-          hovered={hovered}
-          fontSize="9px"
-          height="24px"
-          radius="5px"
-          maxWidth={120}
-          background="rgba(180, 83, 9, 0.20)"
-        />
+        {/* Tags */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            overflow: "hidden",
+          }}
+        >
+          <CardTags
+            tags={tags ?? []}
+            hovered={hovered}
+            fontSize="9px"
+            height="24px"
+            radius="5px"
+            maxWidth={120}
+            background="rgba(180, 83, 9, 0.20)"
+          />
+        </div>
       </div>
     </fieldset>
   );
