@@ -248,6 +248,17 @@ export function mapWorkToCard(w: any) {
     ? w.reviewType.replace(/-/g, " ").toUpperCase()
     : undefined;
 
+  // Creator line shown on the music/literature cards — the musician, author or
+  // director. Takes the first related person (works are fetched with depth so
+  // `people` is populated); falls back to a plain author string if present.
+  const author = Array.isArray(w.people)
+    ? w.people
+        .map((p: any) => (typeof p === "string" ? "" : p?.name ?? ""))
+        .filter(Boolean)[0] ?? ""
+    : typeof w.author === "string"
+    ? w.author
+    : "";
+
   return {
     slug: w.slug ?? "",
     title: w.title ?? "",
@@ -256,6 +267,7 @@ export function mapWorkToCard(w: any) {
     country,
     rating: w.rating,
     badge,
+    author,
     image: getMediaUrl(w.coverImage),
     description: w.cardDescription || w.summary || "",
     hoverDescription: w.cardDescription || w.summary || "",
