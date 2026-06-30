@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { api, getMediaUrl, mapWorkToCard } from "@/lib/api";
 import { BROWN_GRADIENT, TABS } from "./constants";
@@ -54,8 +55,10 @@ function toCard(doc: any, tab: string) {
   return { ...card, href: `/${base}/${card.slug}` };
 }
 
-export function ArchiveBrowser() {
+export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   const params = useSearchParams();
+  const { data: session, status } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
   const [tab, setTab] = useState(params.get("tab") || "works");
   const [query, setQuery] = useState(params.get("q") || "");
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -72,17 +75,20 @@ export function ArchiveBrowser() {
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ["archive", tab, query, sort, countries, themes, yearFrom, yearTo],
+    queryKey: ["archive", tab, query, sort, countries, themes, yearFrom, yearTo, token ?? "anon"],
     queryFn: () =>
-      api.archive({
-        type: tab,
-        q: query || undefined,
-        sort,
-        country: countries.length ? countries : undefined,
-        theme: themes.length ? themes : undefined,
-        yearFrom,
-        yearTo,
-      }),
+      api.archive(
+        {
+          type: tab,
+          q: query || undefined,
+          sort,
+          country: countries.length ? countries : undefined,
+          theme: themes.length ? themes : undefined,
+          yearFrom,
+          yearTo,
+        },
+        token,
+      ),
     retry: false,
     staleTime: 60_000,
   });
@@ -94,6 +100,16 @@ export function ArchiveBrowser() {
 
   const activeTab = TABS.find((t) => t.key === tab) ?? TABS[0];
   const resultCount = (data as any)?.totalDocs ?? 0;
+
+  // Signed-out visitors get a preview-then-wall once they actively search or
+  // change the sort: they see the result count and a few cards, then a prompt
+  // to sign in / up to view the rest. Plain browsing stays open. The API is the
+  // source of truth (it withholds the withheld docs); the client check is just
+  // a fallback for the brief window before the response lands.
+  const isSearchingOrSorting = query.trim().length > 0 || sort !== "newest";
+  const gated =
+    (data as any)?.gated ??
+    (status === "unauthenticated" && isSearchingOrSorting);
 
   const toggle = (
     setter: React.Dispatch<React.SetStateAction<string[]>>,
@@ -132,6 +148,8 @@ export function ArchiveBrowser() {
           onYearChange,
         }}
         loading={isLoading}
+        gated={gated}
+        showRefine={signedIn}
       />
     </div>
   );
