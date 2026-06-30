@@ -7,8 +7,12 @@ interface Props {
   works?: any[];
 }
 
+// Cards are sized so ~4 show per view; the rest are reached via the carousel's
+// Next button. Cap the pool so the row stays a reasonable length.
+const MAX_ESSENTIAL_WORKS = 12;
+
 export function EssentialWorksSection({ works = [] }: Props) {
-  const cards = works.map(mapWorkToCard);
+  const cards = works.slice(0, MAX_ESSENTIAL_WORKS).map(mapWorkToCard);
 
   return (
     <>
