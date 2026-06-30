@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { getMediaUrl } from "@/lib/api";
 
 interface ThinkerData {
@@ -61,6 +61,63 @@ function mapPersonToThinker(p: any): ThinkerData {
     selectedWorks,
     relatedTopics,
   };
+}
+
+/**
+ * Renders the "Selected Works" cards. Each card sizes itself to its own
+ * content, then every card is normalised to the width and height of the
+ * largest card so the row stays uniform with no clipping or dead space.
+ */
+function SelectedWorks({ works }: { works: { title: string; sub: string }[] }) {
+  const worksKey = works.map((w) => `${w.title}|${w.sub}`).join("§");
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
+
+  // Reset measurements whenever the works change so the cards are remeasured
+  // at their natural size rather than the previously applied fixed size.
+  const prevKey = useRef(worksKey);
+  if (prevKey.current !== worksKey) {
+    prevKey.current = worksKey;
+    setDims(null);
+  }
+
+  useLayoutEffect(() => {
+    let w = 0;
+    let h = 0;
+    for (const el of refs.current) {
+      if (el) {
+        w = Math.max(w, el.offsetWidth);
+        h = Math.max(h, el.offsetHeight);
+      }
+    }
+    if (w && h && (dims?.w !== w || dims?.h !== h)) {
+      setDims({ w, h });
+    }
+  }, [worksKey, dims]);
+
+  return (
+    <div className="mt-3 flex flex-wrap gap-3">
+      {works.map((work, i) => (
+        <div
+          key={work.title}
+          ref={(el) => {
+            refs.current[i] = el;
+          }}
+          style={dims ? { width: dims.w, height: dims.h } : undefined}
+          className="flex flex-col items-start justify-start gap-1.5 rounded-lg bg-orange-100/40 px-5 py-4 outline outline-1 outline-offset-[-1px] outline-orange-400"
+        >
+          <p className="max-w-44 font-inter text-sm font-semibold leading-snug tracking-[-0.28px] text-black">
+            {work.title}
+          </p>
+          {work.sub && (
+            <p className="font-inter text-xs font-normal leading-relaxed text-[#666]">
+              {work.sub}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 interface Props {
@@ -227,7 +284,7 @@ export function ThinkersSection({ people = [] }: Props) {
               </p>
             )}
             {thinker.knowledgeSovereignty && (
-              <p className="mt-1 font-inter text-base leading-[179%] text-black">
+              <p className="mt-4 font-inter text-base leading-[179%] text-black">
                 <span className="font-bold capitalize">Knowledge Sovereignty: </span>
                 <span className="font-normal capitalize">{thinker.knowledgeSovereignty}</span>
               </p>
@@ -240,27 +297,7 @@ export function ThinkersSection({ people = [] }: Props) {
               <p className="font-inter text-base font-bold leading-[100%] text-black">
                 Selected Works
               </p>
-              <div className="mt-3 flex flex-wrap gap-3">
-                {thinker.selectedWorks.map((work) => (
-                  <div
-                    key={work.title}
-                    className="w-52 h-24 relative bg-orange-100/40 rounded-lg outline outline-1 outline-offset-[-1px] outline-orange-400"
-                  >
-                    <div className="Body2 w-48 h-14 min-w-40 left-[24px] top-[20px] absolute inline-flex flex-col justify-start items-start gap-4">
-                      <div className="self-stretch flex flex-col justify-start items-start gap-2">
-                        <p className="w-44 justify-start font-inter leading-4 text-sm font-semibold tracking-[-0.28px] text-black">
-                          {work.title}
-                        </p>
-                        {work.sub && (
-                          <p className="self-stretch justify-start text-xs text-[#666] font-normal font-inter leading-relaxed">
-                            {work.sub}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SelectedWorks works={thinker.selectedWorks} />
             </div>
           )}
 
