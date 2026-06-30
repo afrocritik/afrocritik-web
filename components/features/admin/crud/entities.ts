@@ -18,6 +18,16 @@ const WORK_TYPES: SelectOption[] = [
   { label: "Television", value: "television" },
 ];
 
+// Drives the red badge shown top-left on cards (Work.reviewType in Payload).
+const REVIEW_TYPES: SelectOption[] = [
+  { label: "Album Review", value: "album-review" },
+  { label: "Book Review", value: "book-review" },
+  { label: "Film Review", value: "film-review" },
+  { label: "Biography", value: "biography" },
+  { label: "Essay", value: "essay" },
+  { label: "Feature", value: "feature" },
+];
+
 const IDEA_CATEGORIES: SelectOption[] = [
   { label: "Identity", value: "identity" },
   { label: "Symbols", value: "symbols" },
@@ -230,7 +240,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
         fields: [
           { name: "title", label: "Title", type: "text", required: true, maxLength: 160, placeholder: "e.g. Things Fall Apart" },
           { name: "type", label: "Type", type: "select", required: true, options: WORK_TYPES },
-          { name: "typeLabel", label: "Type label", type: "text", placeholder: "Cultural Movement", description: "Free-text label shown in the hero." },
+          { name: "reviewType", label: "Review type (badge)", type: "select", options: REVIEW_TYPES, description: "Red badge shown top-left on cards, e.g. Album Review. Leave empty for no badge." },
           { name: "year", label: "Year", type: "number", min: 1800, max: 2030, placeholder: "1992" },
           { name: "summary", label: "Intro", type: "textarea", required: true, description: "Intro paragraph shown in the hero and in cards." },
         ],
@@ -248,7 +258,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas", options: IDEA_OPTS },
           { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
           { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "tags" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -324,8 +334,11 @@ export const ENTITIES: Record<string, EntityConfig> = {
       },
       {
         title: "Content",
+        description: "Summary, Key Ideas and Knowledge Sovereignty drive the Thinkers card on the homepage.",
         fields: [
-          { name: "summary", label: "Summary", type: "textarea", required: true },
+          { name: "summary", label: "Core contribution (summary)", type: "textarea", required: true, description: "Shown as 'Core Contribution' in the Thinkers card." },
+          { name: "keyIdeas", label: "Key ideas", type: "textarea", description: "Shown as 'Key Ideas' in the Thinkers card." },
+          { name: "knowledgeSovereignty", label: "Knowledge sovereignty", type: "textarea", description: "Shown as 'Knowledge Sovereignty' in the Thinkers card." },
           { name: "biography", label: "Biography", type: "richtext" },
         ],
       },
@@ -335,7 +348,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
           { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas", options: IDEA_OPTS },
           { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "tags" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -411,7 +424,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
           { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
           { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "tags" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -514,7 +527,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
           { name: "relatedWorks", label: "Related works", type: "relationship", relationTo: "works", options: WORK_OPTS },
           { name: "relatedPeople", label: "Related people", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
-          { name: "tags", label: "Tags", type: "tags" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -640,7 +653,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "relatedMoments", label: "Related moments", type: "relationship", relationTo: "moments", options: MOMENT_OPTS },
           { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
           { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "tags" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
