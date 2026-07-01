@@ -50,8 +50,17 @@ export function EntityFormView({
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
   const isEdit = Boolean(record);
-  const [values, setValues] = useState<Record<string, unknown>>(() =>
-    buildInitial(config.form, record)
+  // Snapshot the record's initial values so we can tell whether the editor has
+  // actually made changes. Save stays disabled on an edit form until something
+  // differs — no more no-op saves that pop a misleading "updated successfully".
+  const initialValues = useMemo(
+    () => buildInitial(config.form, record),
+    [config.form, record]
+  );
+  const [values, setValues] = useState<Record<string, unknown>>(initialValues);
+  const dirty = useMemo(
+    () => JSON.stringify(values) !== JSON.stringify(initialValues),
+    [values, initialValues]
   );
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -197,8 +206,10 @@ export function EntityFormView({
             </Link>
             <button
               type="submit"
-              disabled={saving}
-              className="inline-flex h-11 items-center gap-2 rounded-xl px-6 font-inter text-base font-medium text-yellow-950 transition-opacity hover:opacity-90 disabled:opacity-60"
+              // On an edit form, block saving until there are unsaved changes.
+              disabled={saving || (isEdit && !dirty)}
+              title={isEdit && !dirty ? "No changes to save" : undefined}
+              className="inline-flex h-11 items-center gap-2 rounded-xl px-6 font-inter text-base font-medium text-yellow-950 transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)" }}
             >
               {saving && <Loader2 className="size-4 animate-spin" />}
