@@ -3,58 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { ArrowRight, LayoutDashboard, Library, LogOut, Settings, Users } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ArrowRight, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "@/components/layout/Logo";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, type DashboardNavItem } from "./constants";
-
-const IMAGE_ICONS: Partial<Record<DashboardNavItem["icon"], string>> = {
-  saved: "/dashboard-saved.png",
-  reports: "/dashboard-report.png",
-  contribution: "/dashboard-contributor.png",
-};
-
-const LUCIDE_ICONS: Partial<Record<DashboardNavItem["icon"], LucideIcon>> = {
-  dashboard: LayoutDashboard,
-  library: Library,
-  people: Users,
-  settings: Settings,
-};
-
-function NavIcon({
-  icon,
-  active,
-}: Readonly<{
-  icon: DashboardNavItem["icon"];
-  active: boolean;
-}>) {
-  const imageSrc = IMAGE_ICONS[icon];
-  if (imageSrc) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={imageSrc}
-        alt=""
-        aria-hidden="true"
-        className={cn(
-          "size-4 shrink-0",
-          active
-            ? "[filter:brightness(0)_saturate(100%)_invert(67%)_sepia(67%)_saturate(589%)_hue-rotate(329deg)_brightness(105%)_contrast(97%)]"
-            : "brightness-0 invert"
-        )}
-      />
-    );
-  }
-  const Icon = LUCIDE_ICONS[icon];
-  if (!Icon) return null;
-  return (
-    <Icon
-      className={cn("size-4 shrink-0", active ? "text-orange-400" : "text-white")}
-    />
-  );
-}
+import { DashboardNavIcon } from "./DashboardNavIcon";
 
 function NavLink({
   item,
@@ -70,7 +24,7 @@ function NavLink({
           : "text-white hover:bg-white/5"
       )}
     >
-      <NavIcon icon={item.icon} active={active} />
+      <DashboardNavIcon icon={item.icon} active={active} />
       {item.label}
     </Link>
   );
