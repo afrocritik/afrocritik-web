@@ -228,6 +228,27 @@ export function getMediaUrl(media: any): string | undefined {
   return url.startsWith("http") ? url : `${API_BASE}${url}`;
 }
 
+/**
+ * Turn a Cloudinary media URL into a forced-download URL. Cloudinary serves
+ * PDFs inline, so a plain link navigates the user away to the Cloudinary-hosted
+ * file; inserting the `fl_attachment` delivery flag makes it respond with
+ * Content-Disposition: attachment so the browser downloads the file (with a
+ * friendly name) and the user stays on the page. Non-Cloudinary URLs are
+ * returned unchanged.
+ */
+export function toDownloadUrl(
+  url?: string,
+  filename?: string
+): string | undefined {
+  if (!url || !url.includes("res.cloudinary.com") || !url.includes("/upload/")) {
+    return url;
+  }
+  const flag = filename
+    ? `fl_attachment:${encodeURIComponent(filename)}`
+    : "fl_attachment";
+  return url.replace("/upload/", `/upload/${flag}/`);
+}
+
 export function mapWorkToCard(w: any) {
   const country = Array.isArray(w.country)
     ? w.country
