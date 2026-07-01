@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
+import { Logo } from "./Logo";
 import { MegaMenu } from "./MegaMenu";
 
 function HamburgerIcon() {
   return (
-    <div className="flex size-16 items-center justify-center overflow-hidden">
-      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} />
+    <div className="flex size-11 items-center justify-center overflow-hidden sm:size-16">
+      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} className="w-8 sm:w-12" />
     </div>
   );
 }
@@ -33,7 +34,11 @@ export function DashboardNavbar() {
 
   return (
     <header className="w-full">
-      <div className="flex items-center gap-5 px-6 pt-6 pb-5 md:px-8">
+      <div className="flex items-center gap-3 px-4 pt-5 pb-4 sm:gap-5 sm:px-6 sm:pt-6 sm:pb-5 md:px-8">
+        {/* Brand — only on small screens, where the sidebar (which holds the
+            logo) is hidden */}
+        <Logo className="lg:hidden" />
+
         {/* Center search — always visible on the dashboard */}
         <form
           onSubmit={submitSearch}
@@ -63,19 +68,19 @@ export function DashboardNavbar() {
         </form>
 
         {/* Right actions: Bell → Hamburger → Explore → Avatar */}
-        <div className="flex items-center gap-5 shrink-0">
+        <div className="ml-auto flex items-center gap-3 shrink-0 sm:gap-5">
           {/* Notifications */}
           <button
             type="button"
             aria-label="Notifications"
-            className="flex size-16 items-center justify-center transition-opacity hover:opacity-70"
+            className="flex size-11 items-center justify-center transition-opacity hover:opacity-70 sm:size-16"
           >
             <Image
               src="/dashboard-notification-icon.png"
               alt="Notifications"
               width={40}
               height={40}
-              className="size-10 object-contain"
+              className="size-7 object-contain sm:size-10"
             />
           </button>
 

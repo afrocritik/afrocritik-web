@@ -17,21 +17,25 @@ export function Logo({
         width={211}
         height={86}
         className="object-contain"
-        style={{ width: "210.847px", height: "85.532px", aspectRatio: "106/43" }}
+        style={{
+          width: "clamp(150px, 42vw, 210.847px)",
+          height: "auto",
+          aspectRatio: "106/43",
+        }}
         priority
       />
       <div
         style={{
           position: "absolute",
-          width: "78px",
+          width: "clamp(56px, 15vw, 78px)",
           color: "#F3E5D0",
           textAlign: "center",
           fontFamily: "Wittgenstein",
-          fontSize: "16px",
+          fontSize: "clamp(11px, 3.2vw, 16px)",
           fontWeight: 600,
           lineHeight: "110%",
           textTransform: "capitalize",
-          bottom: "10px",
+          bottom: "clamp(7px, 1.8vw, 10px)",
           left: "50%",
           transform: "translateX(-50%)",
         }}
