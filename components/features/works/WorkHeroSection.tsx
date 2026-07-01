@@ -118,16 +118,16 @@ export function WorkHeroSection({
             {title}
           </h1>
           {description ? (
-            <p className="mt-4 w-[600px] text-white text-base font-normal font-inter leading-relaxed">
+            <p className="mt-4 max-w-[600px] text-white text-base font-normal font-inter leading-relaxed">
               {description}
             </p>
           ) : (
-            <p className="mt-4 w-[600px] text-white/40 text-base font-normal font-inter leading-relaxed italic">
+            <p className="mt-4 max-w-[600px] text-white/40 text-base font-normal font-inter leading-relaxed italic">
               Description not uploaded yet.
             </p>
           )}
           {meta.length > 0 && (
-            <div className="mt-8 w-[600px] flex flex-wrap gap-x-6 gap-y-2">
+            <div className="mt-8 max-w-[600px] flex flex-wrap gap-x-6 gap-y-2">
               {meta.map(({ label, value }) => (
                 <div key={label} className="inline-flex justify-start items-center gap-3">
                   <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">
@@ -151,7 +151,7 @@ export function WorkHeroSection({
             </button>
           </div>
           {relatedThemes.length > 0 && (
-            <div className="mt-4 w-[600px] flex flex-wrap items-center gap-2">
+            <div className="mt-4 max-w-[600px] flex flex-wrap items-center gap-2">
               <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">
                 Related themes
               </span>
