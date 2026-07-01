@@ -20,10 +20,15 @@ export function FollowButton({
   const { data: user, refetch } = useCurrentUser();
   const [busy, setBusy] = useState(false);
 
-  const following: string[] = Array.isArray(user?.following)
-    ? user.following.map((p: any) => (typeof p === "string" ? p : String(p.id)))
+  // The people relationship uses Postgres numeric ids, so values must be sent
+  // as numbers — string ids fail Payload's isValidID(value,'number').
+  const following: number[] = Array.isArray(user?.following)
+    ? user.following
+        .map((p: any) => Number(typeof p === "object" ? p?.id : p))
+        .filter((n: number) => Number.isFinite(n))
     : [];
-  const isFollowing = following.includes(String(personId));
+  const personIdNum = Number(personId);
+  const isFollowing = following.includes(personIdNum);
 
   const toggle = async () => {
     if (!token || !user?.id) {
@@ -33,8 +38,8 @@ export function FollowButton({
     }
     setBusy(true);
     const next = isFollowing
-      ? following.filter((id) => id !== String(personId))
-      : [...following, String(personId)];
+      ? following.filter((id) => id !== personIdNum)
+      : [...following, personIdNum];
     try {
       await api.users.update(String(user.id), { following: next }, token);
       if (!isFollowing) {
