@@ -18,9 +18,9 @@ export function HeroSearch() {
   return (
     <form onSubmit={submit} className="relative mx-auto w-full max-w-[888px]">
       <div
-        className="flex items-center gap-4 px-6"
+        className="flex items-center gap-3 px-4 sm:gap-4 sm:px-6"
         style={{
-          height: "105px",
+          height: "clamp(64px, 14vw, 105px)",
           borderRadius: "12px",
           border: "1px solid #6E4205",
           background: "rgba(65, 40, 23, 0.50)",
@@ -33,6 +33,7 @@ export function HeroSearch() {
             width={70}
             height={71}
             priority
+            className="h-9 w-9 sm:h-[70px] sm:w-[71px]"
           />
         </button>
         <input
@@ -41,9 +42,8 @@ export function HeroSearch() {
           placeholder="Search works, ideas, people, reports..."
           className="hero-search-input flex-1 bg-transparent text-white focus:outline-none"
           style={{
-            height: "34.327px",
             fontFamily: "var(--font-inter)",
-            fontSize: "24px",
+            fontSize: "clamp(15px, 3vw, 24px)",
             fontWeight: 400,
             lineHeight: "140%",
             textTransform: "capitalize",

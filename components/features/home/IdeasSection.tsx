@@ -28,10 +28,10 @@ export function IdeasSection({ ideas = [] }: Props) {
         <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-orange-400">
           Conceptual Frameworks
         </span>
-        <h2 className="mt-3 w-[677px] justify-center text-orange-950 text-4xl font-bold font-baskervville capitalize leading-10">
+        <h2 className="mt-3 max-w-[677px] justify-center text-orange-950 text-3xl sm:text-4xl font-bold font-baskervville capitalize leading-tight sm:leading-10">
           Ideas That Shape the Continent
         </h2>
-        <p className="mt-2 w-[670px] justify-center text-neutral-700 text-base font-normal font-inter capitalize leading-6">
+        <p className="mt-2 max-w-[670px] justify-center text-neutral-700 text-base font-normal font-inter capitalize leading-6">
           Each concept in the system connects to works, thinkers, and cultural
           movements — forming a living map of African intellectual life.
         </p>
@@ -43,7 +43,7 @@ export function IdeasSection({ ideas = [] }: Props) {
             <IdeaCard key={idea.slug} {...idea} theme="light" />
           ))
         ) : (
-          <p className="col-span-4 text-neutral-400 font-inter text-sm py-8 text-center italic">
+          <p className="col-span-full text-neutral-400 font-inter text-sm py-8 text-center italic">
             Ideas are being curated — check back soon.
           </p>
         )}

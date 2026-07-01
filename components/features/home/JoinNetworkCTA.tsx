@@ -20,10 +20,10 @@ export function JoinNetworkCTA({ cta }: Readonly<{ cta?: CtaContent }>) {
 
   return (
     <div className="container flex flex-col items-center text-center">
-      <h2 className="w-[681px] text-center justify-center text-white text-5xl font-bold font-baskervville capitalize leading-[52.80px]">
+      <h2 className="w-full max-w-[681px] text-center justify-center text-white text-3xl sm:text-4xl lg:text-5xl font-bold font-baskervville capitalize leading-tight lg:leading-[52.80px]">
         {heading}
       </h2>
-      <p className="w-[704px] text-center justify-center text-orange-100 text-sm font-semibold font-inter capitalize leading-relaxed pt-4">
+      <p className="w-full max-w-[704px] text-center justify-center text-orange-100 text-sm font-semibold font-inter capitalize leading-relaxed pt-4">
         {subheading}
       </p>
       <div className="mt-10 flex flex-wrap justify-center gap-3">
