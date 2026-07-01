@@ -19,12 +19,13 @@ type ExploreHeroProps = Readonly<{
 export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
   return (
     <section>
-      <div className="container flex flex-col items-center justify-center py-14 text-center md:py-16 h-[508px]">
+      <div className="container flex flex-col items-center justify-center py-14 text-center md:py-16 min-h-[360px] md:h-[508px]">
         <h1
           style={{
-            width: "824px",
+            width: "100%",
+            maxWidth: "824px",
             fontFamily: "var(--font-baskervville)",
-            fontSize: "56px",
+            fontSize: "clamp(32px, 8vw, 56px)",
             fontWeight: 700,
             lineHeight: "110%",
             textTransform: "capitalize",
@@ -49,9 +50,9 @@ export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
 
         <div className="mt-9 w-full max-w-[888px]">
           <div
-            className="flex items-center gap-4 px-6"
+            className="flex items-center gap-3 px-4 sm:gap-4 sm:px-6"
             style={{
-              height: "105px",
+              height: "clamp(64px, 14vw, 105px)",
               borderRadius: "12px",
               border: "1px solid #6E4205",
               background: "rgba(65, 40, 23, 0.50)",
@@ -64,6 +65,7 @@ export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
                 width={70}
                 height={71}
                 priority
+                className="h-9 w-9 sm:h-[70px] sm:w-[71px]"
               />
             </button>
             <input
@@ -73,7 +75,7 @@ export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
               className="flex-1 bg-transparent text-white focus:outline-none"
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "24px",
+                fontSize: "clamp(15px, 3vw, 24px)",
                 fontWeight: 400,
                 lineHeight: "140%",
                 textTransform: "capitalize",

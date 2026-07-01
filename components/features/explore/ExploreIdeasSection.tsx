@@ -12,13 +12,13 @@ const CONNECTOR_NODES = [
 export function ExploreIdeasSection() {
   return (
     <section
-      className="relative h-[498px] overflow-hidden bg-cover bg-center"
+      className="relative min-h-[420px] py-16 md:py-0 md:h-[498px] overflow-hidden bg-cover bg-center"
       style={{ backgroundImage: "url('/explore-ideas-bg.png')" }}
     >
       <div className="container h-full flex items-center gap-8">
         {/* Left content */}
-        <div className="flex flex-col justify-between flex-1 h-72">
-          <h2 className="text-white text-5xl font-bold capitalize leading-tight" style={{ fontFamily: "var(--font-baskervville)" }}>
+        <div className="flex flex-col justify-between gap-6 flex-1 md:h-72">
+          <h2 className="text-white text-3xl md:text-5xl font-bold capitalize leading-tight" style={{ fontFamily: "var(--font-baskervville)" }}>
             explore Ideas
           </h2>
           <p className="max-w-lg text-white text-[17px] font-normal capitalize leading-relaxed" style={{ fontFamily: "var(--font-inter)" }}>
@@ -36,8 +36,9 @@ export function ExploreIdeasSection() {
           </Link>
         </div>
 
-        {/* Right diagram */}
-        <div className="w-[664px] h-72 relative shrink-0">
+        {/* Right diagram — decorative; hidden on small screens where its fixed
+            pixel layout can't reflow */}
+        <div className="hidden xl:block w-[664px] h-72 relative shrink-0">
           {/* SVG connecting lines — polylines through connector midpoints */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" fill="none">
             <polyline points="134,31 222,52 316,141" stroke="#9C5C08" strokeWidth="1.37" strokeOpacity="0.7" />
