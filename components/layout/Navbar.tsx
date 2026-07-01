@@ -11,8 +11,8 @@ import { MegaMenu } from "./MegaMenu";
 
 function HamburgerIcon() {
   return (
-    <div className="flex size-16 items-center justify-center overflow-hidden">
-      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} />
+    <div className="flex size-11 items-center justify-center overflow-hidden sm:size-16">
+      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} className="w-8 sm:w-12" />
     </div>
   );
 }
@@ -37,7 +37,7 @@ export function Navbar() {
       className="sticky top-0 z-50 w-full border-b border-amber-line backdrop-blur"
       style={{ background: "#3B1E08" }}
     >
-      <div className="container flex items-center gap-5 pt-6 pb-5">
+      <div className="container flex items-center gap-3 pt-5 pb-4 sm:gap-5 sm:pt-6 sm:pb-5">
         <Logo />
 
         {/* Center search — only on interior pages */}
@@ -73,7 +73,7 @@ export function Navbar() {
         )}
 
         {/* Right actions: Hamburger → Explore → Avatar/Sign In */}
-        <div className="flex items-center gap-5 shrink-0">
+        <div className="flex items-center gap-3 shrink-0 sm:gap-5">
           {/* Hamburger — first on the right */}
           <button
             onClick={() => setMenuOpen(true)}
@@ -111,12 +111,12 @@ export function Navbar() {
           ) : (
             <Link
               href="/signin"
-              className="inline-flex h-[60px] w-[162px] items-center justify-center gap-2.5 rounded-xl transition-opacity hover:opacity-90"
+              className="inline-flex h-11 w-auto px-4 sm:h-[60px] sm:w-[162px] sm:px-0 items-center justify-center gap-2.5 rounded-xl transition-opacity hover:opacity-90"
               style={{
                 background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
               }}
             >
-              <span className="font-inter text-2xl font-medium capitalize leading-8 text-yellow-950">
+              <span className="font-inter text-base sm:text-2xl font-medium capitalize leading-8 text-yellow-950 whitespace-nowrap">
                 Sign in
               </span>
             </Link>
