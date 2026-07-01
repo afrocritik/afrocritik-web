@@ -64,7 +64,7 @@ export function WorkMediaRow({ videoArchive = [], audioArchive = [] }: Props) {
           ref={archiveRef}
           className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 min-h-[360px] flex flex-col"
         >
-          <p className="w-96 justify-start text-white text-xl font-semibold font-baskervville leading-5">
+          <p className="w-full justify-start text-white text-xl font-semibold font-baskervville leading-5">
             Watch Video Archive
           </p>
           <div className="mt-10 flex gap-3 flex-1 min-h-0">

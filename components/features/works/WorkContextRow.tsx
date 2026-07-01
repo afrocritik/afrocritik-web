@@ -21,8 +21,8 @@ export function WorkContextRow({ workTitle, timeline = [] }: Props) {
         Timeline: Key Moments{workTitle ? ` in ${workTitle}` : ""}
       </h2>
       <div className="mt-8 flex flex-col gap-4">
-        {/* Track — dots + lines */}
-        <div className="flex justify-start items-start">
+        {/* Track — dots + lines (horizontal only where the items sit in a row) */}
+        <div className="hidden justify-start items-start md:flex">
           {timeline.map((t, i) => (
             <div key={t.year} className="flex-1 h-2.5 relative">
               <div className="size-2.5 left-0 top-0 absolute">
@@ -34,12 +34,12 @@ export function WorkContextRow({ workTitle, timeline = [] }: Props) {
             </div>
           ))}
         </div>
-        {/* Text items */}
-        <div className="flex justify-start items-start">
+        {/* Text items — stacked on small screens, row on md+ */}
+        <div className="flex flex-col gap-6 md:flex-row md:gap-0 md:justify-start md:items-start">
           {timeline.map((t) => (
             <div
               key={t.year}
-              className="flex-1 inline-flex flex-col justify-start items-start gap-3 pr-4"
+              className="w-full min-w-0 md:flex-1 inline-flex flex-col justify-start items-start gap-3 md:pr-4 border-l-2 border-yellow-700/40 pl-4 md:border-l-0 md:pl-0"
             >
               <div className="text-orange-400 text-sm font-normal font-inter leading-snug">
                 {t.year}
