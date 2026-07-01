@@ -34,12 +34,12 @@ export function ArchiveTabsBar({
   onSortChange,
 }: ArchiveTabsBarProps) {
   return (
-    <section style={{ height: "249px" }}>
+    <section>
       {/* top line */}
       <div className="h-px bg-orange-400/15" />
 
-      {/* TAB CARDS — 145px */}
-      <div className="container flex items-center" style={{ height: "145px" }}>
+      {/* TAB CARDS — horizontally scrollable on small screens */}
+      <div className="container flex items-center overflow-x-auto hide-scrollbar py-4 md:py-0 md:h-[145px]">
         {TABS.map((t, i) => {
           const active = t.key === activeKey;
           return (
@@ -48,7 +48,7 @@ export function ArchiveTabsBar({
               <button
                 onClick={() => onSelect(t.key)}
                 data-has-icon="true"
-                className={`flex-1 h-36 px-4 inline-flex justify-center items-center gap-3 transition-all ${
+                className={`flex-1 min-w-[132px] h-24 md:h-36 px-4 inline-flex justify-center items-center gap-2 md:gap-3 transition-all ${
                   active
                     ? "bg-[#50321C80] rounded-2xl bg-opacity-50 outline outline-1 outline-offset-[-1.13px] outline-amber-600"
                     : "hover:bg-[#50321C80] hover:rounded-2xl hover:bg-opacity-50"
@@ -92,10 +92,7 @@ export function ArchiveTabsBar({
       <div className="h-px bg-orange-400/15" />
 
       {/* FILTER ROW — 104px */}
-      <div
-        className="container flex flex-wrap items-center gap-2"
-        style={{ height: "104px" }}
-      >
+      <div className="container flex flex-wrap items-center gap-2 py-6 md:py-0 md:h-[104px]">
         <p className="font-inter text-sm text-white/60">
           Use{" "}
           <span className="font-semibold text-white/80">Refine results</span> to

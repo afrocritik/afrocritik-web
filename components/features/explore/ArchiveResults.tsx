@@ -47,7 +47,9 @@ export function ArchiveResults({
   const visibleWorks = gated ? works.slice(0, PREVIEW_LIMIT) : works;
   const hiddenCount = gated ? Math.max(resultCount - visibleWorks.length, 0) : 0;
   // Without the sidebar the grid spans the full width, so fit more columns.
-  const gridCols = showRefine ? "grid-cols-4" : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4";
+  const gridCols = showRefine
+    ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4";
   return (
     <section className="container py-10">
       {/* Full-width header row — above both sidebar and cards */}

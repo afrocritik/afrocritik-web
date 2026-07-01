@@ -80,8 +80,8 @@ export function RefineSidebar({
     : countries;
 
   return (
-    <aside className="shrink-0">
-      <div className="w-64 max-h-[680px] bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 overflow-y-auto">
+    <aside className="w-full shrink-0 lg:w-64">
+      <div className="w-full lg:w-64 max-h-[680px] bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 overflow-y-auto">
         <h3 className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
           Refine results
         </h3>
