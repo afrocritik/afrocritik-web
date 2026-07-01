@@ -2,7 +2,7 @@
 
 import { Download } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { api } from "@/lib/api";
+import { api, toDownloadUrl } from "@/lib/api";
 import { logActivity } from "@/lib/activity";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 
@@ -23,16 +23,19 @@ export function ReportDownloadButton({
 
   const record = async () => {
     if (!token || !user?.id) return;
-    const current: string[] = Array.isArray(user.downloadedReports)
-      ? user.downloadedReports.map((r: any) =>
-          typeof r === "string" ? r : String(r.id)
-        )
+    // The reports relationship uses Postgres numeric ids, so values must be
+    // sent as numbers — string ids fail Payload's isValidID(value,'number').
+    const current: number[] = Array.isArray(user.downloadedReports)
+      ? user.downloadedReports
+          .map((r: any) => Number(typeof r === "object" ? r?.id : r))
+          .filter((n: number) => Number.isFinite(n))
       : [];
-    if (current.includes(String(reportId))) return;
+    const id = Number(reportId);
+    if (!Number.isFinite(id) || current.includes(id)) return;
     try {
       await api.users.update(
         String(user.id),
-        { downloadedReports: [...current, String(reportId)] },
+        { downloadedReports: [...current, id] },
         token
       );
       await logActivity("downloaded", reportTitle, `/reports/${reportSlug}`, token);
@@ -54,10 +57,14 @@ export function ReportDownloadButton({
     );
   }
 
+  // Force a file download (Content-Disposition: attachment) with a friendly
+  // filename instead of sending the user off to the Cloudinary viewer.
+  const downloadUrl = toDownloadUrl(pdfUrl, reportSlug) ?? pdfUrl;
+
   return (
     <a
-      href={pdfUrl}
-      target="_blank"
+      href={downloadUrl}
+      download
       rel="noopener noreferrer"
       onClick={record}
       className="mt-7 inline-flex h-12 w-fit items-center gap-2 rounded-xl px-7 font-inter text-sm font-medium text-yellow-950 transition-opacity hover:opacity-90"
