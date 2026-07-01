@@ -165,7 +165,7 @@ export function ThinkersSection({ people = [] }: Props) {
         <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-yellow-700">
           Explore African Philosophy
         </span>
-        <h2 className="mt-6 max-w-[906px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+        <h2 className="mt-6 max-w-[906px] font-baskervville text-3xl sm:text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
           The Thinkers Who Built The Foundations
         </h2>
         <p className="mt-6 max-w-[765px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
@@ -175,7 +175,7 @@ export function ThinkersSection({ people = [] }: Props) {
         </p>
 
         {/* Pagination */}
-        <div className="inline-flex shrink-0 items-center gap-1 self-end">
+        <div className="mt-4 flex flex-wrap shrink-0 items-center gap-1 self-end max-w-full">
           <button
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={page === 0}
@@ -215,17 +215,14 @@ export function ThinkersSection({ people = [] }: Props) {
       </div>
 
       {/* Thinker Card */}
-      <div className="flex overflow-hidden rounded-xl">
+      <div className="flex flex-col overflow-hidden rounded-xl lg:flex-row">
         {/* Left: Image */}
         <div
-          className="relative shrink-0"
+          className="relative w-full shrink-0 rounded-t-xl lg:w-[395px] lg:rounded-l-xl lg:rounded-tr-none h-[420px] sm:h-[520px] lg:h-[778px]"
           style={{
-            width: "395px",
-            height: "778px",
             background: thinker.image
               ? `url('${thinker.image}') #3D1A08 50% / cover no-repeat`
               : "#3D1A08",
-            borderRadius: "12px 0 0 12px",
           }}
         >
           {!thinker.image && (
@@ -267,7 +264,7 @@ export function ThinkersSection({ people = [] }: Props) {
         </div>
 
         {/* Right: Info Panel */}
-        <div className="w-[744px] h-[778px] bg-stone-100 rounded-tr-xl rounded-br-xl border border-yellow-700/30 flex flex-1 flex-col justify-center px-10 py-8">
+        <div className="w-full lg:w-[744px] lg:h-[778px] bg-stone-100 rounded-b-xl lg:rounded-bl-none lg:rounded-r-xl border border-yellow-700/30 flex flex-1 flex-col justify-center px-6 py-6 sm:px-10 sm:py-8">
           <div className="max-w-[649px]">
             {thinker.coreContribution && (
               <p className="font-inter text-base leading-[179%] text-black">

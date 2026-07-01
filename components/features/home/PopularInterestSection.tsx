@@ -22,17 +22,17 @@ export function PopularInterestSection({
   return (
     <>
       <div className="flex flex-col gap-2 pb-4">
-        <h2 className="text-white text-4xl font-bold font-baskervville capitalize leading-tight">
+        <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold font-baskervville capitalize leading-tight">
           explore based on popular interest
         </h2>
         <Link
           href="/explore"
-          className="self-end text-center text-orange-400 text-3xl font-semibold font-inter capitalize leading-8 shrink-0"
+          className="self-end text-center text-orange-400 text-xl sm:text-2xl lg:text-3xl font-semibold font-inter capitalize leading-8 shrink-0"
         >
           See More
         </Link>
       </div>
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
         {items.map(({ label, image, category }) => (
           <Link
             key={label}

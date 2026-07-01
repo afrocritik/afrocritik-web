@@ -35,9 +35,10 @@ export function HeroSection({
       <div className="container flex flex-col items-center py-12 text-center md:py-16">
         <h1
           style={{
-            width: "824px",
+            width: "100%",
+            maxWidth: "824px",
             fontFamily: "var(--font-baskervville)",
-            fontSize: "56px",
+            fontSize: "clamp(32px, 8vw, 56px)",
             fontWeight: 700,
             lineHeight: "110%",
             textTransform: "capitalize",
