@@ -17,8 +17,8 @@ const AXIS_LINE = "rgba(255,255,255,0.5)";
 const TICK = "#ffffff";
 
 export function ContentGrowthChart() {
-  const { data, isLoading, isError } = useDashboardData();
-  if (isLoading && !data)
+  const { data, isPending, isError } = useDashboardData();
+  if (isPending && !isError)
     return (
       <div
         className="h-[288px] w-full animate-pulse rounded-lg"

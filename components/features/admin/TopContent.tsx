@@ -4,8 +4,8 @@ import { Eye } from "lucide-react";
 import { useDashboardData } from "./useDashboardData";
 
 export function TopContent() {
-  const { data, isLoading, isError } = useDashboardData();
-  if (isLoading && !data)
+  const { data, isPending, isError } = useDashboardData();
+  if (isPending && !isError)
     return (
       <ul className="flex flex-col">
         {Array.from({ length: 5 }).map((_, i) => (

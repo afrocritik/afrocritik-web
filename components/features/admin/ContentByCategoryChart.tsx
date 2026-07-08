@@ -4,8 +4,8 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { useDashboardData } from "./useDashboardData";
 
 export function ContentByCategoryChart() {
-  const { data, isLoading, isError } = useDashboardData();
-  if (isLoading && !data)
+  const { data, isPending, isError } = useDashboardData();
+  if (isPending && !isError)
     return (
       <div
         className="h-[256px] w-full animate-pulse rounded-lg"
