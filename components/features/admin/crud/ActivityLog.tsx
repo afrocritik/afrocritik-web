@@ -1,64 +1,146 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { FilePlus2, Pencil, Trash2, Upload, LogIn } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Bookmark, Download, UserPlus, FilePlus2, FolderPlus } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { api, getApiErrorMessage } from "@/lib/api";
 import { TablePagination } from "../TablePagination";
 
-type Action = "created" | "updated" | "deleted" | "uploaded" | "signed in";
+// Mirrors the `action` options on the Payload Activity collection.
+type Action = "saved" | "downloaded" | "followed" | "contributed" | "collection";
 
 interface LogEntry {
   id: string;
   actor: string;
   action: Action;
   target: string;
+  targetUrl?: string;
   time: string;
 }
 
 const ICONS: Record<Action, LucideIcon> = {
-  created: FilePlus2,
-  updated: Pencil,
-  deleted: Trash2,
-  uploaded: Upload,
-  "signed in": LogIn,
+  saved: Bookmark,
+  downloaded: Download,
+  followed: UserPlus,
+  contributed: FilePlus2,
+  collection: FolderPlus,
 };
 
 const COLORS: Record<Action, string> = {
-  created: "bg-emerald-900/60 text-emerald-300",
-  updated: "bg-sky-900/60 text-sky-300",
-  deleted: "bg-red-900/60 text-red-300",
-  uploaded: "bg-amber-900/60 text-amber-200",
-  "signed in": "bg-neutral-700/60 text-white/70",
+  saved: "bg-emerald-900/60 text-emerald-300",
+  downloaded: "bg-sky-900/60 text-sky-300",
+  followed: "bg-amber-900/60 text-amber-200",
+  contributed: "bg-emerald-900/60 text-emerald-300",
+  collection: "bg-purple-900/60 text-purple-300",
 };
 
-const LOG: LogEntry[] = [
-  { id: "l1", actor: "Adaeze Okafor", action: "created", target: "Work · Living in Bondage", time: "2 minutes ago" },
-  { id: "l2", actor: "Kwame Mensah", action: "updated", target: "Person · Fela Kuti", time: "1 hour ago" },
-  { id: "l3", actor: "Zainab Bello", action: "uploaded", target: "Media · afrobeats-cover.png", time: "3 hours ago" },
-  { id: "l4", actor: "Adaeze Okafor", action: "deleted", target: "Tag · Obsolete", time: "Yesterday, 4:20 PM" },
-  { id: "l5", actor: "Kwame Mensah", action: "created", target: "Idea · Afrofuturism", time: "Yesterday, 11:02 AM" },
-  { id: "l6", actor: "Zainab Bello", action: "updated", target: "Report · The Afrobeats Economy", time: "2 days ago" },
-  { id: "l7", actor: "Thabo Nkosi", action: "signed in", target: "Account", time: "2 days ago" },
-  { id: "l8", actor: "Adaeze Okafor", action: "created", target: "Collection · Staff Picks 2025", time: "3 days ago" },
-  { id: "l9", actor: "Kwame Mensah", action: "updated", target: "Work · Things Fall Apart", time: "4 days ago" },
-  { id: "l10", actor: "Zainab Bello", action: "deleted", target: "Media · draft-banner.jpg", time: "5 days ago" },
-];
+// Human-readable verb shown after the actor's name.
+const VERB: Record<Action, string> = {
+  saved: "saved",
+  downloaded: "downloaded",
+  followed: "followed",
+  contributed: "contributed",
+  collection: "created collection",
+};
 
 const PAGE_SIZE = 8;
 
+/** Derive a display name from a populated Payload user (depth=1). */
+function actorName(user: unknown): string {
+  if (!user || typeof user !== "object") return "Someone";
+  const u = user as Record<string, unknown>;
+  const full = [u.firstName, u.lastName].filter(Boolean).join(" ").trim();
+  return (
+    (u.name as string) ||
+    full ||
+    (u.username as string) ||
+    (u.email as string) ||
+    "Someone"
+  );
+}
+
+/** Compact "x minutes ago" formatter (no date-fns dependency). */
+function timeAgo(iso?: string): string {
+  if (!iso) return "";
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const secs = Math.round((Date.now() - then) / 1000);
+  if (secs < 60) return "just now";
+  const mins = Math.round(secs / 60);
+  if (mins < 60) return `${mins} minute${mins === 1 ? "" : "s"} ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  const days = Math.round(hours / 24);
+  if (days < 7) return `${days} day${days === 1 ? "" : "s"} ago`;
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+const TABS: ("all" | Action)[] = [
+  "all",
+  "saved",
+  "downloaded",
+  "followed",
+  "contributed",
+  "collection",
+];
+
 export function ActivityLog() {
+  const { data: session, status } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+
+  const [log, setLog] = useState<LogEntry[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | Action>("all");
   const [page, setPage] = useState(1);
 
+  useEffect(() => {
+    if (status === "loading") return;
+    let active = true;
+    (async () => {
+      try {
+        const res = await api.activity.list(token, { depth: 1, limit: 100 });
+        const docs = Array.isArray(res?.docs) ? res.docs : [];
+        if (active) {
+          setLog(
+            docs.map((d: Record<string, unknown>) => ({
+              id: String(d.id),
+              actor: actorName(d.user),
+              action: (d.action as Action) ?? "contributed",
+              target: (d.targetTitle as string) || "—",
+              targetUrl: d.targetUrl as string | undefined,
+              time: timeAgo(d.createdAt as string),
+            })),
+          );
+          setError(null);
+        }
+      } catch (err) {
+        if (active) {
+          setLog([]);
+          setError(getApiErrorMessage(err, "Couldn't load activity."));
+        }
+      } finally {
+        if (active) setLoaded(true);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [token, status]);
+
   const filtered = useMemo(
-    () => (filter === "all" ? LOG : LOG.filter((l) => l.action === filter)),
-    [filter]
+    () => (filter === "all" ? log : log.filter((l) => l.action === filter)),
+    [log, filter],
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const pageRows = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
-
-  const tabs: ("all" | Action)[] = ["all", "created", "updated", "deleted", "uploaded"];
 
   return (
     <div className="flex flex-col gap-6 px-4 pt-6 pb-[72px] md:px-6">
@@ -67,12 +149,12 @@ export function ActivityLog() {
           Activity Log
         </h1>
         <p className="mt-2 font-inter text-base font-light leading-5 text-orange-100">
-          A record of recent actions taken across the admin.
+          A record of recent actions taken across the platform.
         </p>
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {tabs.map((t) => (
+        {TABS.map((t) => (
           <button
             key={t}
             type="button"
@@ -92,31 +174,47 @@ export function ActivityLog() {
       </div>
 
       <div className="rounded-xl border border-yellow-700 p-5" style={{ background: "#50321C80" }}>
-        <ul className="flex flex-col">
-          {pageRows.map((entry, i) => {
-            const Icon = ICONS[entry.action];
-            return (
-              <li
-                key={entry.id}
-                className={`flex items-center gap-4 py-3.5 ${
-                  i < pageRows.length - 1 ? "border-b-[0.09px] border-neutral-500/50" : ""
-                }`}
-              >
-                <span className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${COLORS[entry.action]}`}>
-                  <Icon className="size-4" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="font-inter text-sm text-white">
-                    <span className="font-semibold">{entry.actor}</span>{" "}
-                    <span className="text-white/60">{entry.action}</span>{" "}
-                    <span className="text-orange-200">{entry.target}</span>
-                  </p>
-                </div>
-                <span className="shrink-0 font-inter text-xs text-white/50">{entry.time}</span>
-              </li>
-            );
-          })}
-        </ul>
+        {pageRows.length === 0 ? (
+          <p className="py-12 text-center font-inter text-sm text-white/50">
+            {!loaded
+              ? "Loading activity…"
+              : error
+                ? error
+                : "No activity yet."}
+          </p>
+        ) : (
+          <ul className="flex flex-col">
+            {pageRows.map((entry, i) => {
+              const Icon = ICONS[entry.action] ?? FilePlus2;
+              return (
+                <li
+                  key={entry.id}
+                  className={`flex items-center gap-4 py-3.5 ${
+                    i < pageRows.length - 1 ? "border-b-[0.09px] border-neutral-500/50" : ""
+                  }`}
+                >
+                  <span className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${COLORS[entry.action] ?? "bg-neutral-700/60 text-white/70"}`}>
+                    <Icon className="size-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-inter text-sm text-white">
+                      <span className="font-semibold">{entry.actor}</span>{" "}
+                      <span className="text-white/60">{VERB[entry.action] ?? entry.action}</span>{" "}
+                      {entry.targetUrl ? (
+                        <Link href={entry.targetUrl} className="text-orange-200 hover:underline">
+                          {entry.target}
+                        </Link>
+                      ) : (
+                        <span className="text-orange-200">{entry.target}</span>
+                      )}
+                    </p>
+                  </div>
+                  <span className="shrink-0 font-inter text-xs text-white/50">{entry.time}</span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
         {filtered.length > PAGE_SIZE && (
           <TablePagination
@@ -126,7 +224,7 @@ export function ActivityLog() {
             visiblePages={Array.from({ length: totalPages }, (_, i) => i + 1)}
             summary={`Showing ${(safePage - 1) * PAGE_SIZE + 1} to ${Math.min(
               safePage * PAGE_SIZE,
-              filtered.length
+              filtered.length,
             )} of ${filtered.length} events`}
           />
         )}
