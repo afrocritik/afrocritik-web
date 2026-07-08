@@ -12,8 +12,8 @@ import {
 import { useDashboardData } from "./useDashboardData";
 
 export function EngagementChart() {
-  const { data, isLoading, isError } = useDashboardData();
-  if (isLoading && !data)
+  const { data, isPending, isError } = useDashboardData();
+  if (isPending && !isError)
     return (
       <div
         className="mt-8 h-[280px] w-full animate-pulse rounded-lg"

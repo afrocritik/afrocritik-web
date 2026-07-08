@@ -50,6 +50,9 @@ export function useDashboardData() {
   return useQuery<DashboardData>({
     queryKey: ["admin-dashboard", token ?? "anon", range],
     staleTime: 60_000,
+    // Wait for the session token before firing — otherwise the first request
+    // goes out unauthenticated and 401s before the token-keyed refetch succeeds.
+    enabled: !!token,
     // A 403 (expired/absent staff token) won't fix itself on retry, so fail fast
     // instead of leaving the cards spinning through several backoff attempts.
     retry: 1,
