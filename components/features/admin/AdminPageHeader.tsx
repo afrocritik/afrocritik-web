@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { Calendar, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -8,12 +9,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-const RANGES = ["Last 7 days", "Last 30 days", "Last 90 days", "All time"];
+import { RANGES, useDashboardFilter } from "./DashboardFilterContext";
 
 export function AdminPageHeader() {
-  const [range, setRange] = useState("Last 30 days");
+  const { range, setRange } = useDashboardFilter();
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+
+  // First name of the signed-in staff member, falling back to a neutral label.
+  const firstName =
+    session?.user?.name?.trim().split(/\s+/)[0] || "there";
 
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
@@ -22,7 +27,7 @@ export function AdminPageHeader() {
           Dashboard
         </h1>
         <p className="mt-2.5 font-inter text-base font-light leading-4 text-orange-100">
-          Welcome back, Admin. Check the activities in this dashboard.
+          Welcome back, {firstName}. Check the activities in this dashboard.
         </p>
       </div>
 

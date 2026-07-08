@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ENGAGEMENT_DATA } from "./constants";
 import { useDashboardData } from "./useDashboardData";
 
 export function EngagementChart() {
@@ -21,7 +20,13 @@ export function EngagementChart() {
         style={{ background: "#50321C40" }}
       />
     );
-  const ENGAGEMENT = data?.engagement?.length ? data.engagement : ENGAGEMENT_DATA;
+  const ENGAGEMENT = data?.engagement ?? [];
+  if (ENGAGEMENT.length === 0)
+    return (
+      <div className="mt-8 flex h-[280px] w-full items-center justify-center font-inter text-sm text-white/50">
+        No engagement data yet.
+      </div>
+    );
   return (
     <div className="mt-8">
       <ResponsiveContainer width="100%" height={280}>

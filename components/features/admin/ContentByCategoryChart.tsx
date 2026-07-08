@@ -1,7 +1,6 @@
 "use client";
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { CATEGORY_DATA } from "./constants";
 import { useDashboardData } from "./useDashboardData";
 
 export function ContentByCategoryChart() {
@@ -13,7 +12,13 @@ export function ContentByCategoryChart() {
         style={{ background: "#50321C40" }}
       />
     );
-  const CATEGORY = data?.category?.length ? data.category : CATEGORY_DATA;
+  const CATEGORY = data?.category ?? [];
+  if (CATEGORY.length === 0)
+    return (
+      <div className="flex h-[256px] w-full items-center justify-center font-inter text-sm text-white/50">
+        No category data yet.
+      </div>
+    );
   return (
     <div className="flex flex-col items-center gap-4">
       <ResponsiveContainer width="100%" height={220}>

@@ -33,15 +33,6 @@ export const apiClient = axios.create({
   withCredentials: true,
 });
 
-// Attach bearer token on the client when available
-apiClient.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    const token = window.localStorage.getItem("afrocritik_token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
 export const api = {
   works: {
     list: (params?: Record<string, any>) =>
@@ -164,6 +155,16 @@ export const api = {
       })
       .then((r) => r.data),
   counts: () => apiClient.get("/api/search/counts").then((r) => r.data),
+  analytics: {
+    // Admin dashboard metrics. `days` is 7 | 30 | 90 for a window, or "all".
+    dashboard: (token?: string, days: number | "all" = "all") =>
+      apiClient
+        .get("/api/analytics/dashboard", {
+          params: { days },
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
+  },
   countries: {
     list: (params?: Record<string, any>) =>
       apiClient

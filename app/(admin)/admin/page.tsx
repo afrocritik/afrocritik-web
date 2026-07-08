@@ -6,11 +6,13 @@ import { ContentByCategoryChart } from "@/components/features/admin/ContentByCat
 import { EngagementChart } from "@/components/features/admin/EngagementChart";
 import { TopContent } from "@/components/features/admin/TopContent";
 import { RecentEntriesTable } from "@/components/features/admin/RecentEntriesTable";
+import { DashboardFilterProvider } from "@/components/features/admin/DashboardFilterContext";
 
 export default function AdminDashboardPage() {
   return (
-    <div className="flex flex-col gap-6 px-4 pt-6 pb-[72px] md:px-6">
-      <AdminPageHeader />
+    <DashboardFilterProvider>
+      <div className="flex flex-col gap-6 px-4 pt-6 pb-[72px] md:px-6">
+        <AdminPageHeader />
 
       <AdminStatCards />
 
@@ -34,7 +36,8 @@ export default function AdminDashboardPage() {
         </ChartCard>
       </div>
 
-      <RecentEntriesTable />
-    </div>
+        <RecentEntriesTable />
+      </div>
+    </DashboardFilterProvider>
   );
 }
