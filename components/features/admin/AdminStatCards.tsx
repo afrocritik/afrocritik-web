@@ -45,12 +45,14 @@ function StatCard({ stat }: Readonly<{ stat: AdminStat }>) {
 }
 
 export function AdminStatCards() {
-  const { data, isError } = useDashboardData();
+  const { data, isError, error } = useDashboardData();
   const stats = data?.stats ?? null;
 
   // The fetch failed (e.g. an expired session) — say so instead of spinning
-  // skeletons forever.
+  // skeletons forever. Surface the API's `reason` so the exact cause is visible.
   if (isError && !stats) {
+    const reason = (error as { response?: { data?: { reason?: string } } })
+      ?.response?.data?.reason;
     return (
       <div
         className="rounded-2xl px-6 py-5 outline outline-1 outline-offset-[-1.01px] outline-yellow-700/60"
@@ -60,6 +62,9 @@ export function AdminStatCards() {
           Couldn&apos;t load dashboard metrics. Your session may have expired —
           try signing out and back in.
         </p>
+        {reason ? (
+          <p className="mt-1 font-inter text-xs text-white/50">Reason: {reason}</p>
+        ) : null}
       </div>
     );
   }
