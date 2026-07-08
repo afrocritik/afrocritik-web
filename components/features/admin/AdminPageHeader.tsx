@@ -16,9 +16,12 @@ export function AdminPageHeader() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
 
-  // First name of the signed-in staff member, falling back to a neutral label.
+  // Prefer the user's name; the Users collection has no `name` field, so fall
+  // back to the email local-part, then a neutral label.
   const firstName =
-    session?.user?.name?.trim().split(/\s+/)[0] || "there";
+    session?.user?.name?.trim().split(/\s+/)[0] ||
+    session?.user?.email?.split("@")[0] ||
+    "there";
 
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">

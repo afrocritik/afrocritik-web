@@ -9,7 +9,7 @@ import { useDashboardData } from "./useDashboardData";
 const COLUMNS = ["Title", "Type", "Category", "Added By", "Date", "Status", ""];
 
 export function RecentEntriesTable() {
-  const { data, isLoading } = useDashboardData();
+  const { data, isLoading, isError } = useDashboardData();
   const entries = data?.recent ?? [];
 
   return (
@@ -54,7 +54,11 @@ export function RecentEntriesTable() {
                   colSpan={COLUMNS.length}
                   className="py-12 text-center font-inter text-sm text-white/50"
                 >
-                  {isLoading ? "Loading recent entries…" : "No entries yet."}
+                  {isLoading
+                    ? "Loading recent entries…"
+                    : isError
+                      ? "Couldn't load recent entries."
+                      : "No entries yet."}
                 </td>
               </tr>
             )}

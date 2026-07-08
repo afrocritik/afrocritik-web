@@ -17,7 +17,7 @@ const AXIS_LINE = "rgba(255,255,255,0.5)";
 const TICK = "#ffffff";
 
 export function ContentGrowthChart() {
-  const { data, isLoading } = useDashboardData();
+  const { data, isLoading, isError } = useDashboardData();
   if (isLoading && !data)
     return (
       <div
@@ -29,7 +29,7 @@ export function ContentGrowthChart() {
   if (GROWTH.length === 0)
     return (
       <div className="flex h-[288px] w-full items-center justify-center font-inter text-sm text-white/50">
-        No content growth data yet.
+        {isError ? "Couldn't load content growth." : "No content growth data yet."}
       </div>
     );
   return (
