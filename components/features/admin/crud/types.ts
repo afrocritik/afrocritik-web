@@ -144,8 +144,6 @@ export interface EntityConfig {
   columns: ColumnConfig[];
   filters?: FilterConfig[];
   form: FormSection[];
-  /** In-memory sample rows used to render the list in the demo */
-  sample: EntityRecord[];
   /** Lightweight create/edit handled in a modal instead of a dedicated page */
   inlineForm?: boolean;
 }

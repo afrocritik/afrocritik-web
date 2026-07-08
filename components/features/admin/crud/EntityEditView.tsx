@@ -10,8 +10,7 @@ import type { EntityConfig, EntityRecord } from "./types";
 /**
  * Loads a single record for the edit form. Fetches the raw Payload document
  * with depth=0 so relationship/upload fields come back as IDs (the shape the
- * form posts back). Falls back to the seeded sample record if the API call
- * fails, keeping the admin demoable offline.
+ * form posts back).
  */
 export function EntityEditView({
   config,
@@ -36,7 +35,9 @@ export function EntityEditView({
           setRecord({ ...res.data, id: String(res.data.id ?? id) });
         }
       } catch {
-        if (active) setRecord(config.sample.find((r) => r.id === id));
+        // Record couldn't be loaded (not found / API error) — leave undefined
+        // so the form renders empty rather than showing fabricated data.
+        if (active) setRecord(undefined);
       } finally {
         if (active) setLoading(false);
       }

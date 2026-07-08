@@ -54,16 +54,9 @@ const PERSON_ROLES: SelectOption[] = [
   { label: "Poet", value: "poet" },
 ];
 
+// Build select options from plain labels (used for fixed taxonomy like regions).
 const opt = (labels: string[]): SelectOption[] =>
   labels.map((l) => ({ label: l, value: l.toLowerCase().replace(/[^a-z0-9]+/g, "-") }));
-
-const PEOPLE_OPTS = opt(["Chinua Achebe", "Fela Kuti", "Ngũgĩ wa Thiong'o", "Wole Soyinka", "Chimamanda Adichie", "Davido"]);
-const IDEA_OPTS = opt(["Pan-Africanism", "Négritude", "Afrofuturism", "Ubuntu", "Decolonisation"]);
-const MOMENT_OPTS = opt(["Birth of Nollywood", "Rise of Afrobeats", "FESTAC '77", "Drum Magazine Era"]);
-const WORK_OPTS = opt(["Things Fall Apart", "Half of a Yellow Sun", "Living in Bondage", "Purple Hibiscus"]);
-const THEME_OPTS = opt(["Colonialism", "Identity", "Diaspora", "Resistance", "Tradition", "Modernity"]);
-const COUNTRY_OPTS = opt(["Nigeria", "Ghana", "Kenya", "South Africa", "Senegal", "Egypt"]);
-const TAG_OPTS = opt(["Classic", "Award-winning", "Essential", "Contemporary", "Foundational"]);
 
 const META_FIELDS = {
   name: "meta",
@@ -137,7 +130,7 @@ const EDITORIAL_SECTIONS: FormSection[] = [
             description:
               "Style with bold, italics, headings, lists and links. Use the image button to drop a picture where your cursor is — then drag its corner to resize, or wrap text to its left or right.",
           },
-          { name: "films", label: "Featured works", type: "relationship", relationTo: "works", options: WORK_OPTS },
+          { name: "films", label: "Featured works", type: "relationship", relationTo: "works" },
         ],
       },
     ],
@@ -254,17 +247,17 @@ export const ENTITIES: Record<string, EntityConfig> = {
         title: "Relationships",
         description: "Connect this work to the rest of the archive.",
         fields: [
-          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people", options: PEOPLE_OPTS, description: "Directors, authors, musicians shown in Pioneers & Icons." },
-          { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas", options: IDEA_OPTS },
-          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
+          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people", description: "Directors, authors, musicians shown in Pioneers & Icons." },
+          { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas" },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries" },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
         title: "Related works",
         fields: [
-          { name: "relatedWorks", label: "Related works", type: "relationship", sidebar: true, relationTo: "works", options: WORK_OPTS, description: "Shown in the Related Works card and 'Explore more'." },
+          { name: "relatedWorks", label: "Related works", type: "relationship", sidebar: true, relationTo: "works", description: "Shown in the Related Works card and 'Explore more'." },
         ],
       },
       {
@@ -275,17 +268,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
-    ],
-    sample: [
-      { id: "w1", title: "Living in Bondage", year: 1992, type: "film", country: "Nigeria", status: "published", image: "/EBOPI-Image-2.jpg" },
-      { id: "w2", title: "Things Fall Apart", year: 1958, type: "literature", country: "Nigeria", status: "published", image: "/EWIL-Image-1.png" },
-      { id: "w3", title: "Zombie", year: 1976, type: "music", country: "Nigeria", status: "published", image: "/EW-Image-4.jpg" },
-      { id: "w4", title: "Half of a Yellow Sun", year: 2006, type: "literature", country: "Nigeria", status: "draft", image: "/EBOPI-Image-2.jpg" },
-      { id: "w5", title: "Purple Hibiscus", year: 2003, type: "literature", country: "Nigeria", status: "published", image: "/EWIL-Image-2.png" },
-      { id: "w6", title: "Sarafina!", year: 1992, type: "film", country: "South Africa", status: "draft", image: "/inner-anchor-2.jpg" },
-      { id: "w7", title: "Black Star", year: 2018, type: "music", country: "Ghana", status: "published", image: "/EWIM-Image-1.png" },
-      { id: "w8", title: "Tsotsi", year: 2005, type: "film", country: "South Africa", status: "published", image: "/EW-Image-3.png" },
-      { id: "w9", title: "The Famished Road", year: 1991, type: "literature", country: "Nigeria", status: "draft", image: "/EWIL-Image-3.png" },
     ],
   },
 
@@ -315,7 +297,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "role", label: "Roles", type: "multiselect", options: PERSON_ROLES },
           { name: "born", label: "Born", type: "text", placeholder: "1938, Kampala, Uganda" },
           { name: "died", label: "Died", type: "text", description: "Leave empty if still alive." },
-          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries" },
         ],
       },
       {
@@ -345,10 +327,10 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
-          { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas", options: IDEA_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
+          { name: "works", label: "Works", type: "relationship", relationTo: "works" },
+          { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas" },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -376,14 +358,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
-    ],
-    sample: [
-      { id: "p1", name: "Chinua Achebe", born: "1930, Ogidi, Nigeria", role: ["author"], country: "Nigeria", status: "published", image: "/EW-Image-3.png" },
-      { id: "p2", name: "Fela Kuti", born: "1938, Abeokuta, Nigeria", role: ["musician", "activist"], country: "Nigeria", status: "published", image: "/EW-Image-4.jpg" },
-      { id: "p3", name: "Ngũgĩ wa Thiong'o", born: "1938, Kamiriithu, Kenya", role: ["author", "scholar"], country: "Kenya", status: "published", image: "/Image-Ngugi.png" },
-      { id: "p4", name: "Wole Soyinka", born: "1934, Abeokuta, Nigeria", role: ["author", "poet"], country: "Nigeria", status: "published", image: "/admin-image-4.png" },
-      { id: "p5", name: "Chimamanda Adichie", born: "1977, Enugu, Nigeria", role: ["author"], country: "Nigeria", status: "draft", image: "/EBOPI-Image-2.jpg" },
-      { id: "p6", name: "Davido", born: "1992, Atlanta, USA", role: ["musician"], country: "Nigeria", status: "published", image: "/EW-Image-3.png" },
     ],
   },
 
@@ -420,17 +394,17 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "people", label: "Key thinkers", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
-          { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
-          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
+          { name: "people", label: "Key thinkers", type: "relationship", relationTo: "people" },
+          { name: "works", label: "Works", type: "relationship", relationTo: "works" },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries" },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
         title: "Related ideas",
         fields: [
-          { name: "relatedIdeas", label: "Related ideas", type: "relationship", sidebar: true, relationTo: "ideas", options: IDEA_OPTS },
+          { name: "relatedIdeas", label: "Related ideas", type: "relationship", sidebar: true, relationTo: "ideas" },
         ],
       },
       {
@@ -441,14 +415,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
-    ],
-    sample: [
-      { id: "i1", title: "Pan-Africanism", category: "politics", status: "published", image: "/admin-image-4.png" },
-      { id: "i2", title: "Négritude", category: "philosophy", status: "published", image: "/EW-Image-3.png" },
-      { id: "i3", title: "Afrofuturism", category: "art-aesthetics", status: "published", image: "/EWIM-Image-2.png" },
-      { id: "i4", title: "Ubuntu", category: "philosophy", status: "draft", image: "/EWIL-Image-4.png" },
-      { id: "i5", title: "Decolonisation", category: "politics", status: "published", image: "/inner-anchor-3.jpg" },
-      { id: "i6", title: "Afrobeats Global Impact", category: "art-aesthetics", status: "draft", image: "/EW-Image-4.jpg" },
     ],
   },
 
@@ -524,10 +490,10 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "relatedWorks", label: "Related works", type: "relationship", relationTo: "works", options: WORK_OPTS },
-          { name: "relatedPeople", label: "Related people", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
-          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes" },
+          { name: "relatedWorks", label: "Related works", type: "relationship", relationTo: "works" },
+          { name: "relatedPeople", label: "Related people", type: "relationship", relationTo: "people" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -539,12 +505,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
-    ],
-    sample: [
-      { id: "r1", title: "Afrocritik 2025 State of African Cinema", subtitle: "Annual industry review", year: 2025, status: "published", image: "/EW-Image-3.png" },
-      { id: "r2", title: "The Afrobeats Economy", subtitle: "Streaming & global reach", year: 2024, status: "published", image: "/EWIM-Image-3.png" },
-      { id: "r3", title: "African Literature in Translation", subtitle: "Market study", year: 2024, status: "draft", image: "/EWIL-Image-5.png" },
-      { id: "r4", title: "Nollywood at 30", subtitle: "A retrospective", year: 2023, status: "published", image: "/EBOPI-Image-2.jpg" },
     ],
   },
 
@@ -648,12 +608,12 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
-          { name: "works", label: "Works", type: "relationship", relationTo: "works", options: WORK_OPTS },
-          { name: "relatedMoments", label: "Related moments", type: "relationship", relationTo: "moments", options: MOMENT_OPTS },
-          { name: "country", label: "Country", type: "relationship", relationTo: "countries", options: COUNTRY_OPTS },
-          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes", options: THEME_OPTS },
-          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", options: TAG_OPTS, description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
+          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people" },
+          { name: "works", label: "Works", type: "relationship", relationTo: "works" },
+          { name: "relatedMoments", label: "Related moments", type: "relationship", relationTo: "moments" },
+          { name: "country", label: "Country", type: "relationship", relationTo: "countries" },
+          { name: "themes", label: "Themes", type: "relationship", relationTo: "themes" },
+          { name: "tags", label: "Tags", type: "relationship", relationTo: "tags", description: "Pick from existing tags. Add new ones in Taxonomy → Tags." },
         ],
       },
       {
@@ -664,12 +624,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
-    ],
-    sample: [
-      { id: "mo1", title: "Birth of Nollywood", typeLabel: "Cultural Moment", year: "1992", status: "published", image: "/EBOPI-Image-2.jpg" },
-      { id: "mo2", title: "Rise of Afrobeats", typeLabel: "Music Movement", year: "2010 – Present", status: "published", image: "/EW-Image-4.jpg" },
-      { id: "mo3", title: "FESTAC '77", typeLabel: "Festival", year: "1977", status: "published", image: "/admin-image-4.png" },
-      { id: "mo4", title: "Drum Magazine Era", typeLabel: "Print Culture", year: "1950s", status: "draft", image: "/EWIL-Image-1.png" },
     ],
   },
 
@@ -693,14 +647,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
         ],
       },
     ],
-    sample: [
-      { id: "g1", name: "Drama", slug: "drama", works: 142 },
-      { id: "g2", name: "Afrobeats", slug: "afrobeats", works: 98 },
-      { id: "g3", name: "Highlife", slug: "highlife", works: 41 },
-      { id: "g4", name: "Fiction", slug: "fiction", works: 213 },
-      { id: "g5", name: "Documentary", slug: "documentary", works: 37 },
-      { id: "g6", name: "Poetry", slug: "poetry", works: 64 },
-    ],
   },
 
   themes: {
@@ -721,13 +667,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
           { name: "description", label: "Description", type: "textarea" },
         ],
       },
-    ],
-    sample: [
-      { id: "t1", name: "Colonialism", slug: "colonialism", entries: 87 },
-      { id: "t2", name: "Identity", slug: "identity", entries: 124 },
-      { id: "t3", name: "Diaspora", slug: "diaspora", entries: 76 },
-      { id: "t4", name: "Resistance", slug: "resistance", entries: 53 },
-      { id: "t5", name: "Tradition", slug: "tradition", entries: 69 },
     ],
   },
 
@@ -764,44 +703,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
         ],
       },
     ],
-    sample: [
-      { id: "co1", name: "Nigeria", code: "NG", region: "West Africa", entries: 312 },
-      { id: "co2", name: "Ghana", code: "GH", region: "West Africa", entries: 96 },
-      { id: "co3", name: "Kenya", code: "KE", region: "East Africa", entries: 88 },
-      { id: "co4", name: "South Africa", code: "ZA", region: "Southern Africa", entries: 134 },
-      { id: "co5", name: "Senegal", code: "SN", region: "West Africa", entries: 47 },
-      { id: "co6", name: "Egypt", code: "EG", region: "North Africa", entries: 52 },
-    ],
-  },
-
-  movements: {
-    slug: "movements",
-    singular: "Movement",
-    plural: "Movements",
-    description: "Track cultural and intellectual movements.",
-    titleField: "name",
-    columns: [
-      { key: "name", label: "Name", render: "media", subKey: "period" },
-      { key: "region", label: "Region" },
-    ],
-    form: [
-      {
-        title: "Movement details",
-        fields: [
-          { name: "name", label: "Name", type: "text", required: true },
-          { name: "period", label: "Period", type: "text", placeholder: "1930s–1950s" },
-          { name: "region", label: "Region", type: "text" },
-          { name: "description", label: "Description", type: "textarea" },
-          { name: "relatedPeople", label: "Key figures", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
-        ],
-      },
-    ],
-    sample: [
-      { id: "m1", name: "Négritude", period: "1930s–1950s", region: "Francophone Africa" },
-      { id: "m2", name: "Black Consciousness", period: "1960s–1970s", region: "South Africa" },
-      { id: "m3", name: "Afrofuturism", period: "1990s–present", region: "Diaspora" },
-      { id: "m4", name: "Onitsha Market Literature", period: "1950s–1970s", region: "Nigeria" },
-    ],
   },
 
   tags: {
@@ -819,59 +720,6 @@ export const ENTITIES: Record<string, EntityConfig> = {
         title: "Tag details",
         fields: [{ name: "name", label: "Name", type: "text", required: true }],
       },
-    ],
-    sample: [
-      { id: "tg1", name: "Classic", slug: "classic", usage: 64 },
-      { id: "tg2", name: "Award-winning", slug: "award-winning", usage: 41 },
-      { id: "tg3", name: "Essential", slug: "essential", usage: 88 },
-      { id: "tg4", name: "Contemporary", slug: "contemporary", usage: 53 },
-      { id: "tg5", name: "Foundational", slug: "foundational", usage: 29 },
-    ],
-  },
-
-  /* -------------------------- Timeline ---------------------------- */
-  timeline: {
-    slug: "timeline",
-    singular: "Timeline Event",
-    plural: "Timeline",
-    description: "Curate the historical timeline of African cultural milestones.",
-    titleField: "title",
-    searchPlaceholder: "Search events...",
-    columns: [
-      { key: "year", label: "Year", align: "left" },
-      { key: "title", label: "Event", render: "media", subKey: "category" },
-      { key: "status", label: "Status", render: "status", align: "center" },
-    ],
-    filters: [{ key: "status", label: "All statuses", options: STATUS }],
-    form: [
-      {
-        title: "Event details",
-        fields: [
-          { name: "year", label: "Year", type: "text", required: true, placeholder: "1958" },
-          { name: "title", label: "Title", type: "text", required: true },
-          { name: "category", label: "Category", type: "text", placeholder: "Literature" },
-          { name: "description", label: "Description", type: "textarea", required: true },
-        ],
-      },
-      {
-        title: "Relationships",
-        fields: [
-          { name: "works", label: "Related works", type: "relationship", relationTo: "works", options: WORK_OPTS },
-          { name: "people", label: "Related people", type: "relationship", relationTo: "people", options: PEOPLE_OPTS },
-        ],
-      },
-      {
-        title: "",
-        fields: [
-          { name: "status", label: "Status", type: "select", required: true, options: STATUS, sidebar: true },
-        ],
-      },
-    ],
-    sample: [
-      { id: "tl1", year: "1958", title: "Things Fall Apart published", category: "Literature", status: "published" },
-      { id: "tl2", year: "1976", title: "Fela releases Zombie", category: "Music", status: "published" },
-      { id: "tl3", year: "1992", title: "Living in Bondage launches Nollywood", category: "Film", status: "published" },
-      { id: "tl4", year: "2006", title: "Half of a Yellow Sun published", category: "Literature", status: "draft" },
     ],
   },
 
@@ -945,55 +793,8 @@ export const ENTITIES: Record<string, EntityConfig> = {
         ],
       },
     ],
-    sample: [
-      { id: "u1", name: "Adaeze Okafor", email: "adaeze@afrocritik.com", role: "admin", status: "active", joined: "Jan 12, 2025", image: "/Interest-Avatar.png" },
-      { id: "u2", name: "Kwame Mensah", email: "kwame@afrocritik.com", role: "editor", status: "active", joined: "Feb 03, 2025" },
-      { id: "u3", name: "Zainab Bello", email: "zainab@afrocritik.com", role: "editor", status: "active", joined: "Feb 20, 2025" },
-      { id: "u4", name: "Thabo Nkosi", email: "thabo@example.com", role: "member", status: "active", joined: "Mar 11, 2025" },
-      { id: "u5", name: "Amina Diallo", email: "amina@example.com", role: "member", status: "suspended", joined: "Apr 02, 2025" },
-    ],
   },
 
-  roles: {
-    slug: "roles",
-    singular: "Role",
-    plural: "Roles & Permissions",
-    description: "Define roles and the permissions attached to them.",
-    titleField: "name",
-    columns: [
-      { key: "name", label: "Role", render: "media", subKey: "description" },
-      { key: "permissions", label: "Permissions", render: "badges" },
-      { key: "users", label: "Users" },
-    ],
-    form: [
-      {
-        title: "Role details",
-        fields: [
-          { name: "name", label: "Name", type: "text", required: true },
-          { name: "description", label: "Description", type: "textarea" },
-          {
-            name: "permissions",
-            label: "Permissions",
-            type: "multiselect",
-            options: [
-              { label: "Create content", value: "create" },
-              { label: "Edit content", value: "edit" },
-              { label: "Delete content", value: "delete" },
-              { label: "Publish", value: "publish" },
-              { label: "Manage users", value: "manage-users" },
-              { label: "Manage settings", value: "manage-settings" },
-            ],
-          },
-        ],
-      },
-    ],
-    sample: [
-      { id: "ro1", name: "Administrator", description: "Full access", permissions: ["create", "edit", "delete", "publish", "manage-users"], users: 3 },
-      { id: "ro2", name: "Editor", description: "Create and publish content", permissions: ["create", "edit", "publish"], users: 8 },
-      { id: "ro3", name: "Contributor", description: "Create drafts only", permissions: ["create", "edit"], users: 21 },
-      { id: "ro4", name: "Member", description: "Read & save", permissions: [], users: 130 },
-    ],
-  },
 };
 
 export function getEntity(slug: string): EntityConfig | undefined {
