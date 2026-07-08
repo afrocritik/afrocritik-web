@@ -1,7 +1,6 @@
 "use client";
 
 import { Eye } from "lucide-react";
-import { TOP_CONTENT } from "./constants";
 import { useDashboardData } from "./useDashboardData";
 
 export function TopContent() {
@@ -17,7 +16,13 @@ export function TopContent() {
         ))}
       </ul>
     );
-  const items = data?.topContent?.length ? data.topContent : TOP_CONTENT;
+  const items = data?.topContent ?? [];
+  if (items.length === 0)
+    return (
+      <p className="py-12 text-center font-inter text-sm text-white/50">
+        No content to rank yet.
+      </p>
+    );
   return (
     <ul className="flex flex-col">
       {items.map((item) => (

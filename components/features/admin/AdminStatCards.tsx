@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { ADMIN_STATS, type AdminStat } from "./constants";
+import type { AdminStat } from "./constants";
 import { useDashboardData } from "./useDashboardData";
 
 function StatIcon({ icon }: Readonly<{ icon: AdminStat["icon"] }>) {
@@ -30,23 +30,24 @@ function StatCard({ stat }: Readonly<{ stat: AdminStat }>) {
       </div>
       <div>
         <p className="font-inter text-3xl font-semibold leading-7 text-white">{stat.value}</p>
-        <div className="mt-[9.5px] flex items-center gap-[10.67px]">
-          <div className="size-2 shrink-0 rounded-sm bg-green-500" />
-          <p className="font-inter text-[10.19px] leading-[10.19px]">
-            <span className="font-medium text-green-500">{stat.pct}</span>
-            <span className="font-normal text-white"> this month</span>
-          </p>
-        </div>
+        {stat.pct ? (
+          <div className="mt-[9.5px] flex items-center gap-[10.67px]">
+            <div className="size-2 shrink-0 rounded-sm bg-green-500" />
+            <p className="font-inter text-[10.19px] leading-[10.19px]">
+              <span className="font-medium text-green-500">{stat.pct}</span>
+              <span className="font-normal text-white"> added</span>
+            </p>
+          </div>
+        ) : null}
       </div>
     </div>
   );
 }
 
 export function AdminStatCards() {
-  const { data, isLoading } = useDashboardData();
-  // Show skeletons during the first load rather than flashing the static
-  // placeholder values; fall back to statics only if the fetch failed.
-  const stats = data?.stats ?? (isLoading ? null : ADMIN_STATS);
+  const { data } = useDashboardData();
+  // Real stats when loaded; skeletons while loading or if the fetch failed.
+  const stats = data?.stats ?? null;
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {stats

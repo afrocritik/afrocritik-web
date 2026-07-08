@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { GROWTH_DATA, GROWTH_SERIES } from "./constants";
+import { GROWTH_SERIES } from "./constants";
 import { useDashboardData } from "./useDashboardData";
 
 const GRID = "rgba(255,255,255,0.3)";
@@ -25,7 +25,13 @@ export function ContentGrowthChart() {
         style={{ background: "#50321C40" }}
       />
     );
-  const GROWTH = data?.growth?.length ? data.growth : GROWTH_DATA;
+  const GROWTH = data?.growth ?? [];
+  if (GROWTH.length === 0)
+    return (
+      <div className="flex h-[288px] w-full items-center justify-center font-inter text-sm text-white/50">
+        No content growth data yet.
+      </div>
+    );
   return (
     <ResponsiveContainer width="100%" height={288}>
       <AreaChart data={GROWTH} margin={{ top: 10, right: 8, left: -16, bottom: 0 }}>

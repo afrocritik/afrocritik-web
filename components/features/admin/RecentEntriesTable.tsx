@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { RECENT_ENTRIES } from "./constants";
 import { RecentEntryRow } from "./RecentEntryRow";
 import { useDashboardData } from "./useDashboardData";
 
@@ -11,7 +10,7 @@ const COLUMNS = ["Title", "Type", "Category", "Added By", "Date", "Status", ""];
 
 export function RecentEntriesTable() {
   const { data, isLoading } = useDashboardData();
-  const entries = data?.recent?.length ? data.recent : isLoading ? [] : RECENT_ENTRIES;
+  const entries = data?.recent ?? [];
 
   return (
     <div className="rounded-xl border border-yellow-700 p-5" style={{ background: "#50321C80" }}>
