@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { ChevronDown, Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { apiClient } from "@/lib/api";
+import { apiClient, getApiErrorMessage } from "@/lib/api";
 import { TablePagination } from "../TablePagination";
 import { StatusPill } from "./StatusPill";
 import { RowActions } from "./RowActions";
@@ -120,13 +120,12 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
   const params = useSearchParams();
   const flash = params.get("flash");
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
 
-  // Start empty (not with sample data) so the seeded/live data doesn't flash
-  // the static placeholder first. Sample is only used as an offline fallback.
   const [rows, setRows] = useState<EntityRecord[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [page, setPage] = useState(1);
@@ -144,24 +143,29 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
     router.replace(`/admin/${config.slug}`);
   }, [flash, config.singular, config.slug, router]);
 
-  // Load live records from the Payload collection. If the request fails (API
-  // offline, etc.) the seeded sample data stays in place so the admin is still
-  // demoable.
+  // Load live records from the Payload collection. Waits for the auth session
+  // to resolve first so the request carries the admin's token (the collection
+  // read access is admin-gated). On failure the list shows a real error rather
+  // than fabricated data.
   useEffect(() => {
+    if (status === "loading") return;
     let active = true;
     (async () => {
       try {
         const res = await apiClient.get(`/api/${config.slug}`, {
           params: { limit: 100, depth: 1 },
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         });
         const docs = res?.data?.docs;
-        if (active && Array.isArray(docs)) {
-          setRows(docs.map((d) => normalizeRecord(d, config)));
+        if (active) {
+          setRows(Array.isArray(docs) ? docs.map((d) => normalizeRecord(d, config)) : []);
+          setError(null);
         }
-      } catch {
-        // Offline / API error — fall back to the seeded sample so the admin
-        // stays demoable.
-        if (active) setRows(config.sample);
+      } catch (err) {
+        if (active) {
+          setRows([]);
+          setError(getApiErrorMessage(err, `Couldn't load ${config.plural.toLowerCase()}.`));
+        }
       } finally {
         if (active) setLoaded(true);
       }
@@ -169,7 +173,7 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
     return () => {
       active = false;
     };
-  }, [config]);
+  }, [config, token, status]);
 
   const filtered = useMemo(() => {
     return rows.filter((r) => {
@@ -322,9 +326,11 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
                     colSpan={config.columns.length + 1}
                     className="py-16 text-center font-inter text-sm text-white/50"
                   >
-                    {loaded
-                      ? `No ${config.plural.toLowerCase()} found.`
-                      : `Loading ${config.plural.toLowerCase()}…`}
+                    {!loaded
+                      ? `Loading ${config.plural.toLowerCase()}…`
+                      : error
+                        ? error
+                        : `No ${config.plural.toLowerCase()} found.`}
                   </td>
                 </tr>
               )}
