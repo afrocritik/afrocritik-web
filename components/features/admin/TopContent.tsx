@@ -4,7 +4,7 @@ import { Eye } from "lucide-react";
 import { useDashboardData } from "./useDashboardData";
 
 export function TopContent() {
-  const { data, isLoading } = useDashboardData();
+  const { data, isLoading, isError } = useDashboardData();
   if (isLoading && !data)
     return (
       <ul className="flex flex-col">
@@ -20,7 +20,7 @@ export function TopContent() {
   if (items.length === 0)
     return (
       <p className="py-12 text-center font-inter text-sm text-white/50">
-        No content to rank yet.
+        {isError ? "Couldn't load top content." : "No content to rank yet."}
       </p>
     );
   return (

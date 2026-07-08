@@ -4,7 +4,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { useDashboardData } from "./useDashboardData";
 
 export function ContentByCategoryChart() {
-  const { data, isLoading } = useDashboardData();
+  const { data, isLoading, isError } = useDashboardData();
   if (isLoading && !data)
     return (
       <div
@@ -16,7 +16,7 @@ export function ContentByCategoryChart() {
   if (CATEGORY.length === 0)
     return (
       <div className="flex h-[256px] w-full items-center justify-center font-inter text-sm text-white/50">
-        No category data yet.
+        {isError ? "Couldn't load categories." : "No category data yet."}
       </div>
     );
   return (

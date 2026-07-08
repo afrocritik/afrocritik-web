@@ -45,9 +45,25 @@ function StatCard({ stat }: Readonly<{ stat: AdminStat }>) {
 }
 
 export function AdminStatCards() {
-  const { data } = useDashboardData();
-  // Real stats when loaded; skeletons while loading or if the fetch failed.
+  const { data, isError } = useDashboardData();
   const stats = data?.stats ?? null;
+
+  // The fetch failed (e.g. an expired session) — say so instead of spinning
+  // skeletons forever.
+  if (isError && !stats) {
+    return (
+      <div
+        className="rounded-2xl px-6 py-5 outline outline-1 outline-offset-[-1.01px] outline-yellow-700/60"
+        style={{ background: "#50321C80" }}
+      >
+        <p className="font-inter text-sm text-white">
+          Couldn&apos;t load dashboard metrics. Your session may have expired —
+          try signing out and back in.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {stats

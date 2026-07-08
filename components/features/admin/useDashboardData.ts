@@ -50,6 +50,9 @@ export function useDashboardData() {
   return useQuery<DashboardData>({
     queryKey: ["admin-dashboard", token ?? "anon", range],
     staleTime: 60_000,
+    // A 403 (expired/absent staff token) won't fix itself on retry, so fail fast
+    // instead of leaving the cards spinning through several backoff attempts.
+    retry: 1,
     queryFn: async () => {
       const d = (await api.analytics.dashboard(token, days == null ? "all" : days)) ?? {};
       const stats: AdminStat[] = (d.stats ?? []).map((s: RawStat) => ({
