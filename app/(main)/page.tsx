@@ -136,21 +136,21 @@ export default async function HomePage() {
       </div>
 
       {/* FIVE PILLARS */}
-      <section id="pillars" className="bg-cream-panel pt-14 pb-20 md:pt-20 md:pb-28">
+      <section id="pillars" className="bg-cream-panel py-14 md:py-20">
         <div className="container">
           <PillarsSection pillars={pillars} />
         </div>
       </section>
 
       {/* THINKERS WHO BUILT THE FOUNDATIONS */}
-      <section id="philosophy" className="bg-[#FAF3E5] py-20">
+      <section id="philosophy" className="bg-[#FAF3E5] py-14 md:py-20">
         <div className="container">
           <ThinkersSection people={featuredPeople} />
         </div>
       </section>
 
       {/* IDEAS THAT SHAPE THE CONTINENT */}
-      <section className="bg-stone-100 py-20">
+      <section className="bg-stone-100 py-14 md:py-20">
         <div className="container">
           <IdeasSection ideas={featuredIdeas} />
         </div>
@@ -163,13 +163,13 @@ export default async function HomePage() {
 
       {/* ESSENTIAL WORKS IN … (first admin-curated section) */}
       {essentialSections[0] && (
-        <section className="relative overflow-hidden bg-[#794C2D] pt-24 pb-12">
+        <section className="relative overflow-hidden bg-[#794C2D] py-14 md:py-20">
           <EssentialWorksByTypeSection {...essentialSections[0]} />
         </section>
       )}
 
       {/* EXPLORE BASED ON POPULAR INTEREST */}
-      <section className="bg-[#59341F] pt-32 pb-12">
+      <section className="bg-[#59341F] py-14 md:py-20">
         <div className="container">
           <PopularInterestSection interests={popularInterests} />
         </div>
@@ -179,21 +179,21 @@ export default async function HomePage() {
       {essentialSections.slice(1).map((section, i) => (
         <section
           key={`${section.type}-${i}`}
-          className="relative overflow-hidden bg-[#59341F] py-24"
+          className="relative overflow-hidden bg-[#59341F] py-14 md:py-20"
         >
           <EssentialWorksByTypeSection {...section} />
         </section>
       ))}
 
       {/* FROM CULTURE TO KNOWLEDGE */}
-      <section className="bg-cream py-20">
+      <section className="bg-cream py-14 md:py-20">
         <div className="container">
           <KnowledgePipeline />
         </div>
       </section>
 
       {/* JOIN NETWORK CTA */}
-      <section className="bg-[#59341F] pt-32 pb-24">
+      <section className="bg-[#59341F] py-14 md:py-20">
         <JoinNetworkCTA cta={cta} />
       </section>
     </>

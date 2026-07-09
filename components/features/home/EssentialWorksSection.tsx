@@ -23,7 +23,7 @@ export function EssentialWorksSection({ works = [] }: Props) {
               maxWidth: "356px",
               color: "#FFF",
               fontFamily: "var(--font-baskervville)",
-              fontSize: "40px",
+              fontSize: "clamp(24px, 5.5vw, 40px)",
               fontWeight: 700,
               lineHeight: "110%",
               textTransform: "capitalize",

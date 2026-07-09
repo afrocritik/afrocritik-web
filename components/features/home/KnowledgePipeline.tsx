@@ -13,7 +13,10 @@ export function KnowledgePipeline() {
         <span className="font-inter text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
           How the Platform operates
         </span>
-        <h2 className="mt-2 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+        <h2
+          className="mt-2 max-w-[607px] font-baskervville font-bold capitalize leading-[110%] text-[#330F09]"
+          style={{ fontSize: "clamp(24px, 5.5vw, 40px)" }}
+        >
           From Culture To Knowledge
         </h2>
         <p className="mt-2 max-w-[622px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
@@ -29,7 +32,7 @@ export function KnowledgePipeline() {
           return (
             <div
               key={s.title}
-              className={`flex flex-1 basis-56 flex-col items-center justify-center gap-3 h-56 bg-stone-100 border border-yellow-700/30 px-4${
+              className={`flex w-56 shrink-0 flex-col items-center justify-center gap-3 min-h-[224px] py-6 bg-stone-100 border border-yellow-700/30 px-4 lg:w-auto lg:flex-1${
                 isFirst ? " rounded-tl-xl rounded-bl-xl" : " -ml-px"
               }${isLast ? " rounded-tr-xl rounded-br-xl" : ""}`}
             >

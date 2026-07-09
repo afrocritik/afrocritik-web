@@ -25,31 +25,25 @@ export function PopularInterestSection({
         <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold font-baskervville capitalize leading-tight">
           explore based on popular interest
         </h2>
-        <Link
-          href="/explore"
-          className="self-end text-center text-orange-400 text-xl sm:text-2xl lg:text-3xl font-semibold font-inter capitalize leading-8 shrink-0"
-        >
-          See More
-        </Link>
       </div>
       <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
         {items.map(({ label, image, category }) => (
           <Link
             key={label}
             href={`/explore?q=${encodeURIComponent(category || label.toLowerCase())}`}
-            className="h-80 bg-yellow-700 rounded-[20px] border-2 border-transparent hover:border-orange-400 transition-colors duration-300 flex flex-col justify-start items-center"
+            className="bg-yellow-700 rounded-[20px] border-2 border-transparent hover:border-orange-400 transition-colors duration-300 flex flex-col justify-start items-center overflow-hidden"
           >
-            <div className="self-stretch h-60 relative rounded-tl-[20px] rounded-tr-[20px]">
+            <div className="self-stretch h-40 sm:h-48 lg:h-52 relative">
               <Image
                 src={image}
                 alt={label}
                 fill
-                className="rounded-tl-[20px] rounded-tr-[20px] object-cover"
+                className="object-cover"
               />
-              <div className="absolute inset-0 bg-white/10 rounded-tl-[20px] rounded-tr-[20px]" />
+              <div className="absolute inset-0 bg-white/10" />
             </div>
-            <div className="self-stretch px-7 pt-5 pb-6 flex flex-col justify-start items-start gap-6">
-              <div className="self-stretch text-white text-base font-semibold font-inter capitalize leading-6">
+            <div className="self-stretch px-4 py-3 sm:px-5 sm:py-4">
+              <div className="text-white text-sm sm:text-base font-semibold font-inter capitalize leading-6">
                 {label}
               </div>
             </div>
