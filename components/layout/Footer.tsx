@@ -73,6 +73,10 @@ export function Footer({ className }: Readonly<{ className?: string }>) {
           </div>
         </div>
 
+        {/* Explore + Institute — stay side by side through tablet as a single
+            grid cell; `lg:contents` dissolves this wrapper so all four columns
+            sit in one row only at lg+. */}
+        <div className="flex gap-8 lg:contents">
         {/* Explore */}
         <div className="w-32">
           <h4 className="mb-6 font-baskervville text-xl font-bold capitalize leading-9 text-amber">Explore</h4>
@@ -99,6 +103,7 @@ export function Footer({ className }: Readonly<{ className?: string }>) {
               </li>
             ))}
           </ul>
+        </div>
         </div>
 
         {/* Newsletter */}

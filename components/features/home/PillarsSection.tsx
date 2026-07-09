@@ -19,7 +19,11 @@ const DEFAULT_PILLARS: Pillar[] = [
 
 export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
   const [selected, setSelected] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
   const items = pillars && pillars.length > 0 ? pillars : DEFAULT_PILLARS;
+  // On the 2-col mobile grid an odd number of cards leaves the last one
+  // stranded on its own row. Tuck it behind a "See More" until revealed.
+  const hideLastOnMobile = items.length % 2 === 1;
 
   return (
     <>
@@ -28,7 +32,10 @@ export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
         <span className="font-inter text-sm font-normal capitalize leading-[110%] text-[#ED9828]">
           Institutional Backbone
         </span>
-        <h2 className="mt-2 max-w-[607px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+        <h2
+          className="mt-2 max-w-[607px] font-baskervville font-bold capitalize leading-[110%] text-[#330F09]"
+          style={{ fontSize: "clamp(24px, 5.5vw, 40px)" }}
+        >
           The Five Pillars
         </h2>
         <p className="mt-2 max-w-[622px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
@@ -39,14 +46,18 @@ export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
       </div>
 
       {/* Cards */}
-      <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:pr-12">
-        {items.map((p) => {
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5 lg:pr-12">
+        {items.map((p, i) => {
           const isSelected = selected === p.title;
+          const isLast = i === items.length - 1;
+          const hidden = hideLastOnMobile && isLast && !showAll;
           return (
             <button
               key={p.title}
               onClick={() => setSelected(isSelected ? null : p.title)}
-              className={`flex w-full flex-col items-center justify-center gap-3 rounded-[15.409px] border bg-white px-4 py-6 transition-colors duration-300 ${
+              className={`w-full flex-col items-center justify-center gap-2 rounded-[15.409px] border bg-white px-3 py-4 transition-colors duration-300 sm:gap-3 sm:px-4 sm:py-6 ${
+                hidden ? "hidden sm:flex" : "flex"
+              } ${
                 isSelected
                   ? "border-amber"
                   : "border-black/10 hover:border-amber"
@@ -57,9 +68,9 @@ export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
                 alt={p.title}
                 width={48}
                 height={48}
-                className="h-12 w-12 object-contain"
+                className="h-10 w-10 object-contain sm:h-12 sm:w-12"
               />
-              <h3 className="w-full text-center font-inter text-[18px] font-bold leading-[120%] tracking-[-0.36px] text-[#330F09]">
+              <h3 className="w-full text-center font-inter text-base font-bold leading-[120%] tracking-[-0.36px] text-[#330F09] sm:text-[18px]">
                 {p.title}
               </h3>
               <p className="w-full text-center font-inter text-xs font-normal leading-[140%] text-[#5C5A59]">
@@ -69,6 +80,15 @@ export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
           );
         })}
       </div>
+
+      {hideLastOnMobile && !showAll && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="mx-auto mt-6 block font-inter text-base font-semibold text-[#9C5C08] underline-offset-4 hover:underline sm:hidden"
+        >
+          See More
+        </button>
+      )}
     </>
   );
 }
