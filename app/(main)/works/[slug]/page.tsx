@@ -127,6 +127,8 @@ export default async function WorkDetailPage({
       <div className="container">
         <WorkHeroSection
           title={title}
+          workId={work.id}
+          slug={params.slug}
           description={description}
           image={image}
           meta={meta}
