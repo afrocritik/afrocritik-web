@@ -16,7 +16,13 @@ import {
 import { api, getApiErrorMessage } from "@/lib/api";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 
-const ROLES = ["User", "Critic", "Contributor"];
+// Only "User" is selectable for now; the other roles are shown but disabled
+// until those flows are ready.
+const ROLES: { label: string; disabled: boolean }[] = [
+  { label: "User", disabled: false },
+  { label: "Critic", disabled: true },
+  { label: "Contributor", disabled: true },
+];
 
 function ProfileSetupForm() {
   const router = useRouter();
@@ -147,8 +153,8 @@ function ProfileSetupForm() {
               </SelectTrigger>
               <SelectContent className="border-yellow-700/40 bg-bg-secondary text-white">
                 {ROLES.map((r) => (
-                  <SelectItem key={r} value={r}>
-                    {r}
+                  <SelectItem key={r.label} value={r.label} disabled={r.disabled}>
+                    {r.label}
                   </SelectItem>
                 ))}
               </SelectContent>

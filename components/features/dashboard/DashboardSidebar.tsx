@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { ArrowRight, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "@/components/layout/Logo";
-import { cn } from "@/lib/utils";
+import { cn, getImageUrl, getUserDisplayName } from "@/lib/utils";
+import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { NAV_ITEMS, type DashboardNavItem } from "./constants";
 import { DashboardNavIcon } from "./DashboardNavIcon";
 
@@ -60,8 +61,9 @@ function ReportCard() {
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
-  const name = session?.user?.name || "Abdul Lawal";
+  const { data: user } = useCurrentUser();
+  const name = getUserDisplayName(user);
+  const avatar = getImageUrl(user?.avatar) || "/Interest-Avatar.png";
 
   return (
     <aside className="hidden w-64 shrink-0 self-start flex-col px-4 lg:flex bg-[#50321C80] border-r border-yellow-700">
@@ -97,7 +99,7 @@ export function DashboardSidebar() {
           <div className="flex items-center gap-3.5">
             <Avatar className="size-7 shrink-0 overflow-hidden rounded-full">
               <AvatarImage
-                src={session?.user?.image || "/Interest-Avatar.png"}
+                src={avatar}
                 alt={name}
                 className="size-7 object-cover"
               />

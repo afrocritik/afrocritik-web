@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
@@ -69,6 +70,7 @@ export function SettingsView() {
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
   const { data: user, isLoading } = useCurrentUser();
+  const queryClient = useQueryClient();
 
   const [form, setForm] = useState<ProfileForm>(EMPTY);
   const [saving, setSaving] = useState(false);
@@ -112,6 +114,9 @@ export function SettingsView() {
         },
         token
       );
+      // Refresh the shared user cache so the dashboard header, sidebar and any
+      // other consumer immediately reflect the new name/details.
+      await queryClient.invalidateQueries({ queryKey: ["current-user"] });
       toast.success("Profile updated.");
     } catch (err) {
       const response = (err as {
