@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Share2 } from "lucide-react";
+import { SaveWorkButton } from "./SaveWorkButton";
 
 const TOC = [
   "Overview",
@@ -31,6 +32,10 @@ function Chevron() {
 
 interface Props {
   title: string;
+  // Optional: only "works" can be saved to a library. When omitted (e.g. the
+  // ideas detail reuses this hero) the Save button is hidden.
+  workId?: string | number;
+  slug?: string;
   sectionLabel?: string;
   sectionHref?: string;
   description?: string;
@@ -41,6 +46,8 @@ interface Props {
 
 export function WorkHeroSection({
   title,
+  workId,
+  slug,
   sectionLabel = "Works",
   sectionHref = "/explore?tab=works",
   description,
@@ -141,10 +148,9 @@ export function WorkHeroSection({
             </div>
           )}
           <div className="mt-5 flex gap-3">
-            <button className="px-1.5 py-2 bg-orange-400/60 rounded-[3px] inline-flex justify-start items-center gap-1.5">
-              <Image src="/inner-Save.png" alt="" width={10} height={10} className="size-2.5" />
-              <span className="text-black text-xs font-semibold font-inter leading-3">Save</span>
-            </button>
+            {workId != null && slug && (
+              <SaveWorkButton workId={workId} workTitle={title} workSlug={slug} />
+            )}
             <button className="px-1.5 py-2 rounded-[3px] outline outline-1 outline-offset-[-1px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5">
               <Share2 className="size-3 text-stone-300" />
               <span className="text-stone-300 text-xs font-semibold font-inter leading-3">Share</span>
