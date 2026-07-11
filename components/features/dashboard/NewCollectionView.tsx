@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { api, getMediaUrl } from "@/lib/api";
@@ -13,6 +13,7 @@ export function NewCollectionView() {
   const router = useRouter();
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
+  const queryClient = useQueryClient();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -60,6 +61,10 @@ export function NewCollectionView() {
         slug ? `/dashboard/collections/${slug}` : "/dashboard/collections",
         token
       );
+      // Drop the cached list (staleTime is 60s) so the new collection shows
+      // as soon as we land back on the collections page.
+      await queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["stats-collections"] });
       toast.success("Collection created.");
       router.push("/dashboard/collections");
     } catch (err) {

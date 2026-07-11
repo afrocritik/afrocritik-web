@@ -3,6 +3,24 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
+/**
+ * The Payload user has no single `name` field, so build a display name from
+ * firstName/lastName → username → email local part. Without this the session
+ * name is empty and the UI falls back to placeholders.
+ */
+function deriveName(u: {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  email?: string;
+}): string {
+  const full = [u.firstName, u.lastName]
+    .map((s) => s?.trim())
+    .filter(Boolean)
+    .join(" ");
+  return full || u.username?.trim() || u.email?.split("@")[0]?.trim() || "";
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -30,7 +48,7 @@ export const authOptions: NextAuthOptions = {
           if (res.ok && user?.user) {
             return {
               id: user.user.id,
-              name: user.user.name,
+              name: deriveName(user.user),
               email: user.user.email,
               role: user.user.role,
               token: user.token,
@@ -62,7 +80,7 @@ export const authOptions: NextAuthOptions = {
           if (res.ok && data?.user) {
             return {
               id: data.user.id,
-              name: data.user.name,
+              name: deriveName(data.user),
               email: data.user.email,
               role: data.user.role,
               token: credentials.token,

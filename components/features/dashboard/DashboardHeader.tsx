@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getUserDisplayName } from "@/lib/utils";
+import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import {
   Popover,
   PopoverContent,
@@ -13,8 +13,8 @@ import {
 const RANGES = ["Last 7 days", "Last 30 days", "Last 90 days", "All time"];
 
 export function DashboardHeader() {
-  const { data: session } = useSession();
-  const name = session?.user?.name || "Abdul Lawal";
+  const { data: user } = useCurrentUser();
+  const name = getUserDisplayName(user);
   const [range, setRange] = useState("Last 30 days");
   const [open, setOpen] = useState(false);
 

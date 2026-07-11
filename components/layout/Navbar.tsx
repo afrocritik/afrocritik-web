@@ -5,7 +5,13 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { LayoutDashboard, LogOut, Shield } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Logo } from "./Logo";
 import { MegaMenu } from "./MegaMenu";
 
@@ -25,7 +31,6 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const showSearch = pathname !== "/";
-  const showAvatar = !!session || showSearch;
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,17 +102,65 @@ export function Navbar() {
           )}
 
           {/* Sign In / Avatar */}
-          {showAvatar ? (
-            <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
-              <AvatarImage
-                src={session?.user?.image || "/Interest-Avatar.png"}
-                alt="User"
-                className="size-12 object-cover"
-              />
-              <AvatarFallback className="bg-bg-secondary text-amber">
-                {session?.user?.name?.[0]?.toUpperCase() || "U"}
-              </AvatarFallback>
-            </Avatar>
+          {session ? (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button type="button" aria-label="Account menu" className="rounded-full">
+                  <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
+                    <AvatarImage
+                      src={session.user?.image || "/Interest-Avatar.png"}
+                      alt="User"
+                      className="size-12 object-cover"
+                    />
+                    <AvatarFallback className="bg-bg-secondary text-amber">
+                      {session.user?.name?.[0]?.toUpperCase() || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                align="end"
+                className="w-56 border-yellow-700/60 bg-[#2C1500] p-1"
+              >
+                <div className="px-3 py-2">
+                  {session.user?.name && (
+                    <p className="truncate font-inter text-sm font-medium text-white">
+                      {session.user.name}
+                    </p>
+                  )}
+                  {session.user?.email && (
+                    <p className="truncate font-inter text-xs text-white/50">
+                      {session.user.email}
+                    </p>
+                  )}
+                </div>
+                <div className="my-1 h-px bg-yellow-700/40" />
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 font-inter text-sm text-white transition-colors hover:bg-white/5"
+                >
+                  <LayoutDashboard className="size-4" />
+                  Dashboard
+                </Link>
+                {(session.user?.role === "admin" || session.user?.role === "editor") && (
+                  <Link
+                    href="/admin"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 font-inter text-sm text-white transition-colors hover:bg-white/5"
+                  >
+                    <Shield className="size-4" />
+                    Admin panel
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left font-inter text-sm text-red-300 transition-colors hover:bg-white/5"
+                >
+                  <LogOut className="size-4" />
+                  Sign out
+                </button>
+              </PopoverContent>
+            </Popover>
           ) : (
             <Link
               href="/signin"

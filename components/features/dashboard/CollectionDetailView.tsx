@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Trash2, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { WorksGrid } from "./WorksGrid";
@@ -14,6 +14,7 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
+  const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
 
   const { data, isLoading } = useQuery({
@@ -60,6 +61,8 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
     setDeleting(true);
     try {
       await api.collections.remove(String(collection.id), token);
+      await queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["stats-collections"] });
       toast.success("Collection deleted.");
       router.push("/dashboard/collections");
     } catch {
