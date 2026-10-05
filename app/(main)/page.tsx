@@ -6,7 +6,7 @@ import { IdeasSection } from "@/components/features/home/IdeasSection";
 import { ReportCTA } from "@/components/features/home/ReportCTA";
 import { EssentialWorksByTypeSection } from "@/components/features/home/EssentialWorksByTypeSection";
 import { PopularInterestSection } from "@/components/features/home/PopularInterestSection";
-import { KnowledgePipeline } from "@/components/features/home/KnowledgePipeline";
+import { MomentsSection } from "@/components/features/home/MomentsSection";
 import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
 import { api, getMediaUrl } from "@/lib/api";
 
@@ -63,11 +63,13 @@ export default async function HomePage() {
         }))
       : [
           { type: "music", works: [] },
+          { type: "film", works: [] },
           { type: "literature", works: [] },
         ];
 
-  const [fallbackWorks, fallbackPeople, fallbackIdeas, fallbackReport, ...sectionFallbacks] =
+  const [moments, fallbackWorks, fallbackPeople, fallbackIdeas, fallbackReport, ...sectionFallbacks] =
     await Promise.all([
+      newest(api.moments.list, 8, { "where[status][equals]": "published" }),
       curatedWorks.length
         ? Promise.resolve([])
         : newest(api.works.list, 8, {
@@ -121,7 +123,7 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* HERO + ESSENTIAL WORKS — single gradient flows across both */}
+      {/* HERO → INTEREST → SPOTLIGHTED → MUSIC → MOMENTS → … single gradient flows across all */}
       <div style={{ background: BROWN_GRADIENT }}>
         <section className="relative overflow-hidden">
           <HeroSection
@@ -130,17 +132,41 @@ export default async function HomePage() {
             stats={stats}
           />
         </section>
-        <section className="relative overflow-hidden py-16">
+
+        {/* EXPLORE BASED ON POPULAR INTEREST */}
+        <section className="py-5 md:py-7">
+          <div className="container">
+            <PopularInterestSection interests={popularInterests} />
+          </div>
+        </section>
+
+        {/* SPOTLIGHTED WORKS */}
+        <section className="relative overflow-hidden py-5 md:py-7">
           <EssentialWorksSection works={featuredWorks} />
         </section>
-      </div>
 
-      {/* FIVE PILLARS */}
-      <section id="pillars" className="bg-cream-panel py-14 md:py-20">
-        <div className="container">
-          <PillarsSection pillars={pillars} />
-        </div>
-      </section>
+        {/* ESSENTIAL WORKS IN … (first admin-curated section) */}
+        {essentialSections[0] && (
+          <section className="relative overflow-hidden py-5 md:py-7">
+            <EssentialWorksByTypeSection {...essentialSections[0]} />
+          </section>
+        )}
+
+        {/* MOMENTS */}
+        <section className="relative overflow-hidden py-5 md:py-7">
+          <MomentsSection moments={moments} />
+        </section>
+
+        {/* ESSENTIAL WORKS IN … (remaining admin-curated sections) */}
+        {essentialSections.slice(1).map((section, i) => (
+          <section
+            key={`${section.type}-${i}`}
+            className="relative overflow-hidden py-5 md:py-7"
+          >
+            <EssentialWorksByTypeSection {...section} />
+          </section>
+        ))}
+      </div>
 
       {/* THINKERS WHO BUILT THE FOUNDATIONS */}
       <section id="philosophy" className="bg-[#FAF3E5] py-14 md:py-20">
@@ -161,34 +187,10 @@ export default async function HomePage() {
         <ReportCTA report={featuredReport} />
       </section>
 
-      {/* ESSENTIAL WORKS IN … (first admin-curated section) */}
-      {essentialSections[0] && (
-        <section className="relative overflow-hidden bg-[#794C2D] py-14 md:py-20">
-          <EssentialWorksByTypeSection {...essentialSections[0]} />
-        </section>
-      )}
-
-      {/* EXPLORE BASED ON POPULAR INTEREST */}
-      <section className="bg-[#59341F] py-14 md:py-20">
+      {/* FIVE PILLARS */}
+      <section id="pillars" className="bg-cream-panel py-14 md:py-20">
         <div className="container">
-          <PopularInterestSection interests={popularInterests} />
-        </div>
-      </section>
-
-      {/* ESSENTIAL WORKS IN … (remaining admin-curated sections) */}
-      {essentialSections.slice(1).map((section, i) => (
-        <section
-          key={`${section.type}-${i}`}
-          className="relative overflow-hidden bg-[#59341F] py-14 md:py-20"
-        >
-          <EssentialWorksByTypeSection {...section} />
-        </section>
-      ))}
-
-      {/* FROM CULTURE TO KNOWLEDGE */}
-      <section className="bg-cream py-14 md:py-20">
-        <div className="container">
-          <KnowledgePipeline />
+          <PillarsSection pillars={pillars} />
         </div>
       </section>
 

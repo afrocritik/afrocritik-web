@@ -1,18 +1,37 @@
 import Link from "next/link";
-import Image from "next/image";
+import { HomeSectionHeader } from "./HomeSectionHeader";
 
 interface InterestItem {
   label: string;
-  image: string;
+  /** Legacy CMS field — tiles are now icon-based, so this is ignored. */
+  image?: string;
   category?: string;
 }
 
 const DEFAULT_INTERESTS: InterestItem[] = [
-  { label: "Movies", image: "/EBOPI-Image-1.png" },
-  { label: "Literature", image: "/EBOPI-Image-2.jpg" },
-  { label: "Report", image: "/EBOPI-Image-3.png" },
-  { label: "Biography", image: "/EBOPI-Image-4.jpg" },
+  { label: "Music", category: "music" },
+  { label: "Literature", category: "literature" },
+  { label: "Report", category: "report" },
+  { label: "Biography", category: "biography" },
 ];
+
+// Icons live in /public/icons. Matched on the editor's category or label so
+// CMS-curated tiles still get the right glyph.
+const ICONS: Record<string, string> = {
+  music: "/icons/music.svg",
+  literature: "/icons/literature.svg",
+  report: "/icons/report.svg",
+  biography: "/icons/biography.svg",
+};
+
+function iconFor(item: InterestItem): string {
+  const key = `${item.category ?? ""} ${item.label}`.toLowerCase();
+  const match = Object.keys(ICONS).find((k) => key.includes(k));
+  if (match) return ICONS[match];
+  if (/(film|movie|nollywood)/.test(key)) return ICONS.literature;
+  if (/(people|person|bio)/.test(key)) return ICONS.biography;
+  return ICONS.report;
+}
 
 export function PopularInterestSection({
   interests,
@@ -21,32 +40,37 @@ export function PopularInterestSection({
 
   return (
     <>
-      <div className="flex flex-col gap-2 pb-4">
-        <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold font-baskervville capitalize leading-tight">
-          explore based on popular interest
-        </h2>
-      </div>
-      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-        {items.map(({ label, image, category }) => (
+      <HomeSectionHeader title="explore based on popular interest" href="/explore" weight={700} linkSize="lg" />
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-[33px]">
+        {items.map((item) => (
           <Link
-            key={label}
-            href={`/explore?q=${encodeURIComponent(category || label.toLowerCase())}`}
-            className="bg-yellow-700 rounded-[20px] border-2 border-transparent hover:border-orange-400 transition-colors duration-300 flex flex-col justify-start items-center overflow-hidden"
+            key={item.label}
+            href={`/explore?q=${encodeURIComponent(item.category || item.label.toLowerCase())}`}
+            className="group flex aspect-[269/309] flex-col items-center justify-center gap-[18px] rounded-[20px] border border-transparent transition-colors duration-300 hover:border-[#ED9828]/70"
+            style={{
+              background: "rgba(255, 255, 255, 0.10)",
+              backdropFilter: "blur(7.5px)",
+              WebkitBackdropFilter: "blur(7.5px)",
+            }}
           >
-            <div className="self-stretch h-40 sm:h-48 lg:h-52 relative">
-              <Image
-                src={image}
-                alt={label}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-white/10" />
-            </div>
-            <div className="self-stretch px-4 py-3 sm:px-5 sm:py-4">
-              <div className="text-white text-sm sm:text-base font-semibold font-inter capitalize leading-6">
-                {label}
-              </div>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={iconFor(item)}
+              alt=""
+              aria-hidden
+              className="h-14 w-14 transition-transform duration-300 group-hover:scale-110 md:h-[90px] md:w-[90px]"
+            />
+            <span
+              className="capitalize text-white"
+              style={{
+                fontFamily: "var(--font-inter)",
+                fontSize: "clamp(18px, 2.2vw, 30px)",
+                fontWeight: 500,
+                lineHeight: "140%",
+              }}
+            >
+              {item.label}
+            </span>
           </Link>
         ))}
       </div>

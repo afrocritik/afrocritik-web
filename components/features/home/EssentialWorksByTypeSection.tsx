@@ -1,4 +1,4 @@
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { HomeSectionHeader } from "./HomeSectionHeader";
 import { WorkCard } from "@/components/common/WorkCard";
 import { CarouselRow } from "@/components/common/CarouselRow";
 import { mapWorkToCard } from "@/lib/api";
@@ -37,13 +37,7 @@ export function EssentialWorksByTypeSection({ type, heading, works = [] }: Props
   return (
     <>
       <div className="container">
-        <SectionHeading
-          title={title}
-          linkText={cards.length > 0 ? "View All →" : undefined}
-          linkHref={cards.length > 0 ? `/explore?q=${encodeURIComponent(type)}` : undefined}
-          font="serif"
-          bleedRight
-        />
+        <HomeSectionHeader title={title} href={cards.length > 0 ? `/explore?q=${encodeURIComponent(type)}` : undefined} />
       </div>
       <div>
         {cards.length > 0 ? (

@@ -97,6 +97,8 @@ export interface WorkCardProps {
   type?: string;
   rating?: number;
   essential?: boolean;
+  /** Spotlighted Works variant: shorter at rest, grows right AND down on hover. */
+  spotlight?: boolean;
   ewim?: boolean;
   ewil?: boolean;
   explore?: boolean;
@@ -150,20 +152,22 @@ function EssentialCardImage({
   title,
   image,
   hovered,
+  idleHeight = 240,
 }: Readonly<{
   slug: string;
   title: string;
   image?: string;
   hovered: boolean;
+  idleHeight?: number;
 }>) {
   return (
     <div
       style={{
         position: "relative",
-        marginTop: "12px",
-        marginLeft: hovered ? "15.5px" : "12px",
-        marginRight: hovered ? "15.5px" : "12px",
-        height: hovered ? "247px" : "215px",
+        marginTop: "16px",
+        marginLeft: "16px",
+        marginRight: "16px",
+        height: hovered ? "247px" : `${idleHeight}px`,
         overflow: "hidden",
         borderRadius: "4px",
         background: "lightgray",
@@ -205,9 +209,9 @@ function EssentialCardBody({
     <div
       className="flex flex-col gap-1"
       style={{
-        paddingTop: hovered ? "10px" : "8px",
-        paddingLeft: hovered ? "15.5px" : "12px",
-        paddingRight: hovered ? "15.5px" : "12px",
+        paddingTop: "10px",
+        paddingLeft: "16px",
+        paddingRight: "16px",
         paddingBottom: "12px",
         transition: "padding 0.4s ease",
       }}
@@ -267,12 +271,14 @@ function EssentialCard({
   type = "Film",
   rating,
   className,
+  spotlight,
 }: Readonly<Omit<WorkCardProps, "essential">>) {
   const { hovered, onEnter, onLeave } = useHoverDelay();
 
   const desc = description ?? [year, country].filter(Boolean).join(" · ");
   const hovDesc = hoverDescription ?? desc;
   const cardTags = tags?.length ? tags : [type];
+  const idleWidth = spotlight ? "270px" : "318px";
 
   return (
     <fieldset
@@ -287,16 +293,17 @@ function EssentialCard({
         margin: 0,
         flexGrow: 0,
         flexShrink: 0,
-        // Fixed idle width so ~4 fit per view and a larger pool overflows the
+        // Idle size matches the Essential Works In Music card (318×384) so ~4 fit per view and a larger pool overflows the
         // row — which is what makes the carousel's Next button appear.
-        flexBasis: hovered ? "418px" : "300px",
-        width: hovered ? "418px" : "300px",
-        height: hovered ? "385px" : "335px",
+        flexBasis: hovered ? "418px" : idleWidth,
+        width: hovered ? "418px" : idleWidth,
+        height: spotlight ? (hovered ? "385px" : "335px") : "384px",
+        alignSelf: spotlight ? "flex-start" : undefined,
         borderRadius: hovered ? "8px" : "6.964px",
         border: `${hovered ? "1" : "0.87"}px solid #9C5C08`,
         background: "rgba(247, 235, 233, 0.10)",
         transition:
-          "flex-grow 0.4s ease, flex-shrink 0.4s ease, flex-basis 0.4s ease, height 0.4s ease, border-radius 0.4s ease",
+          "flex-grow 0.4s ease, flex-shrink 0.4s ease, flex-basis 0.4s ease, width 0.4s ease, height 0.4s ease, border-radius 0.4s ease",
       }}
     >
       <legend className="sr-only">{title}</legend>
@@ -325,7 +332,7 @@ function EssentialCard({
           {badge}
         </span>
       )}
-      <EssentialCardImage slug={slug} title={title} image={image} hovered={hovered} />
+      <EssentialCardImage slug={slug} title={title} image={image} hovered={hovered} idleHeight={spotlight ? 215 : 240} />
       <EssentialCardBody
         slug={slug}
         title={title}
