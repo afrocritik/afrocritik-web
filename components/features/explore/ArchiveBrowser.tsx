@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { api, getMediaUrl, mapWorkToCard } from "@/lib/api";
 import { BROWN_GRADIENT, TABS } from "./constants";
 import { ExploreHero } from "./ExploreHero";
@@ -74,12 +74,15 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
     staleTime: 5 * 60_000,
   });
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ["archive", tab, query, sort, countries, themes, yearFrom, yearTo, token ?? "anon"],
-    queryFn: () =>
+    initialPageParam: 1,
+    getNextPageParam: (last: any) => (last?.hasNextPage ? (last.page ?? 1) + 1 : undefined),
+    queryFn: ({ pageParam }) =>
       api.archive(
         {
           type: tab,
+          page: pageParam,
           q: query || undefined,
           sort,
           country: countries.length ? countries : undefined,
@@ -93,13 +96,19 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
     staleTime: 60_000,
   });
 
-  const works = useMemo(() => {
-    const docs = (data as any)?.docs;
-    return Array.isArray(docs) ? docs.map((d: any) => toCard(d, tab)) : [];
-  }, [data, tab]);
+  // Pages accumulate as "View More" is pressed; the first page carries the
+  // totals and the gating flag.
+  const firstPage: any = data?.pages?.[0];
+  const works = useMemo(
+    () =>
+      (data?.pages ?? []).flatMap((p: any) =>
+        Array.isArray(p?.docs) ? p.docs.map((d: any) => toCard(d, tab)) : [],
+      ),
+    [data, tab],
+  );
 
   const activeTab = TABS.find((t) => t.key === tab) ?? TABS[0];
-  const resultCount = (data as any)?.totalDocs ?? 0;
+  const resultCount = firstPage?.totalDocs ?? 0;
 
   // Signed-out visitors get a preview-then-wall once they actively search or
   // change the sort: they see the result count and a few cards, then a prompt
@@ -108,7 +117,7 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   // a fallback for the brief window before the response lands.
   const isSearchingOrSorting = query.trim().length > 0 || sort !== "newest";
   const gated =
-    (data as any)?.gated ??
+    firstPage?.gated ??
     (status === "unauthenticated" && isSearchingOrSorting);
 
   const toggle = (
@@ -148,6 +157,9 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
           onYearChange,
         }}
         loading={isLoading}
+        hasMore={Boolean(hasNextPage)}
+        loadingMore={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
         gated={gated}
         showRefine={signedIn}
       />
