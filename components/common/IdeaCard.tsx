@@ -42,7 +42,7 @@ export function IdeaCard({
       )}
       <h3
         className={cn(
-          "w-full justify-start text-2xl font-inter leading-7",
+          "line-clamp-3 w-full justify-start text-2xl font-inter leading-7",
           light ? "text-orange-950 font-bold" : "text-white",
         )}
       >
@@ -61,7 +61,7 @@ export function IdeaCard({
       {excerpt && (
         <p
           className={cn(
-            "mt-3 line-clamp-4 flex-1 w-full justify-start text-base font-normal font-inter leading-5",
+            "mt-3 line-clamp-4 w-full justify-start text-base font-normal font-inter leading-5",
             light ? "text-zinc-600" : "text-ink-secondary",
           )}
         >
@@ -69,7 +69,7 @@ export function IdeaCard({
         </p>
       )}
       {tags.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-1.5">
+        <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
           {tags.map((t) => (
             <div
               key={t}

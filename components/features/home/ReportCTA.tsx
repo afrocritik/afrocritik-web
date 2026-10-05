@@ -84,12 +84,12 @@ export function ReportCTA({ report }: Readonly<{ report?: FeaturedReport }>) {
           />
         </div>
 
-        <p className="max-w-[564px] font-inter text-base font-normal capitalize leading-6 text-white/90">
+        <p className="line-clamp-5 max-w-[564px] font-inter text-base font-normal capitalize leading-6 text-white/90">
           {summary}
         </p>
 
         {/* Stat badges + CTA */}
-        <div className="flex w-fit flex-col gap-6">
+        <div className="flex flex-col items-start gap-6">
           {badges.length > 0 && (
             <div className="flex flex-wrap gap-3">
               {badges.map((badge) => (
@@ -106,8 +106,9 @@ export function ReportCTA({ report }: Readonly<{ report?: FeaturedReport }>) {
           {/* CTA */}
           <Link
             href={href}
-            className="inline-flex h-12 w-full items-center justify-center rounded-xl px-10 font-inter text-xl font-medium capitalize leading-7 text-yellow-950"
+            className="inline-flex h-12 w-fit items-center justify-center rounded-xl px-10 font-inter text-xl font-medium capitalize leading-7 text-yellow-950"
             style={{
+              minWidth: "min(380px, 100%)",
               background: "linear-gradient(42deg, #92400E 15%, #FB923C 81%)",
             }}
           >

@@ -1,9 +1,11 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { getMediaUrl } from "@/lib/api";
 
 interface ThinkerData {
+  slug: string;
   name: string;
   role: string;
   image?: string;
@@ -51,6 +53,7 @@ function mapPersonToThinker(p: any): ThinkerData {
     : [];
 
   return {
+    slug: p.slug ?? "",
     name: p.name ?? "",
     role: roleStr,
     image: getMediaUrl(p.photo),
@@ -215,7 +218,11 @@ export function ThinkersSection({ people = [] }: Props) {
       </div>
 
       {/* Thinker Card */}
-      <div className="flex flex-col overflow-hidden rounded-xl lg:flex-row">
+      <Link
+        href={thinker.slug ? `/people/${thinker.slug}` : "/explore?tab=people"}
+        aria-label={`Read the full profile of ${thinker.name}`}
+        className="group flex flex-col overflow-hidden rounded-xl lg:flex-row"
+      >
         {/* Left: Image */}
         <div
           className="relative w-full shrink-0 rounded-t-xl lg:w-[395px] lg:rounded-l-xl lg:rounded-tr-none h-[420px] sm:h-[520px] lg:h-[778px]"
@@ -264,24 +271,22 @@ export function ThinkersSection({ people = [] }: Props) {
         </div>
 
         {/* Right: Info Panel */}
-        <div className="w-full lg:w-[744px] lg:h-[778px] bg-stone-100 rounded-b-xl lg:rounded-bl-none lg:rounded-r-xl border border-yellow-700/30 flex flex-1 flex-col justify-center px-6 py-6 sm:px-10 sm:py-8">
+        <div className="w-full overflow-hidden lg:w-[744px] lg:h-[778px] bg-stone-100 rounded-b-xl lg:rounded-bl-none lg:rounded-r-xl border border-yellow-700/30 flex flex-1 flex-col justify-center px-6 py-6 sm:px-10 sm:py-8">
           <div className="max-w-[649px]">
             {thinker.coreContribution && (
               <p className="font-inter text-base leading-[179%] text-black">
                 <span className="font-bold capitalize">Core Contribution</span>
-                <br />
-                <span className="font-normal capitalize">{thinker.coreContribution}</span>
+                <span className="line-clamp-4 font-normal capitalize">{thinker.coreContribution}</span>
               </p>
             )}
             {thinker.keyIdeas && (
               <p className="mt-4 font-inter text-base leading-[179%] text-black">
                 <span className="font-bold capitalize">Key Ideas</span>
-                <br />
-                <span className="font-normal capitalize">{thinker.keyIdeas}</span>
+                <span className="line-clamp-3 font-normal capitalize">{thinker.keyIdeas}</span>
               </p>
             )}
             {thinker.knowledgeSovereignty && (
-              <p className="mt-4 font-inter text-base leading-[179%] text-black">
+              <p className="mt-4 line-clamp-3 font-inter text-base leading-[179%] text-black">
                 <span className="font-bold capitalize">Knowledge Sovereignty: </span>
                 <span className="font-normal capitalize">{thinker.knowledgeSovereignty}</span>
               </p>
@@ -320,8 +325,12 @@ export function ThinkersSection({ people = [] }: Props) {
               </div>
             </div>
           )}
+
+          <span className="mt-6 inline-flex items-center gap-2 font-inter text-base font-semibold text-yellow-700 transition-colors group-hover:text-orange-950">
+            Read full profile <span aria-hidden>→</span>
+          </span>
         </div>
-      </div>
+      </Link>
     </>
   );
 }
