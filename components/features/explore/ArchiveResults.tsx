@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { LayoutGrid, List, Lock } from "lucide-react";
+import { ArrowDown, LayoutGrid, List, Lock } from "lucide-react";
 import { WorkCard } from "@/components/common/WorkCard";
 import { formatCount } from "@/lib/utils";
 import { RefineSidebar } from "./RefineSidebar";
@@ -30,6 +29,10 @@ type ArchiveResultsProps = Readonly<{
   gated?: boolean;
   /** Show the Refine sidebar (signed-in only); signed-out gets a full-width grid. */
   showRefine?: boolean;
+  /** More pages exist beyond the cards currently shown. */
+  hasMore?: boolean;
+  loadingMore?: boolean;
+  onLoadMore?: () => void;
 }>;
 
 export function ArchiveResults({
@@ -42,6 +45,9 @@ export function ArchiveResults({
   loading,
   gated,
   showRefine = true,
+  hasMore = false,
+  loadingMore = false,
+  onLoadMore,
 }: ArchiveResultsProps) {
   // When gated, only the first few cards render; the rest sit behind the wall.
   const visibleWorks = gated ? works.slice(0, PREVIEW_LIMIT) : works;
@@ -140,16 +146,21 @@ export function ArchiveResults({
                   </div>
                 </div>
               ) : (
-                <div className="mt-6 flex justify-center">
-                  <div className="inline-flex justify-start items-center gap-2">
-                    <button className="px-3 py-2 rounded-lg flex justify-center items-center gap-2 hover:bg-white/5 transition-colors">
+                hasMore && (
+                  <div className="mt-6 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={onLoadMore}
+                      disabled={loadingMore}
+                      className="px-3 py-2 rounded-lg flex justify-center items-center gap-2 hover:bg-white/5 transition-colors disabled:opacity-60"
+                    >
                       <span className="text-stone-200 text-base font-normal font-inter leading-4">
-                        View More
+                        {loadingMore ? "Loading…" : "View More"}
                       </span>
-                      <Image src="/Arrow right.svg" alt="" width={16} height={16} />
+                      {!loadingMore && <ArrowDown className="h-4 w-4 text-stone-200" aria-hidden />}
                     </button>
                   </div>
-                </div>
+                )
               )}
             </>
           ) : (
