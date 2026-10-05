@@ -155,6 +155,9 @@ export const api = {
       })
       .then((r) => r.data),
   counts: () => apiClient.get("/api/search/counts").then((r) => r.data),
+  // Most-searched terms (admin-hideable); empty until visitors have searched.
+  popularSearches: (limit = 8): Promise<{ terms: { term: string; count: number }[] }> =>
+    apiClient.get("/api/search/popular", { params: { limit } }).then((r) => r.data),
   analytics: {
     // Admin dashboard metrics. `days` is 7 | 30 | 90 for a window, or "all".
     dashboard: (token?: string, days: number | "all" = "all") =>

@@ -15,6 +15,7 @@ type RefineState = Readonly<{
   selectedThemes: string[];
   onToggleTheme: (id: string) => void;
   onYearChange: (from: number, to: number) => void;
+  onSearch: (term: string) => void;
 }>;
 
 type ArchiveResultsProps = Readonly<{

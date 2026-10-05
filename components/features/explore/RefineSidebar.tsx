@@ -17,6 +17,7 @@ type RefineSidebarProps = Readonly<{
   selectedThemes: string[];
   onToggleTheme: (id: string) => void;
   onYearChange: (from: number, to: number) => void;
+  onSearch: (term: string) => void;
 }>;
 
 function CheckRow({
@@ -50,6 +51,7 @@ export function RefineSidebar({
   selectedThemes,
   onToggleTheme,
   onYearChange,
+  onSearch,
 }: RefineSidebarProps) {
   const [countrySearch, setCountrySearch] = useState("");
 
@@ -58,6 +60,13 @@ export function RefineSidebar({
     queryFn: () => api.countries.list(),
     staleTime: 5 * 60_000,
   });
+  const { data: popularData } = useQuery({
+    queryKey: ["popular-searches"],
+    queryFn: () => api.popularSearches(8),
+    staleTime: 5 * 60_000,
+  });
+  const popularTerms = popularData?.terms ?? [];
+
   const { data: themesData } = useQuery({
     queryKey: ["facet-themes"],
     queryFn: () => api.themes.list(),
@@ -164,15 +173,25 @@ export function RefineSidebar({
           </div>
         </div>
 
-        <div className="mt-6">
-          <p className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
-            Popular Searches
-          </p>
-          <p className="mt-2 font-inter text-[11px] italic leading-4 text-white/40">
-            No popular searches yet — they&apos;ll appear here as the archive
-            grows.
-          </p>
-        </div>
+        {popularTerms.length > 0 && (
+          <div className="mt-6">
+            <p className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
+              Popular Searches
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {popularTerms.map(({ term }) => (
+                <button
+                  key={term}
+                  type="button"
+                  onClick={() => onSearch(term)}
+                  className="rounded-lg border border-amber-line bg-black/20 px-3 py-1.5 font-inter text-xs capitalize text-gray-200 transition-colors hover:border-orange-400 hover:text-white"
+                >
+                  {term}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );

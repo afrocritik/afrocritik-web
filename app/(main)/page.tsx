@@ -98,9 +98,18 @@ export default async function HomePage() {
 
   const hero = homepage?.hero;
   const stats: { value: string; label: string }[] = homepage?.stats ?? [];
-  const suggestedSearches: string[] = Array.isArray(hero?.suggestedSearches)
+  let suggestedSearches: string[] = Array.isArray(hero?.suggestedSearches)
     ? hero.suggestedSearches.map((s: any) => s?.term).filter(Boolean)
     : [];
+  // No curated chips → fall back to what visitors actually search for (the hero
+  // then uses its built-in defaults if there are none yet).
+  if (suggestedSearches.length === 0) {
+    try {
+      suggestedSearches = (await api.popularSearches(6)).terms.map((t) => t.term);
+    } catch {
+      // API unreachable — hero keeps its defaults
+    }
+  }
 
   const pillars = Array.isArray(homepage?.fivePillars)
     ? homepage.fivePillars.map((p: any) => ({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -68,6 +68,14 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   const [yearFrom, setYearFrom] = useState<number | undefined>(undefined);
   const [yearTo, setYearTo] = useState<number | undefined>(undefined);
 
+  // Search as the visitor pauses typing, not on every keystroke — saves requests
+  // and keeps half-typed words out of the Popular Searches tally.
+  const [searchTerm, setSearchTerm] = useState(query);
+  useEffect(() => {
+    const t = setTimeout(() => setSearchTerm(query), 600);
+    return () => clearTimeout(t);
+  }, [query]);
+
   const { data: countsData } = useQuery({
     queryKey: ["archive-counts"],
     queryFn: () => api.counts(),
@@ -75,7 +83,7 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   });
 
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["archive", tab, query, sort, countries, themes, yearFrom, yearTo, token ?? "anon"],
+    queryKey: ["archive", tab, searchTerm, sort, countries, themes, yearFrom, yearTo, token ?? "anon"],
     initialPageParam: 1,
     getNextPageParam: (last: any) => (last?.hasNextPage ? (last.page ?? 1) + 1 : undefined),
     queryFn: ({ pageParam }) =>
@@ -83,7 +91,8 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
         {
           type: tab,
           page: pageParam,
-          q: query || undefined,
+          q: searchTerm || undefined,
+          track: searchTerm ? 1 : undefined,
           sort,
           country: countries.length ? countries : undefined,
           theme: themes.length ? themes : undefined,
@@ -155,6 +164,7 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
           selectedThemes: themes,
           onToggleTheme: (id) => toggle(setThemes, id),
           onYearChange,
+          onSearch: setQuery,
         }}
         loading={isLoading}
         hasMore={Boolean(hasNextPage)}
