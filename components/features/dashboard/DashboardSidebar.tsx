@@ -8,7 +8,8 @@ import { ArrowRight, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "@/components/layout/Logo";
 import { cn, getImageUrl, getUserDisplayName } from "@/lib/utils";
-import { api } from "@/lib/api";
+import { api, getMediaUrl } from "@/lib/api";
+import { CardImage } from "@/components/common/CardImage";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { NAV_ITEMS, type DashboardNavItem } from "./constants";
 import { DashboardNavIcon } from "./DashboardNavIcon";
@@ -41,38 +42,62 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 function ReportCard() {
-  // Spotlights the report curated on the Homepage global; falls back to the
-  // archive when none is set so the button never points at a dead route.
-  const { data } = useQuery({
+  // Same rule as the home page's report block: the report an editor curated on
+  // the Homepage global wins, otherwise the newest published one (the Reports
+  // collection only returns published docs to non-staff).
+  const { data: homepage, isFetched: homepageLoaded } = useQuery({
     queryKey: ["homepage-global"],
     queryFn: () => api.homepage(),
     staleTime: 5 * 60_000,
   });
-  const report =
-    data?.featuredReport && typeof data.featuredReport === "object"
-      ? data.featuredReport
+  const curated =
+    homepage?.featuredReport && typeof homepage.featuredReport === "object"
+      ? homepage.featuredReport
       : null;
-  const title = report?.title || "Afrocritik 2025 Report";
-  const href = report?.slug ? `/reports/${report.slug}` : "/explore";
+  const { data: latest } = useQuery({
+    queryKey: ["latest-report"],
+    enabled: homepageLoaded && !curated,
+    staleTime: 5 * 60_000,
+    queryFn: () => api.reports.list({ limit: 1, sort: "-createdAt", depth: 2 }),
+  });
+  const report = curated ?? latest?.docs?.[0] ?? null;
+
+  // Nothing published yet → no card, rather than promoting a report that doesn't exist.
+  if (!report) return null;
+
+  const cover = getMediaUrl(report.coverImage);
+  const summary = report.summary || report.subtitle;
 
   return (
     <div className="relative h-[266px] w-full rounded-xl bg-rose-100/10 outline outline-1 outline-offset-[-0.89px] outline-yellow-700">
       <div className="absolute left-[17px] top-[16px] w-44">
-        <p className="font-inter text-sm font-semibold leading-3 text-white">
-          {title}
+        <p className="line-clamp-1 font-inter text-sm font-semibold leading-3 text-white">
+          {report.title}
         </p>
-        <p className="mt-3 font-['Montserrat'] text-xs font-normal leading-4 text-white">
-          Explore key insights and intelligence shaping African culture.
-        </p>
+        {summary && (
+          <p className="mt-3 line-clamp-2 font-['Montserrat'] text-xs font-normal leading-4 text-white">
+            {summary}
+          </p>
+        )}
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/reports/report-cover-3d.png"
-        alt={title}
-        className="absolute left-[4px] top-[78px] h-32 w-28 object-cover rounded"
-      />
+      <div className="absolute left-[17px] top-[78px] h-32 w-28 overflow-hidden rounded">
+        <CardImage
+          src={cover || undefined}
+          alt={report.title ?? "Report"}
+          className="size-full object-cover"
+          // No (or broken) cover → the bundled default report art.
+          fallback={
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="/images/reports/report-cover-3d.png"
+              alt={report.title ?? "Report"}
+              className="size-full object-cover"
+            />
+          }
+        />
+      </div>
       <Link
-        href={href}
+        href={`/reports/${report.slug}`}
         className="absolute left-[17px] top-[218px] inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-yellow-700 to-orange-400 px-4 py-1.5 font-inter text-sm font-medium capitalize leading-5 text-yellow-950 transition-opacity hover:opacity-90 whitespace-nowrap"
       >
         Read report
