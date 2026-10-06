@@ -205,6 +205,26 @@ export const api = {
         .post("/api/track/view", { collection, id })
         .then((r) => r.data),
   },
+  library: {
+    // Engagement-driven My Library. `level` upgrades viewed -> engaged.
+    engage: (
+      collection: "works" | "ideas" | "people",
+      id: string | number,
+      level: "viewed" | "engaged",
+      token: string
+    ) =>
+      apiClient
+        .post(
+          "/api/library/engage",
+          { collection, id, level },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((r) => r.data),
+    me: (token: string) =>
+      apiClient
+        .get("/api/library/me", { headers: { Authorization: `Bearer ${token}` } })
+        .then((r) => r.data),
+  },
   auth: {
     login: (email: string, password: string) =>
       apiClient

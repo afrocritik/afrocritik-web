@@ -5,7 +5,7 @@ import { DashboardSection } from "./DashboardSection";
 import { FeaturedWorkCard, type FeaturedWorkItem } from "./FeaturedWorkCard";
 import { api, getMediaUrl } from "@/lib/api";
 
-function mapFeatured(work: any): FeaturedWorkItem {
+export function mapFeatured(work: any): FeaturedWorkItem {
   const tags = [
     ...(Array.isArray(work.country)
       ? work.country.map((c: any) => (typeof c === "string" ? c : c?.name ?? ""))
