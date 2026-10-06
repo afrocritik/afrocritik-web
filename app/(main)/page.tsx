@@ -116,7 +116,7 @@ export default async function HomePage() {
 
   const pillars = Array.isArray(homepage?.fivePillars)
     ? homepage.fivePillars.map((p: any) => ({
-        icon: getMediaUrl(p.icon) ?? "/TFP-Digital-Archive.png",
+        icon: getMediaUrl(p.icon) ?? "/icons/pillars/digital-archive.png",
         title: p.title ?? "",
         desc: p.description ?? "",
       }))
@@ -126,7 +126,7 @@ export default async function HomePage() {
     ? homepage.popularInterestCategories.map((c: any) => ({
         label: c.label ?? "",
         category: c.category,
-        image: getMediaUrl(c.image) ?? "/EBOPI-Image-1.png",
+        image: getMediaUrl(c.image) ?? "/images/samples/asake-performing.png",
       }))
     : [];
 

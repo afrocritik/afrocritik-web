@@ -16,7 +16,7 @@ const MENU_COLUMNS: MenuSection[][] = [
   [
     {
       title: "Work",
-      icon: "/hero-work.svg",
+      icon: "/icons/mega-menu/works.svg",
       items: [
         "Films",
         "Music",
@@ -31,14 +31,14 @@ const MENU_COLUMNS: MenuSection[][] = [
     },
     {
       title: "People",
-      icon: "/hero-people.svg",
+      icon: "/icons/mega-menu/people.svg",
       items: ["Artists", "Writers", "Directors", "Most popular celebs", "Born today"],
     },
   ],
   [
     {
       title: "Explore",
-      icon: "/hero-explore.svg",
+      icon: "/icons/mega-menu/explore.svg",
       items: [
         "Recently Added",
         "Trending Entries",
@@ -50,7 +50,7 @@ const MENU_COLUMNS: MenuSection[][] = [
     },
     {
       title: "Idea",
-      icon: "/hero-idea.svg",
+      icon: "/icons/mega-menu/ideas.svg",
       items: [
         "Owanbe",
         "Decoloniality",
@@ -67,7 +67,7 @@ const MENU_COLUMNS: MenuSection[][] = [
   [
     {
       title: "Report",
-      icon: "/hero-report.svg",
+      icon: "/icons/mega-menu/reports.svg",
       items: [
         "AMVCA",
         "Featured Research",
@@ -83,7 +83,7 @@ const MENU_COLUMNS: MenuSection[][] = [
     },
     {
       title: "Community",
-      icon: "/hero-community.svg",
+      icon: "/icons/mega-menu/community.svg",
       items: [
         "Discussions",
         "Editorial Network",
@@ -170,7 +170,7 @@ export function MegaMenu({
             className="shrink-0 transition-opacity hover:opacity-80"
           >
             <Image
-              src="/hero-close.svg"
+              src="/icons/mega-menu/close.svg"
               alt="Close"
               width={53}
               height={53}

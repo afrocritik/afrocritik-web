@@ -44,7 +44,7 @@ function ReportCard() {
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/The-Afrocritik-Report.png"
+        src="/images/reports/report-cover-3d.png"
         alt="The Afrocritik Report 2025"
         className="absolute left-[4px] top-[78px] h-32 w-28 object-cover rounded"
       />
@@ -63,7 +63,7 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const { data: user } = useCurrentUser();
   const name = getUserDisplayName(user);
-  const avatar = getImageUrl(user?.avatar) || "/Interest-Avatar.png";
+  const avatar = getImageUrl(user?.avatar) || "/images/avatars/default-avatar.png";
 
   return (
     <aside className="hidden w-64 shrink-0 self-start flex-col px-4 lg:flex bg-[#50321C80] border-r border-yellow-700">

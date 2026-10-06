@@ -51,7 +51,7 @@ function AudioTrack({
       {/* Thumbnail */}
       <div className="size-10 relative shrink-0">
         <Image
-          src="/inner-WVA-Image-1.jpg"
+          src="/images/samples/film-still-wide.jpg"
           alt={track.title}
           width={40}
           height={40}
@@ -70,7 +70,7 @@ function AudioTrack({
               <div className="px-1 py-[0.37px] bg-orange-400/20 rounded-3xl flex justify-start items-center gap-px shrink-0">
                 <span className="text-orange-100 text-[4.41px] font-normal font-inter">{track.type}</span>
               </div>
-              <Image src="/inner-ico-play.png" alt="play" width={5} height={5} className="shrink-0 size-[5.14px]" />
+              <Image src="/icons/ui/play.png" alt="play" width={5} height={5} className="shrink-0 size-[5.14px]" />
             </div>
             {/* View count */}
             <div className="flex justify-start items-center gap-0.5 shrink-0">

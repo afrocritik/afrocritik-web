@@ -86,7 +86,7 @@ export function FilterPill({ label, options, onSelect, selectedValues }: Readonl
                 <div className="w-5 h-5 shrink-0 flex items-center justify-center">
                   {isSel && (
                     <Image
-                      src="/explore-tab-check.png"
+                      src="/icons/ui/tab-check.png"
                       alt="selected"
                       width={20}
                       height={20}

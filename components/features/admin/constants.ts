@@ -36,19 +36,19 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   {
     heading: "Archive",
     items: [
-      { label: "Works", href: "/admin/works", icon: "dashboard-icon_works.png" },
-      { label: "Ideas", href: "/admin/ideas", icon: "explore-icon_ideas.svg" },
+      { label: "Works", href: "/admin/works", icon: "icons/dashboard/works.png" },
+      { label: "Ideas", href: "/admin/ideas", icon: "icons/nav/ideas.svg" },
       { label: "Moments", href: "/admin/moments", icon: Clock },
-      { label: "People", href: "/admin/people", icon: "explore-icon_people.svg" },
-      { label: "Reports", href: "/admin/reports", icon: "explore-icon_analytics.svg" },
+      { label: "People", href: "/admin/people", icon: "icons/nav/people.svg" },
+      { label: "Reports", href: "/admin/reports", icon: "icons/nav/reports.svg" },
     ],
   },
   {
     heading: "Taxonomy",
     items: [
-      { label: "Genres", href: "/admin/genres", icon: "admin-genre-icon.png" },
-      { label: "Themes", href: "/admin/themes", icon: "admin-themes-icon.png" },
-      { label: "Countries", href: "/admin/countries", icon: "admin-country-icon.png" },
+      { label: "Genres", href: "/admin/genres", icon: "icons/admin/genre.png" },
+      { label: "Themes", href: "/admin/themes", icon: "icons/admin/themes.png" },
+      { label: "Countries", href: "/admin/countries", icon: "icons/admin/country.png" },
     ],
   },
   {

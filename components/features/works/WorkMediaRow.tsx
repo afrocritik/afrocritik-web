@@ -108,7 +108,7 @@ export function WorkMediaRow({ videoArchive = [], audioArchive = [] }: Props) {
                 >
                   <div className="size-10 relative shrink-0">
                     <Image
-                      src="/inner-Image-1.png"
+                      src="/images/samples/film-still.png"
                       alt={track.title}
                       width={40}
                       height={40}

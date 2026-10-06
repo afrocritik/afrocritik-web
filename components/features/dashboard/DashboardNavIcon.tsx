@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 import type { DashboardNavItem } from "./constants";
 
 const IMAGE_ICONS: Partial<Record<DashboardNavItem["icon"], string>> = {
-  saved: "/dashboard-saved.png",
-  reports: "/dashboard-report.png",
-  contribution: "/dashboard-contributor.png",
+  saved: "/icons/dashboard/saved.png",
+  reports: "/icons/dashboard/report.png",
+  contribution: "/icons/dashboard/contributor.png",
 };
 
 const LUCIDE_ICONS: Partial<Record<DashboardNavItem["icon"], LucideIcon>> = {

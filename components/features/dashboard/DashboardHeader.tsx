@@ -36,7 +36,7 @@ export function DashboardHeader() {
             className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#50321C80] px-3 py-2 outline outline-[0.45px] outline-offset-[-0.45px] outline-yellow-700/50 transition-opacity hover:opacity-80"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/dashboard-calendar.png" alt="" aria-hidden="true" className="size-3.5 shrink-0 brightness-0 invert" />
+            <img src="/icons/dashboard/calendar.png" alt="" aria-hidden="true" className="size-3.5 shrink-0 brightness-0 invert" />
             <span className="font-inter text-sm font-normal leading-4 text-white">
               {range}
             </span>

@@ -20,7 +20,7 @@ function StatIcon({ icon }: Readonly<{ icon: StatIconKind }>) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src="/dashboard-icon_works.png"
+        src="/icons/dashboard/works.png"
         alt=""
         aria-hidden="true"
         className="size-4 [filter:brightness(0)_saturate(100%)_invert(32%)_sepia(100%)_saturate(500%)_brightness(88%)]"
@@ -31,7 +31,7 @@ function StatIcon({ icon }: Readonly<{ icon: StatIconKind }>) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src="/dashboard-Icon_write.png"
+        src="/icons/dashboard/write.png"
         alt=""
         aria-hidden="true"
         className="size-4 [filter:brightness(0)_saturate(100%)_invert(32%)_sepia(100%)_saturate(500%)_brightness(88%)]"

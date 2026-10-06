@@ -13,7 +13,7 @@ export function ExploreIdeasSection() {
   return (
     <section
       className="relative min-h-[420px] py-16 md:py-0 md:h-[498px] overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: "url('/explore-ideas-bg.png')" }}
+      style={{ backgroundImage: "url('/images/explore/ideas-banner.png')" }}
     >
       <div className="container h-full flex items-center gap-8">
         {/* Left content */}

@@ -12,7 +12,7 @@ export function Logo({
   return (
     <Link href={href} className={cn("block w-fit shrink-0 relative", className)}>
       <Image
-        src="/logo.png"
+        src="/images/brand/logo.png"
         alt="Afrocritik"
         width={211}
         height={86}

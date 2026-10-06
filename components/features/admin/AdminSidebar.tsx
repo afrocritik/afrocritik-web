@@ -93,7 +93,7 @@ export function AdminSidebar() {
         {collapsed ? (
           <Link href="/" aria-label="Afrocritik home" className="block shrink-0">
             <Image
-              src="/logo.png"
+              src="/images/brand/logo.png"
               alt="Afrocritik"
               width={48}
               height={20}

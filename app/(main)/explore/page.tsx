@@ -30,7 +30,7 @@ export default async function ExplorePage() {
     ? homepage.popularInterestCategories.map((c: any) => ({
         label: c.label ?? "",
         category: c.category,
-        image: getMediaUrl(c.image) ?? "/EBOPI-Image-1.png",
+        image: getMediaUrl(c.image) ?? "/images/samples/asake-performing.png",
       }))
     : [];
 

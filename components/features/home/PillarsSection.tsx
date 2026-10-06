@@ -10,11 +10,11 @@ interface Pillar {
 }
 
 const DEFAULT_PILLARS: Pillar[] = [
-  { icon: "/TFP-Digital-Archive.png", title: "Digital Archive", desc: "A comprehensive, searchable database of African cultural works and critical analysis — the continent's cultural memory." },
-  { icon: "/TFP-Critic.svg", title: "Critic & Journalist Development", desc: "Fellowships, mentorship, and editorial support for the next generation of African cultural critics and journalists." },
-  { icon: "/TFP-Ratings.svg", title: "Ratings & Index", desc: "Structured evaluation frameworks that bring transparency and rigor to African cultural assessment." },
-  { icon: "/TFP-Research.svg", title: "Research & Data", desc: "Annual reports, trend analysis, and data-driven cultural research that maps the continent's creative trajectory." },
-  { icon: "/TFP-Philosophy.svg", title: "African Philosophy", desc: "Documenting and connecting the philosophical traditions — Ubuntu, Négritude, Maat, Sankofa, Omolúàbí — that undergird African cultural production." },
+  { icon: "/icons/pillars/digital-archive.png", title: "Digital Archive", desc: "A comprehensive, searchable database of African cultural works and critical analysis — the continent's cultural memory." },
+  { icon: "/icons/pillars/critic.svg", title: "Critic & Journalist Development", desc: "Fellowships, mentorship, and editorial support for the next generation of African cultural critics and journalists." },
+  { icon: "/icons/pillars/ratings.svg", title: "Ratings & Index", desc: "Structured evaluation frameworks that bring transparency and rigor to African cultural assessment." },
+  { icon: "/icons/pillars/research.svg", title: "Research & Data", desc: "Annual reports, trend analysis, and data-driven cultural research that maps the continent's creative trajectory." },
+  { icon: "/icons/pillars/philosophy.svg", title: "African Philosophy", desc: "Documenting and connecting the philosophical traditions — Ubuntu, Négritude, Maat, Sankofa, Omolúàbí — that undergird African cultural production." },
 ];
 
 export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {

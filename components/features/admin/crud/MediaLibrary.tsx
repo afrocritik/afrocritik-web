@@ -14,16 +14,16 @@ interface Asset {
 }
 
 const SAMPLE: Asset[] = [
-  { id: "a1", url: "/EBOPI-Image-2.jpg", name: "living-in-bondage.jpg", meta: "1.2 MB · 1200×800" },
-  { id: "a2", url: "/EW-Image-4.jpg", name: "fela-kuti.jpg", meta: "980 KB · 1080×1080" },
-  { id: "a3", url: "/Image-Ngugi.png", name: "ngugi-portrait.png", meta: "1.5 MB · 900×1200" },
-  { id: "a4", url: "/admin-image-4.png", name: "pan-africanism.png", meta: "740 KB · 1200×675" },
-  { id: "a5", url: "/EWIM-Image-1.png", name: "afrobeats-cover.png", meta: "1.1 MB · 1000×1000" },
-  { id: "a6", url: "/EWIL-Image-1.png", name: "things-fall-apart.png", meta: "820 KB · 800×1200" },
-  { id: "a7", url: "/EW-Image-3.png", name: "davido.png", meta: "1.3 MB · 1200×800" },
-  { id: "a8", url: "/inner-anchor-2.jpg", name: "sarafina.jpg", meta: "640 KB · 1080×720" },
-  { id: "a9", url: "/EWIM-Image-2.png", name: "afrofuturism.png", meta: "1.0 MB · 1000×1000" },
-  { id: "a10", url: "/EWIL-Image-3.png", name: "famished-road.png", meta: "910 KB · 800×1200" },
+  { id: "a1", url: "/images/samples/chimamanda-portrait.jpg", name: "chimamanda-portrait.jpg", meta: "1.2 MB · 1200×800" },
+  { id: "a2", url: "/images/samples/fela-kuti-zombie-cover.jpg", name: "fela-kuti-zombie-cover.jpg", meta: "980 KB · 1080×1080" },
+  { id: "a3", url: "/images/samples/ngugi-portrait.png", name: "ngugi-portrait.png", meta: "1.5 MB · 900×1200" },
+  { id: "a4", url: "/images/samples/thumb-ngugi.png", name: "thumb-ngugi.png", meta: "740 KB · 1200×675" },
+  { id: "a5", url: "/images/samples/wizkid-portrait.png", name: "wizkid-portrait.png", meta: "1.1 MB · 1000×1000" },
+  { id: "a6", url: "/images/samples/purple-hibiscus-cover.png", name: "purple-hibiscus-cover.png", meta: "820 KB · 800×1200" },
+  { id: "a7", url: "/images/samples/davido-portrait.png", name: "davido-portrait.png", meta: "1.3 MB · 1200×800" },
+  { id: "a8", url: "/images/samples/rattlesnake-poster.jpg", name: "rattlesnake-poster.jpg", meta: "640 KB · 1080×720" },
+  { id: "a9", url: "/images/samples/asake-performing.png", name: "asake-performing.png", meta: "1.0 MB · 1000×1000" },
+  { id: "a10", url: "/images/samples/homegoing-cover.png", name: "homegoing-cover.png", meta: "910 KB · 800×1200" },
 ];
 
 export function MediaLibrary() {

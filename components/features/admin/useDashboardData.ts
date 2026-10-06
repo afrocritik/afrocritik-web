@@ -26,11 +26,11 @@ export interface DashboardData {
 // Stat icons live on the client so we can mix image assets with Lucide icons;
 // the server returns stats keyed only by label.
 const ICON_BY_LABEL: Record<string, AdminStat["icon"]> = {
-  "Total Works": "dashboard-icon_works.png",
-  People: "explore-icon_people.svg",
-  Ideas: "explore-icon_ideas.svg",
-  Reports: "explore-icon_analytics.svg",
-  Users: "explore-icon_people.svg",
+  "Total Works": "icons/dashboard/works.png",
+  People: "icons/nav/people.svg",
+  Ideas: "icons/nav/ideas.svg",
+  Reports: "icons/nav/reports.svg",
+  Users: "icons/nav/people.svg",
   Moments: Clock,
 };
 
@@ -60,7 +60,7 @@ export function useDashboardData() {
       const d = (await api.analytics.dashboard(token, days == null ? "all" : days)) ?? {};
       const stats: AdminStat[] = (d.stats ?? []).map((s: RawStat) => ({
         ...s,
-        icon: ICON_BY_LABEL[s.label] ?? "explore-icon_analytics.svg",
+        icon: ICON_BY_LABEL[s.label] ?? "icons/nav/reports.svg",
       }));
       return {
         stats,

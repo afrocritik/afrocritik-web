@@ -2,13 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 const GLANCE_ICONS: Record<string, string> = {
-  Origin: "/inner-glance-origin.png",
-  Period: "/inner-glance-period.png",
-  "Key Focus": "/inner-glance-key-focus.png",
-  "Global Impact": "/inner-glance-key-focus.png",
-  Region: "/inner-glance-origin.png",
-  Country: "/inner-glance-origin.png",
-  Year: "/inner-glance-period.png",
+  Origin: "/icons/glance/origin.png",
+  Period: "/icons/glance/period.png",
+  "Key Focus": "/icons/glance/key-focus.png",
+  "Global Impact": "/icons/glance/key-focus.png",
+  Region: "/icons/glance/origin.png",
+  Country: "/icons/glance/origin.png",
+  Year: "/icons/glance/period.png",
 };
 
 interface GlanceItem { label: string; value: string }
@@ -45,7 +45,7 @@ export function WorkInfoAside({ atAGlance = [], quickFacts = [], relatedWorks = 
               <li key={row.label} className="flex items-start gap-1.5">
                 <div className="size-6 relative overflow-hidden shrink-0">
                   <Image
-                    src={GLANCE_ICONS[row.label] ?? "/inner-glance-origin.png"}
+                    src={GLANCE_ICONS[row.label] ?? "/icons/glance/origin.png"}
                     alt={row.label}
                     fill
                     className="object-contain"
@@ -95,7 +95,7 @@ export function WorkInfoAside({ atAGlance = [], quickFacts = [], relatedWorks = 
               <li key={w.title}>
                 <Link href={w.slug ? `/works/${w.slug}` : "#"} className="flex items-center gap-3 group">
                   <Image
-                    src="/inner-related-image.png"
+                    src="/images/samples/thumb-chimamanda.png"
                     alt={w.title}
                     width={32}
                     height={44}

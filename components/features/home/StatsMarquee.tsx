@@ -63,7 +63,7 @@ export function StatsMarquee({ stats }: Readonly<{ stats?: StatEntry[] }>) {
           <Fragment key={idx}>
             <StatItem value={stat.value} label={stat.label} />
             <Image
-              src="/Ellipse 6.svg"
+              src="/icons/ui/ellipse.svg"
               alt=""
               width={8}
               height={8}

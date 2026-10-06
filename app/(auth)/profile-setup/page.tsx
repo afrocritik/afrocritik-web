@@ -147,7 +147,7 @@ function ProfileSetupForm() {
             <Select value={role} onValueChange={setRole}>
               <SelectTrigger
                 id="role"
-                className="h-auto rounded-md border-yellow-700/40 bg-transparent bg-[url('/nrk_arrow-dropdown.png')] bg-[length:16px_16px] bg-[position:right_1.25rem_center] bg-no-repeat px-5 py-5 pr-12 font-inter text-base text-white [&>span]:text-white/60 data-[placeholder]:[&>span]:text-white/60 [&>svg]:hidden"
+                className="h-auto rounded-md border-yellow-700/40 bg-transparent bg-[url('/icons/ui/arrow-dropdown.png')] bg-[length:16px_16px] bg-[position:right_1.25rem_center] bg-no-repeat px-5 py-5 pr-12 font-inter text-base text-white [&>span]:text-white/60 data-[placeholder]:[&>span]:text-white/60 [&>svg]:hidden"
               >
                 <SelectValue placeholder="Select your role" />
               </SelectTrigger>

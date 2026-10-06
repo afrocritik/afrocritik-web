@@ -8,11 +8,11 @@ import { api } from "@/lib/api";
 type ActivityAction = "saved" | "downloaded" | "followed" | "contributed" | "collection";
 
 const ACTIVITY_ICONS: Record<ActivityAction, string> = {
-  saved: "/dashboard-saved.png",
-  downloaded: "/dashboard-download.png",
-  followed: "/dashboard-contributor.png",
-  contributed: "/dashboard-contributor.png",
-  collection: "/dashboard-add-collections.png",
+  saved: "/icons/dashboard/saved.png",
+  downloaded: "/icons/dashboard/download.png",
+  followed: "/icons/dashboard/contributor.png",
+  contributed: "/icons/dashboard/contributor.png",
+  collection: "/icons/dashboard/add-collection.png",
 };
 
 const ACTIVITY_VERB: Record<ActivityAction, string> = {

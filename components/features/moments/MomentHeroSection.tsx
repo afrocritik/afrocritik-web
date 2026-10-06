@@ -182,7 +182,7 @@ export function MomentHeroSection({
           <div className="mt-5 flex gap-3">
             <button className="px-1.5 py-2 bg-orange-400/60 rounded-[3px] inline-flex justify-start items-center gap-1.5">
               <Image
-                src="/inner-Save.png"
+                src="/icons/ui/save.png"
                 alt=""
                 width={10}
                 height={10}

@@ -24,7 +24,7 @@ const QUICK_CREATE = [
 function HamburgerIcon() {
   return (
     <div className="flex size-16 items-center justify-center overflow-hidden">
-      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} />
+      <Image src="/icons/ui/menu.png" alt="Menu" width={48} height={32} />
     </div>
   );
 }
@@ -77,7 +77,7 @@ export function AdminTopbar() {
             className="flex size-16 items-center justify-center transition-opacity hover:opacity-70"
           >
             <Image
-              src="/dashboard-notification-icon.png"
+              src="/icons/dashboard/notification.png"
               alt="Notifications"
               width={40}
               height={40}
@@ -127,7 +127,7 @@ export function AdminTopbar() {
               <button type="button" aria-label="Account menu" className="rounded-full">
                 <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
                   <AvatarImage
-                    src={session?.user?.image || "/Interest-Avatar.png"}
+                    src={session?.user?.image || "/images/avatars/default-avatar.png"}
                     alt="Admin"
                     className="size-12 object-cover"
                   />

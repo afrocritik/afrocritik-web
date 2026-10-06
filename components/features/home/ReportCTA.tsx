@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getMediaUrl } from "@/lib/api";
 import { CardImage } from "@/components/common/CardImage";
 
-const DEFAULT_COVER = "/The-Afrocritik-Report-2.png";
+const DEFAULT_COVER = "/images/reports/report-cover-2025.png";
 
 interface FeaturedReport {
   slug?: string;

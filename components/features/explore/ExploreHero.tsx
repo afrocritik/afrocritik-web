@@ -65,7 +65,7 @@ export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
           >
             <button type="button" className="shrink-0">
               <Image
-                src="/search-icon.svg"
+                src="/icons/ui/search.svg"
                 alt="Search"
                 width={70}
                 height={71}

@@ -9,7 +9,7 @@ export function AuthLayout({ children }: Readonly<AuthLayoutProps>) {
       <div
         className="absolute inset-0 hidden bg-no-repeat bg-left-top lg:block"
         style={{
-          backgroundImage: "url('/SI-bg.png')",
+          backgroundImage: "url('/images/auth/auth-background.png')",
           backgroundSize: "auto 100%",
         }}
       />

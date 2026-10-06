@@ -8,10 +8,10 @@ import { getMediaUrl, mapWorkToCard } from "@/lib/api";
 const CARD = "rounded-xl border border-[#9C5C08] bg-[#50321C]/50";
 
 const GLANCE_ICONS: Record<string, string> = {
-  Origin: "/inner-glance-origin.png",
-  Period: "/inner-glance-period.png",
-  "Key Focus": "/inner-glance-key-focus.png",
-  Country: "/inner-glance-origin.png",
+  Origin: "/icons/glance/origin.png",
+  Period: "/icons/glance/period.png",
+  "Key Focus": "/icons/glance/key-focus.png",
+  Country: "/icons/glance/origin.png",
 };
 
 function CardTitle({ children, size = "md" }: Readonly<{ children: ReactNode; size?: "md" | "lg" }>) {
@@ -108,7 +108,7 @@ export function GlanceCard({ rows }: Readonly<{ rows: { label: string; value: st
         {rows.map((row) => (
           <li key={row.label} className="flex items-start gap-2">
             <div className="relative size-6 shrink-0 overflow-hidden">
-              <Image src={GLANCE_ICONS[row.label] ?? "/inner-glance-origin.png"} alt="" fill className="object-contain" />
+              <Image src={GLANCE_ICONS[row.label] ?? "/icons/glance/origin.png"} alt="" fill className="object-contain" />
             </div>
             <span className="flex min-w-0 flex-col gap-0.5">
               <span className="font-inter text-[16px] font-medium leading-snug text-white">{row.label}</span>

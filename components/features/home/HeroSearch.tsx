@@ -28,7 +28,7 @@ export function HeroSearch() {
       >
         <button type="submit" className="shrink-0">
           <Image
-            src="/search-icon.svg"
+            src="/icons/ui/search.svg"
             alt="Search"
             width={70}
             height={71}

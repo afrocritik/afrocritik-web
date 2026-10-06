@@ -87,7 +87,7 @@ export function SaveWorkButton({
       ) : isSaved ? (
         <Check className="size-2.5 text-black" />
       ) : (
-        <Image src="/inner-Save.png" alt="" width={10} height={10} className="size-2.5" />
+        <Image src="/icons/ui/save.png" alt="" width={10} height={10} className="size-2.5" />
       )}
       <span className="text-black text-xs font-semibold font-inter leading-3">
         {isSaved ? "Saved" : "Save"}

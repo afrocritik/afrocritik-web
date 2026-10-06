@@ -18,10 +18,10 @@ const DEFAULT_INTERESTS: InterestItem[] = [
 // Icons live in /public/icons. Matched on the editor's category or label so
 // CMS-curated tiles still get the right glyph.
 const ICONS: Record<string, string> = {
-  music: "/icons/music.svg",
-  literature: "/icons/literature.svg",
-  report: "/icons/report.svg",
-  biography: "/icons/biography.svg",
+  music: "/icons/interests/music.svg",
+  literature: "/icons/interests/literature.svg",
+  report: "/icons/interests/report.svg",
+  biography: "/icons/interests/biography.svg",
 };
 
 function iconFor(item: InterestItem): string {

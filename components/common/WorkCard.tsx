@@ -126,7 +126,7 @@ function EssentialRating({ rating, hovered }: Readonly<{ rating: number; hovered
     <div className="flex shrink-0 items-center gap-1">
       {hovered && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src="/Star.svg" alt="" style={{ width: "16px", height: "16px" }} />
+        <img src="/icons/ui/star.svg" alt="" style={{ width: "16px", height: "16px" }} />
       )}
       <span
         style={{
@@ -141,7 +141,7 @@ function EssentialRating({ rating, hovered }: Readonly<{ rating: number; hovered
       </span>
       {!hovered && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src="/Star.svg" alt="" style={{ width: "16.093px", height: "13.928px" }} />
+        <img src="/icons/ui/star.svg" alt="" style={{ width: "16.093px", height: "13.928px" }} />
       )}
     </div>
   );
@@ -537,7 +537,7 @@ function EWIMCard({
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
+              <img src="/icons/ui/star.svg" alt="" style={{ width: "12px", height: "10px" }} />
               <span
                 style={{
                   color: "#FFF",
@@ -608,7 +608,7 @@ function EWIMCard({
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/Share-Icon.png"
+                src="/icons/ui/share.png"
                 alt=""
                 style={{ width: "16px", height: "16px", objectFit: "contain" }}
               />
@@ -743,9 +743,9 @@ function EWILCard({
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/heart-icon.svg" alt="" style={{ width: "12px", height: "10px" }} />
+              <img src="/icons/ui/heart.svg" alt="" style={{ width: "12px", height: "10px" }} />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
+              <img src="/icons/ui/star.svg" alt="" style={{ width: "12px", height: "10px" }} />
               <span
                 style={{
                   color: "#FFF",
@@ -926,7 +926,7 @@ function ExploreCard({
               {rating.toFixed(1)}
             </span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/Star.svg" alt="" style={{ width: "12px", height: "10px" }} />
+            <img src="/icons/ui/star.svg" alt="" style={{ width: "12px", height: "10px" }} />
           </div>
         )}
       </div>

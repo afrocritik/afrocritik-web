@@ -47,7 +47,7 @@ function CheckRow({
         <div className="size-4 rounded-sm border border-gray-200" />
         {checked && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <Image src="/Vector (Stroke).svg" alt="" width={13} height={9} />
+            <Image src="/icons/ui/checkmark.svg" alt="" width={13} height={9} />
           </div>
         )}
       </div>

@@ -12,7 +12,7 @@ import { MegaMenu } from "./MegaMenu";
 function HamburgerIcon() {
   return (
     <div className="flex size-11 items-center justify-center overflow-hidden sm:size-16">
-      <Image src="/Menu-Icon.png" alt="Menu" width={48} height={32} className="w-8 sm:w-12" />
+      <Image src="/icons/ui/menu.png" alt="Menu" width={48} height={32} className="w-8 sm:w-12" />
     </div>
   );
 }
@@ -76,7 +76,7 @@ export function DashboardNavbar() {
             className="flex size-11 items-center justify-center transition-opacity hover:opacity-70 sm:size-16"
           >
             <Image
-              src="/dashboard-notification-icon.png"
+              src="/icons/dashboard/notification.png"
               alt="Notifications"
               width={40}
               height={40}
@@ -107,7 +107,7 @@ export function DashboardNavbar() {
           {/* Avatar */}
           <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
             <AvatarImage
-              src={session?.user?.image || "/Interest-Avatar.png"}
+              src={session?.user?.image || "/images/avatars/default-avatar.png"}
               alt="User"
               className="size-12 object-cover"
             />
