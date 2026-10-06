@@ -4,10 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, LogOut } from "lucide-react";
+import { ArrowRight, LogOut, Settings, User } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "@/components/layout/Logo";
-import { cn, getImageUrl, getUserDisplayName } from "@/lib/utils";
+import { cn, getImageUrl, getRoleLabel, getUserDisplayName } from "@/lib/utils";
 import { api, getMediaUrl } from "@/lib/api";
 import { CardImage } from "@/components/common/CardImage";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
@@ -33,13 +38,6 @@ function NavLink({
     </Link>
   );
 }
-
-const ROLE_LABELS: Record<string, string> = {
-  admin: "Administrator",
-  editor: "Editor",
-  contributor: "Contributor",
-  reader: "Reader",
-};
 
 function ReportCard() {
   // Same rule as the home page's report block: the report an editor curated on
@@ -160,19 +158,45 @@ export function DashboardSidebar() {
                 {name}
               </p>
               <p className="font-inter text-[9.53px] font-light leading-4 text-orange-100/80">
-                {ROLE_LABELS[user?.role ?? ""] ?? "Member"}
+                {getRoleLabel(user?.role)}
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            aria-label="Account options"
-            className="flex flex-col items-center gap-1 transition-opacity hover:opacity-70"
-          >
-            <div className="size-1 rounded-full bg-white" />
-            <div className="size-1 rounded-full bg-white" />
-            <div className="size-1 rounded-full bg-white" />
-          </button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label="Account options"
+                className="flex flex-col items-center gap-1 p-1 transition-opacity hover:opacity-70"
+              >
+                <div className="size-1 rounded-full bg-white" />
+                <div className="size-1 rounded-full bg-white" />
+                <div className="size-1 rounded-full bg-white" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent side="top" align="end" className="w-52 p-1.5">
+              <Link
+                href="/dashboard/profile"
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 font-inter text-sm text-ink-secondary transition-colors hover:bg-amber-soft"
+              >
+                <User className="size-4" /> View profile
+              </Link>
+              <Link
+                href="/dashboard/settings"
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 font-inter text-sm text-ink-secondary transition-colors hover:bg-amber-soft"
+              >
+                <Settings className="size-4" /> Settings
+              </Link>
+              <div className="my-1 border-t border-white/10" />
+              <button
+                type="button"
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left font-inter text-sm text-ink-secondary transition-colors hover:bg-amber-soft"
+              >
+                <LogOut className="size-4" /> Sign out
+              </button>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
     </aside>

@@ -12,20 +12,28 @@ interface ProfileForm {
   firstName: string;
   lastName: string;
   username: string;
+  pronouns: string;
+  location: string;
+  tagline: string;
   bio: string;
   twitter: string;
   instagram: string;
   website: string;
+  facebook: string;
 }
 
 const EMPTY: ProfileForm = {
   firstName: "",
   lastName: "",
   username: "",
+  pronouns: "",
+  location: "",
+  tagline: "",
   bio: "",
   twitter: "",
   instagram: "",
   website: "",
+  facebook: "",
 };
 
 function Field({
@@ -81,10 +89,14 @@ export function SettingsView() {
       firstName: user.firstName ?? "",
       lastName: user.lastName ?? "",
       username: user.username ?? "",
+      pronouns: user.pronouns ?? "",
+      location: user.location ?? "",
+      tagline: user.tagline ?? "",
       bio: user.bio ?? "",
       twitter: user.socialLinks?.twitter ?? "",
       instagram: user.socialLinks?.instagram ?? "",
       website: user.socialLinks?.website ?? "",
+      facebook: user.socialLinks?.facebook ?? "",
     });
   }, [user]);
 
@@ -105,11 +117,15 @@ export function SettingsView() {
           firstName: form.firstName,
           lastName: form.lastName,
           username: form.username,
+          pronouns: form.pronouns,
+          location: form.location,
+          tagline: form.tagline,
           bio: form.bio,
           socialLinks: {
             twitter: form.twitter,
             instagram: form.instagram,
             website: form.website,
+            facebook: form.facebook,
           },
         },
         token
@@ -163,11 +179,17 @@ export function SettingsView() {
           className="w-full cursor-not-allowed rounded-lg border border-yellow-700/30 bg-[#50321C40] px-3.5 py-2.5 font-inter text-sm text-white/50"
         />
       </label>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field label="Pronouns" value={form.pronouns} onChange={set("pronouns")} placeholder="e.g. she/her" />
+        <Field label="Location" value={form.location} onChange={set("location")} placeholder="City, Country" />
+      </div>
+      <Field label="Tagline" value={form.tagline} onChange={set("tagline")} placeholder="One line shown on your profile" />
       <Field label="Bio" value={form.bio} onChange={set("bio")} textarea placeholder="Tell us about yourself" />
-      <div className="grid gap-5 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Twitter" value={form.twitter} onChange={set("twitter")} placeholder="@handle" />
         <Field label="Instagram" value={form.instagram} onChange={set("instagram")} placeholder="@handle" />
         <Field label="Website" value={form.website} onChange={set("website")} placeholder="https://" />
+        <Field label="Facebook" value={form.facebook} onChange={set("facebook")} placeholder="https://facebook.com/…" />
       </div>
       <div>
         <button

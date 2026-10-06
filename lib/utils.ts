@@ -56,3 +56,15 @@ export function getUserDisplayName(
   if (local) return local;
   return fallback;
 }
+
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrator",
+  editor: "Editor",
+  contributor: "Contributor",
+  reader: "Reader",
+};
+
+/** Human label for a Users.role value ("Member" when unknown). */
+export function getRoleLabel(role?: string | null): string {
+  return ROLE_LABELS[role ?? ""] ?? "Member";
+}
