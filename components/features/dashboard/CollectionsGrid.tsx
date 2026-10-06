@@ -46,17 +46,29 @@ function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
           <img src={item.covers[0]} alt={item.name} className="size-full object-cover" />
         ) : item.covers.length > 1 ? (
           <div className="grid size-full grid-cols-2 grid-rows-2 gap-px bg-yellow-950">
-            {item.covers.map((src, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={src + i}
-                src={src}
-                alt=""
-                className={`size-full object-cover ${
-                  item.covers.length === 3 && i === 0 ? "row-span-2" : ""
-                }`}
-              />
-            ))}
+            {item.covers.map((src, i) => {
+              const extra = item.count - item.covers.length;
+              const isLast = i === item.covers.length - 1;
+              return (
+                <div
+                  key={src + i}
+                  className={`relative size-full overflow-hidden ${
+                    item.covers.length === 3 && i === 0 ? "row-span-2" : ""
+                  }`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt="" className="size-full object-cover" />
+                  {/* Overflow marker: the mosaic only shows a few covers */}
+                  {isLast && extra > 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                      <span className="font-inter text-base font-semibold text-white">
+                        +{extra}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div className="flex h-full items-center justify-center bg-yellow-950/50">
@@ -80,7 +92,7 @@ function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
           {item.name}
         </p>
         <p className="mt-[5px] font-inter text-[10px] font-normal leading-3 text-white/80">
-          {item.count} Items
+          {item.count} {item.count === 1 ? "Item" : "Items"}
         </p>
       </div>
     </Link>
