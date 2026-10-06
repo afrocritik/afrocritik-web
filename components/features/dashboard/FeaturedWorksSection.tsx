@@ -62,7 +62,7 @@ export function FeaturedWorksSection() {
       card
     >
       {works.length > 0 ? (
-        <div className="flex gap-3">
+        <div className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-0 [&>*]:w-[180px] [&>*]:flex-none [&>*]:snap-start md:[&>*]:w-auto md:[&>*]:flex-1">
           {works.map((work) => (
             <FeaturedWorkCard key={work.slug ?? work.id} {...mapFeatured(work)} />
           ))}

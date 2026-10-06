@@ -14,10 +14,14 @@ export default function DashboardLayout({
       <div className="flex flex-1">
         <DashboardSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
-          <DashboardNavbar />
-          {/* Small screens have no sidebar — give them a scrollable nav bar */}
-          <DashboardMobileNav />
-          <main className="flex-1">{children}</main>
+          {/* Cap the working area on very wide monitors (HP/Dell 24"+ and up) so
+              cards and forms don't stretch edge to edge. */}
+          <div className="mx-auto flex w-full min-w-0 max-w-[1680px] flex-1 flex-col">
+            <DashboardNavbar />
+            {/* Small screens have no sidebar — give them a scrollable nav bar */}
+            <DashboardMobileNav />
+            <main className="flex-1">{children}</main>
+          </div>
         </div>
       </div>
 

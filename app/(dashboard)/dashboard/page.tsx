@@ -8,25 +8,29 @@ import { MyCollectionsSection } from "@/components/features/dashboard/MyCollecti
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6 px-6 py-8 md:px-8">
+    <div className="flex min-w-0 flex-col gap-6 px-4 py-6 sm:px-6 md:px-8 md:py-8">
       <DashboardHeader />
 
       <StatsRow />
 
-      {/* Continue Exploring + Recent activity */}
-      <div className="grid gap-3 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      {/*
+        Phone: one column. Tablet (md): the two wide sections span the row and
+        Recent Activity + Recommended sit side by side beneath them. Desktop
+        (lg): the original two rows of "wide section + side panel".
+      */}
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <div className="min-w-0 md:order-1 md:col-span-2 lg:order-none lg:col-span-2 lg:row-start-1">
           <ContinueExploringSection />
         </div>
-        <RecentActivity />
-      </div>
-
-      {/* Featured Works + Recommended for you */}
-      <div className="grid gap-3 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+        <div className="min-w-0 md:order-3 lg:order-none lg:row-start-1">
+          <RecentActivity />
+        </div>
+        <div className="min-w-0 md:order-2 md:col-span-2 lg:order-none lg:col-span-2 lg:row-start-2">
           <FeaturedWorksSection />
         </div>
-        <RecommendedForYou />
+        <div className="min-w-0 md:order-4 lg:order-none lg:row-start-2">
+          <RecommendedForYou />
+        </div>
       </div>
 
       <MyCollectionsSection />

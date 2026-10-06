@@ -20,7 +20,7 @@ export function ContinueExploringSection() {
       card
     >
       {works.length > 0 ? (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
           {works.map((work) => (
             <ContinueExploringCard
               key={work.slug ?? work.id}

@@ -17,7 +17,7 @@ export function ContinueExploringCard({
   return (
     <Link
       href={slug ? `/works/${slug}` : "/explore"}
-      className="flex flex-1 flex-col rounded-[5.12px] bg-rose-100/10 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400"
+      className="flex w-[165px] shrink-0 snap-start flex-col rounded-[5.12px] md:w-auto md:flex-1 bg-rose-100/10 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400"
     >
       {/* image — 8px side margins, 10px top, same 10px will sit at bottom */}
       <div className="mx-2 mt-2.5">

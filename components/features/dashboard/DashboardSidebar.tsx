@@ -112,7 +112,7 @@ export function DashboardSidebar() {
   const avatar = getImageUrl(user?.avatar) || "/images/avatars/default-avatar.png";
 
   return (
-    <aside className="hidden w-64 shrink-0 self-start flex-col px-4 lg:flex bg-[#50321C80] border-r border-yellow-700">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 self-start flex-col overflow-y-auto px-4 pb-4 lg:flex bg-[#50321C80] border-r border-yellow-700">
       <div className="flex h-[116px] shrink-0 items-center">
         <Logo />
       </div>
@@ -127,9 +127,11 @@ export function DashboardSidebar() {
         ))}
       </nav>
 
-      <div className="mt-6 flex flex-col gap-4">
+      <div className="mt-6 flex flex-1 flex-col gap-4">
         <ReportCard />
 
+        {/* Logout + account pinned to the bottom of the viewport on tall screens */}
+        <div className="mt-auto flex flex-col gap-4">
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -197,6 +199,7 @@ export function DashboardSidebar() {
               </button>
             </PopoverContent>
           </Popover>
+        </div>
         </div>
       </div>
     </aside>

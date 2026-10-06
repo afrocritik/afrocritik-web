@@ -91,8 +91,8 @@ export function LibraryView() {
   return (
     <div className="flex flex-col gap-8">
       {/* Sub-tabs */}
-      <div className="max-w-full self-start overflow-x-auto rounded-full bg-white/[0.04] px-5 py-2.5 [scrollbar-width:none]">
-        <div className="flex items-center gap-5">
+      <div className="max-w-full self-start overflow-x-auto rounded-full bg-white/[0.04] px-2.5 py-2.5 [scrollbar-width:none] sm:px-5">
+        <div className="flex items-center gap-1 sm:gap-5">
           {TABS.map(({ key, label, icon: Icon }) => {
             const active = tab === key;
             const count = counts[key];
@@ -103,13 +103,13 @@ export function LibraryView() {
                 onClick={() => setTab(key)}
                 aria-pressed={active}
                 className={cn(
-                  "inline-flex h-[26px] min-w-[100px] shrink-0 items-center justify-center gap-[5px] rounded-full px-[11px] font-inter text-xs font-normal text-white transition-colors",
+                  "inline-flex h-[26px] shrink-0 items-center justify-center gap-[5px] rounded-full px-2.5 font-inter text-xs sm:min-w-[100px] sm:px-[11px] font-normal text-white transition-colors",
                   active
                     ? "bg-rose-100/5 outline outline-1 -outline-offset-1 outline-yellow-700/15"
                     : "hover:bg-white/5"
                 )}
               >
-                <Icon className="size-3" />
+                <Icon className="hidden size-3 sm:block" />
                 {label}
                 {key !== "collections" && typeof count === "number" && count > 0 && ` (${count})`}
               </button>

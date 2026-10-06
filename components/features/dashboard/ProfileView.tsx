@@ -355,8 +355,8 @@ export function ProfileView() {
           </section>
         </div>
 
-        {/* Right column */}
-        <div className="flex flex-col gap-[18px]">
+        {/* Right column: side by side on tablets, a narrow stacked rail on desktop */}
+        <div className="grid gap-[18px] md:grid-cols-2 md:items-start lg:flex lg:flex-col">
           <section className={cn(CARD, "p-[15px]")}>
             <div className="px-[10px] pt-[10px]">
               <CardHeader title="Achievements" icon={Trophy} />

@@ -195,7 +195,7 @@ export function EditProfileView() {
   }
 
   return (
-    <form onSubmit={save} className="flex flex-col gap-8">
+    <form onSubmit={save} className="flex w-full max-w-5xl flex-col gap-8">
       <div>
         <Link
           href="/dashboard/profile"
