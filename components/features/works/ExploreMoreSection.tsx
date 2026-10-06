@@ -25,7 +25,7 @@ export function ExploreMoreSection({
       <h2 className="mb-6 text-white text-3xl font-bold font-baskervville leading-8">
         {heading}
       </h2>
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 md:flex-row">
         {related.map((item) => (
           <Link
             key={item.slug}

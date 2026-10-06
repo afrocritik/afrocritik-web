@@ -13,7 +13,14 @@ export function FollowButton({
   personId,
   personName,
   personSlug,
-}: Readonly<{ personId: string; personName: string; personSlug: string }>) {
+  variant = "full",
+}: Readonly<{
+  personId: string;
+  personName: string;
+  personSlug: string;
+  /** "chip" is the small Save-style button used in the profile hero. */
+  variant?: "full" | "chip";
+}>) {
   const router = useRouter();
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
@@ -53,6 +60,30 @@ export function FollowButton({
       setBusy(false);
     }
   };
+
+  if (variant === "chip") {
+    return (
+      <button
+        onClick={toggle}
+        disabled={busy}
+        aria-pressed={isFollowing}
+        className={`inline-flex items-center justify-start gap-1.5 rounded-[3px] px-2 py-2 transition-colors disabled:opacity-60 ${
+          isFollowing ? "bg-orange-400" : "bg-orange-400/60 hover:bg-orange-400/80"
+        }`}
+      >
+        {busy ? (
+          <Loader2 className="size-3 animate-spin text-black" />
+        ) : isFollowing ? (
+          <Check className="size-3 text-black" />
+        ) : (
+          <Bookmark className="size-3 text-black" />
+        )}
+        <span className="font-inter text-xs font-semibold leading-3 text-black">
+          {isFollowing ? "Following" : "Follow"}
+        </span>
+      </button>
+    );
+  }
 
   return (
     <button
