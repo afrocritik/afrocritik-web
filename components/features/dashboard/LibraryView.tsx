@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { LayoutGrid, Lightbulb, Users, Layers, type LucideIcon } from "lucide-react";
 import { api, getMediaUrl } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { PersonCard } from "@/components/common/PersonCard";
+import { PersonLibraryCard, mapPerson } from "./PersonLibraryCard";
 import { FeaturedWorkCard, type FeaturedWorkItem } from "./FeaturedWorkCard";
 import { mapFeatured } from "./FeaturedWorksSection";
 import { CollectionsGrid } from "./CollectionsGrid";
@@ -142,16 +142,9 @@ export function LibraryView() {
       ) : people.length === 0 ? (
         <Empty>People whose profiles you visit will appear in your library.</Empty>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
           {people.map((p) => (
-            <PersonCard
-              key={p.id}
-              slug={p.slug}
-              name={p.name}
-              role={Array.isArray(p.role) ? p.role[0] : undefined}
-              image={getMediaUrl(p.photo)}
-              variant="tile"
-            />
+            <PersonLibraryCard key={p.id} {...mapPerson(p)} />
           ))}
         </div>
       )}
