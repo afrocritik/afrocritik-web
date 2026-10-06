@@ -16,6 +16,7 @@ interface ProfileForm {
   location: string;
   tagline: string;
   bio: string;
+  isProfilePublic: boolean;
   twitter: string;
   instagram: string;
   website: string;
@@ -30,6 +31,7 @@ const EMPTY: ProfileForm = {
   location: "",
   tagline: "",
   bio: "",
+  isProfilePublic: false,
   twitter: "",
   instagram: "",
   website: "",
@@ -93,6 +95,7 @@ export function SettingsView() {
       location: user.location ?? "",
       tagline: user.tagline ?? "",
       bio: user.bio ?? "",
+      isProfilePublic: Boolean(user.isProfilePublic),
       twitter: user.socialLinks?.twitter ?? "",
       instagram: user.socialLinks?.instagram ?? "",
       website: user.socialLinks?.website ?? "",
@@ -121,6 +124,7 @@ export function SettingsView() {
           location: form.location,
           tagline: form.tagline,
           bio: form.bio,
+          isProfilePublic: form.isProfilePublic,
           socialLinks: {
             twitter: form.twitter,
             instagram: form.instagram,
@@ -191,6 +195,24 @@ export function SettingsView() {
         <Field label="Website" value={form.website} onChange={set("website")} placeholder="https://" />
         <Field label="Facebook" value={form.facebook} onChange={set("facebook")} placeholder="https://facebook.com/…" />
       </div>
+      <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-yellow-700/50 bg-[#50321C80] p-3.5">
+        <input
+          type="checkbox"
+          checked={form.isProfilePublic}
+          onChange={(e) => setForm((prev) => ({ ...prev, isProfilePublic: e.target.checked }))}
+          className="mt-0.5 size-4 accent-orange-400"
+        />
+        <span>
+          <span className="block font-inter text-sm font-medium text-white">
+            Make my profile public
+          </span>
+          <span className="block font-inter text-xs text-white/60">
+            Anyone with your link can see your name, photo, role, bio, interests,
+            location and social links at /u/{form.username || "your-username"}. Your
+            email, library, saved items and collections stay private.
+          </span>
+        </span>
+      </label>
       <div>
         <button
           type="submit"

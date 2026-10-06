@@ -205,6 +205,13 @@ export const api = {
         .post("/api/track/view", { collection, id })
         .then((r) => r.data),
   },
+  profile: {
+    // Public read-only profile; 404 unless the user opted in.
+    public: (username: string) =>
+      apiClient
+        .get(`/api/profile/${encodeURIComponent(username)}`)
+        .then((r) => r.data),
+  },
   library: {
     // Engagement-driven My Library. `level` upgrades viewed -> engaged.
     engage: (

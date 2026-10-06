@@ -18,45 +18,26 @@ import {
   Mail,
   MapPin,
   Pencil,
+  Share2,
   Trophy,
   Users,
   ThumbsUp,
   PenLine,
   type LucideIcon,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api, getMediaUrl } from "@/lib/api";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { cn, getImageUrl, getRoleLabel, getUserDisplayName } from "@/lib/utils";
-
-const CARD =
-  "rounded-2xl bg-[#F4A34B26] outline outline-1 -outline-offset-1 outline-[#F4A34B4D]";
-
-function joinedLabel(iso?: string) {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  return `Joined ${d.toLocaleString("en-US", { month: "long", year: "numeric" })}`;
-}
-
-function daysAgo(iso?: string) {
-  if (!iso) return "";
-  const days = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000));
-  if (days < 1) return "today";
-  return `${days}d ago`;
-}
-
-const stripProtocol = (u: string) => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-const handle = (v: string) => (v.startsWith("@") ? v : `@${v.replace(/^https?:\/\/[^/]+\//, "")}`);
-
-function Chip({ icon: Icon, children }: Readonly<{ icon: LucideIcon; children: React.ReactNode }>) {
-  return (
-    <span className="inline-flex h-[30px] items-center gap-2 rounded-full bg-[#F4A34B26] px-3.5 font-inter text-xs text-white/80 outline outline-1 -outline-offset-1 outline-[#F4A34B4D]">
-      <Icon className="size-3.5" />
-      {children}
-    </span>
-  );
-}
+import {
+  CARD,
+  Chip,
+  daysAgo,
+  handle,
+  joinedLabel,
+  stripProtocol,
+} from "@/components/features/profile/shared";
 
 function CardHeader({
   title,
@@ -119,6 +100,26 @@ export function ProfileView() {
   }
 
   const name = getUserDisplayName(user);
+  const share = async () => {
+    if (!user.isProfilePublic) {
+      toast("Your profile is private", {
+        description: "Turn on “Make my profile public” in Settings to share it.",
+        action: { label: "Settings", onClick: () => (window.location.href = "/dashboard/settings") },
+      });
+      return;
+    }
+    const url = `${window.location.origin}/u/${user.username}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: `${name} on Afrocritik Institute`, url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      toast.success("Profile link copied");
+    } catch {
+      /* share sheet dismissed */
+    }
+  };
   const avatar = getImageUrl(user.avatar) || "/images/avatars/default-avatar.png";
   const social = user.socialLinks ?? {};
   const interests: string[] = Array.isArray(user.interests) ? user.interests : [];
@@ -239,6 +240,15 @@ export function ProfileView() {
                 </p>
               )}
             </div>
+            <div className="flex gap-2.5">
+            <button
+              type="button"
+              onClick={share}
+              className="inline-flex h-[42px] items-center gap-2 rounded-[7px] px-4 font-inter text-sm text-white outline outline-1 -outline-offset-1 outline-yellow-700/50 transition-opacity hover:opacity-80"
+            >
+              <Share2 className="size-3.5" />
+              Share
+            </button>
             <Link
               href="/dashboard/settings"
               className="inline-flex h-[42px] items-center gap-2 rounded-[7px] bg-[#4D311D80] px-4 font-inter text-sm text-white outline outline-1 -outline-offset-1 outline-yellow-700/50 transition-opacity hover:opacity-80"
@@ -246,6 +256,7 @@ export function ProfileView() {
               <Pencil className="size-3.5" />
               Edit Profile
             </Link>
+            </div>
           </div>
         </div>
       </div>

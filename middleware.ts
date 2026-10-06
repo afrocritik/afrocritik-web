@@ -13,7 +13,9 @@ const PUBLIC_PATHS = ["/", "/signin", "/signup", "/oauth-callback", "/explore"];
 // from the "finish onboarding" redirect so users can actually finish.
 const ONBOARDING_PATHS = ["/interests", "/profile-setup"];
 
-const isPublic = (pathname: string) => PUBLIC_PATHS.includes(pathname);
+// /u/<username> are opt-in public profiles (the API 404s unless the user enabled it).
+const isPublic = (pathname: string) =>
+  PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/u/");
 
 // Route protection. `withAuth` decodes the NextAuth JWT; unauthenticated
 // visitors to a non-public route are redirected to `/signin?callbackUrl=...`.
