@@ -1,20 +1,24 @@
+import Link from "next/link";
 import { CardImage } from "@/components/common/CardImage";
 
 interface ContinueExploringCardProps {
+  slug?: string;
   title: string;
   description?: string;
   image?: string;
-  progress?: number;
 }
 
 export function ContinueExploringCard({
+  slug,
   title,
   description,
   image,
-  progress = 60,
 }: Readonly<ContinueExploringCardProps>) {
   return (
-    <div className="flex flex-1 flex-col rounded-[5.12px] bg-rose-100/10 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700">
+    <Link
+      href={slug ? `/works/${slug}` : "/explore"}
+      className="flex flex-1 flex-col rounded-[5.12px] bg-rose-100/10 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400"
+    >
       {/* image — 8px side margins, 10px top, same 10px will sit at bottom */}
       <div className="mx-2 mt-2.5">
         <CardImage
@@ -41,18 +45,7 @@ export function ContinueExploringCard({
             {description}
           </p>
         )}
-        <div className="mt-[11px] flex items-center gap-1.5">
-          <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-white/5">
-            <div
-              className="absolute left-0 top-0 h-1 bg-yellow-700"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <span className="font-inter text-[5px] font-light leading-[7px] text-white">
-            {progress}% read
-          </span>
-        </div>
       </div>
-    </div>
+    </Link>
   );
 }

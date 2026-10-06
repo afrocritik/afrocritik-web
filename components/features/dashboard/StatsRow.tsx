@@ -78,7 +78,9 @@ export function StatsRow() {
     queryFn: () => api.collections.list(token, { limit: 0 }),
   });
 
-  const savedCount = Array.isArray(user?.savedWorks) ? user.savedWorks.length : 0;
+  const savedCount =
+    (Array.isArray(user?.savedWorks) ? user.savedWorks.length : 0) +
+    (Array.isArray(user?.savedIdeas) ? user.savedIdeas.length : 0);
   const followingCount = Array.isArray(user?.following) ? user.following.length : 0;
   const downloadedCount = Array.isArray(user?.downloadedReports)
     ? user.downloadedReports.length
@@ -87,7 +89,7 @@ export function StatsRow() {
 
   const stats: DashboardStat[] = [
     {
-      label: "Saved Works",
+      label: "Saved",
       value: String(savedCount),
       delta: savedCount > 0 ? "in your library" : undefined,
       icon: "reviewed",

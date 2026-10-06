@@ -24,6 +24,7 @@ export function ContinueExploringSection() {
           {works.map((work) => (
             <ContinueExploringCard
               key={work.slug ?? work.id}
+              slug={work.slug}
               title={work.title ?? ""}
               description={work.cardDescription || work.summary || ""}
               image={getMediaUrl(work.coverImage) ?? ""}

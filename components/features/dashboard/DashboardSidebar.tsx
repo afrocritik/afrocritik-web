@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Logo } from "@/components/layout/Logo";
 import { cn, getImageUrl, getUserDisplayName } from "@/lib/utils";
+import { api } from "@/lib/api";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { NAV_ITEMS, type DashboardNavItem } from "./constants";
 import { DashboardNavIcon } from "./DashboardNavIcon";
@@ -31,12 +33,33 @@ function NavLink({
   );
 }
 
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrator",
+  editor: "Editor",
+  contributor: "Contributor",
+  reader: "Reader",
+};
+
 function ReportCard() {
+  // Spotlights the report curated on the Homepage global; falls back to the
+  // archive when none is set so the button never points at a dead route.
+  const { data } = useQuery({
+    queryKey: ["homepage-global"],
+    queryFn: () => api.homepage(),
+    staleTime: 5 * 60_000,
+  });
+  const report =
+    data?.featuredReport && typeof data.featuredReport === "object"
+      ? data.featuredReport
+      : null;
+  const title = report?.title || "Afrocritik 2025 Report";
+  const href = report?.slug ? `/reports/${report.slug}` : "/explore";
+
   return (
     <div className="relative h-[266px] w-full rounded-xl bg-rose-100/10 outline outline-1 outline-offset-[-0.89px] outline-yellow-700">
       <div className="absolute left-[17px] top-[16px] w-44">
         <p className="font-inter text-sm font-semibold leading-3 text-white">
-          Afrocritik 2025 Report
+          {title}
         </p>
         <p className="mt-3 font-['Montserrat'] text-xs font-normal leading-4 text-white">
           Explore key insights and intelligence shaping African culture.
@@ -45,11 +68,11 @@ function ReportCard() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/reports/report-cover-3d.png"
-        alt="The Afrocritik Report 2025"
+        alt={title}
         className="absolute left-[4px] top-[78px] h-32 w-28 object-cover rounded"
       />
       <Link
-        href="/reports/afrocritik-2025"
+        href={href}
         className="absolute left-[17px] top-[218px] inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-yellow-700 to-orange-400 px-4 py-1.5 font-inter text-sm font-medium capitalize leading-5 text-yellow-950 transition-opacity hover:opacity-90 whitespace-nowrap"
       >
         Read report
@@ -112,7 +135,7 @@ export function DashboardSidebar() {
                 {name}
               </p>
               <p className="font-inter text-[9.53px] font-light leading-4 text-orange-100/80">
-                Senior Critic
+                {ROLE_LABELS[user?.role ?? ""] ?? "Member"}
               </p>
             </div>
           </div>

@@ -68,7 +68,7 @@ export function RecentActivity() {
   return (
     <div className="h-full rounded-xl border border-yellow-700 bg-[#50321C80] px-5 pt-5 pb-6">
       <h2 className="font-baskervville text-xl font-semibold leading-5 text-white">
-        Recent activity
+        Recent Activity
       </h2>
       {items.length > 0 ? (
         <ul className="mt-5 flex flex-col gap-[17px]">
