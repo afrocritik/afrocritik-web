@@ -103,8 +103,8 @@ export function ProfileView() {
   const share = async () => {
     if (!user.isProfilePublic) {
       toast("Your profile is private", {
-        description: "Turn on “Make my profile public” in Settings to share it.",
-        action: { label: "Settings", onClick: () => (window.location.href = "/dashboard/settings") },
+        description: "Turn on “Make my profile public” in Edit Profile to share it.",
+        action: { label: "Edit profile", onClick: () => (window.location.href = "/dashboard/settings") },
       });
       return;
     }
@@ -199,7 +199,7 @@ export function ProfileView() {
           </Avatar>
           <span className="absolute bottom-[14px] right-[19px] size-4 rounded-full bg-[#00BC7D] ring-2 ring-[#16100C]" />
           <Link
-            href="/dashboard/settings"
+            href="/dashboard/profile/edit"
             aria-label="Change photo"
             className="absolute bottom-[20px] left-[120px] text-white transition-opacity hover:opacity-70"
           >
@@ -250,7 +250,7 @@ export function ProfileView() {
               Share
             </button>
             <Link
-              href="/dashboard/settings"
+              href="/dashboard/profile/edit"
               className="inline-flex h-[42px] items-center gap-2 rounded-[7px] bg-[#4D311D80] px-4 font-inter text-sm text-white outline outline-1 -outline-offset-1 outline-yellow-700/50 transition-opacity hover:opacity-80"
             >
               <Pencil className="size-3.5" />
@@ -277,14 +277,14 @@ export function ProfileView() {
             <div className="flex items-center justify-between">
               <h2 className="font-baskervville text-[19.67px] text-white">About</h2>
               <Link
-                href="/dashboard/settings"
+                href="/dashboard/profile/edit"
                 className="inline-flex items-center gap-1.5 font-inter text-xs text-white transition-opacity hover:opacity-70"
               >
                 <Pencil className="size-3.5" /> Edit
               </Link>
             </div>
             <p className="mt-4 font-inter text-sm leading-[22.75px] text-white/80">
-              {user.bio || "Tell the community about yourself — add a bio in Settings."}
+              {user.bio || "Tell the community about yourself — add a bio in Edit Profile."}
             </p>
             {interests.length > 0 && (
               <div className="mt-6">

@@ -206,6 +206,15 @@ export const api = {
         .then((r) => r.data),
   },
   profile: {
+    // Upload/replace the signed-in user's avatar (JPG/PNG/WebP, max 2MB).
+    uploadAvatar: (mimeType: string, data: string, token: string) =>
+      apiClient
+        .post(
+          "/api/profile/avatar",
+          { mimeType, data },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((r) => r.data),
     // Public read-only profile; 404 unless the user opted in.
     public: (username: string) =>
       apiClient
