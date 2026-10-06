@@ -9,6 +9,7 @@ import { PopularInterestSection } from "@/components/features/home/PopularIntere
 import { MomentsSection } from "@/components/features/home/MomentsSection";
 import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
 import { api, getMediaUrl } from "@/lib/api";
+import { mergeSuggestions } from "@/lib/searchSuggestions";
 
 // Regenerate the static homepage at most once a minute so admin-added content
 // (and the newest-first fallbacks) surface promptly without rendering on every
@@ -101,14 +102,16 @@ export default async function HomePage() {
   let suggestedSearches: string[] = Array.isArray(hero?.suggestedSearches)
     ? hero.suggestedSearches.map((s: any) => s?.term).filter(Boolean)
     : [];
-  // No curated chips → fall back to what visitors actually search for (the hero
-  // then uses its built-in defaults if there are none yet).
+  // No curated chips → default chips that real popular searches progressively
+  // replace as visitors use the site.
   if (suggestedSearches.length === 0) {
+    let popular: string[] = [];
     try {
-      suggestedSearches = (await api.popularSearches(6)).terms.map((t) => t.term);
+      popular = (await api.popularSearches(6)).terms.map((t) => t.term);
     } catch {
-      // API unreachable — hero keeps its defaults
+      // API unreachable — defaults only
     }
+    suggestedSearches = mergeSuggestions(popular);
   }
 
   const pillars = Array.isArray(homepage?.fivePillars)

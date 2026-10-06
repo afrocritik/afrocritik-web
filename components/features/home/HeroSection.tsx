@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { HeroSearch } from "@/components/features/home/HeroSearch";
 import { StatsMarquee } from "@/components/features/home/StatsMarquee";
-
-const DEFAULT_SUGGESTED = ["Nollywood", "Afrobeat", "Fela", "Wizkid", "Reports", "Chimamanda"];
+import { DEFAULT_SEARCH_SUGGESTIONS } from "@/lib/searchSuggestions";
 
 interface HeroContent {
   headline?: string;
@@ -28,7 +27,7 @@ export function HeroSection({
   const suggested =
     suggestedSearches && suggestedSearches.length > 0
       ? suggestedSearches
-      : DEFAULT_SUGGESTED;
+      : DEFAULT_SEARCH_SUGGESTIONS;
 
   return (
     <>

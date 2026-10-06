@@ -1,15 +1,9 @@
 "use client";
 
 import Image from "next/image";
-
-const SEARCH_TAGS = [
-  "Nollywood",
-  "Afrobeat",
-  "Fela",
-  "Wizkid",
-  "Reports",
-  "Chimamanda",
-];
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
+import { DEFAULT_SEARCH_SUGGESTIONS, mergeSuggestions } from "@/lib/searchSuggestions";
 
 type ExploreHeroProps = Readonly<{
   query: string;
@@ -17,6 +11,17 @@ type ExploreHeroProps = Readonly<{
 }>;
 
 export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
+  // Defaults first; real popular searches take over as usage grows.
+  const { data: popular } = useQuery({
+    queryKey: ["popular-searches"],
+    queryFn: () => api.popularSearches(6),
+    staleTime: 5 * 60_000,
+  });
+  const searchTags = mergeSuggestions(
+    popular?.terms?.map((t) => t.term) ?? [],
+    DEFAULT_SEARCH_SUGGESTIONS,
+  );
+
   return (
     <section>
       <div className="container flex flex-col items-center justify-center py-14 text-center md:py-16 min-h-[360px] md:h-[508px]">
@@ -84,7 +89,7 @@ export function ExploreHero({ query, onQueryChange }: ExploreHeroProps) {
           </div>
 
           <div className="mt-4 flex flex-wrap justify-center gap-2">
-            {SEARCH_TAGS.map((t) => (
+            {searchTags.map((t) => (
               <button
                 key={t}
                 onClick={() => onQueryChange(t)}
