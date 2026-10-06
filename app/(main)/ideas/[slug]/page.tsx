@@ -50,11 +50,14 @@ export default async function IdeaDetailPage({
     Array.isArray(idea.country) ? idea.country : idea.country ? [idea.country] : []
   );
 
+  const origin = idea.atAGlance?.origin || countryNames.join(", ");
+  const period = idea.atAGlance?.period;
+
+  // Hero row per Figma: Origin / Type / Period.
   const meta = [
-    idea.category && { label: "Category", value: idea.category.replace(/-/g, " & ").replace(/\b\w/g, (c: string) => c.toUpperCase()) },
+    origin && { label: "Origin", value: origin },
     idea.typeLabel && { label: "Type", value: idea.typeLabel },
-    countryNames.length > 0 && { label: "Origin", value: countryNames.join(", ") },
-    idea.period && { label: "Period", value: idea.period },
+    period && { label: "Period", value: period },
   ].filter(Boolean) as { label: string; value: string }[];
 
   const relatedThemes = resolveNames(Array.isArray(idea.themes) ? idea.themes : []);
@@ -68,8 +71,8 @@ export default async function IdeaDetailPage({
     : [];
 
   const atAGlance = [
-    idea.origin && { label: "Origin", value: idea.origin },
-    idea.period && { label: "Period", value: idea.period },
+    idea.atAGlance?.origin && { label: "Origin", value: idea.atAGlance.origin },
+    idea.atAGlance?.period && { label: "Period", value: idea.atAGlance.period },
     countryNames.length > 0 && { label: "Country", value: countryNames.join(", ") },
   ].filter(Boolean) as { label: string; value: string }[];
 
