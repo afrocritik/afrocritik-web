@@ -106,7 +106,7 @@ export function LibraryView() {
               >
                 <Icon className="size-3" />
                 {label}
-                {typeof count === "number" && count > 0 && ` (${count})`}
+                {key !== "collections" && typeof count === "number" && count > 0 && ` (${count})`}
               </button>
             );
           })}
@@ -114,7 +114,7 @@ export function LibraryView() {
       </div>
 
       {tab === "collections" ? (
-        <CollectionsGrid />
+        <CollectionsGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5" />
       ) : loading ? (
         <Empty>Loading…</Empty>
       ) : tab === "works" ? (

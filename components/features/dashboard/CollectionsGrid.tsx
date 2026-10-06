@@ -35,10 +35,10 @@ function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
   return (
     <Link
       href={`/dashboard/collections/${item.slug}`}
-      className="relative h-56 min-w-0 flex-1 overflow-hidden rounded-[5.12px] bg-rose-100/10 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400"
+      className="relative h-[228px] min-w-0 flex-1 overflow-hidden rounded-[5.12px] bg-rose-100/10 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400"
     >
       {/* Cover image — spans full card width */}
-      <div className="absolute left-[8px] right-[8px] top-[10px] h-[153px] overflow-hidden rounded-sm">
+      <div className="absolute left-[8px] right-[8px] top-[10px] h-[158px] overflow-hidden rounded-sm">
         {item.image ? (
           <Image src={item.image} alt={item.name} fill className="object-cover" />
         ) : item.covers.length === 1 ? (
@@ -87,11 +87,11 @@ function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
       </div>
 
       {/* Name + item count — fills full width at bottom */}
-      <div className="absolute left-[8px] right-[8px] top-[173px]">
-        <p className="truncate font-inter text-lg font-semibold capitalize leading-6 text-white">
+      <div className="absolute left-[8px] right-[8px] top-[181px]">
+        <p className="truncate font-inter text-[15.2px] font-semibold capitalize leading-[21.28px] text-white">
           {item.name}
         </p>
-        <p className="mt-[5px] font-inter text-[10px] font-normal leading-3 text-white/80">
+        <p className="font-inter text-[7.68px] font-normal leading-[10.75px] text-white/80">
           {item.count} {item.count === 1 ? "Item" : "Items"}
         </p>
       </div>
@@ -103,7 +103,7 @@ function CreateCollectionCard() {
   return (
     <Link
       href="/dashboard/collections/new"
-      className="group relative flex h-56 min-w-0 flex-1 flex-col items-center justify-center gap-2.5 rounded-[5.12px] bg-rose-100/5 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:bg-rose-100/10 hover:outline-yellow-500"
+      className="group relative flex h-[228px] min-w-0 flex-1 flex-col items-center justify-center gap-2.5 rounded-[5.12px] bg-rose-100/5 outline outline-[0.64px] outline-offset-[-0.64px] outline-yellow-700 transition-all duration-300 hover:bg-rose-100/10 hover:outline-yellow-500"
     >
       {/* Plus circle */}
       <div className="flex size-9 items-center justify-center rounded-full bg-yellow-700/10 transition-colors group-hover:bg-yellow-700/20">
@@ -111,14 +111,16 @@ function CreateCollectionCard() {
       </div>
 
       {/* Label */}
-      <p className="w-28 text-center font-inter text-xs font-medium leading-4 text-white">
+      <p className="w-28 text-center font-inter text-[10.73px] font-medium leading-[14.31px] text-white">
         Create new collection
       </p>
     </Link>
   );
 }
 
-export function CollectionsGrid() {
+export function CollectionsGrid({
+  className = "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4",
+}: Readonly<{ className?: string }> = {}) {
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
 
@@ -132,7 +134,7 @@ export function CollectionsGrid() {
   const collections: CollectionItem[] = (data?.docs ?? []).map(mapCollection);
 
   return (
-    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+    <div className={`grid gap-2.5 ${className}`}>
       {collections.map((item) => (
         <CollectionCard key={item.slug} item={item} />
       ))}
