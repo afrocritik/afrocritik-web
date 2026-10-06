@@ -12,18 +12,22 @@ export interface CollectionItem {
   name: string;
   count: number;
   image?: string;
+  /** Work covers used for a mosaic when the collection has no cover of its own. */
+  covers: string[];
 }
 
 function mapCollection(doc: any): CollectionItem {
   const works = Array.isArray(doc.works) ? doc.works : [];
-  const firstWorkCover = works
+  const covers: string[] = works
     .map((w: any) => (typeof w === "object" ? getMediaUrl(w.coverImage) : undefined))
-    .find(Boolean);
+    .filter((u: string | undefined): u is string => Boolean(u))
+    .slice(0, 4);
   return {
     slug: doc.slug ?? doc.id,
     name: doc.name ?? "Untitled collection",
     count: works.length,
-    image: getMediaUrl(doc.coverImage) ?? firstWorkCover,
+    image: getMediaUrl(doc.coverImage),
+    covers,
   };
 }
 
@@ -37,6 +41,23 @@ function CollectionCard({ item }: Readonly<{ item: CollectionItem }>) {
       <div className="absolute left-[8px] right-[8px] top-[10px] h-[153px] overflow-hidden rounded-sm">
         {item.image ? (
           <Image src={item.image} alt={item.name} fill className="object-cover" />
+        ) : item.covers.length === 1 ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.covers[0]} alt={item.name} className="size-full object-cover" />
+        ) : item.covers.length > 1 ? (
+          <div className="grid size-full grid-cols-2 grid-rows-2 gap-px bg-yellow-950">
+            {item.covers.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={src + i}
+                src={src}
+                alt=""
+                className={`size-full object-cover ${
+                  item.covers.length === 3 && i === 0 ? "row-span-2" : ""
+                }`}
+              />
+            ))}
+          </div>
         ) : (
           <div className="flex h-full items-center justify-center bg-yellow-950/50">
             <span className="font-baskervville text-3xl text-white/30">
@@ -91,7 +112,8 @@ export function CollectionsGrid() {
 
   const { data } = useQuery({
     queryKey: ["collections", token ?? "anon"],
-    queryFn: () => api.collections.list(token),
+    // depth 2 so each work's coverImage is populated (used for the mosaic)
+    queryFn: () => api.collections.list(token, { depth: 2 }),
     enabled: Boolean(token),
   });
 
