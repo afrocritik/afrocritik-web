@@ -13,7 +13,7 @@ export function WorksGrid({
       )}
     >
       {works.map((work) => (
-        <WorkCard key={work.slug} explore {...work} />
+        <WorkCard key={work.href ?? work.slug} explore {...work} />
       ))}
     </div>
   );
