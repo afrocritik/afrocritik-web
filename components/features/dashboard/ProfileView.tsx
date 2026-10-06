@@ -356,7 +356,7 @@ export function ProfileView() {
         </div>
 
         {/* Right column: side by side on tablets, a narrow stacked rail on desktop */}
-        <div className="grid gap-[18px] md:grid-cols-2 md:items-start lg:flex lg:flex-col">
+        <div className="grid gap-[18px] md:grid-cols-2 md:items-start lg:flex lg:flex-col lg:items-stretch">
           <section className={cn(CARD, "p-[15px]")}>
             <div className="px-[10px] pt-[10px]">
               <CardHeader title="Achievements" icon={Trophy} />
