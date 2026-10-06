@@ -14,14 +14,17 @@ export interface RelatedMomentCard {
 export function RelatedMomentsSection({
   moments = [],
 }: Readonly<{ moments?: RelatedMomentCard[] }>) {
-  if (moments.length === 0) return null;
-
   return (
     <section id="related-moments" className="scroll-mt-28 pb-4">
       <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6">
         <h2 className="mb-6 text-white text-2xl font-semibold font-baskervville leading-7">
           Related Moments
         </h2>
+        {moments.length === 0 ? (
+          <p className="py-12 text-center font-inter text-sm text-white/40">
+            No related moments at the moment.
+          </p>
+        ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {moments.map((film) => (
             <Link
@@ -67,6 +70,7 @@ export function RelatedMomentsSection({
             </Link>
           ))}
         </div>
+        )}
       </div>
     </section>
   );

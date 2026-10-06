@@ -108,17 +108,16 @@ export function MomentMediaRow({
   const activeAudio = audioTracks.find((t) => t.id === activeAudioId);
 
   const hasMedia = videos.length > 0 || images.length > 0;
-  if (!hasMedia && audioTracks.length === 0) return null;
   const hasAudio = audioTracks.length > 0;
 
   return (
     <section className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
       {/* Media From Moment — videos, images or both */}
-      {hasMedia && (
       <div id="media" className="scroll-mt-28 bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 flex-1 flex flex-col">
         <h2 className="text-white text-2xl font-semibold font-baskervville leading-7">
           Media From Moment
         </h2>
+        {hasMedia ? (
         <div
           className={cn(
             "mt-10 grid grid-cols-2 gap-3 flex-1 min-h-0",
@@ -149,10 +148,14 @@ export function MomentMediaRow({
             </figure>
           ))}
         </div>
+        ) : (
+          <p className="mt-10 flex flex-1 items-center justify-center py-16 text-center font-inter text-sm text-white/40">
+            No media for this moment at the moment.
+          </p>
+        )}
       </div>
-      )}
 
-      {/* Play Audio */}
+      {/* Play Audio — only when there are tracks; otherwise Media takes the full row */}
       {hasAudio && (
       <aside id="audio" className="scroll-mt-28 flex lg:w-[250px] lg:shrink-0 lg:flex-col">
         <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-4 flex flex-col gap-3">

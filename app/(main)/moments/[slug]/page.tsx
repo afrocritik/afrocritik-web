@@ -103,13 +103,12 @@ export default async function MomentDetailPage({
         }))
     : [];
 
-  const hasMedia = videos.length > 0 || images.length > 0;
   const toc = [
     { id: "overview", label: "Overview" },
     relatedThemes.length > 0 && { id: "related-themes", label: "Related Themes" },
-    hasMedia && { id: "media", label: "Media From Moment" },
+    { id: "media", label: "Media From Moment" },
     audioTracks.length > 0 && { id: "audio", label: "Play Audio" },
-    relatedMoments.length > 0 && { id: "related-moments", label: "Related Moments" },
+    { id: "related-moments", label: "Related Moments" },
   ].filter(Boolean) as { id: string; label: string }[];
 
   return (
