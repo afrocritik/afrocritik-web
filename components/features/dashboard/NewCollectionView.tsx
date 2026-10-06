@@ -51,7 +51,12 @@ export function NewCollectionView() {
     setSaving(true);
     try {
       const created = await api.collections.create(
-        { name: name.trim(), description, works: selected },
+        {
+          name: name.trim(),
+          description,
+          // Postgres relationship ids must be numbers, not strings.
+          works: selected.map(Number).filter(Number.isFinite),
+        },
         token
       );
       const slug = created?.doc?.slug ?? created?.slug;

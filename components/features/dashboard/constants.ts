@@ -7,7 +7,6 @@ export interface DashboardNavItem {
     | "saved"
     | "people"
     | "reports"
-    | "contribution"
     | "settings";
 }
 
@@ -17,7 +16,6 @@ export const NAV_ITEMS: DashboardNavItem[] = [
   { label: "Saved", href: "/dashboard/saved", icon: "saved" },
   { label: "People", href: "/dashboard/people", icon: "people" },
   { label: "Reports", href: "/dashboard/reports", icon: "reports" },
-  { label: "Contribution", href: "/dashboard/contribution", icon: "contribution" },
   { label: "Settings", href: "/dashboard/settings", icon: "settings" },
 ];
 

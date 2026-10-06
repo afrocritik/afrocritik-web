@@ -49,9 +49,12 @@ export function FollowButton({
       : [...following, personIdNum];
     try {
       await api.users.update(String(user.id), { following: next }, token);
-      if (!isFollowing) {
-        await logActivity("followed", personName, `/people/${personSlug}`, token);
-      }
+      await logActivity(
+        isFollowing ? "unfollowed" : "followed",
+        personName,
+        `/people/${personSlug}`,
+        token
+      );
       await refetch();
       toast.success(isFollowing ? "Unfollowed" : `Following ${personName}`);
     } catch {

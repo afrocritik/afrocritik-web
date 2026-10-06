@@ -4,6 +4,7 @@ type ActivityAction =
   | "saved"
   | "downloaded"
   | "followed"
+  | "unfollowed"
   | "contributed"
   | "collection";
 

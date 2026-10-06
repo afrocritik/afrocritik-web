@@ -2,7 +2,7 @@
 
 import { Download } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { api, toDownloadUrl } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { logActivity } from "@/lib/activity";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 
@@ -57,9 +57,9 @@ export function ReportDownloadButton({
     );
   }
 
-  // Force a file download (Content-Disposition: attachment) with a friendly
-  // filename instead of sending the user off to the Cloudinary viewer.
-  const downloadUrl = toDownloadUrl(pdfUrl, reportSlug) ?? pdfUrl;
+  // Cloudinary blocks public PDF delivery on locked-down accounts (401), so the
+  // API redirects to a short-lived signed download URL instead.
+  const downloadUrl = `${API_BASE}/api/reports-download/${reportId}`;
 
   return (
     <a

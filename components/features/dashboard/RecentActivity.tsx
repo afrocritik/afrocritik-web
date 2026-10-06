@@ -5,12 +5,19 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { api } from "@/lib/api";
 
-type ActivityAction = "saved" | "downloaded" | "followed" | "contributed" | "collection";
+type ActivityAction =
+  | "saved"
+  | "downloaded"
+  | "followed"
+  | "unfollowed"
+  | "contributed"
+  | "collection";
 
 const ACTIVITY_ICONS: Record<ActivityAction, string> = {
   saved: "/icons/dashboard/saved.png",
   downloaded: "/icons/dashboard/download.png",
   followed: "/icons/dashboard/contributor.png",
+  unfollowed: "/icons/dashboard/contributor.png",
   contributed: "/icons/dashboard/contributor.png",
   collection: "/icons/dashboard/add-collection.png",
 };
@@ -19,6 +26,7 @@ const ACTIVITY_VERB: Record<ActivityAction, string> = {
   saved: "You saved",
   downloaded: "You downloaded",
   followed: "You followed",
+  unfollowed: "You unfollowed",
   contributed: "You contributed to",
   collection: "You created the collection",
 };
