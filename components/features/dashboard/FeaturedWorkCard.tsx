@@ -3,6 +3,8 @@ import { CardImage } from "@/components/common/CardImage";
 
 export interface FeaturedWorkItem {
   slug: string;
+  /** Detail-page link; defaults to the work page (/works/<slug>). */
+  href?: string;
   title: string;
   director?: string;
   description: string;
@@ -13,6 +15,7 @@ export interface FeaturedWorkItem {
 
 export function FeaturedWorkCard({
   slug,
+  href,
   title,
   director,
   description,
@@ -20,10 +23,11 @@ export function FeaturedWorkCard({
   tags,
   rating,
 }: Readonly<FeaturedWorkItem>) {
+  const link = href ?? `/works/${slug}`;
   return (
     <div className="flex h-64 flex-1 flex-col overflow-hidden rounded-md bg-rose-100/10 outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400">
       {/* Image */}
-      <Link href={`/works/${slug}`} className="relative mx-2 mt-2.5 block h-40 shrink-0 overflow-hidden rounded-sm">
+      <Link href={link} className="relative mx-2 mt-2.5 block h-40 shrink-0 overflow-hidden rounded-sm">
         <CardImage
           src={image}
           alt={title}
@@ -35,7 +39,7 @@ export function FeaturedWorkCard({
 
       {/* Info */}
       <div className="flex min-h-0 flex-1 flex-col px-[7px] pb-2.5 pt-1.5">
-        <Link href={`/works/${slug}`}>
+        <Link href={link}>
           <p className="truncate font-inter text-xs font-semibold leading-3 text-stone-300 transition-colors hover:text-amber">
             {title}
           </p>

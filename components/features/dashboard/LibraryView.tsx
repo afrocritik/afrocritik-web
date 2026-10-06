@@ -6,9 +6,8 @@ import { useSession } from "next-auth/react";
 import { LayoutGrid, Lightbulb, Users, Layers, type LucideIcon } from "lucide-react";
 import { api, getMediaUrl } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { IdeaCard } from "@/components/common/IdeaCard";
 import { PersonCard } from "@/components/common/PersonCard";
-import { FeaturedWorkCard } from "./FeaturedWorkCard";
+import { FeaturedWorkCard, type FeaturedWorkItem } from "./FeaturedWorkCard";
 import { mapFeatured } from "./FeaturedWorksSection";
 import { CollectionsGrid } from "./CollectionsGrid";
 
@@ -20,6 +19,27 @@ const TABS: { key: TabKey; label: string; icon: LucideIcon }[] = [
   { key: "people", label: "People", icon: Users },
   { key: "collections", label: "Collections", icon: Layers },
 ];
+
+// Ideas share the Works card in the Figma: cover, title, summary and
+// country/category tags, linking to the idea page.
+function mapIdea(idea: any): FeaturedWorkItem {
+  const countries: string[] = Array.isArray(idea.country)
+    ? idea.country.map((c: any) => (typeof c === "string" ? c : c?.name ?? ""))
+    : [];
+  const category = idea.typeLabel || idea.category;
+  const tags = [...countries, category]
+    .filter(Boolean)
+    .slice(0, 3)
+    .map((t: string) => t.replace(/-/g, " ").toUpperCase());
+  return {
+    slug: idea.slug ?? "",
+    href: `/ideas/${idea.slug}`,
+    title: idea.title ?? "",
+    description: idea.summary ?? "",
+    image: getMediaUrl(idea.coverImage),
+    tags,
+  };
+}
 
 function Empty({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -113,16 +133,9 @@ export function LibraryView() {
         ideas.length === 0 ? (
           <Empty>Ideas you open or read will appear in your library.</Empty>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {ideas.map((idea) => (
-              <IdeaCard
-                key={idea.id}
-                slug={idea.slug}
-                title={idea.title}
-                category={idea.category}
-                excerpt={idea.summary}
-                theme="dark"
-              />
+              <FeaturedWorkCard key={idea.id} {...mapIdea(idea)} />
             ))}
           </div>
         )
