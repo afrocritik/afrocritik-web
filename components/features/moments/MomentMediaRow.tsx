@@ -14,6 +14,12 @@ export interface MomentVideo {
   url: string;
 }
 
+export interface MomentImage {
+  id: string;
+  src: string;
+  caption?: string;
+}
+
 interface AudioTrackData {
   id: string;
   title: string;
@@ -91,25 +97,34 @@ function AudioTrack({
 
 export function MomentMediaRow({
   videos = [],
+  images = [],
   audioTracks = [],
 }: Readonly<{
   videos?: MomentVideo[];
+  images?: MomentImage[];
   audioTracks?: AudioTrackData[];
 }>) {
   const [activeAudioId, setActiveAudioId] = useState(audioTracks[0]?.id);
   const activeAudio = audioTracks.find((t) => t.id === activeAudioId);
 
-  if (videos.length === 0 && audioTracks.length === 0) return null;
+  const hasMedia = videos.length > 0 || images.length > 0;
+  if (!hasMedia && audioTracks.length === 0) return null;
+  const hasAudio = audioTracks.length > 0;
 
   return (
     <section className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
-      {/* Play Video */}
-      {videos.length > 0 && (
-      <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 flex-1 flex flex-col">
-        <p className="justify-start text-white text-2xl font-semibold font-baskervville leading-7">
-          Play Video
-        </p>
-        <div className="mt-10 grid grid-cols-2 gap-3 flex-1 min-h-0">
+      {/* Media From Moment — videos, images or both */}
+      {hasMedia && (
+      <div id="media" className="scroll-mt-28 bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0 flex-1 flex flex-col">
+        <h2 className="text-white text-2xl font-semibold font-baskervville leading-7">
+          Media From Moment
+        </h2>
+        <div
+          className={cn(
+            "mt-10 grid grid-cols-2 gap-3 flex-1 min-h-0",
+            hasAudio ? "lg:grid-cols-3" : "lg:grid-cols-4"
+          )}
+        >
           {videos.map((video) => (
             <VideoEmbed
               key={video.id}
@@ -117,20 +132,33 @@ export function MomentMediaRow({
               title={video.title}
               caption={video.caption}
               thumbnail={video.thumbnail}
-              className="aspect-video min-h-[160px]"
+              className="aspect-[4/5] min-h-[160px]"
             />
+          ))}
+          {images.map((img) => (
+            <figure
+              key={img.id}
+              className="relative aspect-[4/5] min-h-[160px] overflow-hidden rounded-[2px] outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 bg-black/40"
+            >
+              <Image src={img.src} alt={img.caption ?? ""} fill className="object-cover" sizes="(min-width: 1024px) 25vw, 50vw" />
+              {img.caption && (
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2 text-[10px] leading-4 text-white">
+                  {img.caption}
+                </figcaption>
+              )}
+            </figure>
           ))}
         </div>
       </div>
       )}
 
       {/* Play Audio */}
-      {audioTracks.length > 0 && (
-      <aside className="hidden lg:flex lg:w-[250px] lg:shrink-0 lg:flex-col">
+      {hasAudio && (
+      <aside id="audio" className="scroll-mt-28 flex lg:w-[250px] lg:shrink-0 lg:flex-col">
         <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-4 flex flex-col gap-3">
-          <div className="justify-start text-white text-lg font-semibold font-baskervville leading-tight">
+          <h2 className="text-white text-lg font-semibold font-baskervville leading-tight">
             Play Audio
-          </div>
+          </h2>
           <div className="flex flex-col gap-1.5">
             {audioTracks.map((track) => (
               <AudioTrack

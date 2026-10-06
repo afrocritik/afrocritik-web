@@ -1,19 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Share2 } from "lucide-react";
+import { toast } from "sonner";
 
-const TOC = [
-  "Overview",
-  "Key Movements",
-  "Pioneers & Icons",
-  "Impact & Influence",
-  "Global Reach",
-  "Related Works",
-  "Further Reading",
-];
+export interface TocItem {
+  id: string;
+  label: string;
+}
 
 interface MetaItem {
   label: string;
@@ -39,13 +35,52 @@ export function MomentHeroSection({
   summary,
   meta = [],
   relatedThemes = [],
+  toc,
 }: Readonly<{
   title: string;
   summary?: string;
   meta?: MetaItem[];
   relatedThemes?: string[];
+  toc: TocItem[];
 }>) {
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Scroll-spy: active entry is the last section whose top has passed the reading line.
+  useEffect(() => {
+    const LINE = 180;
+    const update = () => {
+      let best = 0;
+      toc.forEach((item, i) => {
+        const el = document.getElementById(item.id);
+        if (el && el.getBoundingClientRect().top < LINE) best = i;
+      });
+      setActiveIndex(best);
+    };
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [toc]);
+
+  const share = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) await navigator.share({ title, url });
+      else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied");
+      }
+    } catch {
+      // share sheet dismissed
+    }
+  };
 
   return (
     <section className="grid gap-6 lg:grid-cols-[210px_1fr] lg:items-stretch pt-12 pb-4">
@@ -70,18 +105,17 @@ export function MomentHeroSection({
               </div>
               {/* TOC items */}
               <ul className="flex flex-col gap-4 justify-start text-white text-xs font-light font-inter leading-3">
-                {TOC.map((item, i) => (
-                  <li key={item}>
+                {toc.map((item, i) => (
+                  <li key={item.id}>
                     <a
-                      href={`#${item.toLowerCase().replace(/[^a-z]+/g, "-")}`}
-                      onClick={() => setActiveIndex(i)}
+                      href={`#${item.id}`}
                       className={
                         i === activeIndex
                           ? "font-medium text-amber"
                           : "hover:text-amber transition-colors"
                       }
                     >
-                      {item}
+                      {item.label}
                     </a>
                   </li>
                 ))}
@@ -115,7 +149,7 @@ export function MomentHeroSection({
         </div>
 
         {/* Header / Overview */}
-        <div id="overview">
+        <div id="overview" className="scroll-mt-28">
           <h1 className="justify-start text-white text-4xl font-normal font-baskervville leading-10">
             {title}
           </h1>
@@ -158,7 +192,7 @@ export function MomentHeroSection({
                 Save
               </span>
             </button>
-            <button className="px-1.5 py-2 rounded-[3px] outline outline-1 outline-offset-[-1px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5">
+            <button type="button" onClick={share} className="px-1.5 py-2 rounded-[3px] outline outline-1 outline-offset-[-1px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5">
               <Share2 className="size-3 text-stone-300" />
               <span className="text-stone-300 text-xs font-semibold font-inter leading-3">
                 Share
@@ -166,7 +200,7 @@ export function MomentHeroSection({
             </button>
           </div>
           {relatedThemes.length > 0 && (
-          <div className="mt-4 max-w-[600px] flex flex-wrap items-center gap-2">
+          <div id="related-themes" className="mt-4 max-w-[600px] flex flex-wrap items-center gap-2 scroll-mt-28">
             <span className="text-orange-400/50 text-base font-semibold font-inter leading-4">
               Related themes
             </span>

@@ -2,8 +2,6 @@ import Link from "next/link";
 import { MomentHeroSection } from "@/components/features/moments/MomentHeroSection";
 import { MomentMediaRow } from "@/components/features/moments/MomentMediaRow";
 import { RelatedMomentsSection } from "@/components/features/moments/RelatedMomentsSection";
-import { MomentExploreMore } from "@/components/features/moments/MomentExploreMore";
-import { MomentPioneersSection } from "@/components/features/moments/MomentPioneersSection";
 import { api, getMediaUrl } from "@/lib/api";
 
 function resolveNames(arr: any[]): string[] {
@@ -71,6 +69,16 @@ export default async function MomentDetailPage({
       }))
     : [];
 
+  const images = Array.isArray(moment.mediaImages)
+    ? moment.mediaImages
+        .map((m: any, i: number) => ({
+          id: `img${i}`,
+          src: getMediaUrl(m.image),
+          caption: m.caption,
+        }))
+        .filter((m: any) => m.src)
+    : [];
+
   const audioTracks = Array.isArray(moment.audioArchive)
     ? moment.audioArchive.map((a: any, i: number) => ({
         id: `track-${i}`,
@@ -95,36 +103,14 @@ export default async function MomentDetailPage({
         }))
     : [];
 
-  const pioneers = Array.isArray(moment.people)
-    ? moment.people
-        .filter((p: any) => typeof p === "object")
-        .map((p: any) => {
-          const roles: string[] = Array.isArray(p.role)
-            ? p.role.map((r: string) => String(r).toUpperCase())
-            : p.role
-            ? [String(p.role).toUpperCase()]
-            : [];
-          const countries = resolveNames(
-            Array.isArray(p.country) ? p.country : p.country ? [p.country] : []
-          ).map((c) => c.toUpperCase());
-          return {
-            slug: p.slug,
-            name: p.name ?? "",
-            tags: [...roles, ...countries].slice(0, 2),
-            image: getMediaUrl(p.photo),
-          };
-        })
-    : [];
-
-  const relatedWorks = Array.isArray(moment.works)
-    ? moment.works
-        .filter((w: any) => typeof w === "object")
-        .map((w: any) => ({
-          slug: w.slug ?? "",
-          title: w.title ?? "",
-          desc: w.cardDescription || w.summary,
-        }))
-    : [];
+  const hasMedia = videos.length > 0 || images.length > 0;
+  const toc = [
+    { id: "overview", label: "Overview" },
+    relatedThemes.length > 0 && { id: "related-themes", label: "Related Themes" },
+    hasMedia && { id: "media", label: "Media From Moment" },
+    audioTracks.length > 0 && { id: "audio", label: "Play Audio" },
+    relatedMoments.length > 0 && { id: "related-moments", label: "Related Moments" },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   return (
     <div className="bg-[#160907]">
@@ -135,19 +121,14 @@ export default async function MomentDetailPage({
           summary={summary}
           meta={meta}
           relatedThemes={relatedThemes}
+          toc={toc}
         />
 
-        {/* PLAY VIDEO + PLAY AUDIO */}
-        <MomentMediaRow videos={videos} audioTracks={audioTracks} />
+        {/* MEDIA FROM MOMENT + PLAY AUDIO */}
+        <MomentMediaRow videos={videos} images={images} audioTracks={audioTracks} />
 
         {/* RELATED MOMENTS */}
         <RelatedMomentsSection moments={relatedMoments} />
-
-        {/* EXPLORE MORE RELATED WORKS */}
-        <MomentExploreMore related={relatedWorks} />
-
-        {/* PIONEERS & ICONS */}
-        <MomentPioneersSection people={pioneers} />
       </div>
     </div>
   );
