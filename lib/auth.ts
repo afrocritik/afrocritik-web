@@ -61,29 +61,31 @@ export const authOptions: NextAuthOptions = {
         }
       }
     }),
-    // Establishes a NextAuth session from a token issued by the backend's
-    // OAuth callback (Google/Facebook). The OAuth redirect lands on a small
-    // client page that calls signIn("oauth-token", { token }).
+    // Establishes a NextAuth session from the one-time code the backend's
+    // OAuth callback (Google/Facebook) put in the redirect. The code is
+    // exchanged server-side for the real token, which never touches a URL.
     CredentialsProvider({
       id: "oauth-token",
       name: "OAuth",
       credentials: {
-        token: { label: "Token", type: "text" },
+        code: { label: "Code", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.token) return null;
+        if (!credentials?.code) return null;
         try {
-          const res = await fetch(`${API_URL}/api/auth/me`, {
-            headers: { Authorization: `Bearer ${credentials.token}` },
+          const res = await fetch(`${API_URL}/api/auth/oauth-exchange`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code: credentials.code }),
           });
           const data = await res.json();
-          if (res.ok && data?.user) {
+          if (res.ok && data?.user && data?.token) {
             return {
               id: data.user.id,
               name: deriveName(data.user),
               email: data.user.email,
               role: data.user.role,
-              token: credentials.token,
+              token: data.token,
               isProfileComplete: !!data.user.isProfileComplete,
             };
           }

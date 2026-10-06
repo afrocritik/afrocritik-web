@@ -8,7 +8,7 @@ import { LoadingOverlay } from "@/components/common/LoadingOverlay";
 
 /**
  * Landing page for the backend OAuth (Google/Facebook) redirect. The backend
- * sends `?token=<jwt>&userId=…`; we exchange that token for a NextAuth session
+ * sends `?code=<one-time code>`; we exchange that code for a NextAuth session
  * (via the "oauth-token" credentials provider), then route into onboarding:
  * incomplete profiles go through /interests → /profile-setup, complete ones
  * straight to the dashboard.
@@ -22,15 +22,15 @@ function OAuthCallback() {
     if (ran.current) return;
     ran.current = true;
 
-    const token = params.get("token");
+    const code = params.get("code");
     const error = params.get("error");
-    if (error || !token) {
+    if (error || !code) {
       router.replace(`/signin?error=${error || "oauth_failed"}`);
       return;
     }
 
     (async () => {
-      const res = await signIn("oauth-token", { token, redirect: false });
+      const res = await signIn("oauth-token", { code, redirect: false });
       if (res?.error) {
         router.replace("/signin?error=oauth_failed");
         return;

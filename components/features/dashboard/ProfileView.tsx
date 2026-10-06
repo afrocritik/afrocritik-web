@@ -46,15 +46,15 @@ function CardHeader({
   linkLabel,
 }: Readonly<{ title: string; icon?: LucideIcon; href?: string; linkLabel?: string }>) {
   return (
-    <div className="flex items-center justify-between">
-      <h2 className="flex items-center gap-2 font-baskervville text-[19.67px] leading-7 text-white">
+    <div className="flex items-center justify-between gap-3">
+      <h2 className="flex min-w-0 items-center gap-2 font-baskervville text-[19.67px] leading-7 text-white">
         {Icon && <Icon className="size-4 text-yellow-700" />}
         {title}
       </h2>
       {href && (
         <Link
           href={href}
-          className="font-inter text-xs text-yellow-700 transition-opacity hover:opacity-70"
+          className="shrink-0 whitespace-nowrap font-inter text-xs text-yellow-700 transition-opacity hover:opacity-70"
         >
           {linkLabel} →
         </Link>
@@ -270,7 +270,7 @@ export function ProfileView() {
         {social.facebook && <Chip icon={ThumbsUp}>{stripProtocol(social.facebook)}</Chip>}
       </div>
 
-      <div className="grid gap-[9px] lg:grid-cols-[minmax(0,637fr)_minmax(0,307fr)]">
+      <div className="grid gap-[9px] lg:grid-cols-[minmax(0,1fr)_minmax(300px,24rem)]">
         {/* Left column */}
         <div className="flex flex-col gap-[18px]">
           <section className={cn(CARD, "p-[25px]")}>
@@ -392,7 +392,7 @@ export function ProfileView() {
                       href={`/dashboard/collections/${c.slug}`}
                       className="flex items-center gap-3 transition-opacity hover:opacity-80"
                     >
-                      <div className="size-10 shrink-0 overflow-hidden rounded-[10px] bg-yellow-950/60">
+                      <div className="size-12 shrink-0 overflow-hidden rounded-[10px] bg-yellow-950/60">
                         {c.cover ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={c.cover} alt="" className="size-full object-cover" />
