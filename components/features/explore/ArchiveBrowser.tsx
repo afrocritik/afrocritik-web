@@ -9,6 +9,7 @@ import { BROWN_GRADIENT, TABS } from "./constants";
 import { ExploreHero } from "./ExploreHero";
 import { ArchiveTabsBar } from "./ArchiveTabsBar";
 import { ArchiveResults } from "./ArchiveResults";
+import { YEAR_MAX, YEAR_MIN } from "./RefineSidebar";
 
 function resolveNames(arr: any): string {
   return Array.isArray(arr)
@@ -138,8 +139,17 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
     );
 
   const onYearChange = (from: number, to: number) => {
-    setYearFrom(from);
-    setYearTo(to);
+    // The full range means "no year filter" — it must not drop undated entries.
+    const full = from <= YEAR_MIN && to >= YEAR_MAX;
+    setYearFrom(full ? undefined : from);
+    setYearTo(full ? undefined : to);
+  };
+
+  const clearFilters = () => {
+    setCountries([]);
+    setThemes([]);
+    setYearFrom(undefined);
+    setYearTo(undefined);
   };
 
   return (
@@ -165,6 +175,8 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
           onToggleTheme: (id) => toggle(setThemes, id),
           onYearChange,
           onSearch: setQuery,
+          yearActive: yearFrom !== undefined || yearTo !== undefined,
+          onClearAll: clearFilters,
         }}
         loading={isLoading}
         hasMore={Boolean(hasNextPage)}

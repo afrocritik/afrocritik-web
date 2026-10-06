@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { YearRangeSlider } from "./YearRangeSlider";
+
+export const YEAR_MIN = 1950;
+export const YEAR_MAX = 2025;
+
+// Facet lists show this many options until "Show all" is pressed.
+const FACET_PREVIEW = 6;
 
 interface Facet {
   id: string;
@@ -18,6 +25,9 @@ type RefineSidebarProps = Readonly<{
   onToggleTheme: (id: string) => void;
   onYearChange: (from: number, to: number) => void;
   onSearch: (term: string) => void;
+  /** The year slider is narrower than the full range. */
+  yearActive: boolean;
+  onClearAll: () => void;
 }>;
 
 function CheckRow({
@@ -45,6 +55,89 @@ function CheckRow({
   );
 }
 
+/** Collapsible block: the heading stays visible so every filter is discoverable. */
+function Section({
+  title,
+  badge = 0,
+  defaultOpen = true,
+  children,
+}: Readonly<{ title: string; badge?: number; defaultOpen?: boolean; children: ReactNode }>) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-t border-orange-400/15 py-3 first:border-t-0">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-2 text-left"
+      >
+        <span className="flex items-center gap-2 font-inter text-sm font-bold leading-4 text-white">
+          {title}
+          {badge > 0 && (
+            <span className="rounded-full bg-amber px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
+              {badge}
+            </span>
+          )}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-white/70 transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+      {open && <div className="mt-3">{children}</div>}
+    </div>
+  );
+}
+
+/** Checkbox list that shows a short preview with a "Show all (N)" toggle. */
+function FacetList({
+  items,
+  selected,
+  onToggle,
+  emptyText,
+  expandAll = false,
+}: Readonly<{
+  items: Facet[];
+  selected: string[];
+  onToggle: (id: string) => void;
+  emptyText: string;
+  /** Skip the preview limit (e.g. while the visitor is searching the list). */
+  expandAll?: boolean;
+}>) {
+  const [showAll, setShowAll] = useState(false);
+  if (items.length === 0) {
+    return <span className="font-inter text-[11px] italic text-white/40">{emptyText}</span>;
+  }
+  const full = showAll || expandAll;
+  // Selected options past the preview stay visible so applied filters never hide.
+  const shown = full
+    ? items
+    : items.filter((item, i) => i < FACET_PREVIEW || selected.includes(item.id));
+  const hidden = items.length - shown.length;
+
+  return (
+    <div className="flex flex-col items-start gap-3">
+      {shown.map((item) => (
+        <CheckRow
+          key={item.id}
+          label={item.name}
+          checked={selected.includes(item.id)}
+          onToggle={() => onToggle(item.id)}
+        />
+      ))}
+      {!expandAll && (hidden > 0 || showAll) && items.length > FACET_PREVIEW && (
+        <button
+          type="button"
+          onClick={() => setShowAll((v) => !v)}
+          className="font-inter text-xs font-semibold text-orange-400 hover:text-orange-300"
+        >
+          {showAll ? "Show less" : `Show all (${items.length})`}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function RefineSidebar({
   selectedCountries,
   onToggleCountry,
@@ -52,8 +145,13 @@ export function RefineSidebar({
   onToggleTheme,
   onYearChange,
   onSearch,
+  yearActive,
+  onClearAll,
 }: RefineSidebarProps) {
   const [countrySearch, setCountrySearch] = useState("");
+  // Bumped on "Clear all" so the (uncontrolled) year slider remounts at full range.
+  const [resetKey, setResetKey] = useState(0);
+  const activeCount = selectedCountries.length + selectedThemes.length + (yearActive ? 1 : 0);
 
   const { data: countriesData } = useQuery({
     queryKey: ["facet-countries"],
@@ -90,26 +188,33 @@ export function RefineSidebar({
 
   return (
     <aside className="w-full shrink-0 lg:w-64">
-      <div className="w-full lg:w-64 max-h-[680px] bg-yellow-950/50 rounded-xl border border-yellow-700 p-5 overflow-y-auto">
-        <h3 className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
-          Refine results
-        </h3>
-
-        <div className="mt-2">
-          <p className="mb-2 w-36 justify-start text-white text-xs font-light font-inter leading-3">
-            Year Range
-          </p>
-          <YearRangeSlider min={1950} max={2025} onChange={onYearChange} />
+      <div className="w-full rounded-xl border border-yellow-700 bg-yellow-950/50 p-5 lg:w-64">
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <h3 className="text-white text-base font-semibold font-inter leading-4">
+            Refine results
+          </h3>
+          {activeCount > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setResetKey((k) => k + 1);
+                setCountrySearch("");
+                onClearAll();
+              }}
+              className="font-inter text-xs font-semibold text-orange-400 hover:text-orange-300"
+            >
+              Clear all ({activeCount})
+            </button>
+          )}
         </div>
 
-        <div className="h-px mt-4 bg-orange-400/15" />
+        <Section title="Year Range" badge={yearActive ? 1 : 0}>
+          <YearRangeSlider key={resetKey} min={YEAR_MIN} max={YEAR_MAX} onChange={onYearChange} />
+        </Section>
 
-        <div className="mt-4">
-          <p className="w-16 justify-start text-white text-sm font-bold font-inter leading-4">
-            Country
-          </p>
-          <div className="mt-2 w-full h-7 relative">
-            <div className="absolute inset-0 bg-yellow-950/20 rounded-md border-[0.30px] border-yellow-700" />
+        <Section title="Country" badge={selectedCountries.length}>
+          <div className="relative mb-3 h-7 w-full">
+            <div className="absolute inset-0 rounded-md border-[0.30px] border-yellow-700 bg-yellow-950/20" />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="14"
@@ -130,55 +235,30 @@ export function RefineSidebar({
               value={countrySearch}
               onChange={(e) => setCountrySearch(e.target.value)}
               placeholder="Search..."
-              className="absolute inset-0 bg-transparent rounded-md pl-[29px] pr-2 font-inter text-[11px] text-white placeholder:text-white/30 focus:outline-none"
+              className="absolute inset-0 rounded-md bg-transparent pl-[29px] pr-2 font-inter text-[11px] text-white placeholder:text-white/30 focus:outline-none"
             />
           </div>
-          <div className="mt-2 w-full p-4 rounded-xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.12)] inline-flex flex-col justify-start items-start gap-3">
-            {visibleCountries.length > 0 ? (
-              visibleCountries.map((c) => (
-                <CheckRow
-                  key={c.id}
-                  label={c.name}
-                  checked={selectedCountries.includes(c.id)}
-                  onToggle={() => onToggleCountry(c.id)}
-                />
-              ))
-            ) : (
-              <span className="font-inter text-[11px] italic text-white/40">
-                No countries yet.
-              </span>
-            )}
-          </div>
-        </div>
+          <FacetList
+            items={visibleCountries}
+            selected={selectedCountries}
+            onToggle={onToggleCountry}
+            emptyText={countrySearch ? "No matching countries." : "No countries yet."}
+            expandAll={Boolean(countrySearch)}
+          />
+        </Section>
 
-        <div className="mt-4">
-          <p className="w-16 justify-start text-white text-sm font-bold font-inter leading-4">
-            Theme
-          </p>
-          <div className="mt-2 w-full p-4 rounded-xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.12)] inline-flex flex-col justify-start items-start gap-3">
-            {themes.length > 0 ? (
-              themes.map((t) => (
-                <CheckRow
-                  key={t.id}
-                  label={t.name}
-                  checked={selectedThemes.includes(t.id)}
-                  onToggle={() => onToggleTheme(t.id)}
-                />
-              ))
-            ) : (
-              <span className="font-inter text-[11px] italic text-white/40">
-                No themes yet.
-              </span>
-            )}
-          </div>
-        </div>
+        <Section title="Theme" badge={selectedThemes.length} defaultOpen={selectedThemes.length > 0}>
+          <FacetList
+            items={themes}
+            selected={selectedThemes}
+            onToggle={onToggleTheme}
+            emptyText="No themes yet."
+          />
+        </Section>
 
         {popularTerms.length > 0 && (
-          <div className="mt-6">
-            <p className="w-36 justify-start text-white text-base font-semibold font-inter leading-4">
-              Popular Searches
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+          <Section title="Popular Searches">
+            <div className="flex flex-wrap gap-2">
               {popularTerms.map(({ term }) => (
                 <button
                   key={term}
@@ -190,7 +270,7 @@ export function RefineSidebar({
                 </button>
               ))}
             </div>
-          </div>
+          </Section>
         )}
       </div>
     </aside>
