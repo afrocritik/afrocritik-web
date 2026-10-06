@@ -40,7 +40,7 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
           This collection could not be found, or you don&apos;t have access to it.
         </p>
         <Link
-          href="/dashboard/collections"
+          href="/dashboard/library?tab=collections"
           className="inline-flex w-fit items-center gap-1.5 font-inter text-sm text-amber hover:underline"
         >
           <ChevronLeft className="size-4" /> Back to collections
@@ -76,12 +76,12 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <Link
-            href="/dashboard/collections"
-            className="mb-3 inline-flex items-center gap-1.5 font-inter text-sm text-orange-200 transition-opacity hover:opacity-80"
+            href="/dashboard/library?tab=collections"
+            className="mb-6 inline-flex items-center gap-1.5 font-baskervville text-lg font-medium leading-[19.8px] text-white transition-opacity hover:opacity-80"
           >
-            <ChevronLeft className="size-4" /> Back to collections
+            <ChevronLeft className="size-4" strokeWidth={2.5} /> Back
           </Link>
-          <h1 className="font-baskervville text-3xl font-semibold capitalize leading-8 text-white">
+          <h1 className="font-baskervville text-[22px] font-semibold capitalize leading-[24.2px] text-white">
             {collection.name}
           </h1>
           {collection.description && (
@@ -89,9 +89,6 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
               {collection.description}
             </p>
           )}
-          <p className="mt-2 font-inter text-sm text-white/50">
-            {works.length} {works.length === 1 ? "work" : "works"}
-          </p>
         </div>
         <button
           type="button"
@@ -105,7 +102,10 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
       </div>
 
       {works.length > 0 ? (
-        <WorksGrid works={works} />
+        <WorksGrid
+          works={works}
+          className="lg:grid-cols-4 xl:grid-cols-5"
+        />
       ) : (
         <p className="py-12 text-center font-inter text-sm italic text-white/40">
           This collection is empty. Add works to it from the archive.

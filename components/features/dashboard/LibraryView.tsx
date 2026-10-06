@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { LayoutGrid, Lightbulb, Users, Layers, type LucideIcon } from "lucide-react";
@@ -57,7 +58,11 @@ function Empty({ children }: Readonly<{ children: React.ReactNode }>) {
 export function LibraryView() {
   const { data: session, status } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
-  const [tab, setTab] = useState<TabKey>("works");
+  // ?tab=collections lets other pages (e.g. a collection's Back link) deep-link a sub-tab.
+  const initial = useSearchParams().get("tab");
+  const [tab, setTab] = useState<TabKey>(
+    TABS.some((t) => t.key === initial) ? (initial as TabKey) : "works"
+  );
 
   const { data: library, isLoading } = useQuery({
     queryKey: ["library", token ?? "anon"],

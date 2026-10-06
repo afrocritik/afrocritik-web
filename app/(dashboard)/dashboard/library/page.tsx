@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { DashboardPageHeader } from "@/components/features/dashboard/DashboardPageHeader";
 import { LibraryView } from "@/components/features/dashboard/LibraryView";
 
@@ -8,7 +9,9 @@ export default function LibraryPage() {
         title="My Library"
         description="All cultural entries you've added to your library."
       />
-      <LibraryView />
+      <Suspense fallback={null}>
+        <LibraryView />
+      </Suspense>
     </div>
   );
 }
