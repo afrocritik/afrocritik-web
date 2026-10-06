@@ -109,6 +109,9 @@ export default async function IdeaDetailPage({
       <div className="container">
         <WorkHeroSection
           title={title}
+          workId={idea.id}
+          slug={idea.slug}
+          saveKind="idea"
           sectionLabel="Ideas"
           sectionHref="/explore?tab=ideas"
           description={description}

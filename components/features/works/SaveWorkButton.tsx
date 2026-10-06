@@ -19,7 +19,18 @@ export function SaveWorkButton({
   workId,
   workTitle,
   workSlug,
-}: Readonly<{ workId: string | number; workTitle: string; workSlug: string }>) {
+  field = "savedWorks",
+  basePath = "/works",
+  noun = "works",
+}: Readonly<{
+  workId: string | number;
+  workTitle: string;
+  workSlug: string;
+  /** Users field holding the saved ids — "savedWorks" or "savedIdeas". */
+  field?: "savedWorks" | "savedIdeas";
+  basePath?: string;
+  noun?: string;
+}>) {
   const router = useRouter();
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
@@ -28,8 +39,8 @@ export function SaveWorkButton({
 
   // Relationship values must be sent as numbers — Payload's isValidID rejects
   // string ids on the Postgres numeric primary key.
-  const saved: number[] = Array.isArray(user?.savedWorks)
-    ? user.savedWorks
+  const saved: number[] = Array.isArray(user?.[field])
+    ? user[field]
         .map((w: any) => Number(typeof w === "object" ? w?.id : w))
         .filter((n: number) => Number.isFinite(n))
     : [];
@@ -38,8 +49,8 @@ export function SaveWorkButton({
 
   const toggle = async () => {
     if (!token || !user?.id) {
-      toast.error("Sign in to save works to your library.");
-      router.push("/signin?callbackUrl=" + encodeURIComponent(`/works/${workSlug}`));
+      toast.error(`Sign in to save ${noun} to your library.`);
+      router.push("/signin?callbackUrl=" + encodeURIComponent(`${basePath}/${workSlug}`));
       return;
     }
     setBusy(true);
@@ -47,9 +58,9 @@ export function SaveWorkButton({
       ? saved.filter((id) => id !== workIdNum)
       : [...saved, workIdNum];
     try {
-      await api.users.update(String(user.id), { savedWorks: next }, token);
+      await api.users.update(String(user.id), { [field]: next }, token);
       if (!isSaved) {
-        await logActivity("saved", workTitle, `/works/${workSlug}`, token);
+        await logActivity("saved", workTitle, `${basePath}/${workSlug}`, token);
       }
       await refetch();
       toast.success(isSaved ? "Removed from your library" : "Saved to your library");

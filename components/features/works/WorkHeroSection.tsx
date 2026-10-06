@@ -37,6 +37,8 @@ interface Props {
   // ideas detail reuses this hero) the Save button is hidden.
   workId?: string | number;
   slug?: string;
+  // Set for ideas so Save writes to Users.savedIdeas instead of savedWorks.
+  saveKind?: "work" | "idea";
   sectionLabel?: string;
   sectionHref?: string;
   description?: string;
@@ -49,6 +51,7 @@ export function WorkHeroSection({
   title,
   workId,
   slug,
+  saveKind = "work",
   sectionLabel = "Works",
   sectionHref = "/explore?tab=works",
   description,
@@ -163,7 +166,14 @@ export function WorkHeroSection({
           )}
           <div className="mt-5 flex gap-3">
             {workId != null && slug && (
-              <SaveWorkButton workId={workId} workTitle={title} workSlug={slug} />
+              <SaveWorkButton
+                workId={workId}
+                workTitle={title}
+                workSlug={slug}
+                {...(saveKind === "idea"
+                  ? { field: "savedIdeas" as const, basePath: "/ideas", noun: "ideas" }
+                  : {})}
+              />
             )}
             <button type="button" onClick={share} className="px-1.5 py-2 rounded-[3px] outline outline-1 outline-offset-[-1px] outline-orange-400/20 inline-flex justify-start items-center gap-1.5">
               <Share2 className="size-3 text-stone-300" />
