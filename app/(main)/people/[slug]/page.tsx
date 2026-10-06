@@ -37,31 +37,6 @@ function excerpt(text: string, max = 240): string {
 
 // A bento row whose columns adapt to which cards exist (a missing card never
 // leaves an empty gap). Class strings are literal so Tailwind can generate them.
-const ROW_COLS: Record<string, string> = {
-  "l-c-r": "lg:grid-cols-[250px_minmax(0,1fr)_280px]",
-  "l-c": "lg:grid-cols-[250px_minmax(0,1fr)]",
-  "c-r": "lg:grid-cols-[minmax(0,1fr)_280px]",
-  c: "",
-};
-
-function Row({
-  left,
-  center,
-  right,
-}: {
-  left?: ReactNode;
-  center?: ReactNode;
-  right?: ReactNode;
-}) {
-  const key = [left && "l", center && "c", right && "r"].filter(Boolean).join("-") || "c";
-  const cols = ROW_COLS[key] ?? "";
-  // A row with only a right-hand card spans the full width instead.
-  const content = [left, center, right].filter(Boolean);
-  if (content.length === 0) return null;
-  const effective = key === "r" ? "c" : key;
-  return <div className={`grid gap-4 ${ROW_COLS[effective] ?? cols}`}>{content}</div>;
-}
-
 async function safe<T>(p: Promise<T>): Promise<T | null> {
   try {
     return await p;
@@ -194,7 +169,7 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
     exploreMore.length > 0 && { id: "further-reading", label: "Further Reading" },
   ].filter(Boolean) as TocItem[];
 
-  const showSecondRow = works.length > 0 || hasContribution || glance.length > 0;
+  const leftCol = works.length > 0 ? <SelectedWorksCard works={works} /> : null;
 
   return (
     <div className="bg-[#160907]">
@@ -212,33 +187,27 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
         />
 
         <div className="flex flex-col gap-4">
-          {showSecondRow && (
-            <Row
-              left={works.length > 0 ? <SelectedWorksCard works={works} /> : null}
-              center={
+          {/* Three independent columns: each card sizes to its own content, so a
+              tall card in one column never stretches or shifts the others. */}
+          <div className={`grid items-start gap-4 ${leftCol ? "lg:grid-cols-[250px_minmax(0,1fr)_280px]" : "lg:grid-cols-[minmax(0,1fr)_280px]"}`}>
+            {leftCol && <div className="flex min-w-0 flex-col gap-4">{leftCol}</div>}
+            <div className="flex min-w-0 flex-col gap-4">
+              {hasContribution && (
                 <ContributionCard
                   summary={person.summary}
                   keyIdeas={person.keyIdeas}
                   knowledgeSovereignty={person.knowledgeSovereignty}
                 />
-              }
-              right={glance.length > 0 ? <GlanceCard rows={glance} /> : null}
-            />
-          )}
-
-          {(hasBio || quickFacts.length > 0) && (
-            <Row
-              center={hasBio ? <BiographyCard biography={person.biography} /> : null}
-              right={<QuickFactsCard facts={quickFacts} />}
-            />
-          )}
-
-          {(pioneers.length > 0 || ideas.length > 0) && (
-            <Row
-              center={pioneers.length > 0 ? <PioneersCard people={pioneers} /> : null}
-              right={<RelatedIdeasCard ideas={ideas} />}
-            />
-          )}
+              )}
+              {hasBio && <BiographyCard biography={person.biography} />}
+              {pioneers.length > 0 && <PioneersCard people={pioneers} />}
+            </div>
+            <div className="flex min-w-0 flex-col gap-4">
+              {glance.length > 0 && <GlanceCard rows={glance} />}
+              {quickFacts.length > 0 && <QuickFactsCard facts={quickFacts} />}
+              {ideas.length > 0 && <RelatedIdeasCard ideas={ideas} />}
+            </div>
+          </div>
 
           <EssentialWorksCard heading={essentialHeading} works={works} />
         </div>
