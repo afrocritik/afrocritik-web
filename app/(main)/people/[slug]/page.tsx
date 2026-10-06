@@ -125,7 +125,7 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
     const types = new Set(works.map((w) => w.type).filter(Boolean));
     if (types.size === 1) {
       const t = [...types][0] as string;
-      if (t === "film") return "Essential Films";
+      if (t === "film") return "Essential Nollywood Films";
       if (t === "music") return "Essential Music";
       if (t === "literature") return "Essential Literature";
     }
