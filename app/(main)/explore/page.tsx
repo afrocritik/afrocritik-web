@@ -7,6 +7,7 @@ import { PopularInterestSection } from "@/components/features/home/PopularIntere
 import { ReportCTA } from "@/components/features/home/ReportCTA";
 import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
 import { api, getMediaUrl } from "@/lib/api";
+import { getFeaturedReport } from "@/lib/featuredReport";
 
 export default async function ExplorePage() {
   // Signed-out visitors get a focused, gated archive: just the search + results.
@@ -22,6 +23,8 @@ export default async function ExplorePage() {
   } catch {
     // API unreachable — sections fall back to their designed defaults
   }
+
+  const featuredReport = await getFeaturedReport(homepage);
 
   const popularInterests = Array.isArray(homepage?.popularInterestCategories)
     ? homepage.popularInterestCategories.map((c: any) => ({
@@ -49,8 +52,8 @@ export default async function ExplorePage() {
           </section>
 
           {/* REPORT CTA */}
-          <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 from-[18%] via-yellow-900 to-yellow-950">
-            <ReportCTA report={homepage?.featuredReport} />
+          <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 via-yellow-900 to-yellow-950">
+            <ReportCTA report={featuredReport} />
           </section>
 
           {/* JOIN NETWORK CTA */}

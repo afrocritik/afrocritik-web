@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import Image from "next/image";
 import { FilterPill } from "@/components/common/FilterPill";
 import { formatCount } from "@/lib/utils";
@@ -24,6 +24,8 @@ type ArchiveTabsBarProps = Readonly<{
   counts?: Record<string, number>;
   sort: string;
   onSortChange: (value: string) => void;
+  /** Filter dropdowns (signed-in); signed-out visitors only get Sort. */
+  filterBar?: ReactNode;
 }>;
 
 export function ArchiveTabsBar({
@@ -32,6 +34,7 @@ export function ArchiveTabsBar({
   counts,
   sort,
   onSortChange,
+  filterBar,
 }: ArchiveTabsBarProps) {
   return (
     <section>
@@ -93,11 +96,7 @@ export function ArchiveTabsBar({
 
       {/* FILTER ROW — 104px */}
       <div className="container flex flex-wrap items-center gap-2 py-6 md:py-0 md:h-[104px]">
-        <p className="font-inter text-sm text-white/60">
-          Use{" "}
-          <span className="font-semibold text-white/80">Refine results</span> to
-          filter by country, theme and year.
-        </p>
+        {filterBar}
         <div className="ml-auto">
           <FilterPill
             label={`Sort by: ${SORT_LABELS[sort] ?? "Relevance"}`}

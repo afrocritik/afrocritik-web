@@ -174,6 +174,15 @@ export const api = {
         .get("/api/countries", { params: { limit: 200, sort: "name", ...params } })
         .then((r) => r.data),
   },
+  genres: {
+    list: (params?: Record<string, any>) =>
+      apiClient
+        .get("/api/genres", { params: { limit: 200, sort: "name", depth: 0, ...params } })
+        .then((r) => r.data),
+  },
+  // Distinct years that have content in a collection (works | reports), newest first.
+  years: (type: string): Promise<{ years: number[] }> =>
+    apiClient.get("/api/search/years", { params: { type } }).then((r) => r.data),
   themes: {
     list: (params?: Record<string, any>) =>
       apiClient

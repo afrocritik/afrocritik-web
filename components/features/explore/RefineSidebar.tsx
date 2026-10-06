@@ -27,6 +27,9 @@ type RefineSidebarProps = Readonly<{
   onSearch: (term: string) => void;
   /** The year slider is narrower than the full range. */
   yearActive: boolean;
+  activeCount: number;
+  showYear: boolean;
+  showCountry: boolean;
   onClearAll: () => void;
 }>;
 
@@ -146,12 +149,14 @@ export function RefineSidebar({
   onYearChange,
   onSearch,
   yearActive,
+  activeCount,
+  showYear,
+  showCountry,
   onClearAll,
 }: RefineSidebarProps) {
   const [countrySearch, setCountrySearch] = useState("");
   // Bumped on "Clear all" so the (uncontrolled) year slider remounts at full range.
   const [resetKey, setResetKey] = useState(0);
-  const activeCount = selectedCountries.length + selectedThemes.length + (yearActive ? 1 : 0);
 
   const { data: countriesData } = useQuery({
     queryKey: ["facet-countries"],
@@ -208,44 +213,48 @@ export function RefineSidebar({
           )}
         </div>
 
-        <Section title="Year Range" badge={yearActive ? 1 : 0}>
-          <YearRangeSlider key={resetKey} min={YEAR_MIN} max={YEAR_MAX} onChange={onYearChange} />
-        </Section>
+        {showYear && (
+          <Section title="Year Range" badge={yearActive ? 1 : 0}>
+            <YearRangeSlider key={resetKey} min={YEAR_MIN} max={YEAR_MAX} onChange={onYearChange} />
+          </Section>
+        )}
 
-        <Section title="Country" badge={selectedCountries.length}>
-          <div className="relative mb-3 h-7 w-full">
-            <div className="absolute inset-0 rounded-md border-[0.30px] border-yellow-700 bg-yellow-950/20" />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 70 71"
-              fill="none"
-              className="pointer-events-none absolute left-[9px] top-[7px]"
-            >
-              <path
-                d="M49.37 50.1779L59.5 60.0721M33.25 21.2019C39.049 21.2019 43.75 25.9481 43.75 31.8029M56.2333 33.6875C56.2333 46.4378 45.9956 56.774 33.3667 56.774C20.7378 56.774 10.5 46.4378 10.5 33.6875C10.5 20.9371 20.7378 10.601 33.3667 10.601C45.9956 10.601 56.2333 20.9371 56.2333 33.6875Z"
-                stroke="rgba(156, 92, 8, 0.70)"
-                strokeWidth="2"
-                strokeLinecap="round"
+        {showCountry && (
+          <Section title="Country" badge={selectedCountries.length}>
+            <div className="relative mb-3 h-7 w-full">
+              <div className="absolute inset-0 rounded-md border-[0.30px] border-yellow-700 bg-yellow-950/20" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 70 71"
+                fill="none"
+                className="pointer-events-none absolute left-[9px] top-[7px]"
+              >
+                <path
+                  d="M49.37 50.1779L59.5 60.0721M33.25 21.2019C39.049 21.2019 43.75 25.9481 43.75 31.8029M56.2333 33.6875C56.2333 46.4378 45.9956 56.774 33.3667 56.774C20.7378 56.774 10.5 46.4378 10.5 33.6875C10.5 20.9371 20.7378 10.601 33.3667 10.601C45.9956 10.601 56.2333 20.9371 56.2333 33.6875Z"
+                  stroke="rgba(156, 92, 8, 0.70)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <input
+                type="text"
+                value={countrySearch}
+                onChange={(e) => setCountrySearch(e.target.value)}
+                placeholder="Search..."
+                className="absolute inset-0 rounded-md bg-transparent pl-[29px] pr-2 font-inter text-[11px] text-white placeholder:text-white/30 focus:outline-none"
               />
-            </svg>
-            <input
-              type="text"
-              value={countrySearch}
-              onChange={(e) => setCountrySearch(e.target.value)}
-              placeholder="Search..."
-              className="absolute inset-0 rounded-md bg-transparent pl-[29px] pr-2 font-inter text-[11px] text-white placeholder:text-white/30 focus:outline-none"
+            </div>
+            <FacetList
+              items={visibleCountries}
+              selected={selectedCountries}
+              onToggle={onToggleCountry}
+              emptyText={countrySearch ? "No matching countries." : "No countries yet."}
+              expandAll={Boolean(countrySearch)}
             />
-          </div>
-          <FacetList
-            items={visibleCountries}
-            selected={selectedCountries}
-            onToggle={onToggleCountry}
-            emptyText={countrySearch ? "No matching countries." : "No countries yet."}
-            expandAll={Boolean(countrySearch)}
-          />
-        </Section>
+          </Section>
+        )}
 
         <Section title="Theme" badge={selectedThemes.length} defaultOpen={selectedThemes.length > 0}>
           <FacetList

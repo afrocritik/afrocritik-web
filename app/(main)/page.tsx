@@ -10,6 +10,7 @@ import { MomentsSection } from "@/components/features/home/MomentsSection";
 import { JoinNetworkCTA } from "@/components/features/home/JoinNetworkCTA";
 import { api, getMediaUrl } from "@/lib/api";
 import { mergeSuggestions } from "@/lib/searchSuggestions";
+import { getFeaturedReport } from "@/lib/featuredReport";
 
 // Regenerate the static homepage at most once a minute so admin-added content
 // (and the newest-first fallbacks) surface promptly without rendering on every
@@ -49,7 +50,6 @@ export default async function HomePage() {
   const curatedWorks: any[] = homepage?.featuredWorks ?? [];
   const curatedPeople: any[] = homepage?.featuredPeople ?? [];
   const curatedIdeas: any[] = homepage?.featuredIdeas ?? [];
-  const curatedReport: any = homepage?.featuredReport ?? null;
 
   // "Essential Works In …" sections are admin-driven. Each row is bound to a
   // Work type; if the editor pinned specific works we use those, otherwise we
@@ -68,7 +68,7 @@ export default async function HomePage() {
           { type: "literature", works: [] },
         ];
 
-  const [moments, fallbackWorks, fallbackPeople, fallbackIdeas, fallbackReport, ...sectionFallbacks] =
+  const [moments, fallbackWorks, fallbackPeople, fallbackIdeas, featuredReport, ...sectionFallbacks] =
     await Promise.all([
       newest(api.moments.list, 8, { "where[status][equals]": "published" }),
       curatedWorks.length
@@ -79,7 +79,7 @@ export default async function HomePage() {
           }),
       curatedPeople.length ? Promise.resolve([]) : newest(api.people.list, 4),
       curatedIdeas.length ? Promise.resolve([]) : newest(api.ideas.list, 4),
-      curatedReport ? Promise.resolve([]) : newest(api.reports.list, 1),
+      getFeaturedReport(homepage),
       ...sectionConfigs.map((s) =>
         s.works.length
           ? Promise.resolve([])
@@ -131,7 +131,6 @@ export default async function HomePage() {
     : [];
 
   const cta = homepage?.cta;
-  const featuredReport = curatedReport ?? fallbackReport[0] ?? null;
 
   return (
     <>
@@ -195,7 +194,7 @@ export default async function HomePage() {
       </section>
 
       {/* REPORT CTA */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 from 18% via-yellow-900 to-yellow-950">
+      <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 via-yellow-900 to-yellow-950">
         <ReportCTA report={featuredReport} />
       </section>
 

@@ -19,10 +19,17 @@ interface FilterPillProps {
   label: string;
   options: FilterOption[];
   onSelect?: (values: string[]) => void;
+  /** Controlled selection. When omitted the pill keeps its own state. */
+  selectedValues?: string[];
 }
 
-export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProps>) {
-  const [selected, setSelected] = useState<string[]>([]);
+export function FilterPill({ label, options, onSelect, selectedValues }: Readonly<FilterPillProps>) {
+  const [own, setOwn] = useState<string[]>([]);
+  const controlled = selectedValues !== undefined;
+  const selected = controlled ? selectedValues : own;
+  const setSelected = (next: string[]) => {
+    if (!controlled) setOwn(next);
+  };
   const [open, setOpen] = useState(false);
 
   const toggle = (value: string) => {
@@ -40,10 +47,10 @@ export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProp
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "h-11 px-7 rounded-lg inline-flex justify-center items-center gap-2 transition-colors outline outline-[0.50px] outline-offset-[-0.50px]",
+            "h-[46px] px-4 rounded-lg inline-flex justify-center items-center gap-2 transition-colors outline outline-[0.50px] outline-offset-[-0.50px]",
             active || open
-              ? "bg-yellow-950/70 outline-yellow-700/70 text-white"
-              : "bg-yellow-950/40 outline-yellow-700/50 text-white hover:outline-yellow-700/70",
+              ? "bg-[#4D311D]/80 outline-[#9C5C08]/80 text-white"
+              : "bg-[#4D311D]/50 outline-[#9C5C08]/50 text-white hover:outline-[#9C5C08]/80",
           )}
         >
           <ChevronDown
@@ -52,7 +59,7 @@ export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProp
               open && "rotate-180",
             )}
           />
-          <span className="text-sm text-white font-normal font-inter leading-4 whitespace-nowrap">
+          <span className="text-[16px] text-[#F5F5F5] font-normal font-inter leading-4 whitespace-nowrap">
             {label}
           </span>
           {active && (
@@ -63,7 +70,7 @@ export function FilterPill({ label, options, onSelect }: Readonly<FilterPillProp
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-60 rounded-xl border-amber-line bg-bg-secondary p-0 overflow-hidden text-white shadow-xl">
-        <div className="flex flex-col gap-[3px]">
+        <div className="flex max-h-[320px] flex-col gap-[3px] overflow-y-auto">
           {options.length === 0 && (
             <p className="px-3 py-3 font-inter text-xs text-ink-muted">No options</p>
           )}

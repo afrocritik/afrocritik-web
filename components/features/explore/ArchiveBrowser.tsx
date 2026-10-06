@@ -5,9 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { api, getMediaUrl, mapWorkToCard } from "@/lib/api";
-import { BROWN_GRADIENT, TABS } from "./constants";
+import { BROWN_GRADIENT, TABS, TAB_FILTERS } from "./constants";
 import { ExploreHero } from "./ExploreHero";
 import { ArchiveTabsBar } from "./ArchiveTabsBar";
+import { ArchiveFilterBar } from "./ArchiveFilterBar";
 import { ArchiveResults } from "./ArchiveResults";
 import { YEAR_MAX, YEAR_MIN } from "./RefineSidebar";
 
@@ -68,6 +69,22 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   const [themes, setThemes] = useState<string[]>([]);
   const [yearFrom, setYearFrom] = useState<number | undefined>(undefined);
   const [yearTo, setYearTo] = useState<number | undefined>(undefined);
+  // Top-bar dropdown filters (country is shared with the sidebar above).
+  const [years, setYears] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [genres, setGenres] = useState<string[]>([]);
+
+  // Categories / sub-categories / specific years mean different things per tab.
+  const selectTab = (key: string) => {
+    setTab(key);
+    setCategories([]);
+    setGenres([]);
+    setYears([]);
+    // The sidebar remounts per tab (see ArchiveResults), so its year slider
+    // returns to the full range — keep the filter state in step with it.
+    setYearFrom(undefined);
+    setYearTo(undefined);
+  };
 
   // Search as the visitor pauses typing, not on every keystroke — saves requests
   // and keeps half-typed words out of the Popular Searches tally.
@@ -84,7 +101,7 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   });
 
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["archive", tab, searchTerm, sort, countries, themes, yearFrom, yearTo, token ?? "anon"],
+    queryKey: ["archive", tab, searchTerm, sort, countries, themes, yearFrom, yearTo, years, categories, genres, token ?? "anon"],
     initialPageParam: 1,
     getNextPageParam: (last: any) => (last?.hasNextPage ? (last.page ?? 1) + 1 : undefined),
     queryFn: ({ pageParam }) =>
@@ -99,6 +116,9 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
           theme: themes.length ? themes : undefined,
           yearFrom,
           yearTo,
+          year: years.length ? years : undefined,
+          category: categories.length ? categories : undefined,
+          genre: genres.length ? genres : undefined,
         },
         token,
       ),
@@ -150,17 +170,38 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
     setThemes([]);
     setYearFrom(undefined);
     setYearTo(undefined);
+    setYears([]);
+    setCategories([]);
+    setGenres([]);
   };
+
+  const support = TAB_FILTERS[tab] ?? { year: false, country: false, subcategory: false };
+  const yearRangeActive = support.year && (yearFrom !== undefined || yearTo !== undefined);
+  const activeCount =
+    (support.country ? countries.length : 0) +
+    themes.length +
+    (yearRangeActive ? 1 : 0) +
+    (support.year ? years.length : 0) +
+    categories.length +
+    (support.subcategory ? genres.length : 0);
 
   return (
     <div style={{ background: BROWN_GRADIENT }}>
       <ExploreHero query={query} onQueryChange={setQuery} />
       <ArchiveTabsBar
         activeKey={tab}
-        onSelect={setTab}
+        onSelect={selectTab}
         counts={countsData}
         sort={sort}
         onSortChange={setSort}
+        filterBar={
+          signedIn ? (
+            <ArchiveFilterBar
+              tab={tab}
+              filters={{ years, setYears, categories, setCategories, genres, setGenres, countries, setCountries }}
+            />
+          ) : undefined
+        }
       />
       <ArchiveResults
         works={works}
@@ -175,7 +216,10 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
           onToggleTheme: (id) => toggle(setThemes, id),
           onYearChange,
           onSearch: setQuery,
-          yearActive: yearFrom !== undefined || yearTo !== undefined,
+          yearActive: yearRangeActive,
+          activeCount,
+          showYear: support.year,
+          showCountry: support.country,
           onClearAll: clearFilters,
         }}
         loading={isLoading}

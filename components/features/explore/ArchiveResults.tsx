@@ -17,6 +17,11 @@ type RefineState = Readonly<{
   onYearChange: (from: number, to: number) => void;
   onSearch: (term: string) => void;
   yearActive: boolean;
+  /** Everything currently narrowing the results (sidebar + top-bar filters). */
+  activeCount: number;
+  /** Which sidebar sections the active tab can use. */
+  showYear: boolean;
+  showCountry: boolean;
   onClearAll: () => void;
 }>;
 
@@ -92,7 +97,7 @@ export function ArchiveResults({
 
       {/* Sidebar + Cards — same top baseline so bottoms align */}
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-        {showRefine && <RefineSidebar {...refine} />}
+        {showRefine && <RefineSidebar key={tabLabel} {...refine} />}
 
         {/* Main */}
         <div className="flex-1">
