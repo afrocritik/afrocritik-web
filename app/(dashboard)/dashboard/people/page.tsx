@@ -6,7 +6,7 @@ export default function PeoplePage() {
     <div className="flex flex-col gap-6 px-6 py-8 md:px-8">
       <DashboardPageHeader
         title="People"
-        description="Critics, thinkers and creators you follow."
+        description="Check out icons, pioneers, personalities and people"
       />
       <FollowingView />
     </div>
