@@ -15,7 +15,7 @@ export function WorkContextRow({ workTitle, timeline = [] }: Props) {
   return (
     <div
       id="key-moments"
-      className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0"
+      className="scroll-mt-28 bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0"
     >
       <h2 className="w-full text-white text-xl font-semibold font-baskervville leading-5">
         Timeline: Key Moments{workTitle ? ` in ${workTitle}` : ""}

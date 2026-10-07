@@ -1,16 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { FollowButton } from "./FollowButton";
+import { useScrollSpy, type TocItem } from "@/components/common/useScrollSpy";
 
-export interface TocItem {
-  id: string;
-  label: string;
-}
+export type { TocItem };
 
 interface Props {
   personId: string;
@@ -28,50 +25,7 @@ function Crumb() {
 }
 
 export function PersonHero({ personId, slug, name, description, meta, topics, photo, toc }: Readonly<Props>) {
-  const [active, setActive] = useState(0);
-
-  // Scroll-spy: the active entry is the section nearest to (and not below) the
-  // reading line near the top of the viewport. Cards that share a row sit at the
-  // same height, so a tie goes to whichever comes first in the list.
-  useEffect(() => {
-    const LINE = 180;
-    // Anchors within this distance are the same "row" of cards.
-    const TIE = 120;
-    const update = () => {
-      let best = 0;
-      let bestTop = -Infinity;
-      toc.forEach((item, i) => {
-        const el = document.getElementById(item.id);
-        if (!el) return;
-        const top = el.getBoundingClientRect().top;
-        if (top < LINE && top > bestTop + TIE) {
-          best = i;
-          bestTop = top;
-        }
-      });
-      // The link just clicked wins a tie with its row-mate.
-      const hash = decodeURIComponent(window.location.hash.slice(1));
-      const hashIndex = toc.findIndex((t) => t.id === hash);
-      if (hashIndex >= 0 && hashIndex !== best) {
-        const top = document.getElementById(hash)?.getBoundingClientRect().top;
-        if (top !== undefined && top < LINE && Math.abs(top - bestTop) <= TIE) best = hashIndex;
-      }
-      setActive(best);
-    };
-    let frame = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("hashchange", onScroll);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("hashchange", onScroll);
-    };
-  }, [toc]);
+  const { active, select } = useScrollSpy(toc.map((t) => t.id));
 
   const share = async () => {
     const url = window.location.href;
@@ -105,6 +59,7 @@ export function PersonHero({ personId, slug, name, description, meta, topics, ph
                 <li key={item.id}>
                   <a
                     href={`#${item.id}`}
+                    onClick={() => select(i)}
                     className={i === active ? "font-medium text-amber" : "transition-colors hover:text-amber"}
                   >
                     {item.label}

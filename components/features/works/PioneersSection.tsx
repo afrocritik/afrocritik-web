@@ -34,7 +34,7 @@ export function PioneersSection({ people = [] }: Props) {
   const mapped = people.map(mapPerson);
 
   return (
-    <section id="pioneers-icons" className="pb-4">
+    <section id="pioneers-icons" className="scroll-mt-28 pb-4">
       <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6">
         <h2 className="mb-6 w-96 text-white text-xl font-semibold font-baskervville leading-5">
           Pioneers &amp; Icons

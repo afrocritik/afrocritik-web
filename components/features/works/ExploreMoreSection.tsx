@@ -11,17 +11,19 @@ interface Props {
   heading?: string;
   hrefBase?: string;
   related?: RelatedItem[];
+  id?: string;
 }
 
 export function ExploreMoreSection({
   heading = "Explore more related ideas",
   hrefBase = "/ideas",
   related = [],
+  id = "further-reading",
 }: Readonly<Props> = {}) {
   if (related.length === 0) return null;
 
   return (
-    <section id="further-reading" className="mt-10 pb-16">
+    <section id={id} className="mt-10 scroll-mt-28 pb-16">
       <h2 className="mb-6 text-white text-3xl font-bold font-baskervville leading-8">
         {heading}
       </h2>

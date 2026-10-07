@@ -1,21 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { SaveWorkButton } from "./SaveWorkButton";
-
-const TOC = [
-  "Overview",
-  "Key Movements",
-  "Pioneers & Icons",
-  "Impact & Influence",
-  "Global Reach",
-  "Related Works",
-  "Further Reading",
-];
+import { useScrollSpy, type TocItem } from "@/components/common/useScrollSpy";
 
 function Chevron() {
   return (
@@ -45,6 +35,7 @@ interface Props {
   meta?: { label: string; value: string }[];
   relatedThemes?: string[];
   image?: string;
+  toc: TocItem[];
 }
 
 export function WorkHeroSection({
@@ -58,8 +49,9 @@ export function WorkHeroSection({
   meta = [],
   relatedThemes = [],
   image,
+  toc,
 }: Readonly<Props>) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { active: activeIndex, select } = useScrollSpy(toc.map((t) => t.id));
 
   const share = async () => {
     const url = window.location.href;
@@ -92,18 +84,18 @@ export function WorkHeroSection({
                 />
               </div>
               <ul className="flex flex-col gap-4 justify-start text-white text-xs font-light font-inter leading-3">
-                {TOC.map((item, i) => (
-                  <li key={item}>
+                {toc.map((item, i) => (
+                  <li key={item.id}>
                     <a
-                      href={`#${item.toLowerCase().replace(/[^a-z]+/g, "-")}`}
-                      onClick={() => setActiveIndex(i)}
+                      href={`#${item.id}`}
+                      onClick={() => select(i)}
                       className={
                         i === activeIndex
                           ? "font-medium text-amber"
                           : "hover:text-amber transition-colors"
                       }
                     >
-                      {item}
+                      {item.label}
                     </a>
                   </li>
                 ))}

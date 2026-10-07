@@ -8,7 +8,7 @@ export function WorkAnchorRow({ heading, subheading, body }: Props) {
   if (!heading && !subheading && !body) return null;
 
   return (
-    <div className="bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0">
+    <div id="anchor" className="scroll-mt-28 bg-yellow-950/50 rounded-xl border border-yellow-700 p-6 min-w-0">
       {heading && (
         <p className="justify-start text-white text-xl font-semibold font-baskervville leading-5">
           {heading}

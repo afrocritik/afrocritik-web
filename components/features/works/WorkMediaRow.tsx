@@ -58,7 +58,7 @@ export function WorkMediaRow({ videoArchive = [], audioArchive = [] }: Props) {
   if (videos.length === 0 && audioTracks.length === 0) return null;
 
   return (
-    <div className="relative">
+    <div id="media-archive" className="relative scroll-mt-28">
       {videos.length > 0 && (
         <div
           ref={archiveRef}

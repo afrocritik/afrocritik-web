@@ -121,6 +121,20 @@ export default async function WorkDetailPage({
       }))
     : [];
 
+  const essentialHeading = `Essential ${work.type ? work.type.charAt(0).toUpperCase() + work.type.slice(1) : "Works"}`;
+  const toc = [
+    { id: "overview", label: "Overview" },
+    timeline.length > 0 && { id: "key-moments", label: "Key Moments" },
+    (work.anchor?.heading || work.anchor?.subheading || work.anchor?.body) && {
+      id: "anchor",
+      label: work.anchor?.heading || "Anchor Year",
+    },
+    (videoArchive.length > 0 || audioArchive.length > 0) && { id: "media-archive", label: "Media Archive" },
+    essentialWorks.length > 0 && { id: "related-works", label: essentialHeading },
+    pioneers.length > 0 && { id: "pioneers-icons", label: "Pioneers & Icons" },
+    exploreMore.length > 0 && { id: "further-reading", label: "Further Reading" },
+  ].filter(Boolean) as { id: string; label: string }[];
+
   return (
     <div className="bg-[#160907]">
       <ViewTracker collection="works" id={work.id} />
@@ -133,6 +147,7 @@ export default async function WorkDetailPage({
           image={image}
           meta={meta}
           relatedThemes={relatedThemes}
+          toc={toc}
         />
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
@@ -145,7 +160,7 @@ export default async function WorkDetailPage({
             />
             <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
             <EssentialFilmsSection
-              heading={`Essential ${work.type ? work.type.charAt(0).toUpperCase() + work.type.slice(1) : "Works"}`}
+              heading={essentialHeading}
               works={essentialWorks}
             />
             <PioneersSection people={pioneers} />

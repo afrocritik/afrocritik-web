@@ -108,7 +108,7 @@ export default async function MomentDetailPage({
     relatedThemes.length > 0 && { id: "related-themes", label: "Related Themes" },
     { id: "media", label: "Media From Moment" },
     audioTracks.length > 0 && { id: "audio", label: "Play Audio" },
-    { id: "related-moments", label: "Related Moments" },
+    relatedMoments.length > 0 && { id: "related-moments", label: "Related Moments" },
   ].filter(Boolean) as { id: string; label: string }[];
 
   return (

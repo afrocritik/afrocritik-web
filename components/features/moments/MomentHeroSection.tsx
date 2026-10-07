@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { useScrollSpy, type TocItem } from "@/components/common/useScrollSpy";
 
-export interface TocItem {
-  id: string;
-  label: string;
-}
+export type { TocItem };
 
 interface MetaItem {
   label: string;
@@ -43,31 +40,7 @@ export function MomentHeroSection({
   relatedThemes?: string[];
   toc: TocItem[];
 }>) {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Scroll-spy: active entry is the last section whose top has passed the reading line.
-  useEffect(() => {
-    const LINE = 180;
-    const update = () => {
-      let best = 0;
-      toc.forEach((item, i) => {
-        const el = document.getElementById(item.id);
-        if (el && el.getBoundingClientRect().top < LINE) best = i;
-      });
-      setActiveIndex(best);
-    };
-    let frame = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [toc]);
+  const { active: activeIndex, select } = useScrollSpy(toc.map((t) => t.id));
 
   const share = async () => {
     const url = window.location.href;
@@ -109,6 +82,7 @@ export function MomentHeroSection({
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
+                      onClick={() => select(i)}
                       className={
                         i === activeIndex
                           ? "font-medium text-amber"

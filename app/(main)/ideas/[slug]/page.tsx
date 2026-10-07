@@ -95,13 +95,22 @@ export default async function IdeaDetailPage({
       }))
     : [];
 
-  const relatedWorks = Array.isArray(idea.works)
-    ? idea.works.map((r: any) => ({
-        slug: r.slug ?? "",
-        title: r.title ?? "",
-        summary: r.summary || r.cardDescription,
-      }))
+  const relatedIdeas = Array.isArray(idea.relatedIdeas)
+    ? idea.relatedIdeas
+        .filter((r: any) => r && typeof r === "object" && r.slug)
+        .map((r: any) => ({
+          slug: r.slug ?? "",
+          title: r.title ?? "",
+          summary: r.summary || r.cardDescription,
+        }))
     : [];
+
+  const toc = [
+    { id: "overview", label: "Overview" },
+    timeline.length > 0 && { id: "key-moments", label: "Key Moments" },
+    (videoArchive.length > 0 || audioArchive.length > 0) && { id: "media-archive", label: "Media Archive" },
+    relatedIdeas.length > 0 && { id: "further-reading", label: "Related Ideas" },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   return (
     <div className="bg-[#160907]">
@@ -118,6 +127,7 @@ export default async function IdeaDetailPage({
           image={image}
           meta={meta}
           relatedThemes={relatedThemes}
+          toc={toc}
         />
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
@@ -130,9 +140,9 @@ export default async function IdeaDetailPage({
         </div>
 
         <ExploreMoreSection
-          heading="Explore related works"
-          hrefBase="/works"
-          related={relatedWorks}
+          heading="Explore Related Ideas"
+          hrefBase="/ideas"
+          related={relatedIdeas}
         />
       </div>
     </div>
