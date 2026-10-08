@@ -19,7 +19,7 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
 
   const { data, isLoading } = useQuery({
     queryKey: ["collection", slug, token ?? "anon"],
-    enabled: status !== "loading",
+    enabled: status !== "loading" && Boolean(token),
     queryFn: () => api.collections.bySlug(slug, token),
   });
 

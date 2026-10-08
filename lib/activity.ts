@@ -18,6 +18,8 @@ export async function logActivity(
   targetUrl: string,
   token?: string
 ): Promise<void> {
+  // Activity is owner-scoped; anonymous requests would just 403.
+  if (!token) return
   try {
     await api.activity.create({ action, targetTitle, targetUrl }, token);
   } catch {

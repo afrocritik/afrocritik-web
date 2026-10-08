@@ -46,7 +46,7 @@ export default withAuth(
     callbacks: {
       // Public pages pass without a token; everything else needs one.
       authorized: ({ token, req }) =>
-        isPublic(req.nextUrl.pathname) || !!token,
+        isPublic(req.nextUrl.pathname) || (!!token && !token.error),
     },
     pages: {
       signIn: "/signin",

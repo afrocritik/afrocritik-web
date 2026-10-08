@@ -109,6 +109,21 @@ export const authOptions: NextAuthOptions = {
       if (trigger === "update" && session?.isProfileComplete !== undefined) {
         token.isProfileComplete = session.isProfileComplete;
       }
+      // The Payload JWT inside this session expires on its own schedule. Once
+      // it does, every API call is anonymous (403), so mark the session dead
+      // and let middleware send the user back to sign in.
+      if (typeof token.token === "string") {
+        try {
+          const { exp } = JSON.parse(
+            Buffer.from(token.token.split(".")[1], "base64url").toString(),
+          );
+          if (typeof exp === "number" && exp * 1000 < Date.now()) {
+            token.error = "BackendTokenExpired";
+          }
+        } catch {
+          /* undecodable token: leave as is */
+        }
+      }
       return token;
     },
     async session({ session, token }) {

@@ -101,7 +101,7 @@ export function ActivityLog() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (status === "loading" || !token) return;
     let active = true;
     (async () => {
       try {

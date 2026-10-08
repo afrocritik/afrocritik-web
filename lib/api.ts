@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { signOut } from "next-auth/react";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
@@ -32,6 +33,31 @@ export const apiClient = axios.create({
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
+
+// An authenticated request that comes back 401/403 means the backend token is
+// no longer valid (expired/revoked) — Payload treats it as anonymous. End the
+// session once so the user lands on sign-in instead of seeing silent failures.
+let signingOut = false;
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err: AxiosError) => {
+    const status = err.response?.status;
+    const sentAuth = Boolean(err.config?.headers?.Authorization);
+    if (
+      typeof window !== "undefined" &&
+      sentAuth &&
+      (status === 401 || status === 403) &&
+      !signingOut
+    ) {
+      signingOut = true;
+      const callbackUrl = encodeURIComponent(
+        window.location.pathname + window.location.search,
+      );
+      signOut({ callbackUrl: `/signin?callbackUrl=${callbackUrl}` });
+    }
+    return Promise.reject(err);
+  },
+);
 
 export const api = {
   works: {
