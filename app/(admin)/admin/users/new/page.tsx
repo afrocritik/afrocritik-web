@@ -1,6 +1,6 @@
-import { EntityFormView } from "@/components/features/admin/crud/EntityFormView";
-import { getEntity } from "@/components/features/admin/crud/entities";
+import { redirect } from "next/navigation";
 
+// Users sign themselves up; admins manage role/status from the list.
 export default function Page() {
-  return <EntityFormView config={getEntity("users")!} />;
+  redirect("/admin/users");
 }

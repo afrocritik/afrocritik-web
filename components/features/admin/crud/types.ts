@@ -113,6 +113,8 @@ export interface ColumnConfig {
   render?: ColumnRender;
   /** Secondary field rendered under the title for the `media` column */
   subKey?: string;
+  /** `media` column: render a round avatar (initials fallback) instead of a square thumbnail */
+  avatar?: boolean;
   className?: string;
   align?: "left" | "center" | "right";
 }
@@ -141,6 +143,8 @@ export interface EntityConfig {
   /** The primary text field used in the "Add New" label and titles */
   titleField: string;
   searchPlaceholder?: string;
+  /** Set false to hide the "Add" button (records are created elsewhere, e.g. sign-up) */
+  canCreate?: boolean;
   columns: ColumnConfig[];
   filters?: FilterConfig[];
   form: FormSection[];

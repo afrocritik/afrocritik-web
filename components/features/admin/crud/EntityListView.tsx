@@ -48,6 +48,32 @@ function FilterSelect({
   );
 }
 
+const AVATAR_TONES = [
+  "bg-amber-900/70 text-amber-200",
+  "bg-orange-900/70 text-orange-200",
+  "bg-yellow-900/70 text-yellow-200",
+  "bg-rose-900/60 text-rose-200",
+  "bg-emerald-900/60 text-emerald-200",
+  "bg-sky-900/60 text-sky-200",
+];
+
+function initialsOf(label: string): string {
+  const parts = label
+    .replace(/@.*$/, "")
+    .split(/[\s._-]+/)
+    .filter(Boolean);
+  if (parts.length === 0) return "?";
+  const first = parts[0][0];
+  const second = parts.length > 1 ? parts[parts.length - 1][0] : parts[0][1] ?? "";
+  return (first + second).toUpperCase();
+}
+
+function toneFor(label: string): string {
+  let h = 0;
+  for (const ch of label) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return AVATAR_TONES[h % AVATAR_TONES.length];
+}
+
 function Cell({
   column,
   record,
@@ -64,8 +90,19 @@ function Cell({
             alt=""
             width={40}
             height={40}
-            className="size-10 shrink-0 rounded-lg object-cover"
+            className={`size-10 shrink-0 object-cover ${
+              column.avatar ? "rounded-full ring-1 ring-white/10" : "rounded-lg"
+            }`}
           />
+        ) : column.avatar ? (
+          <span
+            aria-hidden
+            className={`flex size-10 shrink-0 items-center justify-center rounded-full font-inter text-sm font-semibold tracking-wide ring-1 ring-white/10 ${toneFor(
+              String(value ?? "")
+            )}`}
+          >
+            {initialsOf(String(value ?? ""))}
+          </span>
         ) : (
           <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-yellow-950/60 font-baskervville text-base text-orange-300">
             {String(value ?? "?").charAt(0)}
@@ -236,14 +273,16 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
             {config.description}
           </p>
         </div>
-        <Link
-          href={`/admin/${config.slug}/new`}
-          className="inline-flex h-11 items-center gap-2 rounded-xl px-5 font-inter text-base font-medium text-yellow-950 transition-opacity hover:opacity-90"
-          style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)" }}
-        >
-          <Plus className="size-5" />
-          Add {config.singular}
-        </Link>
+        {config.canCreate !== false && (
+          <Link
+            href={`/admin/${config.slug}/new`}
+            className="inline-flex h-11 items-center gap-2 rounded-xl px-5 font-inter text-base font-medium text-yellow-950 transition-opacity hover:opacity-90"
+            style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)" }}
+          >
+            <Plus className="size-5" />
+            Add {config.singular}
+          </Link>
+        )}
       </div>
 
       {/* Toolbar */}

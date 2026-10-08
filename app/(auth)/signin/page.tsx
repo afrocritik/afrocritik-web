@@ -26,7 +26,11 @@ export default function SignInPage() {
     });
     if (res?.error) {
       setLoading(false);
-      setError("Invalid email or password.");
+      setError(
+        res.error === "AccountSuspended"
+          ? "This account has been suspended. Contact support if you think this is a mistake."
+          : "Invalid email or password."
+      );
       return;
     }
     // Success — keep the overlay up through resolving the role and navigating

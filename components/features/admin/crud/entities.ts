@@ -731,8 +731,10 @@ export const ENTITIES: Record<string, EntityConfig> = {
     description: "Manage platform accounts and access levels.",
     titleField: "name",
     searchPlaceholder: "Search users by name or email...",
+    // Users sign themselves up; admins only adjust role/status.
+    canCreate: false,
     columns: [
-      { key: "name", label: "User", render: "media", subKey: "email" },
+      { key: "name", label: "User", render: "media", subKey: "email", avatar: true },
       { key: "role", label: "Role", className: "capitalize" },
       { key: "status", label: "Status", render: "status", align: "center" },
       { key: "joined", label: "Joined" },
@@ -744,7 +746,8 @@ export const ENTITIES: Record<string, EntityConfig> = {
         options: [
           { label: "Admin", value: "admin" },
           { label: "Editor", value: "editor" },
-          { label: "Member", value: "member" },
+          { label: "Contributor", value: "contributor" },
+          { label: "Reader", value: "reader" },
         ],
       },
       {
@@ -760,7 +763,9 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Account",
         fields: [
-          { name: "name", label: "Full name", type: "text", required: true },
+          { name: "firstName", label: "First name", type: "text" },
+          { name: "lastName", label: "Last name", type: "text" },
+          { name: "username", label: "Username", type: "text", required: true },
           { name: "email", label: "Email", type: "email", required: true },
           { name: "avatar", label: "Avatar", type: "image", minWidth: 200, minHeight: 200, maxSizeMB: 2, description: "Square image, at least 200×200px." },
         ],
@@ -777,7 +782,8 @@ export const ENTITIES: Record<string, EntityConfig> = {
             options: [
               { label: "Admin", value: "admin" },
               { label: "Editor", value: "editor" },
-              { label: "Member", value: "member" },
+              { label: "Contributor", value: "contributor" },
+              { label: "Reader", value: "reader" },
             ],
           },
           {

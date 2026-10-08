@@ -28,5 +28,18 @@ export function normalizeRecord(doc: any, config: EntityConfig): EntityRecord {
     }
   }
 
+  if (config.slug === "users") {
+    const full = [doc?.firstName, doc?.lastName].filter(Boolean).join(" ");
+    out.name = full || doc?.username || doc?.email || "";
+    out.status = doc?.status || "active";
+    out.joined = doc?.createdAt
+      ? new Date(doc.createdAt).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
+      : "—";
+  }
+
   return out;
 }

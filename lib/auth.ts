@@ -55,8 +55,12 @@ export const authOptions: NextAuthOptions = {
               isProfileComplete: !!user.user.isProfileComplete,
             };
           }
+          if (res.status === 403 && /suspended/i.test(JSON.stringify(user))) {
+            throw new Error("AccountSuspended");
+          }
           return null;
         } catch (e) {
+          if (e instanceof Error && e.message === "AccountSuspended") throw e;
           return null;
         }
       }
