@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/AuthLayout";
@@ -11,7 +10,6 @@ import { AuthField } from "@/components/features/auth/AuthField";
 import { PasswordField } from "@/components/features/auth/PasswordField";
 
 export default function SignInPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -37,14 +35,18 @@ export default function SignInPage() {
     // relative paths to avoid open-redirects to external sites.
     const target = new URLSearchParams(globalThis.location.search).get("callbackUrl");
     if (target?.startsWith("/")) {
-      router.push(target);
+      // Hard navigation: the router cache may still hold the signed-out
+      // redirect to /signin for this URL, which would leave the overlay up.
+      globalThis.location.assign(target);
       return;
     }
     // Otherwise route by role: admins/editors land in the admin area,
     // everyone else in their dashboard.
     const session = await getSession();
     const role = (session?.user as { role?: string } | undefined)?.role;
-    router.push(role === "admin" || role === "editor" ? "/admin" : "/dashboard");
+    globalThis.location.assign(
+      role === "admin" || role === "editor" ? "/admin" : "/dashboard",
+    );
   };
 
   return (
