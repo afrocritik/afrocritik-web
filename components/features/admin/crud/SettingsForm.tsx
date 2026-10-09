@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { apiClient, describeApiError } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { FieldRenderer } from "./fields";
@@ -13,45 +15,117 @@ const SECTIONS: FormSection[] = [
     description: "How the platform presents itself to visitors.",
     fields: [
       { name: "siteName", label: "Site name", type: "text", required: true, maxLength: 60 },
-      { name: "tagline", label: "Tagline", type: "text", maxLength: 120 },
       { name: "logo", label: "Logo", type: "image", minWidth: 200, minHeight: 60, maxSizeMB: 2, description: "Transparent PNG recommended, at least 200×60px." },
-      { name: "about", label: "About", type: "textarea", full: true, maxLength: 400 },
+      { name: "siteDescription", label: "Site description", type: "textarea", full: true, maxLength: 400 },
     ],
   },
   {
-    title: "Contact & social",
+    title: "Social links",
     fields: [
-      { name: "email", label: "Contact email", type: "email" },
       { name: "twitter", label: "Twitter / X", type: "url", placeholder: "https://x.com/afrocritik" },
       { name: "instagram", label: "Instagram", type: "url", placeholder: "https://instagram.com/afrocritik" },
       { name: "youtube", label: "YouTube", type: "url", placeholder: "https://youtube.com/@afrocritik" },
+      { name: "discord", label: "Discord", type: "url", placeholder: "https://discord.gg/..." },
     ],
   },
   {
-    title: "Features",
+    title: "Newsletter",
+    description: "The signup prompt shown in the site footer.",
     fields: [
-      { name: "allowSignups", label: "Allow new sign-ups", type: "toggle", full: false },
-      { name: "requireReview", label: "Require editor review before publish", type: "toggle", full: false },
-      { name: "maintenance", label: "Maintenance mode", type: "toggle", full: false },
+      { name: "newsletterHeading", label: "Heading", type: "text", maxLength: 80 },
+      { name: "newsletterDescription", label: "Description", type: "text", maxLength: 160 },
+    ],
+  },
+  {
+    title: "Search & sharing defaults",
+    description: "Used when a page doesn't set its own title, description or image.",
+    fields: [
+      { name: "metaTitle", label: "Default title", type: "text", maxLength: 70 },
+      { name: "metaTwitterHandle", label: "Twitter handle", type: "text", placeholder: "@afrocritik" },
+      { name: "metaImage", label: "Default share image", type: "image", minWidth: 1200, minHeight: 630, maxSizeMB: 2, description: "At least 1200×630px." },
+      { name: "metaDescription", label: "Default description", type: "textarea", full: true, maxLength: 160 },
     ],
   },
 ];
 
-const INITIAL: Record<string, unknown> = {
-  siteName: "Afrocritik",
-  tagline: "The archive of African culture & ideas",
-  about: "Afrocritik documents and connects African films, music, literature, people and ideas.",
-  email: "hello@afrocritik.com",
-  twitter: "@afrocritik",
-  allowSignups: true,
-  requireReview: true,
-  maintenance: false,
-};
+const toId = (v: any) => (v == null ? null : typeof v === "object" ? v.id ?? null : v);
+
+/** Flatten the site-settings global into the form's value model. */
+function normalizeIn(d: any): Record<string, unknown> {
+  if (!d) return {};
+  return {
+    siteName: d.siteName ?? "",
+    siteDescription: d.siteDescription ?? "",
+    logo: toId(d.logo),
+    twitter: d.socialLinks?.twitter ?? "",
+    instagram: d.socialLinks?.instagram ?? "",
+    youtube: d.socialLinks?.youtube ?? "",
+    discord: d.socialLinks?.discord ?? "",
+    newsletterHeading: d.newsletter?.heading ?? "",
+    newsletterDescription: d.newsletter?.description ?? "",
+    metaTitle: d.meta?.defaultTitle ?? "",
+    metaDescription: d.meta?.defaultDescription ?? "",
+    metaImage: toId(d.meta?.defaultImage),
+    metaTwitterHandle: d.meta?.twitterHandle ?? "",
+  };
+}
+
+/** Back to the global's shape. footerLinks is deliberately omitted so it's left untouched. */
+function serializeOut(v: Record<string, any>) {
+  return {
+    siteName: v.siteName,
+    siteDescription: v.siteDescription,
+    logo: v.logo ?? null,
+    socialLinks: {
+      twitter: v.twitter,
+      instagram: v.instagram,
+      youtube: v.youtube,
+      discord: v.discord,
+    },
+    newsletter: { heading: v.newsletterHeading, description: v.newsletterDescription },
+    meta: {
+      defaultTitle: v.metaTitle,
+      defaultDescription: v.metaDescription,
+      defaultImage: v.metaImage ?? null,
+      twitterHandle: v.metaTwitterHandle,
+    },
+  };
+}
 
 export function SettingsForm() {
-  const [values, setValues] = useState<Record<string, unknown>>(INITIAL);
+  const { data: session, status } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+
+  const [values, setValues] = useState<Record<string, unknown>>({});
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (status === "loading") return;
+    let active = true;
+    apiClient
+      .get("/api/globals/site-settings", {
+        params: { depth: 0 },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      })
+      .then((r) => {
+        if (active) setValues(normalizeIn(r.data));
+      })
+      .catch((err) => {
+        if (active)
+          setLoadError(
+            describeApiError(err, { subject: "settings", fallback: "Couldn't load settings." }).message
+          );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [token, status]);
 
   const set = (name: string, value: unknown) =>
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -77,10 +151,39 @@ export function SettingsForm() {
     if (Object.keys(next).length > 0) return;
 
     setSaving(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setSaving(false);
-    toast.success("Settings saved.");
+    try {
+      await apiClient.post("/api/globals/site-settings", serializeOut(values), {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      toast.success("Settings saved.");
+    } catch (err) {
+      const labels: Record<string, string> = {};
+      for (const section of SECTIONS) {
+        for (const field of section.fields) labels[field.name] = field.label.toLowerCase();
+      }
+      const { message, fields } = describeApiError(err, {
+        labels,
+        subject: "settings",
+        fallback: "Could not save settings. Please try again.",
+      });
+      setErrors((prev) => ({ ...prev, ...fields }));
+      toast.error(message);
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 px-6 py-16 font-inter text-sm text-white/60">
+        <Loader2 className="size-4 animate-spin" />
+        Loading settings…
+      </div>
+    );
+  }
+  if (loadError) {
+    return <p className="px-6 py-16 font-inter text-sm text-red-300">{loadError}</p>;
+  }
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-6 px-4 pt-6 pb-[72px] md:px-6">

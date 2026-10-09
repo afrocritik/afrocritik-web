@@ -1,59 +1,144 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Search, Trash2, Upload } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { FileText, Loader2, Search, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { apiClient, API_BASE, describeApiError, getMediaUrl } from "@/lib/api";
 import { DeleteDialog } from "./DeleteDialog";
 
 interface Asset {
   id: string;
-  url: string;
+  url: string | null; // null for non-image files (PDFs)
   name: string;
   meta: string;
 }
 
-const SAMPLE: Asset[] = [
-  { id: "a1", url: "/images/samples/chimamanda-portrait.jpg", name: "chimamanda-portrait.jpg", meta: "1.2 MB · 1200×800" },
-  { id: "a2", url: "/images/samples/fela-kuti-zombie-cover.jpg", name: "fela-kuti-zombie-cover.jpg", meta: "980 KB · 1080×1080" },
-  { id: "a3", url: "/images/samples/ngugi-portrait.png", name: "ngugi-portrait.png", meta: "1.5 MB · 900×1200" },
-  { id: "a4", url: "/images/samples/thumb-ngugi.png", name: "thumb-ngugi.png", meta: "740 KB · 1200×675" },
-  { id: "a5", url: "/images/samples/wizkid-portrait.png", name: "wizkid-portrait.png", meta: "1.1 MB · 1000×1000" },
-  { id: "a6", url: "/images/samples/purple-hibiscus-cover.png", name: "purple-hibiscus-cover.png", meta: "820 KB · 800×1200" },
-  { id: "a7", url: "/images/samples/davido-portrait.png", name: "davido-portrait.png", meta: "1.3 MB · 1200×800" },
-  { id: "a8", url: "/images/samples/rattlesnake-poster.jpg", name: "rattlesnake-poster.jpg", meta: "640 KB · 1080×720" },
-  { id: "a9", url: "/images/samples/asake-performing.png", name: "asake-performing.png", meta: "1.0 MB · 1000×1000" },
-  { id: "a10", url: "/images/samples/homegoing-cover.png", name: "homegoing-cover.png", meta: "910 KB · 800×1200" },
-];
+const PAGE_SIZE = 30;
+
+function formatSize(bytes?: number): string {
+  if (!bytes) return "";
+  return bytes >= 1024 * 1024
+    ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
+    : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+function toAsset(doc: any): Asset {
+  const isImage = String(doc?.mimeType ?? "").startsWith("image/");
+  const dims = doc?.width && doc?.height ? `${doc.width}×${doc.height}` : "";
+  return {
+    id: String(doc.id),
+    url: isImage ? getMediaUrl(doc?.sizes?.thumbnail ?? doc) ?? null : null,
+    name: doc?.filename ?? `#${doc.id}`,
+    meta: [formatSize(doc?.filesize), dims].filter(Boolean).join(" · "),
+  };
+}
 
 export function MediaLibrary() {
-  const [assets, setAssets] = useState<Asset[]>(SAMPLE);
+  const { data: session, status } = useSession();
+  const token = (session?.user as { token?: string } | undefined)?.token;
+  const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+
+  const [assets, setAssets] = useState<Asset[]>([]);
   const [query, setQuery] = useState("");
+  const [debounced, setDebounced] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [toDelete, setToDelete] = useState<Asset | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filtered = assets.filter((a) =>
-    a.name.toLowerCase().includes(query.toLowerCase())
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(query.trim()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  const load = useCallback(
+    async (nextPage: number, replace: boolean) => {
+      setLoading(true);
+      try {
+        const res = await apiClient.get("/api/media", {
+          params: {
+            limit: PAGE_SIZE,
+            page: nextPage,
+            sort: "-createdAt",
+            depth: 0,
+            ...(debounced ? { "where[filename][like]": debounced } : {}),
+          },
+          headers,
+        });
+        const docs: any[] = res.data?.docs ?? [];
+        setAssets((prev) => (replace ? docs.map(toAsset) : [...prev, ...docs.map(toAsset)]));
+        setHasMore(Boolean(res.data?.hasNextPage));
+        setPage(nextPage);
+        setLoadError(null);
+      } catch (err) {
+        setLoadError(
+          describeApiError(err, { subject: "file", fallback: "Couldn't load media." }).message
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [debounced, token]
   );
 
-  const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (status === "loading") return;
+    load(1, true);
+  }, [load, status]);
+
+  const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
+    e.target.value = "";
     if (!files.length) return;
-    const added = files.map((f, i) => ({
-      id: `new-${Date.now()}-${i}`,
-      url: URL.createObjectURL(f),
-      name: f.name,
-      meta: `${(f.size / 1024).toFixed(0)} KB`,
-    }));
-    setAssets((prev) => [...added, ...prev]);
-    toast.success(`${files.length} file${files.length > 1 ? "s" : ""} uploaded.`);
+    setUploading(true);
+    let ok = 0;
+    const added: Asset[] = [];
+    for (const file of files) {
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        // fetch sets the multipart boundary; the shared axios client forces JSON.
+        const res = await fetch(`${API_BASE}/api/media`, { method: "POST", headers, body: fd });
+        if (!res.ok) {
+          const body = await res.json().catch(() => undefined);
+          throw { response: { status: res.status, data: body } };
+        }
+        const data = await res.json();
+        added.push(toAsset(data?.doc ?? data));
+        ok += 1;
+      } catch (err) {
+        toast.error(
+          `${file.name}: ${describeApiError(err, { subject: "file", fallback: "Upload failed." }).message}`
+        );
+      }
+    }
+    if (added.length) setAssets((prev) => [...added.reverse(), ...prev]);
+    if (ok) toast.success(`${ok} file${ok > 1 ? "s" : ""} uploaded.`);
+    setUploading(false);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!toDelete) return;
-    setAssets((prev) => prev.filter((a) => a.id !== toDelete.id));
-    toast.success(`"${toDelete.name}" deleted.`);
+    const target = toDelete;
     setToDelete(null);
+    try {
+      await apiClient.delete(`/api/media/${target.id}`, { headers });
+      setAssets((prev) => prev.filter((a) => a.id !== target.id));
+      toast.success(`"${target.name}" deleted.`);
+    } catch (err) {
+      toast.error(
+        describeApiError(err, {
+          subject: "file",
+          fallback: `Could not delete "${target.name}".`,
+        }).message
+      );
+    }
   };
 
   return (
@@ -73,13 +158,13 @@ export function MediaLibrary() {
           className="inline-flex h-11 items-center gap-2 rounded-xl px-5 font-inter text-base font-medium text-yellow-950 transition-opacity hover:opacity-90"
           style={{ background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)" }}
         >
-          <Upload className="size-5" />
-          Upload media
+          {uploading ? <Loader2 className="size-5 animate-spin" /> : <Upload className="size-5" />}
+          {uploading ? "Uploading…" : "Upload media"}
         </button>
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,application/pdf"
           multiple
           onChange={onUpload}
           className="hidden"
@@ -108,19 +193,26 @@ export function MediaLibrary() {
           <span className="font-inter text-sm text-white/70">Upload</span>
         </button>
 
-        {filtered.map((asset) => (
+        {assets.map((asset) => (
           <div
             key={asset.id}
             className="group relative overflow-hidden rounded-xl border border-yellow-700/50 bg-[#50321C80]"
           >
             <div className="relative aspect-square overflow-hidden">
-              <Image
-                src={asset.url}
-                alt={asset.name}
-                fill
-                sizes="200px"
-                className="object-cover"
-              />
+              {asset.url ? (
+                <Image
+                  src={asset.url}
+                  alt={asset.name}
+                  fill
+                  unoptimized
+                  sizes="200px"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex size-full items-center justify-center bg-yellow-950/40 text-orange-300">
+                  <FileText className="size-10" />
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => setToDelete(asset)}
@@ -140,10 +232,28 @@ export function MediaLibrary() {
         ))}
       </div>
 
-      {filtered.length === 0 && (
+      {loading && (
+        <div className="flex items-center justify-center gap-2 py-10 font-inter text-sm text-white/60">
+          <Loader2 className="size-4 animate-spin" />
+          Loading media…
+        </div>
+      )}
+      {!loading && loadError && (
+        <p className="py-10 text-center font-inter text-sm text-red-300">{loadError}</p>
+      )}
+      {!loading && !loadError && assets.length === 0 && (
         <p className="py-10 text-center font-inter text-sm text-white/50">
-          No media found.
+          {debounced ? "No files match that search." : "No media yet. Upload your first file."}
         </p>
+      )}
+      {!loading && hasMore && (
+        <button
+          type="button"
+          onClick={() => load(page + 1, false)}
+          className="mx-auto h-10 rounded-lg border border-yellow-700/60 px-5 font-inter text-sm text-white/80 transition-colors hover:border-yellow-600 hover:bg-[#50321C80]"
+        >
+          Load more
+        </button>
       )}
 
       <DeleteDialog
