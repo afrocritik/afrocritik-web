@@ -157,11 +157,26 @@ export function EntityFormView({
         fallback: "Something went wrong while saving. Please try again.",
       });
       setErrors((prev) => ({ ...prev, ...fields }));
-      setSubmitError(message);
+      // Field-level problems are already listed in the banner above the form.
+      setSubmitError(Object.keys(fields).length > 0 ? null : message);
       setSaving(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  // Split problems: genuinely missing required fields vs. other invalid input
+  // (bad URL, duplicate title, oversized image…), so each gets the right banner.
+  const labelOf: Record<string, string> = {};
+  for (const section of config.form) {
+    for (const field of section.fields) labelOf[field.name] = field.label;
+  }
+  const missingRequired: string[] = [];
+  const otherProblems: string[] = [];
+  for (const [name, message] of Object.entries(errors)) {
+    const label = labelOf[name];
+    if (/ is required\.$/.test(message)) missingRequired.push(label ?? message.replace(/ is required\.$/, ""));
+    else otherProblems.push(label ? `${label}: ${message}` : message);
+  }
 
   const renderField = (field: FieldConfig) => {
     if (!isVisible(field)) return null;
@@ -224,10 +239,21 @@ export function EntityFormView({
         </div>
       </div>
 
-      {Object.keys(errors).length > 0 && (
+      {missingRequired.length > 0 && (
         <p className="rounded-lg border border-red-700/50 bg-red-900/20 px-4 py-3 font-inter text-sm text-red-200">
-          Please fill in all required fields before saving.
+          Required before saving: {missingRequired.join(", ")}.
         </p>
+      )}
+
+      {otherProblems.length > 0 && (
+        <div className="rounded-lg border border-red-700/50 bg-red-900/20 px-4 py-3 font-inter text-sm text-red-200">
+          <p className="font-medium">Fix the following before saving:</p>
+          <ul className="mt-1 list-disc pl-5">
+            {otherProblems.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        </div>
       )}
 
       {submitError && (

@@ -91,13 +91,17 @@ export function describeApiError(
       const label = labels[target] ?? humanise(target || "field");
       const msg = (d.message || "").toLowerCase();
       let text: string;
-      if (/unique/.test(msg)) {
+      if (/^value must be unique/.test(msg)) {
         text =
           target !== raw
             ? `Another ${subject} already uses this ${label}. Choose a different ${label}.`
             : `This ${label} is already in use. Choose a different one.`;
-      } else if (/required/.test(msg)) {
+      } else if (/^this field is required/.test(msg)) {
         text = `${label[0].toUpperCase()}${label.slice(1)} is required.`;
+      } else if (d.message && !/^value must|^this field/.test(msg)) {
+        // Already a specific, human-written message from the API (e.g. a
+        // custom validator) — show it as is.
+        text = d.message;
       } else if (d.message) {
         text = `${label[0].toUpperCase()}${label.slice(1)}: ${d.message.replace(/\.$/, "")}.`;
       } else {
