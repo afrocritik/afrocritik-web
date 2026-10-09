@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { FieldRenderer } from "./fields";
 import { validateField } from "./validation";
-import { apiClient } from "@/lib/api";
+import { apiClient, describeApiError } from "@/lib/api";
 import type { EntityConfig, EntityRecord, FieldConfig, FormSection } from "./types";
 
 function defaultFor(field: FieldConfig): unknown {
@@ -145,13 +145,18 @@ export function EntityFormView({
         `/admin/${config.slug}?flash=${isEdit ? "updated" : "created"}`
       );
     } catch (err) {
-      const response = (err as {
-        response?: { data?: { errors?: { message?: string }[]; message?: string } };
-      }).response;
-      const message =
-        response?.data?.errors?.[0]?.message ||
-        response?.data?.message ||
-        "Something went wrong while saving. Please try again.";
+      const labels: Record<string, string> = {};
+      for (const section of config.form) {
+        for (const field of section.fields) labels[field.name] = field.label.toLowerCase();
+      }
+      const { message, fields } = describeApiError(err, {
+        labels,
+        // slug is generated from the title field, so point the user there.
+        aliases: { slug: config.titleField },
+        subject: config.singular.toLowerCase(),
+        fallback: "Something went wrong while saving. Please try again.",
+      });
+      setErrors((prev) => ({ ...prev, ...fields }));
       setSubmitError(message);
       setSaving(false);
       window.scrollTo({ top: 0, behavior: "smooth" });

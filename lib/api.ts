@@ -28,6 +28,119 @@ export function getApiErrorMessage(err: unknown, fallback: string): string {
   return fallback;
 }
 
+export interface DescribedApiError {
+  /** Banner-level message, always specific enough to act on */
+  message: string;
+  /** Per-field messages keyed by Payload field name (e.g. `slug`, `email`) */
+  fields: Record<string, string>;
+}
+
+const humanise = (name: string) =>
+  name
+    .replace(/\./g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .toLowerCase();
+
+/**
+ * Turns an axios/Payload error into something a person can act on: names the
+ * field(s) at fault, explains duplicates/permissions/size limits, and
+ * distinguishes "can't reach the server" from "the server said no".
+ *
+ * `labels` maps a Payload field name to the label the user sees, and `aliases`
+ * redirects a derived field to the one they actually edit (e.g. slug → title).
+ */
+export function describeApiError(
+  err: unknown,
+  opts: {
+    fallback?: string;
+    labels?: Record<string, string>;
+    aliases?: Record<string, string>;
+    subject?: string; // e.g. "work"
+  } = {},
+): DescribedApiError {
+  const { labels = {}, aliases = {}, subject = "entry" } = opts;
+  const fallback = opts.fallback ?? "Something went wrong. Please try again.";
+  const res = (err as AxiosError<any>)?.response;
+  const fields: Record<string, string> = {};
+
+  if (!res) {
+    const code = (err as AxiosError)?.code;
+    return {
+      message:
+        code === "ECONNABORTED"
+          ? "The server took too long to respond. Check your connection and try again."
+          : "Couldn't reach the server. Check your internet connection and try again.",
+      fields,
+    };
+  }
+
+  const status = res.status;
+  const data = res.data;
+  const first = Array.isArray(data?.errors) ? data.errors[0] : undefined;
+  const details: { message?: string; field?: string }[] = Array.isArray(first?.data)
+    ? first.data
+    : Array.isArray(first?.data?.errors)
+      ? first.data.errors
+      : [];
+
+  if (details.length) {
+    const parts: string[] = [];
+    for (const d of details) {
+      const raw = d.field || "";
+      const target = aliases[raw] ?? raw;
+      const label = labels[target] ?? humanise(target || "field");
+      const msg = (d.message || "").toLowerCase();
+      let text: string;
+      if (/unique/.test(msg)) {
+        text =
+          target !== raw
+            ? `Another ${subject} already uses this ${label}. Choose a different ${label}.`
+            : `This ${label} is already in use. Choose a different one.`;
+      } else if (/required/.test(msg)) {
+        text = `${label[0].toUpperCase()}${label.slice(1)} is required.`;
+      } else if (d.message) {
+        text = `${label[0].toUpperCase()}${label.slice(1)}: ${d.message.replace(/\.$/, "")}.`;
+      } else {
+        text = `${label[0].toUpperCase()}${label.slice(1)} is invalid.`;
+      }
+      if (target) fields[target] = text;
+      parts.push(text);
+    }
+    return { message: parts.join(" "), fields };
+  }
+
+  if (status === 401) {
+    return { message: "Your session has expired. Please sign in again.", fields };
+  }
+  if (status === 403) {
+    return {
+      message:
+        first?.message && !/not allowed to perform/i.test(first.message)
+          ? first.message
+          : "You don't have permission to do this. Ask an admin to update your role if you need access.",
+      fields,
+    };
+  }
+  if (status === 404) {
+    return { message: `That ${subject} no longer exists. It may have been deleted.`, fields };
+  }
+  if (status === 413) {
+    return { message: "That file is too large to upload. Use a smaller file.", fields };
+  }
+  if (status === 429) {
+    return { message: "Too many requests. Wait a moment and try again.", fields };
+  }
+  if (status >= 500) {
+    return {
+      message: "The server hit an error and couldn't save. Try again in a moment; if it keeps happening, contact a developer.",
+      fields,
+    };
+  }
+
+  const message = first?.message || (typeof data?.message === "string" ? data.message : "");
+  return { message: message || fallback, fields };
+}
+
 export const apiClient = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },

@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { api } from "@/lib/api";
+import { api, describeApiError } from "@/lib/api";
 import { FieldRenderer } from "./fields";
 import { validateField } from "./validation";
 import type { FormSection, SelectOption } from "./types";
@@ -228,8 +228,18 @@ export function HomepageForm() {
     try {
       await api.updateHomepage(serializeOut(values), token);
       toast.success("Homepage saved.");
-    } catch {
-      toast.error("Could not save the homepage. Check your access and try again.");
+    } catch (err) {
+      const labels: Record<string, string> = {};
+      for (const section of SECTIONS) {
+        for (const field of section.fields) labels[field.name] = field.label.toLowerCase();
+      }
+      const { message, fields } = describeApiError(err, {
+        labels,
+        subject: "homepage",
+        fallback: "Could not save the homepage. Please try again.",
+      });
+      setErrors((prev) => ({ ...prev, ...fields }));
+      toast.error(message);
     } finally {
       setSaving(false);
     }

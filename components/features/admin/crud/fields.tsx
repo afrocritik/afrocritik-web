@@ -35,7 +35,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { apiClient, API_BASE, getMediaUrl } from "@/lib/api";
+import { apiClient, API_BASE, describeApiError, getMediaUrl } from "@/lib/api";
 import type { FieldConfig, SelectOption } from "./types";
 import { acceptKind, validateField, validateFileSelection } from "./validation";
 
@@ -522,14 +522,23 @@ function ImageControl({ field, value, onChange, error, setError }: ControlProps)
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: fd,
       });
-      if (!res.ok) throw new Error(String(res.status));
+      if (!res.ok) {
+        // Reshape the fetch response so describeApiError can read it.
+        const body = await res.json().catch(() => undefined);
+        throw { response: { status: res.status, data: body } };
+      }
       const data = await res.json();
       const doc = data?.doc ?? data;
       onChange(doc.id);
       setPreview(isImage ? getMediaUrl(doc) || URL.createObjectURL(file) : null);
       setFileName(doc?.filename ?? file.name);
-    } catch {
-      setError?.("Upload failed. Please try again.");
+    } catch (err) {
+      setError?.(
+        describeApiError(err, {
+          subject: "file",
+          fallback: "Upload failed. Please try again.",
+        }).message
+      );
     } finally {
       setChecking(false);
     }

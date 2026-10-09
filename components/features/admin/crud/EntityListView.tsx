@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { ChevronDown, Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { apiClient, getApiErrorMessage } from "@/lib/api";
+import { apiClient, describeApiError, getApiErrorMessage } from "@/lib/api";
 import { TablePagination } from "../TablePagination";
 import { StatusPill } from "./StatusPill";
 import { RowActions } from "./RowActions";
@@ -250,13 +250,11 @@ export function EntityListView({ config }: Readonly<{ config: EntityConfig }>) {
         `${config.singular} "${String(target[titleField])}" deleted.`
       );
     } catch (err) {
-      const response = (err as {
-        response?: { data?: { errors?: { message?: string }[]; message?: string } };
-      }).response;
       toast.error(
-        response?.data?.errors?.[0]?.message ||
-          response?.data?.message ||
-          `Could not delete this ${config.singular.toLowerCase()}.`
+        describeApiError(err, {
+          subject: config.singular.toLowerCase(),
+          fallback: `Could not delete this ${config.singular.toLowerCase()}.`,
+        }).message
       );
     }
   };
