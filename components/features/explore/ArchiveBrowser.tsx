@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { api, getMediaUrl, mapWorkToCard } from "@/lib/api";
@@ -58,22 +58,33 @@ function toCard(doc: any, tab: string) {
   return { ...card, href: `/${base}/${card.slug}` };
 }
 
+// Filters live in the address (?tab=…&q=…&country=a,b) so refresh, back and
+// shared links all land on the same view. Lists are comma-separated.
+const listParam = (params: URLSearchParams, key: string) =>
+  (params.get(key) ?? "").split(",").filter(Boolean);
+const numParam = (params: URLSearchParams, key: string) => {
+  const n = Number(params.get(key));
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 export function ArchiveBrowser() {
   const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
   const [tab, setTab] = useState(params.get("tab") || "works");
   const [query, setQuery] = useState(params.get("q") || "");
   const [view, setView] = useState<"grid" | "list">("grid");
-  const [sort, setSort] = useState("newest");
-  const [countries, setCountries] = useState<string[]>([]);
-  const [themes, setThemes] = useState<string[]>([]);
-  const [yearFrom, setYearFrom] = useState<number | undefined>(undefined);
-  const [yearTo, setYearTo] = useState<number | undefined>(undefined);
+  const [sort, setSort] = useState(params.get("sort") || "newest");
+  const [countries, setCountries] = useState<string[]>(() => listParam(params, "country"));
+  const [themes, setThemes] = useState<string[]>(() => listParam(params, "theme"));
+  const [yearFrom, setYearFrom] = useState<number | undefined>(() => numParam(params, "yearFrom"));
+  const [yearTo, setYearTo] = useState<number | undefined>(() => numParam(params, "yearTo"));
   // Top-bar dropdown filters (country is shared with the sidebar above).
-  const [years, setYears] = useState<string[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [genres, setGenres] = useState<string[]>([]);
+  const [years, setYears] = useState<string[]>(() => listParam(params, "year"));
+  const [categories, setCategories] = useState<string[]>(() => listParam(params, "category"));
+  const [genres, setGenres] = useState<string[]>(() => listParam(params, "genre"));
 
   // Categories / sub-categories / specific years mean different things per tab.
   const selectTab = (key: string) => {
@@ -94,6 +105,28 @@ export function ArchiveBrowser() {
     const t = setTimeout(() => setSearchTerm(query), 600);
     return () => clearTimeout(t);
   }, [query]);
+
+  // Mirror the active view into the address bar (replace, so back doesn't step
+  // through every keystroke or checkbox).
+  useEffect(() => {
+    const sp = new URLSearchParams();
+    if (tab !== "works") sp.set("tab", tab);
+    if (searchTerm) sp.set("q", searchTerm);
+    if (sort !== "newest") sp.set("sort", sort);
+    const lists: [string, string[]][] = [
+      ["country", countries],
+      ["theme", themes],
+      ["year", years],
+      ["category", categories],
+      ["genre", genres],
+    ];
+    for (const [key, vals] of lists) if (vals.length) sp.set(key, vals.join(","));
+    if (yearFrom !== undefined) sp.set("yearFrom", String(yearFrom));
+    if (yearTo !== undefined) sp.set("yearTo", String(yearTo));
+    const qs = sp.toString();
+    if (qs === window.location.search.replace(/^\?/, "")) return;
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [tab, searchTerm, sort, countries, themes, years, categories, genres, yearFrom, yearTo, pathname, router]);
 
   const { data: countsData } = useQuery({
     queryKey: ["archive-counts"],

@@ -173,8 +173,12 @@ export function ArchiveResults({
                   </div>
                 </div>
               ) : (
-                hasMore && (
-                  <div className="mt-6 flex justify-center">
+                <div className="mt-6 flex flex-col items-center gap-1">
+                  <p className="font-inter text-[15px] text-stone-300">
+                    Showing {formatCount(visibleWorks.length)} of {formatCount(resultCount)}{" "}
+                    {countNoun(tabLabel, resultCount).toLowerCase()}
+                  </p>
+                  {hasMore && (
                     <button
                       type="button"
                       onClick={onLoadMore}
@@ -186,8 +190,8 @@ export function ArchiveResults({
                       </span>
                       {!loadingMore && <ArrowDown className="h-4 w-4 text-stone-200" aria-hidden />}
                     </button>
-                  </div>
-                )
+                  )}
+                </div>
               )}
             </>
           ) : (
