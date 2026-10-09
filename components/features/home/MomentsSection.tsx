@@ -59,9 +59,9 @@ function MomentCard({ slug, title, description, image }: Readonly<MomentCardData
         margin: 0,
         flexShrink: 0,
         flexGrow: 0,
-        flexBasis: hovered ? "480px" : "270px",
-        width: hovered ? "480px" : "270px",
-        height: "384px",
+        flexBasis: hovered ? "418px" : "270px",
+        width: hovered ? "418px" : "270px",
+        height: "335px",
         padding: "13px 16px",
         borderRadius: "8px",
         border: "1px solid #9C5C08",
@@ -98,7 +98,7 @@ function MomentCard({ slug, title, description, image }: Readonly<MomentCardData
           )}
         </div>
         <p
-          className="line-clamp-4 shrink-0"
+          className="line-clamp-3 shrink-0"
           style={{
             color: "#D6D3D1",
             fontFamily: "var(--font-inter)",
@@ -140,7 +140,7 @@ export function MomentsSection({ moments = [] }: Readonly<{ moments?: any[] }>) 
   return (
     <>
       <div className="container">
-        <HomeSectionHeader title="Moments" href={cards.length > 0 ? "/explore?tab=moments" : undefined} />
+        <HomeSectionHeader title="Moments" href={cards.length >= 5 ? "/explore?tab=moments" : undefined} bleed />
       </div>
       {cards.length > 0 ? (
         <CarouselRow

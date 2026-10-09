@@ -152,13 +152,14 @@ function EssentialCardImage({
   title,
   image,
   hovered,
-  idleHeight = 240,
+  grow = false,
 }: Readonly<{
   slug: string;
   title: string;
   image?: string;
   hovered: boolean;
-  idleHeight?: number;
+  /** Spotlight cards also grow taller on hover; the rest only widen. */
+  grow?: boolean;
 }>) {
   return (
     <div
@@ -167,7 +168,7 @@ function EssentialCardImage({
         marginTop: "16px",
         marginLeft: "16px",
         marginRight: "16px",
-        height: hovered ? "247px" : `${idleHeight}px`,
+        height: grow && hovered ? "247px" : "215px",
         overflow: "hidden",
         borderRadius: "4px",
         background: "lightgray",
@@ -196,6 +197,7 @@ function EssentialCardBody({
   cardTags,
   rating,
   hovered,
+  grow = false,
 }: Readonly<{
   slug: string;
   title: string;
@@ -204,6 +206,7 @@ function EssentialCardBody({
   cardTags: string[];
   rating?: number;
   hovered: boolean;
+  grow?: boolean;
 }>) {
   return (
     <div
@@ -231,7 +234,7 @@ function EssentialCardBody({
         </h3>
       </Link>
       <p
-        className={hovered ? "line-clamp-2" : "line-clamp-1"}
+        className={hovered && grow ? "line-clamp-2" : "line-clamp-1"}
         style={{
           color: "#D6D3D1",
           fontFamily: "var(--font-inter)",
@@ -297,7 +300,7 @@ function EssentialCard({
         // row — which is what makes the carousel's Next button appear.
         flexBasis: hovered ? "418px" : idleWidth,
         width: hovered ? "418px" : idleWidth,
-        height: spotlight ? (hovered ? "385px" : "335px") : "384px",
+        height: spotlight && hovered ? "385px" : "335px",
         alignSelf: spotlight ? "flex-start" : undefined,
         borderRadius: hovered ? "8px" : "6.964px",
         border: `${hovered ? "1" : "0.87"}px solid #9C5C08`,
@@ -332,7 +335,7 @@ function EssentialCard({
           {badge}
         </span>
       )}
-      <EssentialCardImage slug={slug} title={title} image={image} hovered={hovered} idleHeight={spotlight ? 215 : 240} />
+      <EssentialCardImage slug={slug} title={title} image={image} hovered={hovered} grow={spotlight} />
       <EssentialCardBody
         slug={slug}
         title={title}
@@ -341,6 +344,7 @@ function EssentialCard({
         cardTags={cardTags}
         rating={rating}
         hovered={hovered}
+        grow={spotlight}
       />
     </fieldset>
   );
@@ -436,8 +440,8 @@ function EWIMCard({
         padding: 0,
         margin: 0,
         flexShrink: 0,
-        width: hovered ? "398px" : "270px",
-        height: "384px",
+        width: hovered ? "418px" : "270px",
+        height: "335px",
         borderRadius: "8px",
         border: "1px solid #B45309",
         background: "rgba(255, 241, 242, 0.10)",
@@ -475,7 +479,7 @@ function EWIMCard({
           top: "16px",
           left: "16px",
           right: "16px",
-          height: "240px",
+          height: "215px",
           overflow: "hidden",
           borderRadius: "4px",
           background: "#3D1F00",
@@ -498,12 +502,12 @@ function EWIMCard({
       <div
         style={{
           position: "absolute",
-          top: "268px",
+          top: "244px",
           left: "16px",
           right: "16px",
           display: "flex",
           flexDirection: "column",
-          gap: "8px",
+          gap: "6px",
         }}
       >
         {/* Title + rating */}
@@ -517,7 +521,7 @@ function EWIMCard({
                 fontWeight: 600,
                 lineHeight: "130%",
                 display: "-webkit-box",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 1,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 transition: "font-size 0.4s ease",
@@ -644,8 +648,8 @@ function EWILCard({
         padding: 0,
         margin: 0,
         flexShrink: 0,
-        width: hovered ? "338px" : "270px",
-        height: "384px",
+        width: hovered ? "418px" : "270px",
+        height: "335px",
         borderRadius: "8px",
         border: "1px solid #B45309",
         background: "rgba(255, 241, 242, 0.10)",
@@ -681,7 +685,7 @@ function EWILCard({
           top: "16px",
           left: "16px",
           right: "16px",
-          height: "240px",
+          height: "215px",
           overflow: "hidden",
           borderRadius: "4px",
           background: "#3D1F00",
@@ -704,12 +708,12 @@ function EWILCard({
       <div
         style={{
           position: "absolute",
-          top: "272px",
+          top: "244px",
           left: "16px",
           right: "16px",
           display: "flex",
           flexDirection: "column",
-          gap: "8px",
+          gap: "6px",
         }}
       >
         {/* Title + rating */}
@@ -723,7 +727,7 @@ function EWILCard({
                 fontWeight: 600,
                 lineHeight: "130%",
                 display: "-webkit-box",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 1,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 transition: "font-size 0.4s ease",
