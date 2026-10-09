@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { PreviewGate } from "@/components/common/PreviewGate";
 import { MomentHeroSection } from "@/components/features/moments/MomentHeroSection";
 import { MomentMediaRow } from "@/components/features/moments/MomentMediaRow";
 import { RelatedMomentsSection } from "@/components/features/moments/RelatedMomentsSection";
@@ -111,24 +114,28 @@ export default async function MomentDetailPage({
     relatedMoments.length > 0 && { id: "related-moments", label: "Related Moments" },
   ].filter(Boolean) as { id: string; label: string }[];
 
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="bg-[#160907]">
-      <div className="container">
-        {/* HERO — TOC + breadcrumb/header */}
-        <MomentHeroSection
-          title={title}
-          summary={summary}
-          meta={meta}
-          relatedThemes={relatedThemes}
-          toc={toc}
-        />
+      <PreviewGate locked={!session} callbackUrl={`/moments/${params.slug}`}>
+        <div className="container">
+          {/* HERO — TOC + breadcrumb/header */}
+          <MomentHeroSection
+            title={title}
+            summary={summary}
+            meta={meta}
+            relatedThemes={relatedThemes}
+            toc={toc}
+          />
 
-        {/* MEDIA FROM MOMENT + PLAY AUDIO */}
-        <MomentMediaRow videos={videos} images={images} audioTracks={audioTracks} />
+          {/* MEDIA FROM MOMENT + PLAY AUDIO */}
+          <MomentMediaRow videos={videos} images={images} audioTracks={audioTracks} />
 
-        {/* RELATED MOMENTS */}
-        <RelatedMomentsSection moments={relatedMoments} />
-      </div>
+          {/* RELATED MOMENTS */}
+          <RelatedMomentsSection moments={relatedMoments} />
+        </div>
+      </PreviewGate>
     </div>
   );
 }

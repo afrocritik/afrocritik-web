@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { PreviewGate } from "@/components/common/PreviewGate";
 import { ViewTracker } from "@/components/common/ViewTracker";
 import { WorkHeroSection } from "@/components/features/works/WorkHeroSection";
 import { WorkContextRow } from "@/components/features/works/WorkContextRow";
@@ -112,39 +115,43 @@ export default async function IdeaDetailPage({
     relatedIdeas.length > 0 && { id: "further-reading", label: "Related Ideas" },
   ].filter(Boolean) as { id: string; label: string }[];
 
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="bg-[#160907]">
-      <ViewTracker collection="ideas" id={idea.id} />
-      <div className="container">
-        <WorkHeroSection
-          title={title}
-          workId={idea.id}
-          slug={idea.slug}
-          saveKind="idea"
-          sectionLabel="Ideas"
-          sectionHref="/explore?tab=ideas"
-          description={description}
-          image={image}
-          meta={meta}
-          relatedThemes={relatedThemes}
-          toc={toc}
-        />
+      <PreviewGate locked={!session} callbackUrl={`/ideas/${params.slug}`}>
+        <ViewTracker collection="ideas" id={idea.id} />
+        <div className="container">
+          <WorkHeroSection
+            title={title}
+            workId={idea.id}
+            slug={idea.slug}
+            saveKind="idea"
+            sectionLabel="Ideas"
+            sectionHref="/explore?tab=ideas"
+            description={description}
+            image={image}
+            meta={meta}
+            relatedThemes={relatedThemes}
+            toc={toc}
+          />
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
-            <WorkContextRow workTitle={title} timeline={timeline} />
-            <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
+            <div className="flex min-w-0 flex-1 flex-col gap-4">
+              <WorkContextRow workTitle={title} timeline={timeline} />
+              <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
+            </div>
+
+            <WorkInfoAside atAGlance={atAGlance} />
           </div>
 
-          <WorkInfoAside atAGlance={atAGlance} />
+          <ExploreMoreSection
+            heading="Explore Related Ideas"
+            hrefBase="/ideas"
+            related={relatedIdeas}
+          />
         </div>
-
-        <ExploreMoreSection
-          heading="Explore Related Ideas"
-          hrefBase="/ideas"
-          related={relatedIdeas}
-        />
-      </div>
+      </PreviewGate>
     </div>
   );
 }

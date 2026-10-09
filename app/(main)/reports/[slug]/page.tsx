@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { PreviewGate } from "@/components/common/PreviewGate";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { ViewTracker } from "@/components/common/ViewTracker";
@@ -49,113 +52,117 @@ export default async function ReportDetailPage({
     ? report.signals.map((s: any) => ({ title: s.title ?? "", desc: s.description ?? "" }))
     : [];
 
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="bg-[#160907]">
-      <ViewTracker collection="reports" id={report.id} />
-      <div className="container">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 py-4 font-inter text-xs text-orange-100/70">
-          <Link href="/explore?tab=reports" className="transition-colors hover:text-amber">
-            Reports
-          </Link>
-          <ChevronRight className="size-3.5" />
-          <span className="text-white">{title}</span>
-        </div>
-
-        {/* Hero */}
-        <section className="grid gap-8 pb-14 md:grid-cols-[300px_1fr]">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-yellow-700">
-            {coverUrl ? (
-              <Image src={coverUrl} alt={title} fill className="object-cover" />
-            ) : (
-              <div className="flex h-full items-center justify-center bg-yellow-950/30">
-                <span className="font-baskervville text-6xl text-white/20">
-                  {report.year ?? title.charAt(0)}
-                </span>
-              </div>
-            )}
+      <PreviewGate locked={!session} callbackUrl={`/reports/${params.slug}`}>
+        <ViewTracker collection="reports" id={report.id} />
+        <div className="container">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 py-4 font-inter text-xs text-orange-100/70">
+            <Link href="/explore?tab=reports" className="transition-colors hover:text-amber">
+              Reports
+            </Link>
+            <ChevronRight className="size-3.5" />
+            <span className="text-white">{title}</span>
           </div>
 
-          <div className="flex flex-col">
-            <p className="font-inter text-xs font-semibold uppercase tracking-wider text-amber">
-              {report.subtitle ?? "Annual Report"}
-            </p>
-            <h1 className="mt-2 font-baskervville text-4xl font-semibold leading-tight text-white md:text-5xl">
-              {title}
-            </h1>
+          {/* Hero */}
+          <section className="grid gap-8 pb-14 md:grid-cols-[300px_1fr]">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-yellow-700">
+              {coverUrl ? (
+                <Image src={coverUrl} alt={title} fill className="object-cover" />
+              ) : (
+                <div className="flex h-full items-center justify-center bg-yellow-950/30">
+                  <span className="font-baskervville text-6xl text-white/20">
+                    {report.year ?? title.charAt(0)}
+                  </span>
+                </div>
+              )}
+            </div>
 
-            {report.summary ? (
-              <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100">
-                {report.summary}
+            <div className="flex flex-col">
+              <p className="font-inter text-xs font-semibold uppercase tracking-wider text-amber">
+                {report.subtitle ?? "Annual Report"}
               </p>
-            ) : (
-              <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100/40 italic">
-                Summary not uploaded yet.
-              </p>
-            )}
+              <h1 className="mt-2 font-baskervville text-4xl font-semibold leading-tight text-white md:text-5xl">
+                {title}
+              </h1>
 
-            {/* Stat badges */}
-            {stats.length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-3">
-                {stats.map((s) => (
+              {report.summary ? (
+                <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100">
+                  {report.summary}
+                </p>
+              ) : (
+                <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100/40 italic">
+                  Summary not uploaded yet.
+                </p>
+              )}
+
+              {/* Stat badges */}
+              {stats.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {stats.map((s) => (
+                    <div
+                      key={s.label}
+                      className="rounded-xl border border-yellow-700 bg-yellow-950/50 px-5 py-3 text-center"
+                    >
+                      <div className="font-baskervville text-2xl font-semibold text-white">
+                        {s.value}
+                      </div>
+                      <div className="font-inter text-xs uppercase tracking-wide text-orange-100/60">
+                        {s.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <ReportDownloadButton
+                reportId={String(report.id)}
+                reportTitle={title}
+                reportSlug={report.slug ?? params.slug}
+                pdfUrl={pdfUrl}
+              />
+            </div>
+          </section>
+
+          {/* Signals */}
+          {signals.length > 0 && (
+            <section className="pb-20">
+              <h2 className="mb-6 font-baskervville text-3xl font-semibold capitalize text-white">
+                What The Report Signals
+              </h2>
+              <div className="grid gap-4 md:grid-cols-3">
+                {signals.map((s) => (
                   <div
-                    key={s.label}
-                    className="rounded-xl border border-yellow-700 bg-yellow-950/50 px-5 py-3 text-center"
+                    key={s.title}
+                    className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6"
                   >
-                    <div className="font-baskervville text-2xl font-semibold text-white">
-                      {s.value}
-                    </div>
-                    <div className="font-inter text-xs uppercase tracking-wide text-orange-100/60">
-                      {s.label}
-                    </div>
+                    <h3 className="font-baskervville text-xl font-semibold text-amber">
+                      {s.title}
+                    </h3>
+                    {s.desc && (
+                      <p className="mt-2 font-inter text-sm font-light leading-relaxed text-orange-100">
+                        {s.desc}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
-            )}
+            </section>
+          )}
 
-            <ReportDownloadButton
-              reportId={String(report.id)}
-              reportTitle={title}
-              reportSlug={report.slug ?? params.slug}
-              pdfUrl={pdfUrl}
-            />
-          </div>
-        </section>
-
-        {/* Signals */}
-        {signals.length > 0 && (
-          <section className="pb-20">
-            <h2 className="mb-6 font-baskervville text-3xl font-semibold capitalize text-white">
-              What The Report Signals
-            </h2>
-            <div className="grid gap-4 md:grid-cols-3">
-              {signals.map((s) => (
-                <div
-                  key={s.title}
-                  className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6"
-                >
-                  <h3 className="font-baskervville text-xl font-semibold text-amber">
-                    {s.title}
-                  </h3>
-                  {s.desc && (
-                    <p className="mt-2 font-inter text-sm font-light leading-relaxed text-orange-100">
-                      {s.desc}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {signals.length === 0 && (
-          <section className="pb-20">
-            <p className="font-inter text-sm text-orange-100/40 italic">
-              Report signals not uploaded yet.
-            </p>
-          </section>
-        )}
-      </div>
+          {signals.length === 0 && (
+            <section className="pb-20">
+              <p className="font-inter text-sm text-orange-100/40 italic">
+                Report signals not uploaded yet.
+              </p>
+            </section>
+          )}
+        </div>
+      </PreviewGate>
     </div>
   );
 }

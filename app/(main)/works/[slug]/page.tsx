@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { PreviewGate } from "@/components/common/PreviewGate";
 import { ViewTracker } from "@/components/common/ViewTracker";
 import { WorkHeroSection } from "@/components/features/works/WorkHeroSection";
 import { WorkContextRow } from "@/components/features/works/WorkContextRow";
@@ -135,50 +138,54 @@ export default async function WorkDetailPage({
     exploreMore.length > 0 && { id: "further-reading", label: "Further Reading" },
   ].filter(Boolean) as { id: string; label: string }[];
 
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="bg-[#160907]">
-      <ViewTracker collection="works" id={work.id} />
-      <div className="container">
-        <WorkHeroSection
-          title={title}
-          workId={work.id}
-          slug={params.slug}
-          description={description}
-          image={image}
-          meta={meta}
-          relatedThemes={relatedThemes}
-          toc={toc}
-        />
+      <PreviewGate locked={!session} callbackUrl={`/works/${params.slug}`}>
+        <ViewTracker collection="works" id={work.id} />
+        <div className="container">
+          <WorkHeroSection
+            title={title}
+            workId={work.id}
+            slug={params.slug}
+            description={description}
+            image={image}
+            meta={meta}
+            relatedThemes={relatedThemes}
+            toc={toc}
+          />
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
-            <WorkContextRow workTitle={title} timeline={timeline} />
-            <WorkAnchorRow
-              heading={work.anchor?.heading}
-              subheading={work.anchor?.subheading}
-              body={typeof work.anchor?.body === "string" ? work.anchor.body : undefined}
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start pb-4">
+            <div className="flex min-w-0 flex-1 flex-col gap-4">
+              <WorkContextRow workTitle={title} timeline={timeline} />
+              <WorkAnchorRow
+                heading={work.anchor?.heading}
+                subheading={work.anchor?.subheading}
+                body={typeof work.anchor?.body === "string" ? work.anchor.body : undefined}
+              />
+              <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
+              <EssentialFilmsSection
+                heading={essentialHeading}
+                works={essentialWorks}
+              />
+              <PioneersSection people={pioneers} />
+            </div>
+
+            <WorkInfoAside
+              atAGlance={atAGlance}
+              quickFacts={quickFacts}
+              relatedWorks={asideRelatedWorks}
             />
-            <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
-            <EssentialFilmsSection
-              heading={essentialHeading}
-              works={essentialWorks}
-            />
-            <PioneersSection people={pioneers} />
           </div>
 
-          <WorkInfoAside
-            atAGlance={atAGlance}
-            quickFacts={quickFacts}
-            relatedWorks={asideRelatedWorks}
+          <ExploreMoreSection
+            heading="Explore more related works"
+            hrefBase="/works"
+            related={exploreMore}
           />
         </div>
-
-        <ExploreMoreSection
-          heading="Explore more related works"
-          hrefBase="/works"
-          related={exploreMore}
-        />
-      </div>
+      </PreviewGate>
     </div>
   );
 }

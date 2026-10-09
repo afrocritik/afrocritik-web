@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { PreviewGate } from "@/components/common/PreviewGate";
 import { ViewTracker } from "@/components/common/ViewTracker";
 import { PersonHero, type TocItem } from "@/components/features/people/PersonHero";
 import {
@@ -175,63 +178,67 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
   const hasRight = glance.length > 0 || quickFacts.length > 0 || ideas.length > 0;
   const leftCol = works.length > 0 ? <SelectedWorksCard works={works} /> : null;
 
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="bg-[#160907]">
-      <ViewTracker collection="people" id={person.id} />
-      <div className="container pb-16">
-        <PersonHero
-          personId={String(person.id)}
-          slug={person.slug ?? params.slug}
-          name={name}
-          description={description}
-          meta={meta}
-          topics={topics}
-          photo={getMediaUrl(person.photo)}
-          toc={toc}
-        />
+      <PreviewGate locked={!session} callbackUrl={`/people/${params.slug}`}>
+        <ViewTracker collection="people" id={person.id} />
+        <div className="container pb-16">
+          <PersonHero
+            personId={String(person.id)}
+            slug={person.slug ?? params.slug}
+            name={name}
+            description={description}
+            meta={meta}
+            topics={topics}
+            photo={getMediaUrl(person.photo)}
+            toc={toc}
+          />
 
-        <div className="flex flex-col gap-4">
-          {/* Left/centre cards form rows; the right-hand cards are one stack beside
-              them (spanning those rows), each sized to its own content. */}
-          <div className="grid gap-4 lg:grid-cols-[250px_minmax(0,1fr)_280px]">
-            {leftCol && <div className="flex min-w-0 flex-col [&>*]:flex-1">{leftCol}</div>}
-            {hasContribution && (
-              <div className={`flex min-w-0 flex-col [&>*]:flex-1 ${leftCol ? "" : "lg:col-span-2"}`}>
-                <ContributionCard
-                  summary={person.summary}
-                  keyIdeas={person.keyIdeas}
-                  knowledgeSovereignty={person.knowledgeSovereignty}
-                />
-              </div>
-            )}
-            {hasBio && (
-              <div className="min-w-0 lg:col-span-2">
-                <BiographyCard biography={person.biography} />
-              </div>
-            )}
-            {pioneers.length > 0 && (
-              <div className="min-w-0 lg:col-span-2">
-                <PioneersCard people={pioneers} />
-              </div>
-            )}
-            {hasRight && (
-              <div
-                className={`flex min-w-0 flex-col gap-4 lg:col-start-3 lg:row-start-1 lg:self-start ${
-                  SPAN[leftRows] ?? ""
-                }`}
-              >
-                {glance.length > 0 && <GlanceCard rows={glance} />}
-                {quickFacts.length > 0 && <QuickFactsCard facts={quickFacts} />}
-                {ideas.length > 0 && <RelatedIdeasCard ideas={ideas} />}
-              </div>
-            )}
+          <div className="flex flex-col gap-4">
+            {/* Left/centre cards form rows; the right-hand cards are one stack beside
+                them (spanning those rows), each sized to its own content. */}
+            <div className="grid gap-4 lg:grid-cols-[250px_minmax(0,1fr)_280px]">
+              {leftCol && <div className="flex min-w-0 flex-col [&>*]:flex-1">{leftCol}</div>}
+              {hasContribution && (
+                <div className={`flex min-w-0 flex-col [&>*]:flex-1 ${leftCol ? "" : "lg:col-span-2"}`}>
+                  <ContributionCard
+                    summary={person.summary}
+                    keyIdeas={person.keyIdeas}
+                    knowledgeSovereignty={person.knowledgeSovereignty}
+                  />
+                </div>
+              )}
+              {hasBio && (
+                <div className="min-w-0 lg:col-span-2">
+                  <BiographyCard biography={person.biography} />
+                </div>
+              )}
+              {pioneers.length > 0 && (
+                <div className="min-w-0 lg:col-span-2">
+                  <PioneersCard people={pioneers} />
+                </div>
+              )}
+              {hasRight && (
+                <div
+                  className={`flex min-w-0 flex-col gap-4 lg:col-start-3 lg:row-start-1 lg:self-start ${
+                    SPAN[leftRows] ?? ""
+                  }`}
+                >
+                  {glance.length > 0 && <GlanceCard rows={glance} />}
+                  {quickFacts.length > 0 && <QuickFactsCard facts={quickFacts} />}
+                  {ideas.length > 0 && <RelatedIdeasCard ideas={ideas} />}
+                </div>
+              )}
+            </div>
+
+            <EssentialWorksCard heading={essentialHeading} works={works} />
           </div>
 
-          <EssentialWorksCard heading={essentialHeading} works={works} />
+          <ExploreMoreSection heading="Explore more related works" hrefBase="/works" related={exploreMore.slice(0, 3)} />
         </div>
-
-        <ExploreMoreSection heading="Explore more related works" hrefBase="/works" related={exploreMore.slice(0, 3)} />
-      </div>
+      </PreviewGate>
     </div>
   );
 }

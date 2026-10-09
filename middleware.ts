@@ -14,8 +14,13 @@ const PUBLIC_PATHS = ["/", "/signin", "/signup", "/oauth-callback", "/explore"];
 const ONBOARDING_PATHS = ["/interests", "/profile-setup"];
 
 // /u/<username> are opt-in public profiles (the API 404s unless the user enabled it).
+// Detail pages are public too: signed-out visitors get a clipped preview with a
+// sign-in prompt (see PreviewGate) instead of being bounced to /signin.
+const PREVIEW_PREFIXES = ["/works/", "/people/", "/ideas/", "/moments/", "/reports/"];
 const isPublic = (pathname: string) =>
-  PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/u/");
+  PUBLIC_PATHS.includes(pathname) ||
+  pathname.startsWith("/u/") ||
+  PREVIEW_PREFIXES.some((p) => pathname.startsWith(p));
 
 // Route protection. `withAuth` decodes the NextAuth JWT; unauthenticated
 // visitors to a non-public route are redirected to `/signin?callbackUrl=...`.
