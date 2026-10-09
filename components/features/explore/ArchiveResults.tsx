@@ -43,6 +43,25 @@ type ArchiveResultsProps = Readonly<{
   onLoadMore?: () => void;
 }>;
 
+// Tab labels are display names ("Report", "People"); result text needs the
+// noun to agree with the count: "1 Work Found" / "2 Reports Found".
+const NOUNS: Record<string, [string, string]> = {
+  work: ["Work", "Works"],
+  works: ["Work", "Works"],
+  idea: ["Idea", "Ideas"],
+  ideas: ["Idea", "Ideas"],
+  person: ["Person", "People"],
+  people: ["Person", "People"],
+  report: ["Report", "Reports"],
+  reports: ["Report", "Reports"],
+};
+
+function countNoun(label: string, count: number): string {
+  const forms = NOUNS[label.toLowerCase()];
+  if (!forms) return label;
+  return count === 1 ? forms[0] : forms[1];
+}
+
 export function ArchiveResults({
   works,
   resultCount,
@@ -69,7 +88,7 @@ export function ArchiveResults({
       {/* Full-width header row — above both sidebar and cards */}
       <div className="mb-5 flex items-center justify-between">
         <p className="w-64 justify-start text-white text-2xl font-semibold font-inter leading-6">
-          {formatCount(resultCount)} {tabLabel} Found
+          {formatCount(resultCount)} {countNoun(tabLabel, resultCount)} Found
         </p>
         <div className="flex items-center gap-1 rounded-md border border-amber-line p-1">
           <button
@@ -131,11 +150,11 @@ export function ArchiveResults({
                 <div className="mt-8 flex flex-col items-center gap-4 rounded-xl border border-amber-line bg-black/30 px-6 py-10 text-center">
                   <Lock className="h-7 w-7 text-amber" />
                   <p className="font-inter text-xl font-semibold text-white">
-                    {formatCount(resultCount)} {tabLabel} found
+                    {formatCount(resultCount)} {countNoun(tabLabel, resultCount)} found
                   </p>
                   <p className="max-w-md font-inter text-sm text-ink-muted">
                     {hiddenCount > 0
-                      ? `Sign in or create a free account to view ${formatCount(hiddenCount)} more ${tabLabel.toLowerCase()}.`
+                      ? `Sign in or create a free account to view ${formatCount(hiddenCount)} more ${countNoun(tabLabel, hiddenCount).toLowerCase()}.`
                       : `Sign in or create a free account to explore the full archive.`}
                   </p>
                   <div className="mt-1 flex items-center gap-3">
