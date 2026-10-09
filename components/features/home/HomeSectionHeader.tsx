@@ -9,15 +9,10 @@ import { ArrowRight } from "lucide-react";
 export function HomeSectionHeader({
   title,
   href,
-  weight = 600,
-  linkSize = "md",
   bleed = false,
 }: Readonly<{
   title: string;
   href?: string;
-  weight?: 600 | 700;
-  /** "lg" ≈ title-sized (Popular Interest, Spotlighted); "md" is noticeably smaller. */
-  linkSize?: "lg" | "md";
   /** Carousel sections: link sits at the right viewport edge (cards bleed there) with an arrow. */
   bleed?: boolean;
 }>) {
@@ -27,8 +22,8 @@ export function HomeSectionHeader({
         className="capitalize text-white"
         style={{
           fontFamily: "var(--font-baskervville)",
-          fontSize: "clamp(24px, 4vw, 38px)",
-          fontWeight: weight,
+          fontSize: "clamp(20px, 2.4vw, 24px)",
+          fontWeight: 700,
           lineHeight: "110%",
         }}
       >
@@ -41,7 +36,7 @@ export function HomeSectionHeader({
           style={{
             color: "#ED9828",
             fontFamily: "var(--font-inter)",
-            fontSize: linkSize === "lg" ? "clamp(16px, 2.2vw, 29px)" : "clamp(14px, 1.5vw, 20px)",
+            fontSize: "clamp(13px, 1.2vw, 16px)",
             fontWeight: 500,
             lineHeight: 1,
             ...(bleed && { marginRight: "calc(24px - max(24px, 50vw - 636px))" }),

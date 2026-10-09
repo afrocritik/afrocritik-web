@@ -58,11 +58,11 @@ export function PioneersSection({ people = [] }: Props) {
                   )}
                 </div>
                 <div className="px-3.5 py-2">
-                  <div className="text-orange-400 text-sm font-semibold font-inter leading-5">
+                  <div className="truncate text-orange-400 text-lg font-semibold font-inter leading-6">
                     {p.name}
                   </div>
                   {p.role && (
-                    <div className="text-stone-300 text-sm font-light font-inter leading-5">
+                    <div className="truncate text-stone-300 text-[15px] font-normal font-inter leading-5">
                       {p.role}
                     </div>
                   )}

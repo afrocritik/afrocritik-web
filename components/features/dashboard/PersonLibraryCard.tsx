@@ -42,14 +42,14 @@ export function PersonLibraryCard({
         />
       </div>
       <div className="px-[2px] pb-[10px] pt-[9px]">
-        <p className="font-inter text-[13px] font-semibold leading-[18.5px] text-[#DD962A]">
+        <p className="truncate font-inter text-lg font-semibold leading-6 text-[#DD962A]">
           {name}
         </p>
-        <div className="mt-[11px] flex flex-wrap items-center gap-1.5">
+        <div className="mt-2 flex flex-wrap items-center gap-1.5 overflow-hidden">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center rounded-[4px] bg-orange-400/20 px-2 py-[5px] font-inter text-[6px] font-normal leading-[8px] text-white"
+              className="inline-flex items-center rounded-[4px] bg-orange-400/20 px-2 py-[5px] font-inter text-[11px] font-normal leading-[14px] text-white"
             >
               {tag}
             </span>

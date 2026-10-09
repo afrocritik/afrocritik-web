@@ -29,7 +29,7 @@ export function IdeasSection({ ideas = [] }: Props) {
         <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-orange-400">
           Conceptual Frameworks
         </span>
-        <h2 className="mt-3 max-w-[677px] justify-center text-orange-950 text-3xl sm:text-4xl font-bold font-baskervville capitalize leading-tight sm:leading-10">
+        <h2 className="mt-3 max-w-[677px] justify-center text-orange-950 text-xl sm:text-2xl font-bold font-baskervville capitalize leading-tight">
           Ideas That Shape the Continent
         </h2>
         <p className="mt-2 max-w-[670px] justify-center text-neutral-700 text-base font-normal font-inter capitalize leading-6">

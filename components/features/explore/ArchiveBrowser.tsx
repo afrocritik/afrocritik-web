@@ -58,9 +58,9 @@ function toCard(doc: any, tab: string) {
   return { ...card, href: `/${base}/${card.slug}` };
 }
 
-export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
+export function ArchiveBrowser() {
   const params = useSearchParams();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const token = (session?.user as { token?: string } | undefined)?.token;
   const [tab, setTab] = useState(params.get("tab") || "works");
   const [query, setQuery] = useState(params.get("q") || "");
@@ -146,10 +146,7 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
   // to sign in / up to view the rest. Plain browsing stays open. The API is the
   // source of truth (it withholds the withheld docs); the client check is just
   // a fallback for the brief window before the response lands.
-  const isSearchingOrSorting = query.trim().length > 0 || sort !== "newest";
-  const gated =
-    firstPage?.gated ??
-    (status === "unauthenticated" && isSearchingOrSorting);
+  const gated = firstPage?.gated ?? false;
 
   const toggle = (
     setter: React.Dispatch<React.SetStateAction<string[]>>,
@@ -196,12 +193,10 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
         sort={sort}
         onSortChange={setSort}
         filterBar={
-          signedIn ? (
-            <ArchiveFilterBar
-              tab={tab}
-              filters={{ years, setYears, categories, setCategories, genres, setGenres, countries, setCountries }}
-            />
-          ) : undefined
+          <ArchiveFilterBar
+            tab={tab}
+            filters={{ years, setYears, categories, setCategories, genres, setGenres, countries, setCountries }}
+          />
         }
       />
       <ArchiveResults
@@ -228,7 +223,7 @@ export function ArchiveBrowser({ signedIn = false }: { signedIn?: boolean }) {
         loadingMore={isFetchingNextPage}
         onLoadMore={() => fetchNextPage()}
         gated={gated}
-        showRefine={signedIn}
+        showRefine
       />
     </div>
   );

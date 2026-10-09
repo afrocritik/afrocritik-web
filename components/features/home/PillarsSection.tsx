@@ -34,7 +34,7 @@ export function PillarsSection({ pillars }: Readonly<{ pillars?: Pillar[] }>) {
         </span>
         <h2
           className="mt-2 max-w-[607px] font-baskervville font-bold capitalize leading-[110%] text-[#330F09]"
-          style={{ fontSize: "clamp(24px, 5.5vw, 40px)" }}
+          style={{ fontSize: "clamp(20px, 2.4vw, 24px)" }}
         >
           The Five Pillars
         </h2>

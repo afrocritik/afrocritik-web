@@ -34,11 +34,11 @@ export function ExploreMoreSection({
             href={`${hrefBase}/${item.slug}`}
             className="flex-1 p-4 bg-white/10 rounded-xl flex flex-col justify-start items-start"
           >
-            <div className="self-stretch text-white text-2xl font-semibold font-baskervville capitalize leading-7">
+            <div className="self-stretch line-clamp-2 text-white text-lg font-semibold font-baskervville capitalize leading-6">
               {item.title}
             </div>
             {(item.desc || item.summary) && (
-              <div className="self-stretch text-white text-base font-normal font-inter capitalize leading-relaxed mt-2 line-clamp-3">
+              <div className="self-stretch text-white text-[15px] font-normal font-inter capitalize leading-5 mt-2 line-clamp-2">
                 {item.desc ?? item.summary}
               </div>
             )}

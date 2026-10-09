@@ -27,7 +27,7 @@ export function FeaturedWorkCard({
   return (
     <div className="flex h-64 flex-1 flex-col overflow-hidden rounded-md bg-rose-100/10 outline outline-[0.72px] outline-offset-[-0.72px] outline-yellow-700 transition-all duration-300 hover:outline-2 hover:outline-orange-400">
       {/* Image */}
-      <Link href={link} className="relative mx-2 mt-2.5 block h-40 shrink-0 overflow-hidden rounded-sm">
+      <Link href={link} className="relative mx-2 mt-2.5 block h-32 shrink-0 overflow-hidden rounded-sm">
         <CardImage
           src={image}
           alt={title}
@@ -40,37 +40,37 @@ export function FeaturedWorkCard({
       {/* Info */}
       <div className="flex min-h-0 flex-1 flex-col px-[7px] pb-2.5 pt-1.5">
         <Link href={link}>
-          <p className="truncate font-inter text-xs font-semibold leading-3 text-stone-300 transition-colors hover:text-amber">
+          <p className="truncate font-inter text-lg font-semibold leading-6 text-stone-300 transition-colors hover:text-amber">
             {title}
           </p>
         </Link>
-        <div className="mt-1">
+        <div className="mt-0.5">
           {director && (
-            <span className="block font-inter text-[6px] font-semibold leading-[8.40px] text-stone-300">
+            <span className="block truncate font-inter text-[15px] font-semibold leading-5 text-stone-300">
               Dir. {director}
             </span>
           )}
-          <span className="line-clamp-2 font-inter text-[6px] font-normal leading-[8.40px] text-stone-300">
+          <span className="line-clamp-1 font-inter text-[15px] font-normal leading-5 text-stone-300">
             {description}
           </span>
         </div>
-        <div className="mt-auto flex items-center gap-1 pt-2">
+        <div className="mt-auto flex items-center gap-1 overflow-hidden pt-1.5">
           {tags.map((tag) => (
             <div
               key={tag}
-              className="inline-flex items-center rounded-sm bg-yellow-700/20 px-[5px] py-[4px]"
+              className="inline-flex items-center rounded-sm bg-yellow-700/20 px-1.5 py-[3px]"
             >
-              <span className="font-inter text-[6.44px] font-normal leading-none text-white">
+              <span className="font-inter text-[11px] font-normal leading-none text-white">
                 {tag}
               </span>
             </div>
           ))}
           {typeof rating === "number" && (
             <div className="ml-auto flex items-center gap-0.5">
-              <span className="font-inter text-[8.59px] font-semibold leading-3 text-white">
+              <span className="font-inter text-sm font-semibold leading-4 text-white">
                 {rating.toFixed(1)}
               </span>
-              <span className="text-[8px] leading-none text-yellow-400">★</span>
+              <span className="text-xs leading-none text-yellow-400">★</span>
             </div>
           )}
         </div>

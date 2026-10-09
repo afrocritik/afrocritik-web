@@ -391,21 +391,21 @@ function StandardCard({
       </Link>
       <div className="flex flex-1 flex-col gap-2 p-3">
         <Link href={`/works/${slug}`}>
-          <h3 className="line-clamp-2 text-sm font-semibold text-white transition-colors group-hover:text-amber">
+          <h3 className="line-clamp-1 text-lg font-semibold text-white transition-colors group-hover:text-amber">
             {title}
           </h3>
         </Link>
-        <div className="mt-auto flex items-center gap-2 text-xs text-ink-muted">
+        <div className="mt-auto flex items-center gap-2 text-[15px] text-ink-muted">
           {year && <span>{year}</span>}
           {year && country && <span className="h-1 w-1 rounded-full bg-ink-muted/60" />}
           {country && <span>{country}</span>}
         </div>
         <div className="flex items-center justify-between border-t border-amber-line pt-2">
-          <span className="rounded bg-amber-soft px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber">
+          <span className="rounded bg-amber-soft px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-amber">
             {type}
           </span>
           {typeof rating === "number" && (
-            <span className="flex items-center gap-1 text-[11px] text-ink-secondary">
+            <span className="flex items-center gap-1 text-sm text-ink-secondary">
               <Star className="h-3 w-3 fill-amber text-amber" />
               {rating.toFixed(1)}
             </span>
@@ -834,7 +834,7 @@ function ExploreCard({
     >
       {/* Image */}
       <Link href={detailHref}>
-        <div className="absolute left-[10px] top-[12px] right-[10px] h-[191px] overflow-hidden rounded-sm bg-[#3D1F00]">
+        <div className="absolute left-[10px] top-[12px] right-[10px] h-[170px] overflow-hidden rounded-sm bg-[#3D1F00]">
           <CardImage
             src={image}
             alt={title}
@@ -854,10 +854,10 @@ function ExploreCard({
             top: "11.57px",
             background: "#B00000",
             color: "#FFF",
-            fontSize: "6.94px",
+            fontSize: "11px",
             fontWeight: 400,
             fontFamily: "var(--font-inter)",
-            lineHeight: "9.72px",
+            lineHeight: "14px",
             padding: "2.61px 6.09px",
             borderRadius: "3.09px",
             whiteSpace: "nowrap",
@@ -870,16 +870,16 @@ function ExploreCard({
       {/* Title */}
       <Link href={detailHref}>
         <div
-          className="absolute line-clamp-2"
+          className="absolute line-clamp-1"
           style={{
-            left: "8px",
-            right: "8px",
-            top: "210px",
+            left: "10px",
+            right: "10px",
+            top: "190px",
             color: "#FB923C",
-            fontSize: "12px",
+            fontSize: "18px",
             fontWeight: 600,
             fontFamily: "var(--font-inter)",
-            lineHeight: "13px",
+            lineHeight: "24px",
           }}
         >
           {title}
@@ -889,16 +889,16 @@ function ExploreCard({
       {/* Description */}
       {description && (
         <div
-          className="absolute line-clamp-2"
+          className="absolute line-clamp-1"
           style={{
             left: "10px",
             right: "10px",
-            top: "238px",
+            top: "218px",
             color: "#D6D3D1",
-            fontSize: "9.26px",
+            fontSize: "15px",
             fontWeight: 600,
             fontFamily: "var(--font-inter)",
-            lineHeight: "12px",
+            lineHeight: "20px",
           }}
         >
           {description}
@@ -910,10 +910,10 @@ function ExploreCard({
         <CardTags
           tags={cardTags}
           max={MAX_EXPLORE_TAGS}
-          fontSize="6.94px"
-          height="20px"
-          radius="3px"
-          maxWidth={92}
+          fontSize="11px"
+          height="22px"
+          radius="4px"
+          maxWidth={100}
           uppercase
         />
         {typeof rating === "number" && (
@@ -921,10 +921,10 @@ function ExploreCard({
             <span
               style={{
                 color: "#FFF",
-                fontSize: "9.26px",
+                fontSize: "14px",
                 fontWeight: 600,
                 fontFamily: "var(--font-inter)",
-                lineHeight: "12px",
+                lineHeight: "18px",
               }}
             >
               {rating.toFixed(1)}

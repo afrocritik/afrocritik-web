@@ -143,7 +143,7 @@ export function ThinkersSection({ people = [] }: Props) {
           <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-yellow-700">
             Explore African Philosophy
           </span>
-          <h2 className="mt-6 max-w-[906px] font-baskervville text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+          <h2 className="mt-6 max-w-[906px] font-baskervville text-xl font-bold sm:text-2xl capitalize leading-[110%] text-[#330F09]">
             The Thinkers Who Built The Foundations
           </h2>
           <p className="mt-6 max-w-[765px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">
@@ -169,7 +169,7 @@ export function ThinkersSection({ people = [] }: Props) {
         <span className="font-inter text-center justify-center text-sm font-normal capitalize leading-4 text-yellow-700">
           Explore African Philosophy
         </span>
-        <h2 className="mt-6 max-w-[906px] font-baskervville text-3xl sm:text-[40px] font-bold capitalize leading-[110%] text-[#330F09]">
+        <h2 className="mt-6 max-w-[906px] font-baskervville text-xl font-bold sm:text-2xl capitalize leading-[110%] text-[#330F09]">
           The Thinkers Who Built The Foundations
         </h2>
         <p className="mt-6 max-w-[765px] font-inter text-base font-normal capitalize leading-[140%] text-[#3B3B3B]">

@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { ArchiveBrowser } from "@/components/features/explore/ArchiveBrowser";
 import { ExploreIdeasSection } from "@/components/features/explore/ExploreIdeasSection";
 import { PopularInterestSection } from "@/components/features/home/PopularInterestSection";
@@ -10,13 +8,9 @@ import { api, getMediaUrl } from "@/lib/api";
 import { getFeaturedReport } from "@/lib/featuredReport";
 
 export default async function ExplorePage() {
-  // Signed-out visitors get a focused, gated archive: just the search + results.
-  // The discovery/marketing sections (Ideas, Popular Interest, Report, Join the
-  // Network) and the Refine sidebar are reserved for signed-in users. Resolved
-  // server-side so there's no flash of the hidden sections.
-  const session = await getServerSession(authOptions);
-  const signedIn = !!session?.user;
-
+  // The explore page is fully open: signed-out visitors get the same archive,
+  // filters and discovery sections as members. Sign-in is asked for when they
+  // open a detail page past its preview.
   let homepage: any = null;
   try {
     homepage = await api.homepage();
@@ -37,31 +31,27 @@ export default async function ExplorePage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-bg-primary" />}>
       {/* HERO + TABS + FILTER + RESULTS — single gradient, owns search state */}
-      <ArchiveBrowser signedIn={signedIn} />
+      <ArchiveBrowser />
 
-      {signedIn && (
-        <>
-          {/* EXPLORE IDEAS */}
-          <ExploreIdeasSection />
+      {/* EXPLORE IDEAS */}
+      <ExploreIdeasSection />
 
-          {/* POPULAR INTEREST */}
-          <section className="bg-[#59341F] pt-32 pb-12">
-            <div className="container">
-              <PopularInterestSection interests={popularInterests} />
-            </div>
-          </section>
+      {/* POPULAR INTEREST */}
+      <section className="bg-[#59341F] pt-32 pb-12">
+        <div className="container">
+          <PopularInterestSection interests={popularInterests} />
+        </div>
+      </section>
 
-          {/* REPORT CTA */}
-          <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 via-yellow-900 to-yellow-950">
-            <ReportCTA report={featuredReport} />
-          </section>
+      {/* REPORT CTA */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-yellow-950 via-yellow-900 to-yellow-950">
+        <ReportCTA report={featuredReport} />
+      </section>
 
-          {/* JOIN NETWORK CTA */}
-          <section className="bg-[#59341F] pt-32 pb-24">
-            <JoinNetworkCTA cta={homepage?.cta} />
-          </section>
-        </>
-      )}
+      {/* JOIN NETWORK CTA */}
+      <section className="bg-[#59341F] pt-32 pb-24">
+        <JoinNetworkCTA cta={homepage?.cta} />
+      </section>
     </Suspense>
   );
 }

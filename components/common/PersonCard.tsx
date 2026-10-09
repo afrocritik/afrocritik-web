@@ -42,10 +42,10 @@ export function PersonCard({
           )}
         </div>
         <div className="p-3 text-center">
-          <h4 className="truncate text-sm font-semibold text-white group-hover:text-amber">
+          <h4 className="truncate text-lg font-semibold text-white group-hover:text-amber">
             {name}
           </h4>
-          {role && <p className="truncate text-xs text-ink-muted">{role}</p>}
+          {role && <p className="truncate text-[15px] text-ink-muted">{role}</p>}
         </div>
       </Link>
     );
@@ -66,10 +66,10 @@ export function PersonCard({
           </div>
         )}
       </div>
-      <h4 className="text-sm font-semibold text-white group-hover:text-amber">
+      <h4 className="truncate text-lg font-semibold text-white group-hover:text-amber">
         {name}
       </h4>
-      {role && <p className="text-xs text-ink-muted">{role}</p>}
+      {role && <p className="truncate text-[15px] text-ink-muted">{role}</p>}
     </Link>
   );
 }

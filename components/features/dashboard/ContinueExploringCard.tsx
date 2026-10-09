@@ -37,11 +37,11 @@ export function ContinueExploringCard({
 
       {/* content — pb-2.5 = same 10px as the top margin above the image */}
       <div className="flex flex-col px-1.5 pt-2 pb-2.5">
-        <p className="font-inter text-[10.24px] font-semibold leading-[10.24px] text-stone-300">
+        <p className="truncate font-inter text-lg font-semibold leading-6 text-stone-300">
           {title}
         </p>
         {description && (
-          <p className="mt-[11px] line-clamp-2 font-inter text-[7.68px] font-semibold leading-3 text-stone-300">
+          <p className="mt-1 line-clamp-1 font-inter text-[15px] font-semibold leading-5 text-stone-300">
             {description}
           </p>
         )}
