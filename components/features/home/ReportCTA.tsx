@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getMediaUrl } from "@/lib/api";
 import { CardImage } from "@/components/common/CardImage";
+import { plainText } from "@/lib/richText";
 
 const DEFAULT_COVER = "/images/reports/report-cover-2025.png";
 
@@ -19,7 +20,7 @@ const DEFAULT_BADGES = ["151 PAGES", "5 SECTIONS", "20+ CONTRIBUTORS"];
 export function ReportCTA({ report }: Readonly<{ report?: FeaturedReport }>) {
   const eyebrow = report?.subtitle || report?.title || "The Afrocritik Report 2025";
   const summary =
-    report?.summary ||
+    plainText(report?.summary) ||
     "Each year, the Afrocritik Report maps the cultural forces shaping Africa and its diaspora — the breakthroughs, the ruptures, and the tensions that define the moment. The 2025 edition reveals a continent whose creative output is globally ascendant, even as the infrastructure beneath it remains deeply contested.";
   const remoteCover = getMediaUrl(report?.coverImage);
   const coverAlt = report?.title || "The Afrocritik Report 2025";

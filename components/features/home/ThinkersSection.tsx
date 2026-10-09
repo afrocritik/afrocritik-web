@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 interface ThinkerData {
   slug: string;
@@ -23,7 +24,7 @@ function mapPersonToThinker(p: any): ThinkerData {
     : [];
 
   const countryNames: string[] = Array.isArray(p.country)
-    ? p.country.map((c: any) => (typeof c === "string" ? c : c?.name ?? "")).filter(Boolean)
+    ? p.country.map((c: any) => (typeof c === "string" ? c : plainText(c?.name ?? ""))).filter(Boolean)
     : [];
 
   const born = p.born ?? "";
@@ -38,29 +39,29 @@ function mapPersonToThinker(p: any): ThinkerData {
 
   const relatedTopics: string[] = [
     ...(Array.isArray(p.tags)
-      ? p.tags.map((t: any) => (typeof t === "string" ? t : t?.name ?? "")).filter(Boolean)
+      ? p.tags.map((t: any) => (typeof t === "string" ? t : plainText(t?.name ?? ""))).filter(Boolean)
       : []),
     ...(Array.isArray(p.themes)
-      ? p.themes.map((t: any) => (typeof t === "string" ? t : t?.name ?? "")).filter(Boolean)
+      ? p.themes.map((t: any) => (typeof t === "string" ? t : plainText(t?.name ?? ""))).filter(Boolean)
       : []),
   ];
 
   const selectedWorks = Array.isArray(p.works)
     ? p.works.slice(0, 3).map((w: any) => ({
-        title: w.title ?? "",
+        title: plainText(w.title ?? ""),
         sub: w.year ? String(w.year) : "",
       }))
     : [];
 
   return {
     slug: p.slug ?? "",
-    name: p.name ?? "",
+    name: plainText(p.name ?? ""),
     role: roleStr,
     image: getMediaUrl(p.photo),
     tags: tagLabels,
-    coreContribution: p.summary ?? "",
-    keyIdeas: p.keyIdeas || undefined,
-    knowledgeSovereignty: p.knowledgeSovereignty || undefined,
+    coreContribution: plainText(p.summary ?? ""),
+    keyIdeas: plainText(p.keyIdeas) || undefined,
+    knowledgeSovereignty: plainText(p.knowledgeSovereignty) || undefined,
     selectedWorks,
     relatedTopics,
   };

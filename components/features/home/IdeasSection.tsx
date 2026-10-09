@@ -1,6 +1,7 @@
 "use client";
 
 import { IdeaCard } from "@/components/common/IdeaCard";
+import { plainText } from "@/lib/richText";
 
 interface Props {
   ideas?: any[];
@@ -8,13 +9,13 @@ interface Props {
 
 function mapIdea(idea: any) {
   const tags = Array.isArray(idea.tags)
-    ? idea.tags.map((t: any) => (typeof t === "string" ? t : t?.name ?? "")).filter(Boolean)
+    ? idea.tags.map((t: any) => (typeof t === "string" ? t : plainText(t?.name ?? ""))).filter(Boolean)
     : [];
   return {
     slug: idea.slug ?? "#",
-    title: idea.title ?? "",
+    title: plainText(idea.title ?? ""),
     category: idea.category,
-    excerpt: idea.summary,
+    excerpt: plainText(idea.summary),
     tags,
   };
 }

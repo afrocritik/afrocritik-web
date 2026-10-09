@@ -11,11 +11,12 @@ import { ArchiveTabsBar } from "./ArchiveTabsBar";
 import { ArchiveFilterBar } from "./ArchiveFilterBar";
 import { ArchiveResults } from "./ArchiveResults";
 import { YEAR_MAX, YEAR_MIN } from "./RefineSidebar";
+import { plainText } from "@/lib/richText";
 
 function resolveNames(arr: any): string {
   return Array.isArray(arr)
     ? arr
-        .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+        .map((x: any) => (typeof x === "string" ? x : plainText(x?.name ?? "")))
         .filter(Boolean)
         .join(", ")
     : "";
@@ -39,14 +40,14 @@ function toCard(doc: any, tab: string) {
     return {
       slug,
       href: `/${base}/${slug}`,
-      title: doc.name ?? "",
+      title: plainText(doc.name ?? ""),
       type: "person",
       year: undefined,
       country: resolveNames(doc.country),
       rating: undefined,
       badge: undefined,
       image: getMediaUrl(doc.photo),
-      description: doc.summary ?? "",
+      description: plainText(doc.summary ?? ""),
       tags: resolveNames(doc.tags)
         ? resolveNames(doc.tags).split(", ")
         : [],

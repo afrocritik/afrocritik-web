@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DashboardSection } from "./DashboardSection";
 import { ContinueExploringCard } from "./ContinueExploringCard";
 import { api, getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 export function ContinueExploringSection() {
   const { data, isLoading } = useQuery({
@@ -26,7 +27,7 @@ export function ContinueExploringSection() {
               key={work.slug ?? work.id}
               slug={work.slug}
               title={work.title ?? ""}
-              description={work.cardDescription || work.summary || ""}
+              description={plainText(work.cardDescription || work.summary || "")}
               image={getMediaUrl(work.coverImage) ?? ""}
             />
           ))}

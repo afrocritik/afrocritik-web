@@ -7,6 +7,7 @@ import { ChevronRight } from "lucide-react";
 import { ViewTracker } from "@/components/common/ViewTracker";
 import { ReportDownloadButton } from "@/components/features/reports/ReportDownloadButton";
 import { api, getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 export default async function ReportDetailPage({
   params,
@@ -40,7 +41,7 @@ export default async function ReportDetailPage({
     );
   }
 
-  const title = report.title ?? "";
+  const title = plainText(report.title ?? "");
   const coverUrl = getMediaUrl(report.coverImage);
   const pdfUrl = getMediaUrl(report.pdfFile);
 
@@ -49,7 +50,7 @@ export default async function ReportDetailPage({
     : [];
 
   const signals: { title: string; desc: string }[] = Array.isArray(report.signals)
-    ? report.signals.map((s: any) => ({ title: s.title ?? "", desc: s.description ?? "" }))
+    ? report.signals.map((s: any) => ({ title: plainText(s.title ?? ""), desc: plainText(s.description ?? "") }))
     : [];
 
   const session = await getServerSession(authOptions);
@@ -90,9 +91,9 @@ export default async function ReportDetailPage({
                 {title}
               </h1>
 
-              {report.summary ? (
+              {plainText(report.summary) ? (
                 <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100">
-                  {report.summary}
+                  {plainText(report.summary)}
                 </p>
               ) : (
                 <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100/40 italic">

@@ -12,10 +12,11 @@ import { EssentialFilmsSection } from "@/components/features/works/EssentialFilm
 import { PioneersSection } from "@/components/features/works/PioneersSection";
 import { ExploreMoreSection } from "@/components/features/works/ExploreMoreSection";
 import { api, getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 function resolveNames(arr: any[]): string[] {
   return arr
-    .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+    .map((x: any) => (typeof x === "string" ? x : plainText(x?.name ?? "")))
     .filter(Boolean);
 }
 
@@ -48,8 +49,8 @@ export default async function WorkDetailPage({
     );
   }
 
-  const title = work.title ?? "";
-  const description = work.cardDescription || work.summary || "";
+  const title = plainText(work.title ?? "");
+  const description = plainText(work.cardDescription || work.summary || "");
   const image = getMediaUrl(work.coverImage);
 
   const countryNames = resolveNames(
@@ -70,7 +71,7 @@ export default async function WorkDetailPage({
     ? work.timeline.map((t: any) => ({
         year: String(t.year ?? ""),
         label: t.label ?? "",
-        description: typeof t.description === "string" ? t.description : undefined,
+        description: t.description || undefined,
       }))
     : [];
 
@@ -88,7 +89,7 @@ export default async function WorkDetailPage({
 
   const asideRelatedWorks = Array.isArray(work.relatedWorks)
     ? work.relatedWorks.map((r: any) => ({
-        title: r.title ?? "",
+        title: plainText(r.title ?? ""),
         year: r.year,
         slug: r.slug ?? "",
       }))
@@ -100,7 +101,7 @@ export default async function WorkDetailPage({
   const videoArchive = Array.isArray(work.videoArchive)
     ? work.videoArchive.map((v: any, i: number) => ({
         id: `v${i}`,
-        title: v.title ?? "",
+        title: plainText(v.title ?? ""),
         url: v.url ?? "",
         thumbnail: getMediaUrl(v.thumbnail),
         duration: v.duration,
@@ -110,7 +111,7 @@ export default async function WorkDetailPage({
   const audioArchive = Array.isArray(work.audioArchive)
     ? work.audioArchive.map((a: any, i: number) => ({
         id: `track-${i}`,
-        title: a.title ?? "",
+        title: plainText(a.title ?? ""),
         url: a.url ?? "",
         duration: a.duration,
       }))
@@ -119,8 +120,8 @@ export default async function WorkDetailPage({
   const exploreMore = Array.isArray(work.relatedWorks)
     ? work.relatedWorks.map((r: any) => ({
         slug: r.slug ?? "",
-        title: r.title ?? "",
-        summary: r.summary || r.cardDescription,
+        title: plainText(r.title ?? ""),
+        summary: plainText(r.summary || r.cardDescription),
       }))
     : [];
 
@@ -162,7 +163,7 @@ export default async function WorkDetailPage({
               <WorkAnchorRow
                 heading={work.anchor?.heading}
                 subheading={work.anchor?.subheading}
-                body={typeof work.anchor?.body === "string" ? work.anchor.body : undefined}
+                body={work.anchor?.body}
               />
               <WorkMediaRow videoArchive={videoArchive} audioArchive={audioArchive} />
               <EssentialFilmsSection

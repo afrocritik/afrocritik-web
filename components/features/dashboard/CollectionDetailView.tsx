@@ -9,6 +9,7 @@ import { Loader2, Trash2, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { WorksGrid } from "./WorksGrid";
 import { api, mapWorkToCard } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
   const router = useRouter();
@@ -86,7 +87,7 @@ export function CollectionDetailView({ slug }: Readonly<{ slug: string }>) {
           </h1>
           {collection.description && (
             <p className="mt-2 max-w-2xl font-inter text-base font-light leading-6 text-orange-100">
-              {collection.description}
+              {plainText(collection.description)}
             </p>
           )}
         </div>

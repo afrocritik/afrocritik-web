@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { signOut } from "next-auth/react";
+import { plainText } from "@/lib/richText";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
@@ -444,16 +445,16 @@ export function toDownloadUrl(
 export function mapWorkToCard(w: any) {
   const country = Array.isArray(w.country)
     ? w.country
-        .map((c: any) => (typeof c === "string" ? c : c?.name ?? ""))
+        .map((c: any) => (typeof c === "string" ? c : plainText(c?.name ?? "")))
         .filter(Boolean)
         .join(", ")
     : typeof w.country === "object"
-    ? w.country?.name ?? ""
+    ? plainText(w.country?.name ?? "")
     : w.country ?? "";
 
   const tags = Array.isArray(w.tags)
     ? w.tags
-        .map((t: any) => (typeof t === "string" ? t : t?.name ?? ""))
+        .map((t: any) => (typeof t === "string" ? t : plainText(t?.name ?? "")))
         .filter(Boolean)
     : [];
 
@@ -466,7 +467,7 @@ export function mapWorkToCard(w: any) {
   // `people` is populated); falls back to a plain author string if present.
   const author = Array.isArray(w.people)
     ? w.people
-        .map((p: any) => (typeof p === "string" ? "" : p?.name ?? ""))
+        .map((p: any) => (typeof p === "string" ? "" : plainText(p?.name ?? "")))
         .filter(Boolean)[0] ?? ""
     : typeof w.author === "string"
     ? w.author
@@ -474,7 +475,7 @@ export function mapWorkToCard(w: any) {
 
   return {
     slug: w.slug ?? "",
-    title: w.title ?? "",
+    title: plainText(w.title ?? ""),
     type: w.type ?? "",
     year: w.year,
     country,
@@ -482,8 +483,8 @@ export function mapWorkToCard(w: any) {
     badge,
     author,
     image: getMediaUrl(w.coverImage),
-    description: w.cardDescription || w.summary || "",
-    hoverDescription: w.cardDescription || w.summary || "",
+    description: plainText(w.cardDescription || w.summary || ""),
+    hoverDescription: plainText(w.cardDescription || w.summary || ""),
     tags,
   };
 }

@@ -17,9 +17,10 @@ import {
 import { ExploreMoreSection } from "@/components/features/works/ExploreMoreSection";
 import { api, getMediaUrl } from "@/lib/api";
 import { richTextToPlain } from "@/lib/richText";
+import { plainText } from "@/lib/richText";
 
 function resolveNames(arr: any[]): string[] {
-  return arr.map((x: any) => (typeof x === "string" ? x : x?.name ?? "")).filter(Boolean);
+  return arr.map((x: any) => (typeof x === "string" ? x : plainText(x?.name ?? ""))).filter(Boolean);
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -75,7 +76,7 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
     );
   }
 
-  const name: string = person.name ?? "";
+  const name: string = plainText(person.name ?? "");
   const roleValues: string[] = Array.isArray(person.role) ? person.role : person.role ? [String(person.role)] : [];
   const roles = roleValues.map(cap);
   const countryNames = resolveNames(Array.isArray(person.country) ? person.country : person.country ? [person.country] : []);
@@ -122,7 +123,7 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
   for (const w of [...(relatedWorks?.docs ?? []), ...(newestWorks?.docs ?? [])]) {
     if (!moreSeen.has(String(w.id)) && w.slug) {
       moreSeen.add(String(w.id));
-      exploreMore.push({ slug: w.slug, title: w.title ?? "", summary: w.cardDescription || w.summary });
+      exploreMore.push({ slug: w.slug, title: plainText(w.title ?? ""), summary: plainText(w.cardDescription || w.summary) });
     }
   }
 
@@ -204,9 +205,9 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
               {hasContribution && (
                 <div className={`flex min-w-0 flex-col [&>*]:flex-1 ${leftCol ? "" : "lg:col-span-2"}`}>
                   <ContributionCard
-                    summary={person.summary}
-                    keyIdeas={person.keyIdeas}
-                    knowledgeSovereignty={person.knowledgeSovereignty}
+                    summary={plainText(person.summary)}
+                    keyIdeas={plainText(person.keyIdeas)}
+                    knowledgeSovereignty={plainText(person.knowledgeSovereignty)}
                   />
                 </div>
               )}

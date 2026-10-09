@@ -9,10 +9,11 @@ import { WorkMediaRow } from "@/components/features/works/WorkMediaRow";
 import { WorkInfoAside } from "@/components/features/works/WorkInfoAside";
 import { ExploreMoreSection } from "@/components/features/works/ExploreMoreSection";
 import { api, getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 function resolveNames(arr: any[]): string[] {
   return arr
-    .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+    .map((x: any) => (typeof x === "string" ? x : plainText(x?.name ?? "")))
     .filter(Boolean);
 }
 
@@ -45,8 +46,8 @@ export default async function IdeaDetailPage({
     );
   }
 
-  const title = idea.title ?? "";
-  const description = idea.summary ?? "";
+  const title = plainText(idea.title ?? "");
+  const description = plainText(idea.summary ?? "");
   const image = getMediaUrl(idea.coverImage);
 
   const countryNames = resolveNames(
@@ -69,7 +70,7 @@ export default async function IdeaDetailPage({
     ? idea.timeline.map((t: any) => ({
         year: String(t.year ?? ""),
         label: t.label ?? "",
-        description: typeof t.description === "string" ? t.description : undefined,
+        description: t.description || undefined,
       }))
     : [];
 
@@ -82,7 +83,7 @@ export default async function IdeaDetailPage({
   const videoArchive = Array.isArray(idea.videoArchive)
     ? idea.videoArchive.map((v: any, i: number) => ({
         id: `v${i}`,
-        title: v.title ?? "",
+        title: plainText(v.title ?? ""),
         url: v.url ?? "",
         thumbnail: getMediaUrl(v.thumbnail),
         duration: v.duration,
@@ -92,7 +93,7 @@ export default async function IdeaDetailPage({
   const audioArchive = Array.isArray(idea.audioArchive)
     ? idea.audioArchive.map((a: any, i: number) => ({
         id: `track-${i}`,
-        title: a.title ?? "",
+        title: plainText(a.title ?? ""),
         url: a.url ?? "",
         duration: a.duration,
       }))
@@ -103,8 +104,8 @@ export default async function IdeaDetailPage({
         .filter((r: any) => r && typeof r === "object" && r.slug)
         .map((r: any) => ({
           slug: r.slug ?? "",
-          title: r.title ?? "",
-          summary: r.summary || r.cardDescription,
+          title: plainText(r.title ?? ""),
+          summary: plainText(r.summary || r.cardDescription),
         }))
     : [];
 

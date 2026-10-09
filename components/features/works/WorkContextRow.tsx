@@ -1,7 +1,10 @@
+import { RichText, richTextToPlain } from "@/lib/richText";
+
 interface TimelineItem {
   year: string;
   label: string;
-  description?: string;
+  /** Payload rich text: HTML string or Slate JSON. */
+  description?: unknown;
 }
 
 interface Props {
@@ -48,10 +51,11 @@ export function WorkContextRow({ workTitle, timeline = [] }: Props) {
                 <div className="text-white text-base font-medium font-inter leading-snug">
                   {t.label}
                 </div>
-                {t.description && (
-                  <div className="text-white text-sm font-normal font-inter leading-relaxed">
-                    {t.description}
-                  </div>
+                {richTextToPlain(t.description) && (
+                  <RichText
+                    value={t.description}
+                    className="text-white text-sm font-normal font-inter leading-relaxed [&_p+p]:mt-2"
+                  />
                 )}
               </div>
             </div>

@@ -18,6 +18,7 @@ import { CardImage } from "@/components/common/CardImage";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { NAV_ITEMS, type DashboardNavItem } from "./constants";
 import { DashboardNavIcon } from "./DashboardNavIcon";
+import { plainText } from "@/lib/richText";
 
 function NavLink({
   item,
@@ -64,7 +65,7 @@ function ReportCard() {
   if (!report) return null;
 
   const cover = getMediaUrl(report.coverImage);
-  const summary = report.summary || report.subtitle;
+  const summary = plainText(report.summary || report.subtitle);
 
   return (
     <div className="relative h-[266px] w-full rounded-xl bg-rose-100/10 outline outline-1 outline-offset-[-0.89px] outline-yellow-700">

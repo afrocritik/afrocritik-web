@@ -6,10 +6,11 @@ import { MomentHeroSection } from "@/components/features/moments/MomentHeroSecti
 import { MomentMediaRow } from "@/components/features/moments/MomentMediaRow";
 import { RelatedMomentsSection } from "@/components/features/moments/RelatedMomentsSection";
 import { api, getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 function resolveNames(arr: any[]): string[] {
   return arr
-    .map((x: any) => (typeof x === "string" ? x : x?.name ?? ""))
+    .map((x: any) => (typeof x === "string" ? x : plainText(x?.name ?? "")))
     .filter(Boolean);
 }
 
@@ -45,8 +46,8 @@ export default async function MomentDetailPage({
     );
   }
 
-  const title = moment.title ?? "";
-  const summary = moment.summary ?? "";
+  const title = plainText(moment.title ?? "");
+  const summary = plainText(moment.summary ?? "");
 
   const countryNames = resolveNames(
     Array.isArray(moment.country) ? moment.country : moment.country ? [moment.country] : []
@@ -65,7 +66,7 @@ export default async function MomentDetailPage({
   const videos = Array.isArray(moment.videoArchive)
     ? moment.videoArchive.map((v: any, i: number) => ({
         id: `v${i}`,
-        title: v.title ?? "",
+        title: plainText(v.title ?? ""),
         caption: v.caption,
         thumbnail: getMediaUrl(v.thumbnail),
         url: v.url ?? "",
@@ -85,7 +86,7 @@ export default async function MomentDetailPage({
   const audioTracks = Array.isArray(moment.audioArchive)
     ? moment.audioArchive.map((a: any, i: number) => ({
         id: `track-${i}`,
-        title: a.title ?? "",
+        title: plainText(a.title ?? ""),
         type: "Audio",
         views: "",
         subtitle: "",
@@ -99,8 +100,8 @@ export default async function MomentDetailPage({
         .filter((m: any) => typeof m === "object")
         .map((m: any) => ({
           slug: m.slug ?? "",
-          title: m.title ?? "",
-          desc: m.summary,
+          title: plainText(m.title ?? ""),
+          desc: plainText(m.summary),
           image: getMediaUrl(m.coverImage),
           tags: resolveNames(Array.isArray(m.country) ? m.country : []),
         }))

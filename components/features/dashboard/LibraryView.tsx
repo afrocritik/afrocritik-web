@@ -11,6 +11,7 @@ import { PersonLibraryCard, mapPerson } from "./PersonLibraryCard";
 import { FeaturedWorkCard, type FeaturedWorkItem } from "./FeaturedWorkCard";
 import { mapFeatured } from "./FeaturedWorksSection";
 import { CollectionsGrid } from "./CollectionsGrid";
+import { plainText } from "@/lib/richText";
 
 type TabKey = "works" | "ideas" | "people" | "collections";
 
@@ -36,7 +37,7 @@ function mapIdea(idea: any): FeaturedWorkItem {
     slug: idea.slug ?? "",
     href: `/ideas/${idea.slug}`,
     title: idea.title ?? "",
-    description: idea.summary ?? "",
+    description: plainText(idea.summary ?? ""),
     image: getMediaUrl(idea.coverImage),
     tags,
   };

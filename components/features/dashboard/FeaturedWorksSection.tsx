@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DashboardSection } from "./DashboardSection";
 import { FeaturedWorkCard, type FeaturedWorkItem } from "./FeaturedWorkCard";
 import { api, getMediaUrl } from "@/lib/api";
+import { plainText } from "@/lib/richText";
 
 export function mapFeatured(work: any): FeaturedWorkItem {
   const tags = [
@@ -27,7 +28,7 @@ export function mapFeatured(work: any): FeaturedWorkItem {
     slug: work.slug ?? "",
     title: work.title ?? "",
     director: director || undefined,
-    description: work.cardDescription || work.summary || "",
+    description: plainText(work.cardDescription || work.summary || ""),
     image: getMediaUrl(work.coverImage),
     tags,
     rating: typeof work.rating === "number" ? work.rating : undefined,

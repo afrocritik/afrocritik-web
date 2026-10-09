@@ -7,6 +7,7 @@ import { CarouselRow } from "@/components/common/CarouselRow";
 import { CardImage } from "@/components/common/CardImage";
 import { getMediaUrl } from "@/lib/api";
 import { HomeSectionHeader } from "./HomeSectionHeader";
+import { plainText } from "@/lib/richText";
 
 export interface MomentCardData {
   slug: string;
@@ -18,8 +19,8 @@ export interface MomentCardData {
 export function mapMomentToCard(m: any): MomentCardData {
   return {
     slug: m?.slug ?? "",
-    title: m?.title ?? "",
-    description: m?.summary ?? "",
+    title: plainText(m?.title ?? ""),
+    description: plainText(m?.summary ?? ""),
     image: getMediaUrl(m?.coverImage),
   };
 }
