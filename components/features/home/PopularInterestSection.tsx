@@ -40,13 +40,13 @@ export function PopularInterestSection({
 
   return (
     <>
-      <HomeSectionHeader title="explore based on popular interest" href="/explore" weight={700} linkSize="lg" />
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-[33px]">
+      <HomeSectionHeader title="explore based on popular interest" href="/explore" />
+      <div className="mx-auto grid max-w-[640px] grid-cols-2 gap-3 lg:max-w-[760px] lg:grid-cols-4 lg:gap-4">
         {items.map((item) => (
           <Link
             key={item.label}
             href={`/explore?q=${encodeURIComponent(item.category || item.label.toLowerCase())}`}
-            className="group flex aspect-[269/309] flex-col items-center justify-center gap-[18px] rounded-[20px] border border-transparent transition-colors duration-300 hover:border-[#ED9828]/70"
+            className="group flex aspect-[269/250] flex-col items-center justify-center gap-2.5 rounded-[14px] border border-transparent transition-colors duration-300 hover:border-[#ED9828]/70"
             style={{
               background: "rgba(255, 255, 255, 0.10)",
               backdropFilter: "blur(7.5px)",
@@ -58,13 +58,13 @@ export function PopularInterestSection({
               src={iconFor(item)}
               alt=""
               aria-hidden
-              className="h-14 w-14 transition-transform duration-300 group-hover:scale-110 md:h-[90px] md:w-[90px]"
+              className="h-9 w-9 transition-transform duration-300 group-hover:scale-110 md:h-[50px] md:w-[50px]"
             />
             <span
               className="capitalize text-white"
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "clamp(18px, 2.2vw, 30px)",
+                fontSize: "clamp(14px, 1.4vw, 18px)",
                 fontWeight: 500,
                 lineHeight: "140%",
               }}

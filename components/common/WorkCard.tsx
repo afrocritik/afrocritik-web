@@ -132,7 +132,7 @@ function EssentialRating({ rating, hovered }: Readonly<{ rating: number; hovered
         style={{
           color: "#FFF",
           fontFamily: "var(--font-inter)",
-          fontSize: hovered ? "12px" : "10.446px",
+          fontSize: "14px",
           fontWeight: 600,
           lineHeight: "140%",
         }}
@@ -218,24 +218,24 @@ function EssentialCardBody({
     >
       <Link href={`/works/${slug}`}>
         <h3
-          className={hovered ? "line-clamp-1" : "line-clamp-2"}
+          className="line-clamp-1"
           style={{
             color: "#DD962A",
             fontFamily: "var(--font-inter)",
-            fontSize: hovered ? "16px" : "13.928px",
+            fontSize: "18px",
             fontWeight: 600,
-            lineHeight: hovered ? "140%" : "100%",
+            lineHeight: "130%",
           }}
         >
           {title}
         </h3>
       </Link>
       <p
-        className={hovered ? "line-clamp-3" : "line-clamp-1"}
+        className={hovered ? "line-clamp-2" : "line-clamp-1"}
         style={{
-          color: "#CCC",
+          color: "#D6D3D1",
           fontFamily: "var(--font-inter)",
-          fontSize: hovered ? "12px" : "10.446px",
+          fontSize: "15px",
           fontWeight: 600,
           lineHeight: "140%",
         }}
@@ -246,8 +246,8 @@ function EssentialCardBody({
         <CardTags
           tags={cardTags}
           hovered={hovered}
-          fontSize="9px"
-          height={hovered ? "24px" : "20.891px"}
+          fontSize="11px"
+          height="24px"
           radius={hovered ? "5px" : "4.352px"}
           maxWidth={hovered ? 150 : 120}
           background="rgba(156, 92, 8, 0.20)"
@@ -278,7 +278,7 @@ function EssentialCard({
   const desc = description ?? [year, country].filter(Boolean).join(" · ");
   const hovDesc = hoverDescription ?? desc;
   const cardTags = tags?.length ? tags : [type];
-  const idleWidth = spotlight ? "270px" : "318px";
+  const idleWidth = "270px";
 
   return (
     <fieldset
@@ -436,7 +436,7 @@ function EWIMCard({
         padding: 0,
         margin: 0,
         flexShrink: 0,
-        width: hovered ? "398px" : "318px",
+        width: hovered ? "398px" : "270px",
         height: "384px",
         borderRadius: "8px",
         border: "1px solid #B45309",
@@ -513,7 +513,7 @@ function EWIMCard({
               style={{
                 color: "#D6D3D1",
                 fontFamily: "var(--font-inter)",
-                fontSize: hovered ? "18px" : "16px",
+                fontSize: "18px",
                 fontWeight: 600,
                 lineHeight: "130%",
                 display: "-webkit-box",
@@ -559,7 +559,7 @@ function EWIMCard({
             style={{
               color: "#F9B65F",
               fontFamily: "var(--font-inter)",
-              fontSize: "17px",
+              fontSize: "15px",
               fontWeight: 600,
               lineHeight: "130%",
               overflow: "hidden",
@@ -644,7 +644,7 @@ function EWILCard({
         padding: 0,
         margin: 0,
         flexShrink: 0,
-        width: hovered ? "338px" : "268px",
+        width: hovered ? "338px" : "270px",
         height: "384px",
         borderRadius: "8px",
         border: "1px solid #B45309",
@@ -719,7 +719,7 @@ function EWILCard({
               style={{
                 color: "#D6D3D1",
                 fontFamily: "var(--font-inter)",
-                fontSize: hovered ? "16px" : "14px",
+                fontSize: "18px",
                 fontWeight: 600,
                 lineHeight: "130%",
                 display: "-webkit-box",
@@ -767,7 +767,7 @@ function EWILCard({
             style={{
               color: "#b45309",
               fontFamily: "var(--font-inter)",
-              fontSize: "16px",
+              fontSize: "15px",
               fontWeight: 600,
               lineHeight: "130%",
               overflow: "hidden",
@@ -791,7 +791,7 @@ function EWILCard({
           <CardTags
             tags={tags ?? []}
             hovered={hovered}
-            fontSize="9px"
+            fontSize="11px"
             height="24px"
             radius="5px"
             maxWidth={120}

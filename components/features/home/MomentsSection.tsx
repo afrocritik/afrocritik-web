@@ -59,8 +59,8 @@ function MomentCard({ slug, title, description, image }: Readonly<MomentCardData
         margin: 0,
         flexShrink: 0,
         flexGrow: 0,
-        flexBasis: hovered ? "480px" : "318px",
-        width: hovered ? "480px" : "318px",
+        flexBasis: hovered ? "480px" : "270px",
+        width: hovered ? "480px" : "270px",
         height: "384px",
         padding: "13px 16px",
         borderRadius: "8px",
@@ -78,7 +78,7 @@ function MomentCard({ slug, title, description, image }: Readonly<MomentCardData
               style={{
                 color: "#DD962A",
                 fontFamily: "var(--font-inter)",
-                fontSize: "16px",
+                fontSize: "18px",
                 fontWeight: 600,
                 lineHeight: "140%",
               }}
@@ -100,9 +100,9 @@ function MomentCard({ slug, title, description, image }: Readonly<MomentCardData
         <p
           className="line-clamp-4 shrink-0"
           style={{
-            color: "#CCC",
+            color: "#D6D3D1",
             fontFamily: "var(--font-inter)",
-            fontSize: "12px",
+            fontSize: "15px",
             fontWeight: 600,
             lineHeight: "140%",
           }}

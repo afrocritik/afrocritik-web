@@ -5,9 +5,12 @@ import { cn } from "@/lib/utils";
 export function Logo({
   className,
   href = "/",
+  compact = false,
 }: Readonly<{
   className?: string;
   href?: string;
+  /** Half-size logo for the slim site header. */
+  compact?: boolean;
 }>) {
   return (
     <Link href={href} className={cn("block w-fit shrink-0 relative", className)}>
@@ -18,7 +21,7 @@ export function Logo({
         height={86}
         className="object-contain"
         style={{
-          width: "clamp(150px, 42vw, 210.847px)",
+          width: compact ? "clamp(80px, 22vw, 106px)" : "clamp(150px, 42vw, 210.847px)",
           height: "auto",
           aspectRatio: "106/43",
         }}
@@ -27,15 +30,15 @@ export function Logo({
       <div
         style={{
           position: "absolute",
-          width: "clamp(56px, 15vw, 78px)",
+          width: compact ? "clamp(30px, 8vw, 40px)" : "clamp(56px, 15vw, 78px)",
           color: "#F3E5D0",
           textAlign: "center",
           fontFamily: "Wittgenstein",
-          fontSize: "clamp(11px, 3.2vw, 16px)",
+          fontSize: compact ? "clamp(6px, 1.6vw, 8px)" : "clamp(11px, 3.2vw, 16px)",
           fontWeight: 600,
           lineHeight: "110%",
           textTransform: "capitalize",
-          bottom: "clamp(7px, 1.8vw, 10px)",
+          bottom: compact ? "clamp(3px, 0.9vw, 5px)" : "clamp(7px, 1.8vw, 10px)",
           left: "50%",
           transform: "translateX(-50%)",
         }}

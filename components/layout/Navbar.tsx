@@ -17,8 +17,8 @@ import { MegaMenu } from "./MegaMenu";
 
 function HamburgerIcon() {
   return (
-    <div className="flex size-11 items-center justify-center overflow-hidden sm:size-16">
-      <Image src="/icons/ui/menu.png" alt="Menu" width={48} height={32} className="w-8 sm:w-12" />
+    <div className="flex size-6 items-center justify-center overflow-hidden sm:size-8">
+      <Image src="/icons/ui/menu.png" alt="Menu" width={48} height={32} className="w-4 sm:w-6" />
     </div>
   );
 }
@@ -42,22 +42,22 @@ export function Navbar() {
       className="sticky top-0 z-50 w-full border-b border-amber-line backdrop-blur"
       style={{ background: "#3B1E08" }}
     >
-      <div className="container flex items-center gap-3 pt-5 pb-4 sm:gap-5 sm:pt-6 sm:pb-5">
-        <Logo />
+      <div className="container flex items-center gap-2 pt-2.5 pb-2 sm:gap-3 sm:pt-3 sm:pb-2.5">
+        <Logo compact />
 
         {/* Center search — only on interior pages */}
         {showSearch ? (
           <form
             onSubmit={submitSearch}
-            className="relative hidden h-[72px] flex-1 md:block"
+            className="relative hidden h-9 flex-1 md:block"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="58"
-              height="58"
+              width="29"
+              height="29"
               viewBox="0 0 70 71"
               fill="none"
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"
+              className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2"
             >
               <path
                 d="M49.37 50.1779L59.5 60.0721M33.25 21.2019C39.049 21.2019 43.75 25.9481 43.75 31.8029M56.2333 33.6875C56.2333 46.4378 45.9956 56.774 33.3667 56.774C20.7378 56.774 10.5 46.4378 10.5 33.6875C10.5 20.9371 20.7378 10.601 33.3667 10.601C45.9956 10.601 56.2333 20.9371 56.2333 33.6875Z"
@@ -70,7 +70,7 @@ export function Navbar() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search Works, Ideas, People, Reports..."
-              className="h-[72px] w-full rounded-xl bg-zinc-300/30 pl-[76px] pr-5 font-inter text-lg text-white placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-amber"
+              className="h-9 w-full rounded-lg bg-zinc-300/30 pl-11 pr-3 font-inter text-sm text-white placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-amber"
             />
           </form>
         ) : (
@@ -78,7 +78,7 @@ export function Navbar() {
         )}
 
         {/* Right actions: Hamburger → Explore → Avatar/Sign In */}
-        <div className="flex items-center gap-3 shrink-0 sm:gap-5">
+        <div className="flex items-center gap-2 shrink-0 sm:gap-3">
           {/* Hamburger — first on the right */}
           <button
             onClick={() => setMenuOpen(true)}
@@ -92,7 +92,7 @@ export function Navbar() {
           {showSearch && (
             <Link
               href="/explore"
-              className="hidden md:inline-flex h-[60px] items-center justify-center gap-2.5 rounded-xl px-7 py-2.5 font-inter text-2xl font-medium capitalize leading-8 text-yellow-950 transition-opacity hover:opacity-90"
+              className="hidden md:inline-flex h-[30px] items-center justify-center gap-1 rounded-lg px-3.5 py-1 font-inter text-sm font-medium capitalize leading-4 text-yellow-950 transition-opacity hover:opacity-90"
               style={{
                 background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
               }}
@@ -106,11 +106,11 @@ export function Navbar() {
             <Popover>
               <PopoverTrigger asChild>
                 <button type="button" aria-label="Account menu" className="rounded-full">
-                  <Avatar className="size-12 cursor-pointer overflow-hidden rounded-full">
+                  <Avatar className="size-8 cursor-pointer overflow-hidden rounded-full">
                     <AvatarImage
                       src={session.user?.image || "/images/avatars/default-avatar.png"}
                       alt="User"
-                      className="size-12 object-cover"
+                      className="size-8 object-cover"
                     />
                     <AvatarFallback className="bg-bg-secondary text-amber">
                       {session.user?.name?.[0]?.toUpperCase() || "U"}
@@ -164,12 +164,12 @@ export function Navbar() {
           ) : (
             <Link
               href="/signin"
-              className="inline-flex h-11 w-auto px-4 sm:h-[60px] sm:w-[162px] sm:px-0 items-center justify-center gap-2.5 rounded-xl transition-opacity hover:opacity-90"
+              className="inline-flex h-7 w-auto px-3 sm:h-[30px] sm:w-[81px] sm:px-0 items-center justify-center gap-1 rounded-lg transition-opacity hover:opacity-90"
               style={{
                 background: "linear-gradient(42deg, #A16207 15%, #FB923C 81%)",
               }}
             >
-              <span className="font-inter text-base sm:text-2xl font-medium capitalize leading-8 text-yellow-950 whitespace-nowrap">
+              <span className="font-inter text-xs sm:text-sm font-medium capitalize leading-4 text-yellow-950 whitespace-nowrap">
                 Sign in
               </span>
             </Link>

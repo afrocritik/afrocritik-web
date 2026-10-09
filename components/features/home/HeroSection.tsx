@@ -31,7 +31,7 @@ export function HeroSection({
 
   return (
     <>
-      <div className="container flex flex-col items-center py-12 text-center md:py-16">
+      <div className="container flex flex-col items-center pb-12 pt-16 text-center md:pb-16 md:pt-24">
         <h1
           style={{
             width: "100%",
