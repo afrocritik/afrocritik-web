@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function YearRangeSlider({
   min = 1950,
-  max = 2025,
+  max = new Date().getFullYear(),
   onChange,
 }: Readonly<{
   min?: number;

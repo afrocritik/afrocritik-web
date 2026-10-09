@@ -8,7 +8,8 @@ import { api } from "@/lib/api";
 import { YearRangeSlider } from "./YearRangeSlider";
 
 export const YEAR_MIN = 1950;
-export const YEAR_MAX = 2025;
+// Upper bound follows the calendar so the range never stops short of this year.
+export const YEAR_MAX = new Date().getFullYear();
 
 // Facet lists show this many options until "Show all" is pressed.
 const FACET_PREVIEW = 6;
