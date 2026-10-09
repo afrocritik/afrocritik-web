@@ -37,7 +37,7 @@ export function EssentialWorksByTypeSection({ type, heading, works = [] }: Props
   return (
     <>
       <div className="container">
-        <HomeSectionHeader title={title} href={cards.length > 0 ? `/explore?q=${encodeURIComponent(type)}` : undefined} />
+        <HomeSectionHeader title={title} href={cards.length >= 5 ? `/explore?q=${encodeURIComponent(type)}` : undefined} bleed />
       </div>
       <div>
         {cards.length > 0 ? (
