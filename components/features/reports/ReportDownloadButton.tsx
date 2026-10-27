@@ -1,10 +1,8 @@
 "use client";
 
 import { Download } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { api, API_BASE } from "@/lib/api";
-import { logActivity } from "@/lib/activity";
-import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
+import { API_BASE } from "@/lib/api";
+import { useRecordReportDownload } from "@/lib/hooks/useRecordReportDownload";
 
 export function ReportDownloadButton({
   reportId,
@@ -17,33 +15,8 @@ export function ReportDownloadButton({
   reportSlug: string;
   pdfUrl?: string;
 }>) {
-  const { data: session } = useSession();
-  const token = (session?.user as { token?: string } | undefined)?.token;
-  const { data: user, refetch } = useCurrentUser();
-
-  const record = async () => {
-    if (!token || !user?.id) return;
-    // The reports relationship uses Postgres numeric ids, so values must be
-    // sent as numbers — string ids fail Payload's isValidID(value,'number').
-    const current: number[] = Array.isArray(user.downloadedReports)
-      ? user.downloadedReports
-          .map((r: any) => Number(typeof r === "object" ? r?.id : r))
-          .filter((n: number) => Number.isFinite(n))
-      : [];
-    const id = Number(reportId);
-    if (!Number.isFinite(id) || current.includes(id)) return;
-    try {
-      await api.users.update(
-        String(user.id),
-        { downloadedReports: [...current, id] },
-        token
-      );
-      await logActivity("downloaded", reportTitle, `/reports/${reportSlug}`, token);
-      await refetch();
-    } catch {
-      /* non-blocking */
-    }
-  };
+  const recordDownload = useRecordReportDownload();
+  const record = () => recordDownload(reportId, reportTitle, reportSlug);
 
   if (!pdfUrl) {
     return (
