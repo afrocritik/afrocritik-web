@@ -275,6 +275,13 @@ export const api = {
           ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
         })
         .then((r) => r.data),
+    // Self-service account deletion (users can't hit DELETE /api/users/:id).
+    deleteMe: (token?: string) =>
+      apiClient
+        .delete("/api/profile/me", {
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        })
+        .then((r) => r.data),
     update: (id: string, data: Record<string, any>, token?: string) =>
       apiClient
         .patch(`/api/users/${id}`, data, {

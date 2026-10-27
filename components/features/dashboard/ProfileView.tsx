@@ -104,7 +104,7 @@ export function ProfileView() {
     if (!user.isProfilePublic) {
       toast("Your profile is private", {
         description: "Turn on “Make my profile public” in Edit Profile to share it.",
-        action: { label: "Edit profile", onClick: () => (window.location.href = "/dashboard/settings") },
+        action: { label: "Edit profile", onClick: () => (window.location.href = "/dashboard/profile/edit") },
       });
       return;
     }

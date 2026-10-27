@@ -6,7 +6,7 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-6 px-6 py-8 md:px-8">
       <DashboardPageHeader
         title="Settings"
-        description="Manage your account, profile and preferences."
+        description="Manage your account preferences and configuration."
       />
       <SettingsView />
     </div>
