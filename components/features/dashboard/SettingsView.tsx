@@ -17,8 +17,6 @@ type PrefKey =
   | "showLibrary"
   | "usageAnalytics";
 
-const GRADIENT = "linear-gradient(132deg, #9C5C08 15%, #ED9828 81%)";
-
 function Toggle({
   checked,
   onChange,
@@ -58,7 +56,7 @@ function Row({
     <div className="flex min-h-[56px] items-center justify-between gap-6 rounded-[5px] px-[22px] py-2.5">
       <div className="flex flex-col gap-1.5">
         <span
-          className={`font-inter text-base leading-[17.6px] ${danger ? "text-[#F53E49]" : "text-white"}`}
+          className={`font-inter text-[16px] font-normal leading-[17.6px] ${danger ? "text-[#F53E49]" : "text-white"}`}
         >
           {title}
         </span>
@@ -235,8 +233,7 @@ export function SettingsView() {
           <button
             type="button"
             onClick={exportData}
-            className="h-[30px] shrink-0 rounded-md border border-white/80 px-2.5 font-inter text-[10px] font-medium capitalize text-white/80 transition-opacity hover:opacity-90"
-            style={{ background: GRADIENT }}
+            className="h-[30px] w-[121px] shrink-0 rounded-md border border-white/80 px-2.5 text-center font-inter text-[10px] font-medium capitalize leading-[14px] text-white/80 transition-colors hover:bg-white/10"
           >
             Request Data Export
           </button>
@@ -270,7 +267,7 @@ export function SettingsView() {
             <button
               type="button"
               onClick={() => setConfirmingDelete(true)}
-              className="h-[30px] shrink-0 rounded-md bg-[#F53E49] px-2.5 font-inter text-[10px] font-medium capitalize text-white transition-opacity hover:opacity-90"
+              className="h-[30px] w-[121px] shrink-0 rounded-md bg-[#F53E49] px-2.5 text-center font-inter text-[10px] font-medium capitalize leading-[14px] text-white transition-opacity hover:opacity-90"
             >
               Delete Account
             </button>
