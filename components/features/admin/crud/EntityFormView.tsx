@@ -82,6 +82,7 @@ export function EntityFormView({
       config.form
         .map((s) => ({
           title: s.title || "Publishing",
+          description: s.title ? s.description : undefined,
           fields: s.fields.filter((f) => f.sidebar),
         }))
         .filter((s) => s.fields.length > 0),
@@ -300,9 +301,16 @@ export function EntityFormView({
                 className="rounded-xl border border-yellow-700 p-5"
                 style={{ background: "#50321C80" }}
               >
-                <h2 className="mb-5 font-baskervville text-xl font-semibold leading-6 text-white">
-                  {section.title}
-                </h2>
+                <div className="mb-5">
+                  <h2 className="font-baskervville text-xl font-semibold leading-6 text-white">
+                    {section.title}
+                  </h2>
+                  {section.description && (
+                    <p className="mt-1 font-inter text-sm text-white/50">
+                      {section.description}
+                    </p>
+                  )}
+                </div>
                 <div className="flex flex-col gap-5">
                   {section.fields.map(renderField)}
                 </div>

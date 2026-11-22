@@ -7,6 +7,7 @@ import type { LucideIcon } from "lucide-react";
 export type FieldType =
   | "text"
   | "number"
+  | "rating"
   | "url"
   | "email"
   | "textarea"
@@ -81,6 +82,8 @@ export interface FieldConfig {
   /** Min / max for number fields */
   min?: number;
   max?: number;
+  /** Max decimal places for number/rating fields (e.g. 1 for 9.8) */
+  decimals?: number;
   /** Accepted upload kind for image/file fields (default: image→image, file→pdf) */
   accept?: "image" | "pdf";
   /** Max upload size in megabytes */

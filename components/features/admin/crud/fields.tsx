@@ -589,6 +589,62 @@ function ImageControl({ field, value, onChange, error, setError }: ControlProps)
 }
 
 /* ------------------------------------------------------------------ */
+/* Rating — score input + live preview of the public card badge        */
+/* ------------------------------------------------------------------ */
+
+function RatingControl({
+  field,
+  value,
+  onChange,
+  onBlur,
+  errCls,
+}: ControlProps & { onBlur: () => void; errCls: string }) {
+  const max = field.max ?? 10;
+  const hasScore = typeof value === "number" && !Number.isNaN(value);
+  const hint = "font-inter text-xs leading-4 text-white/45";
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="relative">
+        <input
+          type="number"
+          inputMode="decimal"
+          step={0.1}
+          min={field.min}
+          max={max}
+          value={(value as number | string) ?? ""}
+          onChange={(e) =>
+            onChange(e.target.value === "" ? "" : Number(e.target.value))
+          }
+          onBlur={onBlur}
+          placeholder="9.8"
+          className={cn(controlBase, "h-11 pr-12", errCls)}
+        />
+        <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 font-inter text-sm text-white/50">
+          / {max}
+        </span>
+      </div>
+      <p className={hint}>Use 0–{max}, with up to one decimal place (e.g. 9.8).</p>
+      <p className={hint}>Optional. Leave the score empty to keep this work unrated.</p>
+
+      <span className={cn(labelBase, "mt-4")}>Public rating preview</span>
+      <div className="flex h-11 items-center gap-1 rounded-xl border border-yellow-700/50 bg-[#3A2417]/50 px-3.5">
+        {hasScore ? (
+          <>
+            <span className="font-inter text-sm font-semibold leading-5 text-white">
+              {(value as number).toFixed(1)}
+            </span>
+            <Image src="/icons/ui/star.svg" alt="" width={17} height={14} />
+          </>
+        ) : (
+          <span className="font-inter text-sm text-white/40">Unrated</span>
+        )}
+      </div>
+      <p className={hint}>Shown beside the star on the public work card.</p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Toggle                                                              */
 /* ------------------------------------------------------------------ */
 
@@ -1214,6 +1270,17 @@ export function FieldRenderer({
           max={field.max}
           placeholder={field.placeholder}
           className={cn(controlBase, "h-11", errCls)}
+        />
+      );
+      break;
+    case "rating":
+      control = (
+        <RatingControl
+          field={field}
+          value={value}
+          onChange={handleChange}
+          onBlur={onBlur}
+          errCls={errCls}
         />
       );
       break;

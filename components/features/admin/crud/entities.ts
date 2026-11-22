@@ -268,6 +268,13 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
+      {
+        title: "Work rating",
+        description: "Set the score shown on this work\u2019s public card.",
+        fields: [
+          { name: "rating", label: "Score (out of 10)", type: "rating", sidebar: true, min: 0, max: 10, decimals: 1 },
+        ],
+      },
     ],
   },
 

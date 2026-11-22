@@ -45,7 +45,16 @@ export function validateField(field: FieldConfig, value: unknown): string | null
     }
   }
 
-  if (field.type === "number" && typeof value === "number") {
+  if ((field.type === "number" || field.type === "rating") && typeof value === "number") {
+    if (Number.isNaN(value)) return `${field.label} must be a number.`;
+    if (field.decimals !== undefined) {
+      const places = (String(value).split(".")[1] ?? "").length;
+      if (places > field.decimals) {
+        return field.decimals === 0
+          ? "Use a whole number."
+          : `Use at most ${field.decimals} decimal place${field.decimals > 1 ? "s" : ""}.`;
+      }
+    }
     if (field.min !== undefined && value < field.min) {
       return `Must be at least ${field.min}.`;
     }
