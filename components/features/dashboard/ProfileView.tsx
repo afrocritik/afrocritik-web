@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api, getMediaUrl } from "@/lib/api";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
-import { cn, getImageUrl, getRoleLabel, getUserDisplayName } from "@/lib/utils";
+import { cn, getImageUrl, getRoleLabel, getUserDisplayName, isPlaceholderUsername } from "@/lib/utils";
 import {
   CARD,
   Chip,
@@ -219,7 +219,7 @@ export function ProfileView() {
                 </span>
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 font-inter text-[15.25px] text-white/80">
-                {user.username && <span>@{user.username}</span>}
+                {user.username && !isPlaceholderUsername(user.username) && <span>@{user.username}</span>}
                 {user.pronouns && <span>· {user.pronouns}</span>}
                 {user.location && (
                   <span className="inline-flex items-center gap-1.5">

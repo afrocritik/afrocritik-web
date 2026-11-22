@@ -43,7 +43,7 @@ export default function SignUpPage() {
     // creation; the user picks their real one on the next (profile-setup)
     // step, which overrides this placeholder via complete-profile.
     try {
-      const username = `${email.split("@")[0]}_${Date.now()}`;
+      const username = `pending_${crypto.randomUUID().replace(/-/g, "").slice(0, 10)}`;
       await api.auth.register({ email, password, username });
     } catch (err) {
       setLoading(false);

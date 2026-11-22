@@ -399,10 +399,21 @@ export const api = {
         .then((r) => r.data),
     register: (payload: Record<string, any>) =>
       apiClient.post("/api/users", payload).then((r) => r.data),
-    completeProfile: (payload: Record<string, any>) =>
+    completeProfile: (payload: Record<string, any>, token?: string) =>
       apiClient
-        .post("/api/auth/complete-profile", payload)
+        .post(
+          "/api/auth/complete-profile",
+          payload,
+          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+        )
         .then((r) => r.data),
+    usernameAvailable: (username: string, userId?: string) =>
+      apiClient
+        .get("/api/auth/username-available", { params: { username, userId } })
+        .then(
+          (r) =>
+            r.data as { available: boolean; valid: boolean; message: string },
+        ),
     saveInterests: (userId: string, interests: string[], token?: string) =>
       apiClient
         .post(

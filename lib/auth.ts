@@ -18,7 +18,8 @@ function deriveName(u: {
     .map((s) => s?.trim())
     .filter(Boolean)
     .join(" ");
-  return full || u.username?.trim() || u.email?.split("@")[0]?.trim() || "";
+  const username = /^pending_[0-9a-f]{10}$/.test(u.username ?? "") || /_\d{13}$/.test(u.username?.trim() ?? "") ? "" : u.username?.trim();
+  return full || username || u.email?.split("@")[0]?.trim() || "";
 }
 
 export const authOptions: NextAuthOptions = {
@@ -112,6 +113,10 @@ export const authOptions: NextAuthOptions = {
       // via useSession().update({ isProfileComplete: true }).
       if (trigger === "update" && session?.isProfileComplete !== undefined) {
         token.isProfileComplete = session.isProfileComplete;
+      }
+      // Refresh the display name (e.g. after the user picks their username).
+      if (trigger === "update" && typeof session?.name === "string" && session.name) {
+        token.name = session.name;
       }
       // The Payload JWT inside this session expires on its own schedule. Once
       // it does, every API call is anonymous (403), so mark the session dead

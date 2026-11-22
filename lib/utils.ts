@@ -29,6 +29,14 @@ export function formatCount(n: number): string {
 }
 
 /**
+ * Signup creates a placeholder username `<emailLocal>_<Date.now()>` until the
+ * user picks a real one in profile-setup. Never show that suffix in the UI.
+ */
+export function isPlaceholderUsername(username?: string | null): boolean {
+  return /^pending_[0-9a-f]{10}$/.test(username ?? "") || /_\d{13}$/.test(username?.trim() ?? "");
+}
+
+/**
  * Derive a friendly display name from a Payload user. The user collection has
  * no single `name` field, so fall back through firstName/lastName → username →
  * email local part → a neutral default.
@@ -51,7 +59,9 @@ export function getUserDisplayName(
     .filter(Boolean)
     .join(" ");
   if (full) return full;
-  if (user.username?.trim()) return user.username.trim();
+  if (user.username?.trim() && !isPlaceholderUsername(user.username)) {
+    return user.username.trim();
+  }
   const local = user.email?.split("@")[0]?.trim();
   if (local) return local;
   return fallback;

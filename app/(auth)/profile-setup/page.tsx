@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { api, getApiErrorMessage } from "@/lib/api";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
+import { getUserDisplayName } from "@/lib/utils";
 
 // Only "User" is selectable for now; the other roles are shown but disabled
 // until those flows are ready.
@@ -37,6 +38,39 @@ function ProfileSetupForm() {
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Live username availability. "idle" until something is typed.
+  type UsernameState = "idle" | "checking" | "available" | "taken" | "invalid";
+  const [usernameState, setUsernameState] = useState<UsernameState>("idle");
+  const [usernameMsg, setUsernameMsg] = useState("");
+  const normalized = username.trim().toLowerCase();
+
+  useEffect(() => {
+    if (!normalized) {
+      setUsernameState("idle");
+      setUsernameMsg("");
+      return;
+    }
+    setUsernameState("checking");
+    setUsernameMsg("");
+    let cancelled = false;
+    const t = setTimeout(async () => {
+      try {
+        const r = await api.auth.usernameAvailable(normalized, userId);
+        if (cancelled) return;
+        setUsernameMsg(r.message);
+        setUsernameState(r.available ? "available" : r.valid ? "taken" : "invalid");
+      } catch {
+        if (cancelled) return;
+        setUsernameState("invalid");
+        setUsernameMsg("Couldn't check that username. Please try again.");
+      }
+    }, 400);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [normalized, userId]);
 
   // Gate: only users who haven't finished onboarding belong here. Send
   // anonymous visitors to sign up, and bounce anyone who already completed
@@ -64,12 +98,22 @@ function ProfileSetupForm() {
     if (!userId) {
       return setError("Your session has expired. Please sign in again.");
     }
+    if (usernameState !== "available") {
+      return setError("Choose an available username to continue.");
+    }
     setLoading(true);
     try {
-      await api.auth.completeProfile({ userId, username, role });
+      const res = await api.auth.completeProfile(
+        { username: normalized, role },
+        (session?.user as any)?.token,
+      );
       // Flip the session flag so the gates everywhere see a complete profile
-      // without waiting for a re-login.
-      await update({ isProfileComplete: true });
+      // without waiting for a re-login, and refresh the displayed name so the
+      // navbar shows the chosen username instead of the email prefix.
+      await update({
+        isProfileComplete: true,
+        name: getUserDisplayName(res?.user ?? { username: normalized }, ""),
+      });
       router.push("/dashboard");
     } catch (err) {
       setError(
@@ -133,8 +177,37 @@ function ProfileSetupForm() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your Username"
-              className="rounded-md border border-yellow-700/40 bg-transparent px-5 py-5 font-inter text-base text-white placeholder:text-white/60 focus:border-amber focus:outline-none"
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              maxLength={30}
+              aria-invalid={usernameState === "taken" || usernameState === "invalid"}
+              aria-describedby="username-status"
+              className={`rounded-md border bg-transparent px-5 py-5 font-inter text-base text-white placeholder:text-white/60 focus:outline-none ${
+                usernameState === "taken" || usernameState === "invalid"
+                  ? "border-red-500/70 focus:border-red-500"
+                  : usernameState === "available"
+                    ? "border-green-500/70 focus:border-green-500"
+                    : "border-yellow-700/40 focus:border-amber"
+              }`}
             />
+            <p
+              id="username-status"
+              role="status"
+              aria-live="polite"
+              className={`min-h-5 font-inter text-sm ${
+                usernameState === "available"
+                  ? "text-green-400"
+                  : usernameState === "taken" || usernameState === "invalid"
+                    ? "text-red-400"
+                    : "text-white/60"
+              }`}
+            >
+              {usernameState === "checking"
+                ? "Checking availability…"
+                : usernameMsg ||
+                  "3–30 characters: letters, numbers, underscores and dots."}
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -168,7 +241,7 @@ function ProfileSetupForm() {
           )}
           <button
             type="submit"
-            disabled={loading || !username || !role}
+            disabled={loading || usernameState !== "available" || !role}
             className="w-full rounded-xl bg-yellow-700 py-4 font-inter text-xl font-medium text-white transition-all hover:bg-yellow-800 disabled:opacity-50 disabled:hover:bg-yellow-700 disabled:cursor-not-allowed"
           >
             {loading ? "Saving…" : "Finish"}
