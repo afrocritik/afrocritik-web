@@ -7,11 +7,12 @@ export function RatingBadge({
   rating,
   className,
   scoreClassName,
-}: Readonly<{ rating?: unknown; className?: string; scoreClassName?: string }>) {
+  starFirst = true,
+}: Readonly<{ rating?: unknown; className?: string; scoreClassName?: string; starFirst?: boolean }>) {
   const text = formatRating(rating);
   if (!text) return null;
   return (
-    <span className={cn("inline-flex items-center gap-0.5", className)} title={`Rated ${text} out of 10`}>
+    <span className={cn("inline-flex items-center gap-0.5", starFirst && "flex-row-reverse", className)} title={`Rated ${text} out of 10`}>
       <span className={cn("font-inter text-[8.59px] font-semibold leading-3 text-white", scoreClassName)}>{text}</span>
       <Image src="/icons/ui/star.svg" alt="" width={12} height={10} aria-hidden />
     </span>

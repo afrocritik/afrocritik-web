@@ -106,7 +106,7 @@ export default async function ReportDetailPage({
               {parseRating(report.rating) !== undefined && (
                 <div className="mt-5 inline-flex items-center gap-3">
                   <span className="font-inter text-base font-semibold text-orange-400/50">Rating</span>
-                  <RatingBadge rating={report.rating} scoreClassName="text-base" className="gap-1.5 [&_img]:size-4" />
+                  <RatingBadge rating={report.rating} starFirst scoreClassName="text-base" className="gap-1.5 [&_img]:size-4" />
                 </div>
               )}
 

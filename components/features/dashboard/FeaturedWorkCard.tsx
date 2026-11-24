@@ -67,10 +67,10 @@ export function FeaturedWorkCard({
           ))}
           {typeof rating === "number" && (
             <div className="ml-auto flex items-center gap-0.5">
+              <span className="text-xs leading-none text-yellow-400">★</span>
               <span className="font-inter text-sm font-semibold leading-4 text-white">
                 {rating.toFixed(1)}
               </span>
-              <span className="text-xs leading-none text-yellow-400">★</span>
             </div>
           )}
         </div>

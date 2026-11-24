@@ -157,7 +157,7 @@ export function WorkHeroSection({
                   </span>
                 </div>
               ))}
-            <RatingBadge rating={rating} scoreClassName="text-base" className="gap-1.5 [&_img]:size-4" />
+            <RatingBadge rating={rating} starFirst scoreClassName="text-base" className="gap-1.5 [&_img]:size-4" />
             </div>
           )}
           <div className="mt-5 flex gap-3">

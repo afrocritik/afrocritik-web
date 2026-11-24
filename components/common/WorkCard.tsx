@@ -124,10 +124,12 @@ function useHoverDelay() {
 function EssentialRating({ rating, hovered }: Readonly<{ rating: number; hovered: boolean }>) {
   return (
     <div className="flex shrink-0 items-center gap-1">
-      {hovered && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src="/icons/ui/star.svg" alt="" style={{ width: "16px", height: "16px" }} />
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/icons/ui/star.svg"
+        alt=""
+        style={hovered ? { width: "16px", height: "16px" } : { width: "16.093px", height: "13.928px" }}
+      />
       <span
         style={{
           color: "#FFF",
@@ -139,10 +141,6 @@ function EssentialRating({ rating, hovered }: Readonly<{ rating: number; hovered
       >
         {rating.toFixed(1)}
       </span>
-      {!hovered && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src="/icons/ui/star.svg" alt="" style={{ width: "16.093px", height: "13.928px" }} />
-      )}
     </div>
   );
 }
@@ -918,6 +916,8 @@ function ExploreCard({
         />
         {typeof rating === "number" && (
           <div className="flex shrink-0 items-center gap-0.5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/ui/star.svg" alt="" style={{ width: "12px", height: "10px" }} />
             <span
               style={{
                 color: "#FFF",
@@ -929,8 +929,6 @@ function ExploreCard({
             >
               {rating.toFixed(1)}
             </span>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/icons/ui/star.svg" alt="" style={{ width: "12px", height: "10px" }} />
           </div>
         )}
       </div>
