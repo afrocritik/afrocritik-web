@@ -2,6 +2,9 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { RatingBadge } from "@/components/common/RatingBadge";
 
+// Tags stay on one row so a card with many tags can't stretch its neighbours.
+const MAX_TAGS = 3;
+
 export interface IdeaCardProps {
   slug?: string;
   title: string;
@@ -72,16 +75,17 @@ export function IdeaCard({
         </p>
       )}
       {(tags.length > 0 || rating !== undefined) && (
-        <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-4">
-          {tags.map((t) => (
+        <div className="mt-auto flex flex-nowrap items-center gap-1.5 overflow-hidden pt-4">
+          {tags.slice(0, MAX_TAGS).map((t) => (
             <div
               key={t}
-              className="h-8 px-2.5 py-2 bg-yellow-700/20 rounded-md inline-flex justify-center items-center gap-3 overflow-hidden"
+              className="h-8 min-w-0 shrink px-2.5 py-2 bg-yellow-700/20 rounded-md inline-flex justify-center items-center gap-3 overflow-hidden"
+              title={t}
             >
               <span
                 key={t}
                 className={cn(
-                  "justify-start text-yellow-700 text-[11px] font-normal font-inter leading-4",
+                  "truncate justify-start text-yellow-700 text-[11px] font-normal font-inter leading-4",
                   light
                     ? "bg-[#F0E6D0] text-yellow-700"
                     : "bg-amber-soft text-amber",
@@ -91,6 +95,14 @@ export function IdeaCard({
               </span>
             </div>
           ))}
+          {tags.length > MAX_TAGS && (
+            <span
+              className="h-8 shrink-0 px-2 inline-flex items-center rounded-md bg-yellow-700/20 font-inter text-[11px] leading-4 text-yellow-700"
+              title={tags.slice(MAX_TAGS).join(", ")}
+            >
+              +{tags.length - MAX_TAGS}
+            </span>
+          )}
           <RatingBadge
             rating={rating}
             className="ml-auto gap-1"
