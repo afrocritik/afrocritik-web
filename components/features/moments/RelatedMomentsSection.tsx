@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { RatingBadge } from "@/components/common/RatingBadge";
 
 export interface RelatedMomentCard {
   slug: string;
@@ -60,10 +61,7 @@ export function RelatedMomentsSection({
                     </div>
                   ))}
                   {film.rating && (
-                    <div className="ml-auto flex items-center gap-0.5">
-                      <span className="text-white text-[8.59px] font-semibold font-inter leading-3">{film.rating}</span>
-                      <span className="text-yellow-400 text-[8px] leading-none">★</span>
-                    </div>
+                    <RatingBadge rating={film.rating} className="ml-auto" />
                   )}
                 </div>
               </div>

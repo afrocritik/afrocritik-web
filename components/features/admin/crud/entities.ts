@@ -43,6 +43,8 @@ const IDEA_CATEGORIES: SelectOption[] = [
 
 const PERSON_ROLES: SelectOption[] = [
   { label: "Director", value: "director" },
+  { label: "Actor", value: "actor" },
+  { label: "Actress", value: "actress" },
   { label: "Author", value: "author" },
   { label: "Musician", value: "musician" },
   { label: "Philosopher", value: "philosopher" },
@@ -66,6 +68,15 @@ const META_FIELDS = {
   fields: [
     { name: "title", label: "Meta title", type: "text" as const },
     { name: "description", label: "Meta description", type: "textarea" as const },
+  ],
+};
+
+/** Sidebar "Work rating" card, shared by Works, Ideas, Reports and Moments. */
+const RATING_SECTION = {
+  title: "Work rating",
+  description: "Set the score shown on this entry\u2019s public card.",
+  fields: [
+    { name: "rating", label: "Score (out of 10)", type: "rating" as const, sidebar: true, min: 0, max: 10, decimals: 1 },
   ],
 };
 
@@ -268,13 +279,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
-      {
-        title: "Work rating",
-        description: "Set the score shown on this work\u2019s public card.",
-        fields: [
-          { name: "rating", label: "Score (out of 10)", type: "rating", sidebar: true, min: 0, max: 10, decimals: 1 },
-        ],
-      },
+      RATING_SECTION,
     ],
   },
 
@@ -422,6 +427,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
+      RATING_SECTION,
     ],
   },
 
@@ -512,6 +518,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
+      RATING_SECTION,
     ],
   },
 
@@ -631,6 +638,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
           META_FIELDS,
         ],
       },
+      RATING_SECTION,
     ],
   },
 

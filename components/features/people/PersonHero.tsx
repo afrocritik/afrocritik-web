@@ -16,6 +16,10 @@ interface Props {
   description?: string;
   meta: { label: string; value: string }[];
   topics: string[];
+  /** Label for the chip row (default "Related topics"; film profiles use "Related people") */
+  topicsLabel?: string;
+  /** Replaces the default Explore › People › name trail; the last item renders as the current page */
+  crumbs?: { label: string; href: string }[];
   photo?: string;
   toc: TocItem[];
 }
@@ -24,7 +28,7 @@ function Crumb() {
   return <ChevronRight className="size-4 shrink-0 text-white/50" aria-hidden />;
 }
 
-export function PersonHero({ personId, slug, name, description, meta, topics, photo, toc }: Readonly<Props>) {
+export function PersonHero({ personId, slug, name, description, meta, topics, topicsLabel = "Related topics", crumbs, photo, toc }: Readonly<Props>) {
   const { active, select } = useScrollSpy(toc.map((t) => t.id));
 
   const share = async () => {
@@ -74,18 +78,28 @@ export function PersonHero({ personId, slug, name, description, meta, topics, ph
       {/* Title block */}
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex flex-wrap items-center gap-1.5">
-          <Link href="/explore" className="font-inter text-[16px] font-semibold leading-4 text-white/50 transition-colors hover:text-amber">
-            Explore
-          </Link>
-          <Crumb />
-          <Link
-            href="/explore?tab=people"
-            className="font-inter text-[16px] font-semibold leading-4 text-white/50 transition-colors hover:text-amber"
-          >
-            People
-          </Link>
-          <Crumb />
-          <span className="font-inter text-[16px] font-semibold leading-4 text-orange-400/60">{name}</span>
+          {(crumbs ?? [
+            { label: "Explore", href: "/explore" },
+            { label: "People", href: "/explore?tab=people" },
+          ]).map((c, i, arr) => {
+            const current = Boolean(crumbs) && i === arr.length - 1;
+            return (
+              <span key={c.label} className="inline-flex items-center gap-1.5">
+                <Link
+                  href={c.href}
+                  className={`font-inter text-[16px] font-semibold leading-4 transition-colors hover:text-amber ${
+                    current ? "text-orange-400/60" : "text-white/50"
+                  }`}
+                >
+                  {c.label}
+                </Link>
+                {(!crumbs || !current) && <Crumb />}
+              </span>
+            );
+          })}
+          {!crumbs && (
+            <span className="font-inter text-[16px] font-semibold leading-4 text-orange-400/60">{name}</span>
+          )}
         </div>
 
         <div id="overview" className="scroll-mt-28">
@@ -127,7 +141,7 @@ export function PersonHero({ personId, slug, name, description, meta, topics, ph
 
           {topics.length > 0 && (
             <div className="mt-4 flex max-w-[640px] flex-wrap items-center gap-2">
-              <span className="font-inter text-[16px] font-semibold leading-4 text-orange-400/50">Related topics</span>
+              <span className="font-inter text-[16px] font-semibold leading-4 text-orange-400/50">{topicsLabel}</span>
               {topics.map((t) => (
                 <div key={t} className="inline-flex items-center rounded-[5px] bg-yellow-700/40 py-[5px] pl-2.5 pr-3">
                   <span className="font-inter text-[16px] font-semibold leading-4 text-stone-300">{t}</span>

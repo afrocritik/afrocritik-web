@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RatingBadge } from "@/components/common/RatingBadge";
 import Image from "next/image";
 import { Share2 } from "lucide-react";
 import { toast } from "sonner";
@@ -33,6 +34,7 @@ interface Props {
   sectionHref?: string;
   description?: string;
   meta?: { label: string; value: string }[];
+  rating?: number;
   relatedThemes?: string[];
   image?: string;
   toc: TocItem[];
@@ -47,6 +49,7 @@ export function WorkHeroSection({
   sectionHref = "/explore?tab=works",
   description,
   meta = [],
+  rating,
   relatedThemes = [],
   image,
   toc,
@@ -142,7 +145,7 @@ export function WorkHeroSection({
               Description not uploaded yet.
             </p>
           )}
-          {meta.length > 0 && (
+          {(meta.length > 0 || rating !== undefined) && (
             <div className="mt-8 max-w-[600px] flex flex-wrap gap-x-6 gap-y-2">
               {meta.map(({ label, value }) => (
                 <div key={label} className="inline-flex justify-start items-center gap-3">
@@ -154,6 +157,7 @@ export function WorkHeroSection({
                   </span>
                 </div>
               ))}
+            <RatingBadge rating={rating} scoreClassName="text-base" className="gap-1.5 [&_img]:size-4" />
             </div>
           )}
           <div className="mt-5 flex gap-3">

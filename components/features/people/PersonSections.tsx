@@ -235,6 +235,44 @@ export function RelatedIdeasCard({ ideas }: Readonly<{ ideas: any[] }>) {
   );
 }
 
+// ── Related films (film profiles; takes the place of Related Ideas) ─────────
+export function RelatedFilmsCard({ films }: Readonly<{ films: any[] }>) {
+  if (films.length === 0) return null;
+  return (
+    <div id="related-films" className={`${CARD} scroll-mt-28 p-5`}>
+      <CardTitle size="lg">Related Films</CardTitle>
+      <ul className="mt-4 flex flex-col gap-3">
+        {films.slice(0, 5).map((film) => {
+          const img = getMediaUrl(film.coverImage);
+          const year = film.year ? ` (${film.year})` : "";
+          return (
+            <li key={film.slug ?? film.title}>
+              <Link href={film.slug ? `/works/${film.slug}` : "#"} className="group flex items-center gap-3">
+                <div className="relative size-10 shrink-0 overflow-hidden rounded-[5px]">
+                  {img ? (
+                    <Image src={img} alt="" fill sizes="40px" className="object-cover" />
+                  ) : (
+                    <Letter text={film.title ?? "?"} className="h-full w-full" />
+                  )}
+                </div>
+                <span className="flex min-w-0 flex-col items-start gap-1">
+                  <span className="line-clamp-2 font-inter text-[11px] font-light leading-snug text-white transition-colors group-hover:text-amber">
+                    {film.title}
+                    {year}
+                  </span>
+                  <span className="rounded-sm bg-yellow-700/40 px-1.5 py-0.5 font-inter text-[8px] leading-none text-amber">
+                    Film
+                  </span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 // ── Essential works (full cards) ────────────────────────────────────────────
 export function EssentialWorksCard({ heading, works }: Readonly<{ heading: string; works: any[] }>) {
   if (works.length === 0) return null;

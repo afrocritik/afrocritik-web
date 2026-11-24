@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { RatingBadge } from "@/components/common/RatingBadge";
 
 export interface IdeaCardProps {
   slug?: string;
@@ -8,6 +9,7 @@ export interface IdeaCardProps {
   subtitle?: string;
   excerpt?: string;
   tags?: string[];
+  rating?: number;
   theme?: "dark" | "light";
   className?: string;
 }
@@ -19,6 +21,7 @@ export function IdeaCard({
   subtitle,
   excerpt,
   tags = [],
+  rating,
   theme = "light",
   className,
 }: Readonly<IdeaCardProps>) {
@@ -68,8 +71,8 @@ export function IdeaCard({
           {excerpt}
         </p>
       )}
-      {tags.length > 0 && (
-        <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
+      {(tags.length > 0 || rating !== undefined) && (
+        <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-4">
           {tags.map((t) => (
             <div
               key={t}
@@ -88,6 +91,11 @@ export function IdeaCard({
               </span>
             </div>
           ))}
+          <RatingBadge
+            rating={rating}
+            className="ml-auto gap-1"
+            scoreClassName={cn("text-xs", light ? "text-orange-950" : "text-white")}
+          />
         </div>
       )}
     </Link>

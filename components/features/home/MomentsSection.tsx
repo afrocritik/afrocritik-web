@@ -8,12 +8,15 @@ import { CardImage } from "@/components/common/CardImage";
 import { getMediaUrl } from "@/lib/api";
 import { HomeSectionHeader } from "./HomeSectionHeader";
 import { plainText } from "@/lib/richText";
+import { parseRating } from "@/lib/rating";
+import { RatingBadge } from "@/components/common/RatingBadge";
 
 export interface MomentCardData {
   slug: string;
   title: string;
   description: string;
   image?: string;
+  rating?: number;
 }
 
 export function mapMomentToCard(m: any): MomentCardData {
@@ -22,10 +25,11 @@ export function mapMomentToCard(m: any): MomentCardData {
     title: plainText(m?.title ?? ""),
     description: plainText(m?.summary ?? ""),
     image: getMediaUrl(m?.coverImage),
+    rating: parseRating(m?.rating),
   };
 }
 
-function MomentCard({ slug, title, description, image }: Readonly<MomentCardData>) {
+function MomentCard({ slug, title, description, image, rating }: Readonly<MomentCardData>) {
   const [hovered, setHovered] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const enter = () => {
@@ -122,6 +126,12 @@ function MomentCard({ slug, title, description, image }: Readonly<MomentCardData
             className="h-full w-full object-cover"
             letterClassName="text-4xl"
           />
+          {rating !== undefined && (
+            <RatingBadge
+              rating={rating}
+              className="absolute bottom-2 right-2 z-10 rounded-[4px] bg-black/55 px-1.5 py-1"
+            />
+          )}
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0"
             style={{

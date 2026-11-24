@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatRating, parseRating } from "@/lib/rating";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { PreviewGate } from "@/components/common/PreviewGate";
@@ -103,6 +104,7 @@ export default async function MomentDetailPage({
           title: plainText(m.title ?? ""),
           desc: plainText(m.summary),
           image: getMediaUrl(m.coverImage),
+          rating: formatRating(m.rating),
           tags: resolveNames(Array.isArray(m.country) ? m.country : []),
         }))
     : [];
@@ -126,6 +128,7 @@ export default async function MomentDetailPage({
             title={title}
             summary={summary}
             meta={meta}
+            rating={parseRating(moment.rating)}
             relatedThemes={relatedThemes}
             toc={toc}
           />

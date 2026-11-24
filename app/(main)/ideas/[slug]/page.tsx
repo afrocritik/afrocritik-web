@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { parseRating } from "@/lib/rating";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { PreviewGate } from "@/components/common/PreviewGate";
@@ -133,6 +134,7 @@ export default async function IdeaDetailPage({
             description={description}
             image={image}
             meta={meta}
+            rating={parseRating(idea.rating)}
             relatedThemes={relatedThemes}
             toc={toc}
           />

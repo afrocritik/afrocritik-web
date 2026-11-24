@@ -8,6 +8,8 @@ import { ViewTracker } from "@/components/common/ViewTracker";
 import { ReportDownloadButton } from "@/components/features/reports/ReportDownloadButton";
 import { api, getMediaUrl } from "@/lib/api";
 import { plainText } from "@/lib/richText";
+import { RatingBadge } from "@/components/common/RatingBadge";
+import { parseRating } from "@/lib/rating";
 
 export default async function ReportDetailPage({
   params,
@@ -99,6 +101,13 @@ export default async function ReportDetailPage({
                 <p className="mt-5 max-w-2xl font-inter text-base font-light leading-relaxed text-orange-100/40 italic">
                   Summary not uploaded yet.
                 </p>
+              )}
+
+              {parseRating(report.rating) !== undefined && (
+                <div className="mt-5 inline-flex items-center gap-3">
+                  <span className="font-inter text-base font-semibold text-orange-400/50">Rating</span>
+                  <RatingBadge rating={report.rating} scoreClassName="text-base" className="gap-1.5 [&_img]:size-4" />
+                </div>
               )}
 
               {/* Stat badges */}

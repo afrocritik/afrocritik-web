@@ -2,6 +2,7 @@
 
 import { IdeaCard } from "@/components/common/IdeaCard";
 import { plainText } from "@/lib/richText";
+import { parseRating } from "@/lib/rating";
 
 interface Props {
   ideas?: any[];
@@ -17,6 +18,7 @@ function mapIdea(idea: any) {
     category: idea.category,
     excerpt: plainText(idea.summary),
     tags,
+    rating: parseRating(idea.rating),
   };
 }
 

@@ -11,6 +11,7 @@ import {
   GlanceCard,
   PioneersCard,
   QuickFactsCard,
+  RelatedFilmsCard,
   RelatedIdeasCard,
   SelectedWorksCard,
 } from "@/components/features/people/PersonSections";
@@ -22,6 +23,11 @@ import { plainText } from "@/lib/richText";
 function resolveNames(arr: any[]): string[] {
   return arr.map((x: any) => (typeof x === "string" ? x : plainText(x?.name ?? ""))).filter(Boolean);
 }
+
+// Profiles for people who work in film (directors, actors, producers…) use the
+// film layout: "Related Films" instead of "Related Ideas", and "Related people"
+// chips in the header.
+const FILM_ROLES = new Set(["director", "actor", "actress", "producer"]);
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const idOf = (x: any) => (typeof x === "object" ? x?.id : x);
@@ -94,6 +100,9 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
 
   const works: any[] = (Array.isArray(person.works) ? person.works : []).filter((w: any) => typeof w === "object");
   const ideas: any[] = (Array.isArray(person.ideas) ? person.ideas : []).filter((i: any) => typeof i === "object");
+  const isFilm =
+    roleValues.some((r) => FILM_ROLES.has(r)) ||
+    (works.length > 0 && works.every((w) => w.type === "film"));
   const hasBio = richTextToPlain(person.biography).length > 0;
 
   // Related content, fetched in parallel; each degrades to nothing on failure.
@@ -127,6 +136,22 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
     }
   }
 
+  // Related films: other films sharing a theme (topped up with the newest),
+  // never ones already credited to this person.
+  const relatedFilms: any[] = [];
+  if (isFilm) {
+    const filmSeen = new Set<string>(ownWorkIds);
+    for (const w of [...(relatedWorks?.docs ?? []), ...(newestWorks?.docs ?? [])]) {
+      if (w.type === "film" && !filmSeen.has(String(w.id))) {
+        filmSeen.add(String(w.id));
+        relatedFilms.push(w);
+      }
+    }
+  }
+
+  // Header chips: topics for thinkers, collaborators/peers for film people.
+  const relatedPeopleNames = pioneers.map((p) => plainText(p.name ?? "")).filter(Boolean).slice(0, 4);
+
   const essentialHeading = (() => {
     const types = new Set(works.map((w) => w.type).filter(Boolean));
     if (types.size === 1) {
@@ -159,7 +184,7 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
     roles.length > 0 && `Known as: ${roles.join(", ")}`,
     countryNames.length > 0 && `Associated with ${countryNames.join(", ")}`,
     works.length > 0 && `${works.length} ${works.length === 1 ? "work" : "works"} in the archive`,
-    ideas.length > 0 && `${ideas.length} ${ideas.length === 1 ? "idea" : "ideas"} explored`,
+    !isFilm && ideas.length > 0 && `${ideas.length} ${ideas.length === 1 ? "idea" : "ideas"} explored`,
   ].filter(Boolean) as string[];
 
   const hasContribution = Boolean(person.summary || person.keyIdeas || person.knowledgeSovereignty);
@@ -171,12 +196,14 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
     works.length > 0 && { id: "selected-works", label: "Selected Works" },
     quickFacts.length > 0 && { id: "quick-facts", label: "Quick Facts" },
     pioneers.length > 0 && { id: "pioneers-icons", label: "Pioneers & Icons" },
-    ideas.length > 0 && { id: "related-ideas", label: "Related Ideas" },
+    !isFilm && ideas.length > 0 && { id: "related-ideas", label: "Related Ideas" },
+    isFilm && relatedFilms.length > 0 && { id: "related-films", label: "Related Films" },
     exploreMore.length > 0 && { id: "further-reading", label: "Further Reading" },
   ].filter(Boolean) as TocItem[];
 
   const leftRows = [works.length > 0 || hasContribution, hasBio, pioneers.length > 0].filter(Boolean).length;
-  const hasRight = glance.length > 0 || quickFacts.length > 0 || ideas.length > 0;
+  const hasRight =
+    glance.length > 0 || quickFacts.length > 0 || (isFilm ? relatedFilms.length > 0 : ideas.length > 0);
   const leftCol = works.length > 0 ? <SelectedWorksCard works={works} /> : null;
 
   const session = await getServerSession(authOptions);
@@ -192,7 +219,16 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
             name={name}
             description={description}
             meta={meta}
-            topics={topics}
+            topics={isFilm ? relatedPeopleNames : topics}
+            topicsLabel={isFilm ? "Related people" : undefined}
+            crumbs={
+              isFilm
+                ? [
+                    { label: "Film", href: "/explore?tab=works&category=film" },
+                    { label: "People", href: "/explore?tab=people" },
+                  ]
+                : undefined
+            }
             photo={getMediaUrl(person.photo)}
             toc={toc}
           />
@@ -229,7 +265,7 @@ export default async function PersonDetailPage({ params }: { readonly params: { 
                 >
                   {glance.length > 0 && <GlanceCard rows={glance} />}
                   {quickFacts.length > 0 && <QuickFactsCard facts={quickFacts} />}
-                  {ideas.length > 0 && <RelatedIdeasCard ideas={ideas} />}
+                  {isFilm ? <RelatedFilmsCard films={relatedFilms} /> : ideas.length > 0 && <RelatedIdeasCard ideas={ideas} />}
                 </div>
               )}
             </div>
