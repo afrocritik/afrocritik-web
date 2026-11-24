@@ -136,7 +136,7 @@ export default async function WorkDetailPage({
     },
     (videoArchive.length > 0 || audioArchive.length > 0) && { id: "media-archive", label: "Media Archive" },
     essentialWorks.length > 0 && { id: "related-works", label: essentialHeading },
-    pioneers.length > 0 && { id: "pioneers-icons", label: "Pioneers & Icons" },
+    pioneers.length > 0 && { id: "pioneers-icons", label: "Key People" },
     exploreMore.length > 0 && { id: "further-reading", label: "Further Reading" },
   ].filter(Boolean) as { id: string; label: string }[];
 

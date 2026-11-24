@@ -17,7 +17,7 @@ export function MomentPioneersSection({
     <section id="pioneers-icons" className="pb-16">
       <div className="rounded-xl border border-yellow-700 bg-yellow-950/50 p-6">
         <h2 className="mb-6 text-white text-2xl font-semibold font-baskervville leading-7">
-          Pioneers &amp; Icons
+          Key People
         </h2>
         <div className="grid grid-cols-5 gap-4">
           {people.map((p, i) => {

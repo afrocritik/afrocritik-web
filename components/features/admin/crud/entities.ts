@@ -258,7 +258,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
         title: "Relationships",
         description: "Connect this work to the rest of the archive.",
         fields: [
-          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people", description: "Directors, authors, musicians shown in Pioneers & Icons." },
+          { name: "people", label: "Key people", type: "relationship", relationTo: "people", description: "Directors, authors, musicians shown in Key People." },
           { name: "ideas", label: "Ideas", type: "relationship", relationTo: "ideas" },
           { name: "country", label: "Country", type: "relationship", relationTo: "countries" },
           { name: "themes", label: "Themes", type: "relationship", relationTo: "themes" },
@@ -622,7 +622,7 @@ export const ENTITIES: Record<string, EntityConfig> = {
       {
         title: "Relationships",
         fields: [
-          { name: "people", label: "Pioneers & icons", type: "relationship", relationTo: "people" },
+          { name: "people", label: "Key people", type: "relationship", relationTo: "people" },
           { name: "works", label: "Works", type: "relationship", relationTo: "works" },
           { name: "relatedMoments", label: "Related moments", type: "relationship", relationTo: "moments" },
           { name: "country", label: "Country", type: "relationship", relationTo: "countries" },
